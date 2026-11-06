@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="ko" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>⚽ AI Football Agency Strategy Desk v2.0</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap');
+    body {
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      background-color: #0b0f17;
+      color: #e2e8f0;
+    }
+    .glass-card {
+      background: rgba(17, 24, 39, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(51, 65, 85, 0.6);
+    }
+    .markdown-body h1 { font-size: 1.45rem; font-weight: 800; color: #34d399; margin-bottom: 0.75rem; border-bottom: 1px solid #334155; padding-bottom: 0.5rem; }
+    .markdown-body h2 { font-size: 1.15rem; font-weight: 700; color: #38bdf8; margin-top: 1.25rem; margin-bottom: 0.5rem; }
+    .markdown-body p, .markdown-body li { font-size: 0.92rem; line-height: 1.65; color: #cbd5e1; }
+    .markdown-body ul, .markdown-body ol { padding-left: 1.25rem; margin-bottom: 0.75rem; list-style-type: disc; }
+    .markdown-body blockquote { border-left: 4px solid #10b981; background: rgba(16, 185, 129, 0.08); padding: 0.6rem 1rem; margin: 0.75rem 0; border-radius: 0.375rem; }
+    .markdown-body table { width: 100%; border-collapse: collapse; margin: 0.85rem 0; font-size: 0.85rem; }
+    .markdown-body th { background: #1e293b; color: #94a3b8; font-weight: 700; padding: 0.55rem; border: 1px solid #334155; text-align: left; }
+    .markdown-body td { padding: 0.55rem; border: 1px solid #334155; color: #e2e8f0; }
+    .markdown-body hr { border-color: #334155; margin: 1rem 0; }
+    .markdown-body strong { color: #f8fafc; font-weight: 700; }
+
+    @media print {
+      body { background: #ffffff !important; color: #0f172a !important; }
+      .no-print { display: none !important; }
+      #printable-area {
+        display: block !important;
+        background: #ffffff !important;
+        color: #0f172a !important;
+        border: none !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+      }
+      .markdown-body h1 { color: #047857 !important; border-bottom: 2px solid #047857 !important; }
+      .markdown-body h2 { color: #0369a1 !important; }
+      .markdown-body p, .markdown-body li, .markdown-body td, .markdown-body strong { color: #0f172a !important; }
+      .markdown-body th { background: #f1f5f9 !important; color: #0f172a !important; border: 1px solid #94a3b8 !important; }
+      .markdown-body td { border: 1px solid #cbd5e1 !important; }
+      .markdown-body blockquote { background: #f0fdf4 !important; border-left: 4px solid #059669 !important; }
+    }
+  </style>
+</head>
+<body class="min-h-screen pb-16">
+
+  <!-- Top Navigation & GCP ADC Status Bar -->
+  <header class="no-print sticky top-0 z-30 border-b border-slate-800 bg-slate-950/90 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-xl">⚽</div>
+        <div>
+          <h1 class="text-lg font-extrabold tracking-tight text-white flex items-center gap-2">
+            AI Football Agency Strategy Desk
+            <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Hybrid v2.0</span>
+          </h1>
+          <p class="text-xs text-slate-400">
+            LangGraph (SqliteSaver + HITL) · Hermes Tool-Calling · SQLite Vector DB · Vertex AI (Gemini 3.8/3.5 Flash & Embedding 2/001)
+          </p>
+        </div>
+      </div>
+
+      <!-- GCP ADC Status & Quick Config -->
+      <div class="flex flex-wrap items-center gap-2">
+        <div id="adc-badge" class="text-xs px-3 py-1.5 rounded-lg border border-amber-500/40 bg-amber-500/10 text-amber-300 flex items-center gap-1.5">
+          <span id="adc-dot" class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+          <span id="adc-text">GCP ADC 상태 확인 중...</span>
+        </div>
+        <div class="flex items-center gap-1 bg-slate-900 border border-slate-700 rounded-lg px-2 py-1">
+          <input id="gcp-project-input" type="text" placeholder="GCP Project ID 입력"
+            class="bg-transparent text-xs text-white placeholder-slate-500 focus:outline-none w-36" />
+          <button onclick="saveGcpProject()" class="text-xs bg-sky-600 hover:bg-sky-500 text-white font-semibold px-2.5 py-1 rounded transition">
+            ADC 적용
+          </button>
+          <button onclick="refreshAuthStatus()" title="gcloud auth application-default login 후 상태 새로고침"
+            class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded transition">
+            🔄
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Model Routing Sub-bar -->
+    <div class="bg-slate-900/80 border-t border-slate-800/80 px-4 py-1.5 text-[11px] text-slate-400">
+      <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+        <div class="flex flex-wrap items-center gap-3">
+          <span>🧠 <b>고성능 추론/협상/문서:</b> <code class="text-emerald-400">gemini-3.8-flash</code></span>
+          <span>⚡ <b>경량 라우팅/요약:</b> <code class="text-sky-400">gemini-3.5-flash</code></span>
+          <span>📚 <b>규정집 RAG 임베딩:</b> <code class="text-purple-400">gemini-embedding-2</code></span>
+          <span>🎯 <b>전술/스카우팅 임베딩:</b> <code class="text-amber-400">gemini-embedding-001</code></span>
+        </div>
+        <div id="vecdb-summary" class="text-slate-400">SQLite Vector DB: 인덱싱 확인 중...</div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 pt-6 space-y-6">
+
+    <!-- STEP 1 & STEP 2: Player Roster Selection + Radar Chart + Strategy Controls -->
+    <section class="no-print grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+      <!-- Left 5 Cols: Step 1 Roster Cards -->
+      <div class="lg:col-span-5 glass-card rounded-2xl p-5 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <h2 class="text-sm font-bold text-emerald-400 uppercase tracking-wider">Step 1 · 선수 선택 (5대 리그 3,172명 실데이터)</h2>
+            <span id="roster-count" class="text-xs text-slate-400">로딩 중...</span>
+          </div>
+          <div class="flex gap-1.5 mb-2.5">
+            <input id="player-search-input" type="text" oninput="filterPlayerCards()"
+              placeholder="🔍 선수명, 소속 구단, 포지션 검색 (예: 손흥민, Mbappe, Saka, Arsenal, CB)"
+              class="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500" />
+            <button onclick="resetPlayerFilter()" class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-[11px] text-emerald-300 font-bold">
+              🇰🇷 코리안리거
+            </button>
+          </div>
+          <div id="player-roster-grid" class="grid grid-cols-2 gap-2.5 max-h-[300px] overflow-y-auto pr-1">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- Selected Player Quick Summary Box -->
+        <div id="selected-player-card" class="mt-4 pt-4 border-t border-slate-800 hidden">
+          <div class="flex items-center justify-between">
+            <div>
+              <span id="sp-pos" class="text-xs font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"></span>
+              <h3 id="sp-name" class="text-base font-extrabold text-white mt-1"></h3>
+              <p id="sp-club" class="text-xs text-slate-400"></p>
+            </div>
+            <div class="text-right">
+              <div class="text-xs text-slate-400">Transfermarkt 시세</div>
+              <div id="sp-val" class="text-sm font-extrabold text-emerald-400"></div>
+              <div id="sp-wage" class="text-xs text-sky-400 font-semibold"></div>
+            </div>
+          </div>
+          <p id="sp-strengths" class="mt-2 text-xs text-slate-300 bg-slate-900/90 p-2.5 rounded-lg border border-slate-800"></p>
+        </div>
+      </div>
+
+      <!-- Center 3 Cols: FBref Stat Percentile Radar Chart -->
+      <div class="lg:col-span-3 glass-card rounded-2xl p-5 flex flex-col items-center justify-between">
+        <div class="w-full flex items-center justify-between mb-1">
+          <h2 class="text-sm font-bold text-sky-400 uppercase tracking-wider">시즌 퍼포먼스 레이더</h2>
+          <span id="sp-percentile-badge" class="text-xs font-bold px-2 py-0.5 rounded bg-sky-500/20 text-sky-300">상위 -%</span>
+        </div>
+        <div class="w-full h-56 flex items-center justify-center">
+          <canvas id="playerRadarChart"></canvas>
+        </div>
+        <div id="sp-gbe-mini" class="w-full text-[11px] text-slate-300 bg-slate-900/90 p-2.5 rounded-lg border border-slate-800 text-center">
+          선수를 선택하면 영국 GBE A매치 출전율 및 계약 만료일이 표시됩니다.
+        </div>
+      </div>
+
+      <!-- Right 4 Cols: Step 2 Zero-Prompt Strategy Controls -->
+      <div class="lg:col-span-4 glass-card rounded-2xl p-5 flex flex-col justify-between">
+        <div class="space-y-4">
+          <h2 class="text-sm font-bold text-purple-400 uppercase tracking-wider">Step 2 · 업무 트랙 & 협상 조건 설정</h2>
+
+          <!-- Track Toggle -->
+          <div class="space-y-2">
+            <label class="text-xs font-semibold text-slate-300">에이전시 실무 트랙 선택 (LangGraph Supervisor 분기)</label>
+            <div class="grid grid-cols-1 gap-2">
+              <button id="btn-track-a" onclick="selectTrack('TRACK_A_TRANSFER')"
+                class="text-left p-3 rounded-xl border border-emerald-500 bg-emerald-500/15 transition">
+                <div class="text-xs font-bold text-emerald-300">🛫 Track A: 타 구단 이적 역제의 (Pitching & 스카우팅)</div>
+                <div class="text-[11px] text-slate-300 mt-0.5">주전 노쇠화·계약만료 구단 발굴 + 실시간 부상/전술 검색 + GBE 검증</div>
+              </button>
+              <button id="btn-track-b" onclick="selectTrack('TRACK_B_RENEWAL')"
+                class="text-left p-3 rounded-xl border border-slate-700 bg-slate-900/60 hover:border-slate-600 transition">
+                <div class="text-xs font-bold text-sky-300">📝 Track B: 현 소속팀 재계약 연봉 협상 (Wage Benchmarking)</div>
+                <div class="text-[11px] text-slate-400 mt-0.5">동급 비교군(Peer 5인) 주급 사분위수 밴드 산출 + 단장 압박 방어 논리</div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Wage Increase Slider -->
+          <div>
+            <div class="flex justify-between text-xs font-semibold mb-1">
+              <span class="text-slate-300">목표 주급 인상률 (Anchor Target)</span>
+              <span id="wage-slider-label" class="text-emerald-400 font-bold">+30%</span>
+            </div>
+            <input id="wage-slider" type="range" min="10" max="150" step="5" value="30"
+              oninput="updateSliderLabel(this.value)"
+              class="w-full accent-emerald-500 cursor-pointer" />
+            <div class="flex justify-between text-[10px] text-slate-500 mt-0.5">
+              <span>보수적 (+10%)</span>
+              <span>표준 (+30~50%)</span>
+              <span>빅리그 도약 (+100~150%)</span>
+            </div>
+          </div>
+
+          <!-- Priority Goal Select -->
+          <div>
+            <label class="text-xs font-semibold text-slate-300 block mb-1">협상 최우선 가치 (Priority Goal)</label>
+            <select id="priority-select"
+              class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
+              <option value="유럽 5대 리그 즉시 주전 도약 + 적정 주급 확보">유럽 5대 리그 즉시 주전 도약 + 적정 주급 확보</option>
+              <option value="고정 기본급 극대화 + 다년 계약 안정성 확보">고정 기본급 극대화 + 다년 계약 안정성 확보</option>
+              <option value="출전/공격포인트 인센티브 극대화 + 바이아웃 하향">출전/공격포인트 인센티브 극대화 + 바이아웃 하향</option>
+              <option value="UCL/UEL 유럽 대항전 출전 구단 진입 최우선">UCL/UEL 유럽 대항전 출전 구단 진입 최우선</option>
+            </select>
+          </div>
+        </div>
+
+        <button id="btn-start-workflow" onclick="startWorkflow()"
+          class="mt-4 w-full py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-extrabold text-sm shadow-lg shadow-emerald-900/40 transition flex items-center justify-center gap-2">
+          <span>🚀 전략 생성 & 1차 모의 협상 시작</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- LIVE EXECUTION PANEL: Hermes Tool Trace, Peer Band, Club Matches & Legal RAG -->
+    <section id="analysis-section" class="no-print hidden space-y-6">
+
+      <!-- Node Execution & Model Trace Bar -->
+      <div class="glass-card rounded-2xl p-4">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+          <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
+            <span>🔗 LangGraph 실행 파이프라인 & 모델 라우팅 로그</span>
+            <span id="thread-badge" class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-sky-300 font-mono"></span>
+          </h3>
+          <span id="workflow-status-badge" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40"></span>
+        </div>
+        <p id="supervisor-note-box" class="text-xs text-emerald-300 bg-emerald-950/30 border border-emerald-800/50 rounded-lg p-2.5 mb-3"></p>
+        <div id="model-usage-pills" class="flex flex-wrap gap-2"></div>
+      </div>
+
+      <!-- 3-Column Quantitative, Scouting & Legal RAG Cards -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <!-- Card 1: Hermes Tool-Calling & Peer Wage Band -->
+        <div class="glass-card rounded-2xl p-5 space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="text-sm font-bold text-emerald-400">🧠 Node 2 · Hermes 정량 밸류에이션</h3>
+            <span class="text-[11px] px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300">gemini-3.8-flash</span>
+          </div>
+          <p id="hermes-ai-summary" class="text-xs text-slate-200 leading-relaxed bg-slate-900/80 p-3 rounded-xl border border-slate-800"></p>
+          <div id="wage-band-bars" class="space-y-1.5 text-xs"></div>
+          <div>
+            <div class="text-[11px] font-bold text-slate-400 mb-1">Hermes XML &lt;tool_call&gt; 연쇄 호출 로그</div>
+            <div id="hermes-tool-trace" class="space-y-1 max-h-36 overflow-y-auto font-mono text-[10px] bg-slate-950 p-2.5 rounded-lg border border-slate-800 text-slate-300"></div>
+          </div>
+        </div>
+
+        <!-- Card 2: Matched Target Clubs / Live Search Grounding & Tactical Vector Match -->
+        <div class="glass-card rounded-2xl p-5 space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="text-sm font-bold text-sky-400">🎯 구단 매칭 & 실시간 스카우팅 동향</h3>
+            <span class="text-[11px] px-2 py-0.5 rounded bg-amber-500/15 text-amber-300">gemini-embedding-001</span>
+          </div>
+          <div id="live-news-box" class="bg-sky-950/30 border border-sky-800/50 rounded-xl p-3 space-y-1"></div>
+          <div id="matched-clubs-list" class="space-y-2 max-h-56 overflow-y-auto"></div>
+        </div>
+
+        <!-- Card 3: Node 3 SQLite Vector DB Regulation RAG -->
+        <div class="glass-card rounded-2xl p-5 space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="text-sm font-bold text-purple-400">⚖️ Node 3 · 규정 & 워크퍼밋 Vector RAG</h3>
+            <span class="text-[11px] px-2 py-0.5 rounded bg-purple-500/15 text-purple-300">gemini-embedding-2</span>
+          </div>
+          <div id="legal-review-box" class="space-y-2 text-xs"></div>
+          <div>
+            <div class="text-[11px] font-bold text-slate-400 mb-1">SQLite `rag_regulations_vec` 검색 상위 청크</div>
+            <div id="rag-chunks-list" class="space-y-1.5 max-h-40 overflow-y-auto"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 3: Node 4 Sparring Simulator & Human-in-the-Loop (HITL) 1-Click Action Buttons -->
+      <div class="glass-card rounded-2xl p-6 border-2 border-emerald-500/30">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+          <div>
+            <h2 class="text-base font-extrabold text-white flex items-center gap-2">
+              🥊 Step 3 · 모의 협상 시뮬레이터 (LangGraph Sparring Loop) & 에이전트 전략 개입
+            </h2>
+            <p class="text-xs text-slate-400">
+              선수 에이전트 AI와 상대 구단 스포츠 디렉터 AI가 1차 공방을 마쳤습니다. 아래 원클릭 버튼으로 2라운드 최종 타결 전략을 지시하세요.
+            </p>
+          </div>
+          <span class="text-xs px-2.5 py-1 rounded bg-emerald-500/15 text-emerald-300 font-semibold">
+            SqliteSaver 체크포인트 연동됨
+          </span>
+        </div>
+
+        <!-- Chat Transcript Area -->
+        <div id="sparring-chat-box" class="space-y-3 mb-5 bg-slate-950/80 p-4 rounded-xl border border-slate-800"></div>
+
+        <!-- Human-in-the-Loop 1-Click Intervention Buttons -->
+        <div id="hitl-action-panel" class="bg-amber-500/10 border border-amber-500/40 rounded-xl p-4">
+          <div class="text-xs font-extrabold text-amber-300 mb-2.5 flex items-center gap-2">
+            <span>⏸️ [Human-in-the-Loop 개입 대기 중] 수석 에이전트로서 2라운드 카운터 전략을 원클릭으로 선택하세요:</span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <button onclick="resumeWorkflow('OPTION_1_HOLD_BASE_WAGE')"
+              class="text-left p-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-emerald-400 transition group">
+              <div class="text-xs font-bold text-white group-hover:text-emerald-300">🔥 전략 1: 기본급 원안 강행</div>
+              <div class="text-[11px] text-slate-400 mt-1">구단 양보 거절. 상위 백분위 스탯과 대체자 영입 비용을 근거로 1차 요구 기본급을 끝까지 관철</div>
+            </button>
+
+            <button onclick="resumeWorkflow('OPTION_2_BONUS_AND_RELEASE_CLAUSE')"
+              class="text-left p-3.5 rounded-xl bg-emerald-950/60 hover:bg-emerald-900/60 border-2 border-emerald-500 transition group">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-extrabold text-emerald-300">⚖️ 전략 2: 보너스 전환 & 수수료 방어</span>
+                <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500 text-slate-950 font-extrabold">추천</span>
+              </div>
+              <div class="text-[11px] text-slate-200 mt-1">고정 기본급을 절충하여 구단 PSR 부담을 덜어주는 대신, 20경기 출전 보너스 신설 + FIFA Circular 1873으로 수수료 6% 방어</div>
+            </button>
+
+            <button onclick="resumeWorkflow('OPTION_3_LOWER_RELEASE_FOR_CLUB_OFFER')"
+              class="text-left p-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-sky-400 transition group">
+              <div class="text-xs font-bold text-white group-hover:text-sky-300">🛡️ 전략 3: 구단안 수용 + 바이아웃 하향</div>
+              <div class="text-[11px] text-slate-400 mt-1">구단의 기본급 역제안을 수용하여 빠른 합의를 이끌어내되, 차기 빅클럽 이적을 위한 바이아웃(Release Clause) 금액 대폭 하향</div>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 4: Dual-Output Practical Documents & SQLite Vector DB Lab -->
+    <section id="documents-section" class="hidden space-y-4">
+      <div class="no-print glass-card rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3">
+        <div class="flex flex-wrap items-center gap-2">
+          <button id="tab-btn-prep" onclick="switchDocTab('prep')"
+            class="px-4 py-2 rounded-xl text-xs font-extrabold bg-emerald-600 text-white transition">
+            🔒 문서 1 (대외비 내부용): 협상 전략 치트시트 (Deal Prep Sheet)
+          </button>
+          <button id="tab-btn-pitch" onclick="switchDocTab('pitch')"
+            class="px-4 py-2 rounded-xl text-xs font-extrabold bg-slate-800 text-slate-300 hover:bg-slate-700 transition">
+            📨 문서 2 (구단 발송용): 맞춤형 선수 역제의서 (Club Pitch Deck)
+          </button>
+          <button id="tab-btn-raglab" onclick="switchDocTab('raglab')"
+            class="px-4 py-2 rounded-xl text-xs font-extrabold bg-slate-800 text-purple-300 hover:bg-slate-700 transition">
+            🗄️ SQLite Vector DB 실시간 검색 테스트기
+          </button>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button onclick="copyActiveMarkdown()"
+            class="px-3 py-2 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">
+            📋 마크다운 복사
+          </button>
+          <button onclick="downloadActiveMarkdown()"
+            class="px-3 py-2 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-sky-300 border border-slate-700 transition">
+            💾 .md 파일 다운로드
+          </button>
+          <button onclick="window.print()"
+            class="px-3.5 py-2 rounded-xl text-xs font-extrabold bg-emerald-600 hover:bg-emerald-500 text-white shadow transition">
+            🖨️ 원클릭 PDF 인쇄 / 저장
+          </button>
+        </div>
+      </div>
+
+      <!-- Printable Document Render Container -->
+      <div id="printable-area" class="glass-card rounded-2xl p-8 markdown-body"></div>
+
+      <!-- Interactive SQLite Vector DB Search Lab -->
+      <div id="raglab-area" class="no-print hidden glass-card rounded-2xl p-6 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h3 class="text-sm font-extrabold text-purple-300">🗄️ SQLite 통합 Vector DB (`agency_desk.db`) 이원화 임베딩 검색 실험실</h3>
+            <p class="text-xs text-slate-400">
+              공식 규정집 테이블(`rag_regulations_vec` · <code class="text-purple-300">gemini-embedding-2</code>)과 전술 노트 테이블(`scouting_notes_vec` · <code class="text-amber-300">gemini-embedding-001</code>)을 직접 검색해 볼 수 있습니다.
+            </p>
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <select id="rag-search-type" class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
+            <option value="REGULATIONS">법률·규정집 검색 (gemini-embedding-2)</option>
+            <option value="TACTICAL">구단 전술 노트 검색 (gemini-embedding-001)</option>
+          </select>
+          <input id="rag-search-input" type="text"
+            value="FIFA 에이전트 수수료 3% 상한 유예 Circular 1873 및 영국 GBE 워크퍼밋 자동 통과 기준"
+            class="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-purple-500" />
+          <button onclick="runInteractiveRagSearch()"
+            class="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-extrabold transition">
+            🔍 벡터 검색 실행
+          </button>
+        </div>
+        <div id="rag-lab-results" class="space-y-2.5"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    let allPlayers = [];
+    let selectedPlayer = null;
+    let selectedTrack = 'TRACK_A_TRANSFER';
+    let currentThreadId = null;
+    let currentWorkflowState = null;
+    let activeDocTab = 'prep';
+    let radarChartInstance = null;
+
+    async function initDashboard() {
+      await Promise.all([loadSystemStatus(), loadPlayers()]);
+    }
+
+    async function loadSystemStatus() {
+      try {
+        const res = await fetch('/api/status');
+        const data = await res.json();
+        renderAuthStatus(data);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    function renderAuthStatus(data) {
+      const auth = data.gcp_auth || {};
+      const vec = data.vector_db || {};
+      const badge = document.getElementById('adc-badge');
+      const dot = document.getElementById('adc-dot');
+      const text = document.getElementById('adc-text');
+      const projInput = document.getElementById('gcp-project-input');
+
+      if (auth.project_id && auth.project_id !== 'your-gcp-project-id') {
+        projInput.value = auth.project_id;
+      }
+
+      if (auth.adc_authenticated) {
+        badge.className = 'text-xs px-3 py-1.5 rounded-lg border border-emerald-500/40 bg-emerald-500/10 text-emerald-300 flex items-center gap-1.5';
+        dot.className = 'w-2 h-2 rounded-full bg-emerald-400';
+        text.textContent = `GCP ADC 연결됨 (${auth.project_id})`;
+      } else {
+        badge.className = 'text-xs px-3 py-1.5 rounded-lg border border-amber-500/40 bg-amber-500/10 text-amber-300 flex items-center gap-1.5';
+        dot.className = 'w-2 h-2 rounded-full bg-amber-400 animate-pulse';
+        text.textContent = auth.project_id
+          ? `ADC 대기 중 (${auth.project_id}) — 하이브리드 모드`
+          : 'GCP ADC 미설정 (하이브리드 로컬 추론 활성)';
+      }
+
+      document.getElementById('vecdb-summary').innerHTML =
+        `🗄️ <b>SQLite Vector DB:</b> 규정 청크 <b>${vec.rag_regulations_chunks || 0}개</b> · 스카우팅 노트 <b>${vec.scouting_notes_chunks || 0}개</b> 인덱싱 완료`;
+    }
+
+    async function saveGcpProject() {
+      const proj = document.getElementById('gcp-project-input').value.trim();
+      if (!proj) {
+        alert('GCP Project ID를 입력해 주세요.');
+        return;
+      }
+      const res = await fetch('/api/config/gcp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ gcp_project: proj, gcp_location: 'global' })
+      });
+      const data = await res.json();
+      renderAuthStatus(data);
+    }
+
+    async function refreshAuthStatus() {
+      const res = await fetch('/api/auth/refresh', { method: 'POST' });
+      const data = await res.json();
+      renderAuthStatus(data);
+    }
+
+    let koreanRosterList = [];
+
+    async function loadPlayers() {
+      const res = await fetch('/api/players');
+      const data = await res.json();
+      allPlayers = data.all_players || [];
+      koreanRosterList = data.korean_roster || [];
+      document.getElementById('roster-count').textContent = `코리안리거 ${koreanRosterList.length}명 / 유럽 5대리그 전체 ${allPlayers.length.toLocaleString()}명`;
+
+      renderPlayerGrid(koreanRosterList.concat(allPlayers.slice(0, 30)), true);
+    }
+
+    function renderPlayerGrid(list, selectFirst = false) {
+      const grid = document.getElementById('player-roster-grid');
+      grid.innerHTML = '';
+
+      list.slice(0, 60).forEach((p, idx) => {
+        const card = document.createElement('button');
+        card.id = `player-card-${p.player_id}`;
+        card.onclick = () => selectPlayer(p);
+        const isSelected = selectedPlayer && selectedPlayer.player_id === p.player_id;
+        card.className = isSelected
+          ? 'player-card text-left p-3 rounded-xl border-2 border-emerald-500 bg-emerald-950/30 transition flex flex-col justify-between'
+          : 'player-card text-left p-3 rounded-xl border border-slate-800 bg-slate-900/70 hover:border-emerald-500/60 transition flex flex-col justify-between';
+        const displayName = p.name_ko !== p.name ? `${p.name_ko} (${p.name})` : p.name;
+        card.innerHTML = `
+          <div class="flex items-center justify-between w-full">
+            <span class="text-[10px] font-extrabold px-1.5 py-0.5 rounded bg-slate-800 text-emerald-400">${p.position}</span>
+            <span class="text-[10px] text-slate-400">${p.age}세 · 만료 ${p.contract_expires.slice(0,4)}</span>
+          </div>
+          <div class="mt-1.5">
+            <div class="text-xs font-extrabold text-white truncate">${displayName}</div>
+            <div class="text-[10px] text-slate-400 truncate">${p.current_club} (${p.league})</div>
+          </div>
+          <div class="mt-2 pt-1.5 border-t border-slate-800/80 flex items-center justify-between text-[10px]">
+            <span class="text-emerald-400 font-bold">€${(p.market_value_eur / 1000000).toFixed(1)}M</span>
+            <span class="text-sky-300">€${(p.weekly_wage_eur / 1000).toFixed(0)}k/주</span>
+          </div>
+        `;
+        grid.appendChild(card);
+        if (selectFirst && idx === 0) selectPlayer(p);
+      });
+    }
+
+    function filterPlayerCards() {
+      const q = document.getElementById('player-search-input').value.trim().toLowerCase();
+      if (!q) {
+        renderPlayerGrid(koreanRosterList.concat(allPlayers.slice(0, 30)), false);
+        return;
+      }
+      const matched = allPlayers.filter(p =>
+        (p.name && p.name.toLowerCase().includes(q)) ||
+        (p.name_ko && p.name_ko.toLowerCase().includes(q)) ||
+        (p.current_club && p.current_club.toLowerCase().includes(q)) ||
+        (p.position && p.position.toLowerCase() === q)
+      );
+      renderPlayerGrid(matched, false);
+    }
+
+    function resetPlayerFilter() {
+      document.getElementById('player-search-input').value = '';
+      renderPlayerGrid(koreanRosterList, false);
+    }
+
+    function selectPlayer(p) {
+      selectedPlayer = p;
+      document.querySelectorAll('.player-card').forEach(el => {
+        el.className = 'player-card text-left p-3 rounded-xl border border-slate-800 bg-slate-900/70 hover:border-emerald-500/60 transition flex flex-col justify-between';
+      });
+      const activeEl = document.getElementById(`player-card-${p.player_id}`);
+      if (activeEl) {
+        activeEl.className = 'player-card text-left p-3 rounded-xl border-2 border-emerald-500 bg-emerald-950/30 transition flex flex-col justify-between';
+      }
+
+      document.getElementById('selected-player-card').classList.remove('hidden');
+      document.getElementById('sp-pos').textContent = `${p.position} (${p.secondary_positions})`;
+      document.getElementById('sp-name').textContent = `${p.name_ko} (${p.name})`;
+      document.getElementById('sp-club').textContent = `${p.current_club} · ${p.league} · 계약만료 ${p.contract_expires}`;
+      document.getElementById('sp-val').textContent = `€${p.market_value_eur.toLocaleString()}`;
+      document.getElementById('sp-wage').textContent = `주급 €${p.weekly_wage_eur.toLocaleString()} (추정)`;
+      document.getElementById('sp-strengths').textContent = `💡 전술 강점: ${p.strengths_summary}`;
+      document.getElementById('sp-percentile-badge').textContent = `유럽 상위 ${100 - p.pos_percentile + 1}%`;
+
+      const gbeAuto = p.intl_match_pct >= 70
+        ? `<span class="text-emerald-400 font-bold">✅ 영국 GBE Auto-Pass (A매치 ${p.intl_match_pct}%)</span>`
+        : `<span class="text-amber-300 font-bold">⚡ A매치 ${p.intl_match_pct}% (GBE 합산/ESC 검토 대상)</span>`;
+      document.getElementById('sp-gbe-mini').innerHTML = `${gbeAuto}<br/>90분당 전진액션 <b>${p.progressive_actions_per90}회</b> · 키패스 <b>${p.key_passes_per90}회</b>`;
+
+      updateRadarChart(p);
+    }
+
+    function updateRadarChart(p) {
+      const ctx = document.getElementById('playerRadarChart').getContext('2d');
+      const progScore = Math.min(99, Math.round((p.progressive_actions_per90 / 9.5) * 100));
+      const keyPassScore = Math.min(99, Math.round((p.key_passes_per90 / 2.8) * 100));
+      const gaScore = Math.min(99, Math.round(((p.goals_per90 + p.assists_per90) / 0.9) * 100));
+      const duelScore = Math.min(99, Math.round(p.defensive_duels_won_pct));
+      const pctScore = p.pos_percentile;
+
+      if (radarChartInstance) radarChartInstance.destroy();
+      radarChartInstance = new Chart(ctx, {
+        type: 'radar',
+        data: {
+          labels: ['포지션 백분위', '전진 패스/드리블', '기회 창출(키패스)', '공격포인트(G+A)', '경합 성공률'],
+          datasets: [{
+            label: p.name_ko,
+            data: [pctScore, progScore, keyPassScore, Math.max(35, gaScore), duelScore],
+            backgroundColor: 'rgba(16, 185, 129, 0.25)',
+            borderColor: '#10b981',
+            pointBackgroundColor: '#34d399',
+            borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            r: {
+              min: 0,
+              max: 100,
+              ticks: { display: false },
+              grid: { color: 'rgba(148, 163, 184, 0.15)' },
+              angleLines: { color: 'rgba(148, 163, 184, 0.15)' },
+              pointLabels: { color: '#cbd5e1', font: { size: 10, weight: '600' } }
+            }
+          },
+          plugins: { legend: { display: false } }
+        }
+      });
+    }
+
+    function selectTrack(mode) {
+      selectedTrack = mode;
+      const btnA = document.getElementById('btn-track-a');
+      const btnB = document.getElementById('btn-track-b');
+      if (mode === 'TRACK_A_TRANSFER') {
+        btnA.className = 'text-left p-3 rounded-xl border-2 border-emerald-500 bg-emerald-500/15 transition';
+        btnB.className = 'text-left p-3 rounded-xl border border-slate-700 bg-slate-900/60 hover:border-slate-600 transition';
+      } else {
+        btnB.className = 'text-left p-3 rounded-xl border-2 border-sky-500 bg-sky-500/15 transition';
+        btnA.className = 'text-left p-3 rounded-xl border border-slate-700 bg-slate-900/60 hover:border-slate-600 transition';
+      }
+    }
+
+    function updateSliderLabel(val) {
+      document.getElementById('wage-slider-label').textContent = `+${val}%`;
+    }
+
+    async function startWorkflow() {
+      if (!selectedPlayer) return;
+      const btn = document.getElementById('btn-start-workflow');
+      btn.disabled = true;
+      btn.innerHTML = '<span>⏳ LangGraph 에이전트 파이프라인 실행 중...</span>';
+
+      try {
+        const payload = {
+          player_name: selectedPlayer.name,
+          track_mode: selectedTrack,
+          target_wage_increase_pct: parseInt(document.getElementById('wage-slider').value, 10),
+          priority_goal: document.getElementById('priority-select').value,
+          auto_complete: false
+        };
+        const res = await fetch('/api/workflow/start', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        currentThreadId = data.thread_id;
+        currentWorkflowState = data.state;
+
+        renderAnalysisAndSparring(data);
+      } catch (e) {
+        alert('워크플로우 실행 중 오류가 발생했습니다: ' + e);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<span>🚀 전략 생성 & 1차 모의 협상 시작</span>';
+      }
+    }
+
+    function renderAnalysisAndSparring(data) {
+      const st = data.state;
+      document.getElementById('analysis-section').classList.remove('hidden');
+      document.getElementById('thread-badge').textContent = `Thread: ${data.thread_id}`;
+
+      const statusBadge = document.getElementById('workflow-status-badge');
+      if (data.status === 'WAITING_FOR_HUMAN_STRATEGY') {
+        statusBadge.textContent = '⏸️ Human-in-the-Loop 전략 선택 대기 중';
+        statusBadge.className = 'text-xs font-bold px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40';
+        document.getElementById('hitl-action-panel').classList.remove('hidden');
+        document.getElementById('documents-section').classList.add('hidden');
+      } else {
+        statusBadge.textContent = '✅ 최종 합의 및 투트랙 문서 생성 완료';
+        statusBadge.className = 'text-xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40';
+        document.getElementById('hitl-action-panel').classList.add('hidden');
+      }
+
+      document.getElementById('supervisor-note-box').textContent = st.supervisor_note || '';
+
+      // Model usage pills
+      const pills = document.getElementById('model-usage-pills');
+      pills.innerHTML = (st.model_usage_log || []).map(item => `
+        <span class="text-[11px] px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-700 text-slate-300">
+          <b>${item.node}:</b> <code class="text-emerald-400">${item.model}</code>
+        </span>
+      `).join('');
+
+      // Card 1: Hermes & Peer Wage Band
+      document.getElementById('hermes-ai-summary').textContent = st.hermes_ai_summary || '';
+      const band = (st.peer_wage_band || {}).wage_band_eur || {};
+      document.getElementById('wage-band-bars').innerHTML = `
+        <div class="flex justify-between p-2 rounded bg-slate-900 border border-slate-800">
+          <span class="text-slate-400">보수적 하한 (Q25)</span>
+          <span class="font-bold text-slate-200">€${(band.q25_conservative || 0).toLocaleString()} / 주</span>
+        </div>
+        <div class="flex justify-between p-2 rounded bg-emerald-950/40 border border-emerald-800/50">
+          <span class="text-emerald-300 font-semibold">비교군 중앙값 (Median Fair)</span>
+          <span class="font-extrabold text-emerald-400">€${(band.median_fair || 0).toLocaleString()} / 주</span>
+        </div>
+        <div class="flex justify-between p-2 rounded bg-slate-900 border border-slate-800">
+          <span class="text-sky-300">공격적 상한 (Q75)</span>
+          <span class="font-bold text-sky-400">€${(band.q75_ambitious || 0).toLocaleString()} / 주</span>
+        </div>
+      `;
+
+      document.getElementById('hermes-tool-trace').innerHTML = (st.hermes_tool_trace || []).map(t =>
+        `<div class="truncate">🤖 ${t.xml_protocol.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>`
+      ).join('');
+
+      // Card 2: Live News & Matched Clubs
+      const news = st.live_club_news || {};
+      document.getElementById('live-news-box').innerHTML = `
+        <div class="text-[10px] font-bold text-sky-400 uppercase">${news.source || 'Scouting Feed'}</div>
+        <div class="text-xs font-bold text-white">${news.headline || ''}</div>
+        <div class="text-[11px] text-slate-300">${news.tactical_context || ''}</div>
+      `;
+
+      const clubs = st.matched_clubs || [];
+      const clubsEl = document.getElementById('matched-clubs-list');
+      if (clubs.length > 0) {
+        clubsEl.innerHTML = clubs.slice(0, 3).map((c, idx) => `
+          <div class="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 text-xs">
+            <div class="flex justify-between font-bold text-white">
+              <span>${idx + 1}순위 · ${c.club_name} (${c.league})</span>
+              <span class="text-emerald-400">가용 €${c.max_weekly_wage_offer_eur.toLocaleString()}/주</span>
+            </div>
+            <div class="text-[11px] text-slate-400 mt-0.5">
+              현 주전: ${c.current_starter} (${c.starter_age}세, 만료 ${c.starter_contract_expires}) · 주급 €${c.starter_weekly_wage_eur.toLocaleString()}
+            </div>
+            <div class="text-[11px] text-slate-300 mt-1">${c.recruitment_note}</div>
+          </div>
+        `).join('');
+      } else {
+        clubsEl.innerHTML = `
+          <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 text-xs text-slate-300">
+            📌 <b>Track B (현 소속팀 재계약 모드):</b> 타 구단 이적 매칭 대신 현 소속 구단(<b>${st.player_profile.current_club}</b>) 내 대체 불가 가치 및 동급 비교군 주급 벤치마킹에 집중합니다.
+          </div>
+        `;
+      }
+
+      // Card 3: Legal & GBE RAG
+      const legal = st.rag_legal_review || {};
+      document.getElementById('legal-review-box').innerHTML = `
+        <div class="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800">
+          <div class="font-bold text-emerald-300">${legal.gbe_work_permit_result || ''}</div>
+          <div class="text-[10px] text-slate-400 mt-0.5">${legal.gbe_source || ''}</div>
+        </div>
+        <div class="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800">
+          <div class="font-bold text-sky-300">${legal.non_eu_quota_result || ''}</div>
+          <div class="text-[10px] text-slate-400 mt-0.5">${legal.non_eu_source || ''}</div>
+        </div>
+        <div class="p-2.5 rounded-xl bg-purple-950/30 border border-purple-800/50">
+          <div class="text-[11px] text-slate-200">${legal.ffar_fee_guidance || ''}</div>
+          <div class="text-[10px] text-purple-300 mt-0.5">${legal.ffar_source || ''}</div>
+        </div>
+      `;
+
+      document.getElementById('rag-chunks-list').innerHTML = (st.rag_retrieved_chunks || []).map(c => `
+        <div class="p-2 rounded bg-slate-950 border border-slate-800 text-[11px]">
+          <div class="flex justify-between text-purple-300 font-semibold">
+            <span class="truncate">${c.title}</span>
+            <span>유사도 ${c.similarity_score}</span>
+          </div>
+          <div class="text-[10px] text-slate-500">${c.source_citation} (${c.effective_date})</div>
+        </div>
+      `).join('');
+
+      // Sparring transcript
+      renderSparringTranscript(st.sparring_transcript || []);
+
+      // Scroll smoothly to sparring section
+      document.getElementById('analysis-section').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function renderSparringTranscript(transcript) {
+      const box = document.getElementById('sparring-chat-box');
+      box.innerHTML = transcript.map(item => {
+        const isAgent = item.speaker.includes('에이전트');
+        return `
+          <div class="flex flex-col ${isAgent ? 'items-start' : 'items-end'}">
+            <div class="text-[11px] font-bold mb-1 ${isAgent ? 'text-emerald-400' : 'text-sky-400'}">
+              ${isAgent ? '🗣️' : '🛡️'} [${item.round}] ${item.speaker}
+            </div>
+            <div class="max-w-3xl p-3.5 rounded-2xl text-xs leading-relaxed ${
+              isAgent
+                ? 'bg-emerald-950/50 border border-emerald-700/50 text-slate-100 rounded-tl-none'
+                : 'bg-sky-950/50 border border-sky-700/50 text-slate-100 rounded-tr-none'
+            }">
+              ${item.message}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function resumeWorkflow(choice) {
+      if (!currentThreadId) return;
+      const panel = document.getElementById('hitl-action-panel');
+      panel.innerHTML = '<div class="text-xs font-bold text-emerald-300 py-2">⏳ 선택한 전략을 반영하여 2라운드 협상 타결 및 투트랙 실무 문서를 생성하고 있습니다...</div>';
+
+      try {
+        const res = await fetch('/api/workflow/resume', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            thread_id: currentThreadId,
+            human_action_choice: choice
+          })
+        });
+        const data = await res.json();
+        currentWorkflowState = data.state;
+
+        renderAnalysisAndSparring(data);
+
+        // Show Dual-Output Document Viewer
+        document.getElementById('documents-section').classList.remove('hidden');
+        switchDocTab('prep');
+        document.getElementById('documents-section').scrollIntoView({ behavior: 'smooth' });
+      } catch (e) {
+        alert('협상 재개 중 오류 발생: ' + e);
+      }
+    }
+
+    function switchDocTab(tab) {
+      activeDocTab = tab;
+      const btnPrep = document.getElementById('tab-btn-prep');
+      const btnPitch = document.getElementById('tab-btn-pitch');
+      const btnRag = document.getElementById('tab-btn-raglab');
+      const printArea = document.getElementById('printable-area');
+      const ragArea = document.getElementById('raglab-area');
+
+      btnPrep.className = 'px-4 py-2 rounded-xl text-xs font-extrabold bg-slate-800 text-slate-300 hover:bg-slate-700 transition';
+      btnPitch.className = 'px-4 py-2 rounded-xl text-xs font-extrabold bg-slate-800 text-slate-300 hover:bg-slate-700 transition';
+      btnRag.className = 'px-4 py-2 rounded-xl text-xs font-extrabold bg-slate-800 text-purple-300 hover:bg-slate-700 transition';
+
+      if (tab === 'prep') {
+        btnPrep.className = 'px-4 py-2 rounded-xl text-xs font-extrabold bg-emerald-600 text-white transition';
+        printArea.classList.remove('hidden');
+        ragArea.classList.add('hidden');
+        printArea.innerHTML = marked.parse((currentWorkflowState && currentWorkflowState.deal_prep_md) || '');
+      } else if (tab === 'pitch') {
+        btnPitch.className = 'px-4 py-2 rounded-xl text-xs font-extrabold bg-sky-600 text-white transition';
+        printArea.classList.remove('hidden');
+        ragArea.classList.add('hidden');
+        printArea.innerHTML = marked.parse((currentWorkflowState && currentWorkflowState.pitch_deck_md) || '');
+      } else {
+        btnRag.className = 'px-4 py-2 rounded-xl text-xs font-extrabold bg-purple-600 text-white transition';
+        printArea.classList.add('hidden');
+        ragArea.classList.remove('hidden');
+        runInteractiveRagSearch();
+      }
+    }
+
+    function copyActiveMarkdown() {
+      if (!currentWorkflowState) return;
+      const md = activeDocTab === 'pitch' ? currentWorkflowState.pitch_deck_md : currentWorkflowState.deal_prep_md;
+      navigator.clipboard.writeText(md || '');
+      alert('클립보드에 마크다운 원문이 복사되었습니다!');
+    }
+
+    function downloadActiveMarkdown() {
+      if (!currentWorkflowState || !currentWorkflowState.saved_files) return;
+      const fullPath = activeDocTab === 'pitch'
+        ? currentWorkflowState.saved_files.external_club_pitch_deck
+        : currentWorkflowState.saved_files.internal_deal_prep_sheet;
+      const fileName = fullPath.split(/[\\/]/).pop();
+      window.open(`/api/outputs/${fileName}`, '_blank');
+    }
+
+    async function runInteractiveRagSearch() {
+      const query = document.getElementById('rag-search-input').value.trim();
+      const sType = document.getElementById('rag-search-type').value;
+      const pos = selectedPlayer ? selectedPlayer.position : 'RB';
+      const res = await fetch('/api/rag/search', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query, search_type: sType, position: pos, top_k: 4 })
+      });
+      const data = await res.json();
+      const container = document.getElementById('rag-lab-results');
+
+      if (data.search_type === 'LEGAL_REGULATIONS') {
+        container.innerHTML = (data.results || []).map(r => `
+          <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-800 space-y-1">
+            <div class="flex justify-between items-center">
+              <span class="text-xs font-extrabold text-purple-300">${r.title}</span>
+              <span class="text-[11px] px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 font-mono">
+                Cosine+Keyword Score: ${r.similarity_score} | ${r.query_embedding_model}
+              </span>
+            </div>
+            <div class="text-[11px] text-emerald-400 font-semibold">출처: ${r.source_citation} (기준일: ${r.effective_date})</div>
+            <pre class="text-[11px] text-slate-300 whitespace-pre-wrap font-sans mt-1">${r.content}</pre>
+          </div>
+        `).join('');
+      } else {
+        container.innerHTML = (data.results || []).map(r => `
+          <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-800 space-y-1">
+            <div class="flex justify-between items-center">
+              <span class="text-xs font-extrabold text-amber-300">${r.club_name} (${r.league} · ${r.position})</span>
+              <span class="text-[11px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono">
+                Tactical Similarity: ${r.tactical_similarity_score} | ${r.embedding_model}
+              </span>
+            </div>
+            <div class="text-xs text-slate-200">${r.tactical_note}</div>
+          </div>
+        `).join('');
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', initDashboard);
+  </script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+[
+  {
+    "rule_type": "AUTO_PASS_INTL_PCT",
+    "band_or_min_pct": 70.0,
+    "points": 15,
+    "description": "FIFA 상위 50위국 A매치 출전율 70% 이상 자동 통과"
+  },
+  {
+    "rule_type": "INTL_MATCH_PCT",
+    "band_or_min_pct": 60.0,
+    "points": 10,
+    "description": "A매치 출전율 60~69%"
+  },
+  {
+    "rule_type": "INTL_MATCH_PCT",
+    "band_or_min_pct": 40.0,
+    "points": 7,
+    "description": "A매치 출전율 40~59%"
+  },
+  {
+    "rule_type": "INTL_MATCH_PCT",
+    "band_or_min_pct": 30.0,
+    "points": 5,
+    "description": "A매치 출전율 30~39%"
+  },
+  {
+    "rule_type": "INTL_MATCH_PCT",
+    "band_or_min_pct": 0.0,
+    "points": 2,
+    "description": "A매치 출전율 30% 미만 기본"
+  },
+  {
+    "rule_type": "LEAGUE_BAND",
+    "band_or_min_pct": 1.0,
+    "points": 12,
+    "description": "Band 1 유럽 5대 리그"
+  },
+  {
+    "rule_type": "LEAGUE_BAND",
+    "band_or_min_pct": 2.0,
+    "points": 10,
+    "description": "Band 2 챔피언십/포르투갈/네덜란드 등"
+  },
+  {
+    "rule_type": "LEAGUE_BAND",
+    "band_or_min_pct": 3.0,
+    "points": 8,
+    "description": "Band 3 스코틀랜드/튀르키예 등"
+  },
+  {
+    "rule_type": "LEAGUE_BAND",
+    "band_or_min_pct": 4.0,
+    "points": 6,
+    "description": "Band 4 세르비아/오스트리아 등"
+  },
+  {
+    "rule_type": "LEAGUE_BAND",
+    "band_or_min_pct": 5.0,
+    "points": 4,
+    "description": "Band 5 기타 유럽 리그"
+  },
+  {
+    "rule_type": "LEAGUE_BAND",
+    "band_or_min_pct": 6.0,
+    "points": 2,
+    "description": "Band 6 K리그1/J1리그 등 아시아 최상위 리그"
+  },
+  {
+    "rule_type": "CONTINENTAL_PCT",
+    "band_or_min_pct": 70.0,
+    "points": 10,
+    "description": "UCL/대륙컵 출전 시간 70% 이상"
+  },
+  {
+    "rule_type": "CONTINENTAL_PCT",
+    "band_or_min_pct": 30.0,
+    "points": 5,
+    "description": "UCL/대륙컵 출전 시간 30~69%"
+  }
+]

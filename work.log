@@ -1,0 +1,60 @@
+# ==============================================================================
+# 🛠️ Sports Agency Project — Complete Work & Execution Log (`work.log`)
+# Rule #2: 프로젝트 시작 시점(사전 작업 포함)부터 수행한 모든 작업 및 실행 내역을 기록합니다.
+# ==============================================================================
+
+# --- [Phase 0: `work.log` 생성 이전 초기 프로젝트 구축 이력 (복원 기록)] ---
+[2026-11-06 18:37:10] [PROJECT_INIT] Created initial project architecture plans: `SPORTS_AGENCY_PLAN.md` (v1.0 feasibility study) and `SPORTS_AGENCY_HYBRID_PLAN.md` (v2.0 hybrid architecture plan).
+[2026-11-06 18:37:30] [INITIAL_DATA] Created `data/docs/regulations.md` (initial regulation summary), `data/seed_real_data.py`, and initial `data/agency_desk.db` SQLite database.
+[2026-11-06 18:37:45] [INITIAL_MCP] Created `mcp_server/football_mcp_server.py` with 5 baseline MCP tool functions (`get_player_complete_data`, `find_matching_clubs_for_transfer`, `get_peer_group_wage_band`, `search_live_club_injury_and_rumors`, `export_agency_documents`).
+[2026-11-06 18:37:55] [INITIAL_POC] Created `poc_agency_desk.py` CLI prototype script for Scenario 1 (Seol Young-woo) and Scenario 2 (Son Heung-min).
+[2026-11-06 18:40:15] [UV_ENV_INIT] Initialized Python 3.11 project environment (`.python-version`, `pyproject.toml`, `uv.lock`, `src/sports_agency/__init__.py`) with `langchain>=1.4.9`, `langchain-community>=0.4.2`, `langchain-openai>=1.7.4`.
+
+# --- [Phase 1: 트러블슈팅 및 가상환경 점검] ---
+[2026-11-06 18:44:57] [ENV_CHECK] Verified LangChain version in `.venv` via `uv run python -c "import langchain; print(langchain.__version__)"` -> `1.4.9` (resolved user's `langchain.version` AttributeError).
+[2026-11-06 18:45:01] [ENV_CHECK] Inspected workspace directory and confirmed `.venv` virtual environment creation and `pyproject.toml` dependencies.
+[2026-11-06 18:48:31] [BUGFIX] Refactored `poc_agency_desk.py` lines 302-376 to extract `club_section_content` outside f-string expressions, fixing Python 3.11 `SyntaxError: f-string expression part cannot include a backslash`.
+[2026-11-06 18:48:43] [TEST_RUN] Executed `uv run python poc_agency_desk.py` and verified generation of 4 output Markdown files in `outputs/`.
+
+# --- [Phase 2: 풀스택 아키텍처 구축 (GCP Vertex AI + SQLite Vector DB + LangGraph + FastAPI)] ---
+[2026-11-06 19:24:12] [DEPENDENCIES] Installed `google-genai`, `langgraph`, `langgraph-checkpoint-sqlite`, `fastapi`, `uvicorn`, `python-dotenv`, `numpy`, `mcp`, `sqlite-vec`, `httpx` via `uv add`.
+[2026-11-06 19:24:34] [GIT_CONFIG] Created `.gitignore` excluding `qa.md`, `.env`, `.venv/`, and SQLite temporary files.
+[2026-11-06 19:25:03] [DOCS] Created `qa.md` to record all user questions, agent answers, and architectural decisions.
+[2026-11-06 19:25:46] [CONFIG] Created `.env.example` and `src/sports_agency/config.py` for GCP ADC authentication and multi-model routing (`gemini-3.8-flash`, `gemini-3.5-flash`, `gemini-embedding-2`, `gemini-embedding-001`).
+[2026-11-06 19:26:45] [RAG_DOCS] Added Document 4 (EPL PSR / UEFA FSR amortization & contract clauses) to `data/docs/regulations.md`.
+[2026-11-06 19:27:39] [VECTOR_DB] Created `src/sports_agency/rag/sqlite_vector_store.py` integrating `sqlite-vec` extension into `data/agency_desk.db` (`rag_regulations_vec` and `scouting_notes_vec` tables).
+[2026-11-06 19:28:33] [MCP_UPGRADE] Updated `mcp_server/football_mcp_server.py` with `list_agency_players()` and Vertex AI Google Search Grounding integration.
+[2026-11-06 19:31:48] [LANGGRAPH] Created `src/sports_agency/graph/agency_workflow.py` implementing `StateGraph` + `SqliteSaver` (`data/agency_checkpoints.db`) + `interrupt_before=["sparring_round_2"]` for Human-in-the-Loop.
+[2026-11-06 19:32:40] [FASTAPI_BACKEND] Created `src/sports_agency/api/main.py` exposing `/api/status`, `/api/config/gcp`, `/api/players`, `/api/workflow/start`, `/api/workflow/resume`, `/api/rag/search`.
+[2026-11-06 19:35:51] [FASTAPI_FRONTEND] Created `src/sports_agency/api/static/index.html` single-page dashboard (Tailwind CSS + Chart.js Radar Chart + HITL 1-click buttons + Print/PDF view + Vector DB search lab).
+[2026-11-06 19:36:12] [SERVER_ENTRY] Created `run_server.py` and updated `src/sports_agency/__init__.py` entrypoint.
+
+# --- [Phase 3: GCP ADC 실서버 연동 (`iceu-songpa09` / `global`)] ---
+[2026-11-06 21:23:06] [GCP_DIAG] Listed 5 GCP projects under user's ADC credentials (`sesac-ge-2026`, `gen-lang-client-0545601324`, `iceu-songpa09`, `nimble-autumn-508604-n2`, `striped-sunlight-k5wls`).
+[2026-11-06 21:27:28] [GCP_DIAG] Verified that `iceu-songpa09` (`location=global`) supports live `gemini-3.8-flash`, `gemini-3.5-flash`, `gemini-embedding-2`, and `gemini-embedding-001`.
+[2026-11-06 21:28:54] [GCP_ADC] Set active project & ADC quota project to `iceu-songpa09` and re-indexed 11 regulation chunks (`gemini-embedding-2`) + 39 scouting notes (`gemini-embedding-001`) in `data/agency_desk.db`.
+
+# --- [Phase 4: 6대 원칙 적용 — 하드코딩 전면 제거 & Pydantic `response_schema` 적용] ---
+[2026-11-06 21:35:50] [DATA_EXTERNALIZE] Exported relational tables and created `gbe_scoring_rules` table in `data/agency_desk.db` and `data/datasets/*.json`.
+[2026-11-06 21:36:50] [REFACTOR_CONFIG] Removed all local mock/fallback generators from `src/sports_agency/config.py` and added `generate_structured` with Pydantic `response_schema`.
+[2026-11-06 21:37:40] [REFACTOR_MCP] Removed hardcoded `curated_news_feed` from `mcp_server/football_mcp_server.py` and implemented SQLite-driven `calculate_gbe_points_from_db`.
+[2026-11-06 21:42:53] [REFACTOR_WORKFLOW] Applied Pydantic schemas (`LegalRagReviewSchema`, `SparringRound1Schema`, `SparringRound2Schema`, `DualOutputDocsSchema`) in `src/sports_agency/graph/agency_workflow.py`.
+[2026-11-06 21:43:07] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-06 21:43:13] [INFO] [VERTEX_LLM_CALL] Model=gemini-3.5-flash | Temp=0.2 | OutputChars=190
+[2026-11-06 21:43:13] [INFO] [LANGGRAPH_NODE_1] Supervisor routed player=설영우 to mode=TRACK_A_TRANSFER
+[2026-11-06 21:43:13] [INFO] [MCP_TOOL_1] get_player_complete_data(설영우) -> club=Crvena Zvezda, val=€4,500,000
+[2026-11-06 21:43:13] [INFO] [MCP_TOOL_3] get_peer_group_wage_band(pos=RB, age=26) -> Q25=€28,000, Median=€35,000, Q75=€42,000
+[2026-11-06 21:43:13] [INFO] [MCP_TOOL_2] find_matching_clubs_for_transfer(pos=RB, fee=4500000, wage=19600) -> 3 clubs matched
+[2026-11-06 21:43:15] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-001 | Count=1 | Dim=768
+[2026-11-06 21:43:56] [INFO] [VERTEX_GROUNDING_SEARCH] Model=gemini-3.5-flash | Club=West Ham United | Pos=RB | Headline=Scott Parker's Right-Back Puzzle: Walker-Peters and Veltman
+[2026-11-06 21:43:56] [INFO] [MCP_TOOL_4] search_live_club_injury_and_rumors(club=West Ham United, pos=RB) -> source=Vertex AI Google Search Grounding (gemini-3.5-flash)
+[2026-11-06 21:44:06] [INFO] [VERTEX_LLM_CALL] Model=gemini-3.8-flash | Temp=0.3 | OutputChars=321
+[2026-11-06 21:44:06] [INFO] [LANGGRAPH_NODE_2A] Completed Hermes Transfer Analysis for Seol Young-woo
+[2026-11-06 21:44:06] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=1 | Dim=768
+[2026-11-06 21:44:17] [INFO] [VERTEX_STRUCTURED_LLM_CALL] Model=gemini-3.5-flash | Schema=LegalRagReviewSchema | Temp=0.1
+[2026-11-06 21:44:17] [INFO] [LANGGRAPH_NODE_3] Completed SQLite Vector RAG & GBE calculation (15 pts) for Seol Young-woo
+[2026-11-06 21:44:52] [INFO] [VERTEX_STRUCTURED_LLM_CALL] Model=gemini-3.8-flash | Schema=SparringRound1Schema | Temp=0.4
+[2026-11-06 21:44:52] [INFO] [LANGGRAPH_NODE_4A] Sparring Round 1 completed vs West Ham United (ask=€35,000, counter=€24,500)
+[2026-11-06 22:01:29] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-06 22:01:37] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=11 | Dim=768
+[2026-11-06 22:02:43] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-001 | Count=644 | Dim=768

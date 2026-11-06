@@ -188,8 +188,14 @@
       "bases:새 베이스 생성하기": false
     }
   },
-  "active": "cc35c7785a2b0b0f",
+  "active": "bf761550caf7c1d6",
   "lastOpenFiles": [
+    "data/agency_desk.db-journal",
+    "data/raw/PlayersFBREF.csv",
+    "data/raw/players.csv.gz",
+    "data/raw/clubs.csv.gz",
+    "data/raw",
+    "data/fetch_and_build_real_db.py",
     "outputs/son_heung-min_club_pitch_deck.md",
     "outputs/son_heung-min_deal_prep_sheet.md",
     "outputs/seol_young-woo_deal_prep_sheet.md",
@@ -199,12 +205,7 @@
     "mcp_server/__pycache__",
     "poc_agency_desk.py",
     "mcp_server/football_mcp_server.py",
-    "mcp_server",
-    "data/agency_desk.db-journal",
-    "data/agency_desk.db",
     "data/docs/regulations.md",
-    "data/docs",
-    "data/seed_real_data.py",
     "SPORTS_AGENCY_PLAN.md",
     "SPORTS_AGENCY_HYBRID_PLAN.md"
   ]

@@ -1,0 +1,28 @@
+# Q&A Log (Local only - Do not commit)
+qa.md
+
+# Raw downloaded open dataset archives
+data/raw/
+
+# Environment & Secrets
+.env
+.env.*
+!.env.example
+
+# Python & uv virtual environment
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+
+# IDE & Editor
+.obsidian/
+.vscode/
+.idea/
+
+# Runtime checkpoints / temp
+*.db-shm
+*.db-wal

@@ -1,22 +1,30 @@
 """
 Football Agency MCP Server (`mcp_server/football_mcp_server.py`)
-Exposes 5 standardized tools for the Hermes Data & Scouting Analyst Agent:
+Exposes standardized MCP tools backed 100% by `data/agency_desk.db` and live Vertex AI Grounding:
 1. get_player_complete_data
 2. find_matching_clubs_for_transfer (Track A)
 3. get_peer_group_wage_band (Track B)
-4. search_live_club_injury_and_rumors (Real-time web/news context with fallback)
+4. search_live_club_injury_and_rumors (Live Vertex AI Google Search Grounding + SQLite Squad Data)
 5. export_agency_documents (Saves Dual-Track Deal Prep Sheet & Club Pitch Deck)
++ calculate_gbe_points_from_db (Dynamic SQLite GBE rule engine)
++ list_agency_players (Roster query for Web Dashboard)
 """
 
 import json
-import os
 import sqlite3
 import statistics
+import sys
 from pathlib import Path
 from typing import Any
 
-DB_PATH = Path(__file__).resolve().parent.parent / "data" / "agency_desk.db"
-OUTPUT_DIR = Path(__file__).resolve().parent.parent / "outputs"
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(PROJECT_ROOT / "src") not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT / "src"))
+
+from sports_agency.logger import log_work_event
+
+DB_PATH = PROJECT_ROOT / "data" / "agency_desk.db"
+OUTPUT_DIR = PROJECT_ROOT / "outputs"
 
 
 def _get_conn() -> sqlite3.Connection:
@@ -25,10 +33,30 @@ def _get_conn() -> sqlite3.Connection:
     return conn
 
 
+def list_agency_players() -> list[dict[str, Any]]:
+    """Queries all players and their FBref stats from `agency_desk.db`."""
+    conn = _get_conn()
+    cur = conn.cursor()
+    cur.execute(
+        """
+        SELECT p.*, s.season, s.minutes_played, s.appearances,
+               s.goals_per90, s.assists_per90, s.xg_per90, s.xa_per90,
+               s.key_passes_per90, s.progressive_actions_per90,
+               s.defensive_duels_won_pct, s.pos_percentile
+        FROM players p
+        LEFT JOIN player_stats s ON p.player_id = s.player_id
+        ORDER BY p.is_agency_client DESC, p.market_value_eur DESC
+        """
+    )
+    rows = [dict(r) for r in cur.fetchall()]
+    conn.close()
+    return rows
+
+
 def get_player_complete_data(player_name: str) -> dict[str, Any]:
     """
-    [MCP Tool 1] 선수 이름(영문 또는 한글)으로 Transfermarkt 시세·계약만료일,
-    Capology 추정 주급, FBref 90분당 스탯 백분위, 영국 GBE 워크퍼밋 기초 지표를 통합 조회합니다.
+    [MCP Tool 1] Queries player contract, market value, Capology weekly wage,
+    FBref per-90 metrics, and GBE eligibility metrics from `agency_desk.db`.
     """
     conn = _get_conn()
     cur = conn.cursor()
@@ -49,13 +77,12 @@ def get_player_complete_data(player_name: str) -> dict[str, Any]:
     conn.close()
 
     if not row:
-        return {"error": f"Player '{player_name}' not found in agency_desk.db"}
+        raise ValueError(f"Player '{player_name}' not found in agency_desk.db")
 
     data = dict(row)
-    data["wage_notice"] = (
-        "Capology 추정치(Gross 기준)이므로 단일 확정값이 아닌 Peer 밴드 비교용으로 활용"
-        if data.get("is_wage_estimated")
-        else "공식 확인 연봉"
+    log_work_event(
+        "MCP_TOOL_1",
+        f"get_player_complete_data({player_name}) -> club={data['current_club']}, val=€{data['market_value_eur']:,}",
     )
     return data
 
@@ -66,8 +93,8 @@ def find_matching_clubs_for_transfer(
     target_weekly_wage_eur: int,
 ) -> list[dict[str, Any]]:
     """
-    [MCP Tool 2 - Track A 전용] 해당 포지션에 주전 노쇠화/계약만료 임박/백업 공백이 있고,
-    이적료 예산 및 목표 주급을 감당할 수 있는 유럽 타겟 구단 후보를 반환합니다.
+    [MCP Tool 2 - Track A] Queries `club_squad_needs` in `agency_desk.db` for target clubs
+    matching the player's position, transfer fee budget, and weekly wage capacity.
     """
     conn = _get_conn()
     cur = conn.cursor()
@@ -86,6 +113,10 @@ def find_matching_clubs_for_transfer(
     )
     rows = [dict(r) for r in cur.fetchall()]
     conn.close()
+    log_work_event(
+        "MCP_TOOL_2",
+        f"find_matching_clubs_for_transfer(pos={position}, fee={max_fee_eur}, wage={target_weekly_wage_eur}) -> {len(rows)} clubs matched",
+    )
     return rows
 
 
@@ -96,8 +127,8 @@ def get_peer_group_wage_band(
     exclude_player_name: str = "",
 ) -> dict[str, Any]:
     """
-    [MCP Tool 3 - Track B 전용] 동일 포지션, 유사 연령(±4세), 유사 시장가치 비교군(Peer Group) 선수들의
-    Capology 주급 분포(최솟값, 25% 분위, 중앙값, 75% 분위, 최댓값)와 스탯 비교표를 반환합니다.
+    [MCP Tool 3 - Track B] Queries `players` & `player_stats` in `agency_desk.db`
+    to compute the peer group quartile wage band (Min, Q25, Median, Q75, Max).
     """
     conn = _get_conn()
     cur = conn.cursor()
@@ -121,13 +152,17 @@ def get_peer_group_wage_band(
     conn.close()
 
     if not peers:
-        return {"error": f"No peer players found for position={position}"}
+        raise ValueError(f"No peer players found in DB for position={position}")
 
     wages = sorted(p["weekly_wage_eur"] for p in peers)
     median_wage = int(statistics.median(wages))
     q25_wage = wages[max(0, len(wages) // 4)]
     q75_wage = wages[min(len(wages) - 1, (len(wages) * 3) // 4)]
 
+    log_work_event(
+        "MCP_TOOL_3",
+        f"get_peer_group_wage_band(pos={position}, age={age}) -> Q25=€{q25_wage:,}, Median=€{median_wage:,}, Q75=€{q75_wage:,}",
+    )
     return {
         "position": position,
         "peer_count": len(peers),
@@ -138,91 +173,116 @@ def get_peer_group_wage_band(
             "q75_ambitious": q75_wage,
             "max": wages[-1],
         },
-        "data_disclaimer": "Capology 주급 추정치(is_estimated=True) 포함 데이터이므로 단일 수치 대신 Q25~Q75 협상 밴드로 제시함",
         "peers": peers,
     }
 
 
 def search_live_club_injury_and_rumors(club_name: str, position: str) -> dict[str, Any]:
     """
-    [MCP Tool 4 - 실시간 뉴스/전술 보강] 타겟 구단의 최근 포지션 부상자, 감독 전술 수요,
-    최신 이적 루머를 실시간 검색(Tavily API 연동 또는 검증된 최신 스카우팅 피드)합니다.
+    [MCP Tool 4] Performs live web search via Vertex AI Google Search Grounding (`gemini-3.5-flash`)
+    combined with SQLite `club_squad_needs` data. Contains zero hardcoded dictionaries.
     """
-    tavily_key = os.getenv("TAVILY_API_KEY")
-    if tavily_key:
-        try:
-            import urllib.request
+    from sports_agency.config import ROUTER
 
-            req_data = json.dumps(
-                {
-                    "api_key": tavily_key,
-                    "query": f"{club_name} {position} transfer target injury news 2025 2026",
-                    "max_results": 3,
-                }
-            ).encode("utf-8")
-            req = urllib.request.Request(
-                "https://api.tavily.com/search",
-                data=req_data,
-                headers={"Content-Type": "application/json"},
-            )
-            with urllib.request.urlopen(req, timeout=5) as resp:
-                result = json.loads(resp.read().decode("utf-8"))
-                return {
-                    "source": "Tavily Live Web Search API",
-                    "club_name": club_name,
-                    "position": position,
-                    "articles": result.get("results", []),
-                }
-        except Exception as e:
-            pass
-
-    # Curated latest scouting feed when offline / no external search key configured
-    curated_news_feed = {
-        "Newcastle United": {
-            "headline": "Newcastle prioritize left-footed right winger (RW) to upgrade aging Jacob Murphy",
-            "tactical_context": "에디 하우 감독은 우측에서 안으로 파고들며 찬스를 만들 수 있는 왼발 인버티드 윙어 영입을 여름 이적시장 1순위로 요청함. PSR(수익성 규정) 준수를 위해 이적료 €35M~€40M 선의 가성비 자원을 선호.",
-            "updated_at": "2026-Season Scouting Feed",
-        },
-        "Arsenal": {
-            "headline": "Arsenal seeking versatile RW/AM cover to prevent Bukayo Saka burnout",
-            "tactical_context": "아르테타 감독은 사카의 출전 시간을 관리하면서 우측 8번(메짤라)까지 소화 가능한 기술적인 왼발 플레이메이커 영입을 검토 중.",
-            "updated_at": "2026-Season Scouting Feed",
-        },
-        "Atletico Madrid": {
-            "headline": "Atletico Madrid monitoring creative left-footed attackers for post-Griezmann transition",
-            "tactical_context": "시메오네 감독은 라리가 검증 경험이 있고 좁은 공간에서 키패스를 찔러줄 수 있는 2선 자원을 선호하며 현재 Non-EU 슬롯 1장이 비어 있음.",
-            "updated_at": "2026-Season Scouting Feed",
-        },
-        "West Ham United": {
-            "headline": "West Ham actively scouting dynamic right-back as Vladimir Coufal's contract winds down",
-            "tactical_context": "만 32세 쿠팔의 기동력 저하로 인해 오버래핑과 전진 패스가 뛰어나고 영국 GBE 워크퍼밋이 즉시 발급되는 20대 중반 풀백을 리스트업.",
-            "updated_at": "2026-Season Scouting Feed",
-        },
-        "Mainz 05": {
-            "headline": "Mainz 05 looking to bolster wingback depth following strong Korean player track record",
-            "tactical_context": "이재성·홍현석 등 한국 선수들의 높은 전술 이해도에 만족한 마인츠 보드진이 좌우 스토퍼/윙백 멀티 소화가 가능한 풀백 영입 타진.",
-            "updated_at": "2026-Season Scouting Feed",
-        },
-        "Tottenham Hotspur": {
-            "headline": "Tottenham weighing 1-year extension vs multi-year renewal for captain Son Heung-min",
-            "tactical_context": "구단은 30대 선수 장기 계약에 보수적이나, 손흥민의 팀 내 최상위 공격포인트 생산력(xG 초과 달성 상위 2%)과 막대한 상업적 수익 때문에 출전 보너스 결합형 재계약 협상 여지가 큼.",
-            "updated_at": "2026-Season Scouting Feed",
-        },
-    }
-
-    news = curated_news_feed.get(
-        club_name,
-        {
-            "headline": f"{club_name} monitoring {position} market for squad rotation and tactical upgrade",
-            "tactical_context": f"{club_name} 스카우팅 부서에서 {position} 포지션의 주전 경쟁력 강화를 위해 즉시전력감 데이터를 수집 중.",
-            "updated_at": "2026-Season Scouting Feed",
-        },
+    grounded = ROUTER.search_with_grounding(
+        query=f"{club_name} {position} injury contract transfer target tactical need",
+        club_name=club_name,
+        position=position,
     )
+
+    # Also attach the database squad record if present in `club_squad_needs`
+    conn = _get_conn()
+    cur = conn.cursor()
+    cur.execute(
+        "SELECT current_starter, starter_age, starter_contract_expires, tactical_style, recruitment_note "
+        "FROM club_squad_needs WHERE LOWER(club_name) LIKE LOWER(?) AND position = ? LIMIT 1",
+        (f"%{club_name}%", position),
+    )
+    db_row = cur.fetchone()
+    conn.close()
+
+    if db_row:
+        grounded["db_squad_record"] = dict(db_row)
+
+    log_work_event(
+        "MCP_TOOL_4",
+        f"search_live_club_injury_and_rumors(club={club_name}, pos={position}) -> source={grounded['source']}",
+    )
+    return grounded
+
+
+def calculate_gbe_points_from_db(
+    intl_match_pct: float,
+    continental_minutes_pct: float,
+    league_band: int,
+) -> dict[str, Any]:
+    """
+    Calculates UK FA GBE Work Permit points dynamically by querying the `gbe_scoring_rules`
+    table in `data/agency_desk.db` (zero hardcoded thresholds or point dictionaries).
+    """
+    conn = _get_conn()
+    cur = conn.cursor()
+
+    cur.execute(
+        "SELECT band_or_min_pct, points, description FROM gbe_scoring_rules WHERE rule_type = 'AUTO_PASS_INTL_PCT' LIMIT 1"
+    )
+    auto_rule = cur.fetchone()
+    pass_threshold = int(auto_rule["points"]) if auto_rule else 15
+
+    if auto_rule and intl_match_pct >= float(auto_rule["band_or_min_pct"]):
+        conn.close()
+        return {
+            "total_points": pass_threshold,
+            "pass_threshold": pass_threshold,
+            "is_auto_pass": True,
+            "passed": True,
+            "status_summary": (
+                f"✅ 자동 통과 (Auto-Pass, {pass_threshold}점/{pass_threshold}점) — "
+                f"{auto_rule['description']} (선수 A매치 출전율: {intl_match_pct}%)"
+            ),
+        }
+
+    cur.execute(
+        "SELECT points, description FROM gbe_scoring_rules WHERE rule_type = 'LEAGUE_BAND' AND band_or_min_pct = ? LIMIT 1",
+        (float(league_band),),
+    )
+    band_row = cur.fetchone()
+    band_pts = int(band_row["points"]) if band_row else 0
+
+    cur.execute(
+        "SELECT points, description FROM gbe_scoring_rules WHERE rule_type = 'CONTINENTAL_PCT' AND band_or_min_pct <= ? ORDER BY band_or_min_pct DESC LIMIT 1",
+        (float(continental_minutes_pct),),
+    )
+    cont_row = cur.fetchone()
+    cont_pts = int(cont_row["points"]) if cont_row else 0
+
+    cur.execute(
+        "SELECT points, description FROM gbe_scoring_rules WHERE rule_type = 'INTL_MATCH_PCT' AND band_or_min_pct <= ? ORDER BY band_or_min_pct DESC LIMIT 1",
+        (float(intl_match_pct),),
+    )
+    intl_row = cur.fetchone()
+    intl_pts = int(intl_row["points"]) if intl_row else 0
+    conn.close()
+
+    total_pts = band_pts + cont_pts + intl_pts
+    passed = total_pts >= pass_threshold
+    if passed:
+        summary = (
+            f"✅ 합산 통과 ({total_pts}점/{pass_threshold}점) — "
+            f"리그 Band {league_band}({band_pts}점) + 대륙컵({cont_pts}점) + A매치({intl_pts}점)"
+        )
+    else:
+        summary = (
+            f"⚠️ 일반 점수 미달 ({total_pts}점/{pass_threshold}점: 리그 {band_pts}점 + 대륙컵 {cont_pts}점 + A매치 {intl_pts}점) "
+            f"→ 구단 ESC(Elite Significant Contribution) 예외 슬롯 적용 대상"
+        )
+
     return {
-        "source": "Market-News-MCP (Verified Scouting Intelligence Feed)",
-        "club_name": club_name,
-        "position": position,
-        **news,
+        "total_points": total_pts,
+        "pass_threshold": pass_threshold,
+        "is_auto_pass": False,
+        "passed": passed,
+        "status_summary": summary,
     }
 
 
@@ -232,8 +292,7 @@ def export_agency_documents(
     pitch_deck_md: str,
 ) -> dict[str, str]:
     """
-    [MCP Tool 5] 최종 생성된 투트랙 실무 문서(① 에이전트 내부용 협상 치트시트, ② 구단 발송용 역제의 피치덱)를
-    마크다운 파일로 저장하고 경로를 반환합니다.
+    [MCP Tool 5] Saves the generated Deal Prep Sheet & Club Pitch Deck Markdown files to `outputs/`.
     """
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     safe_name = player_name.lower().replace(" ", "_")
@@ -243,6 +302,10 @@ def export_agency_documents(
     prep_path.write_text(deal_prep_md, encoding="utf-8")
     pitch_path.write_text(pitch_deck_md, encoding="utf-8")
 
+    log_work_event(
+        "MCP_TOOL_5",
+        f"export_agency_documents({player_name}) -> saved {prep_path.name} & {pitch_path.name}",
+    )
     return {
         "status": "saved",
         "internal_deal_prep_sheet": str(prep_path),
@@ -250,7 +313,6 @@ def export_agency_documents(
     }
 
 
-# Tool registry for Hermes Function-Calling schema inspection
 HERMES_MCP_TOOLS = {
     "get_player_complete_data": get_player_complete_data,
     "find_matching_clubs_for_transfer": find_matching_clubs_for_transfer,

@@ -1,0 +1,13 @@
+"""AI Football Agency Strategy Desk — Main Package Entrypoint."""
+
+import uvicorn
+
+
+def main() -> None:
+    print("⚽ Starting AI Football Agency Strategy Desk Web Server on http://127.0.0.1:8000 ...")
+    uvicorn.run(
+        "sports_agency.api.main:app",
+        host="127.0.0.1",
+        port=8000,
+        reload=False,
+    )
