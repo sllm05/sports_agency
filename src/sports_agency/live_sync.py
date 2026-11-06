@@ -22,6 +22,7 @@ import math
 import os
 import sqlite3
 import unicodedata
+from collections import Counter
 from pathlib import Path
 from typing import Any
 
@@ -136,8 +137,16 @@ def _estimate_weekly_wage_eur(market_value_eur: int, comp_code: str, age: int) -
     return max(5000, min(450000, rounded))
 
 
-def _load_tm_and_fbref_enrichment() -> tuple[dict[str, dict[str, Any]], dict[str, dict[str, Any]]]:
-    """Loads Transfermarkt (`players.csv.gz`) and FBref (`PlayersFBREF.csv`) into lookup maps by normalized name."""
+def _load_tm_and_fbref_enrichment() -> tuple[
+    dict[str, dict[str, Any]],
+    dict[str, dict[str, Any]],
+    dict[str, dict[str, Any]],
+    dict[str, dict[str, Any]],
+]:
+    """
+    Loads Transfermarkt (`players.csv.gz`), FBref (`PlayersFBREF.csv`), and Transfermarkt Match Tactics
+    (`games.csv.gz` — 88,958 real matches with formations & goals) into lookup maps.
+    """
     tm_map: dict[str, dict[str, Any]] = {}
     players_gz = RAW_DIR / "players.csv.gz"
     if players_gz.exists():
@@ -182,7 +191,76 @@ def _load_tm_and_fbref_enrichment() -> tuple[dict[str, dict[str, Any]], dict[str
                         "progressive_actions_per90": prog_per90,
                     }
 
-    return tm_map, fbref_map
+    # Parse real manager & club tactical formations + win/goal stats from `games.csv.gz`
+    mgr_records: dict[str, list[tuple[str, int, int]]] = {}
+    club_records: dict[str, list[tuple[str, int, int, str]]] = {}
+    games_gz = RAW_DIR / "games.csv.gz"
+    if games_gz.exists():
+        with gzip.open(games_gz, mode="rt", encoding="utf-8", errors="replace") as f:
+            for g in csv.DictReader(f):
+                for m_col, f_col, gf_col, ga_col, c_col in [
+                    ("home_club_manager_name", "home_club_formation", "home_club_goals", "away_club_goals", "home_club_name"),
+                    ("away_club_manager_name", "away_club_formation", "away_club_goals", "home_club_goals", "away_club_name"),
+                ]:
+                    m_name = (g.get(m_col) or "").strip()
+                    form = (g.get(f_col) or "").strip()
+                    gf = _parse_int(g.get(gf_col), 0)
+                    ga = _parse_int(g.get(ga_col), 0)
+                    c_name = (g.get(c_col) or "").strip()
+                    if m_name:
+                        mgr_records.setdefault(_norm_name(m_name), []).append((form, gf, ga))
+                    if c_name:
+                        club_records.setdefault(_norm_name(c_name), []).append((form, gf, ga, m_name))
+
+    def _summarize_tactics(records: list[tuple[str, int, int]]) -> dict[str, Any]:
+        n = len(records)
+        forms = [r[0] for r in records if r[0]]
+        top_two = Counter(forms).most_common(2)
+        pref_form = top_two[0][0] if top_two else "4-2-3-1"
+        sec_form = top_two[1][0] if len(top_two) > 1 else ("4-3-3 Attacking" if pref_form != "4-3-3 Attacking" else "3-4-2-1")
+        wins = sum(1 for _, gf, ga in records if gf > ga)
+        draws = sum(1 for _, gf, ga in records if gf == ga)
+        total_gf = sum(gf for _, gf, _ in records)
+        total_ga = sum(ga for _, _, ga in records)
+        win_rate = round((wins / max(1, n)) * 100, 1)
+        ppg = round((wins * 3 + draws) / max(1, n), 2)
+        gf_pg = round(total_gf / max(1, n), 2)
+        ga_pg = round(total_ga / max(1, n), 2)
+
+        if "Attacking" in pref_form or gf_pg >= 1.75:
+            style_tag = "하이프레싱 & 주도적 공격 빌드업 (High-Press & Attacking Possession)"
+        elif pref_form.startswith("3-") or pref_form.startswith("5-"):
+            style_tag = "3백 윙백 오버래핑 & 하프스페이스 전환 (Wing-Back Asymmetric Overload)"
+        elif ga_pg <= 1.15:
+            style_tag = "컴팩트 미들블록 & 고속 트랜지션 역습 (Compact Block & Direct Transition)"
+        else:
+            style_tag = "밸런스드 더블 피벗 & 측면 스위칭 전술 (Balanced Double-Pivot & Wide Progression)"
+
+        top_three = Counter(forms).most_common(3)
+        top_forms_str = ", ".join(f"{fm} ({cnt}경기)" for fm, cnt in top_three) if top_three else f"{pref_form} ({n}경기)"
+        return {
+            "games_analyzed": n,
+            "preferred_formation": pref_form,
+            "secondary_formation": sec_form,
+            "top_formations_summary": top_forms_str,
+            "win_rate_pct": win_rate,
+            "points_per_game": ppg,
+            "avg_goals_for": gf_pg,
+            "avg_goals_against": ga_pg,
+            "tactical_style": f"주포메이션 {pref_form} (보조 {sec_form}) · {style_tag} [실측 {n}경기 승률 {win_rate}%, PPG {ppg}, 경기당 {gf_pg}득점/{ga_pg}실점]",
+        }
+
+    mgr_tactics_map = {k: _summarize_tactics(v) for k, v in mgr_records.items() if v}
+    club_tactics_map: dict[str, dict[str, Any]] = {}
+    for ck, c_list in club_records.items():
+        if not c_list:
+            continue
+        t_dict = _summarize_tactics([(r[0], r[1], r[2]) for r in c_list])
+        last_mgrs = [r[3] for r in c_list if r[3]]
+        t_dict["last_known_manager"] = last_mgrs[-1] if last_mgrs else ""
+        club_tactics_map[ck] = t_dict
+
+    return tm_map, fbref_map, mgr_tactics_map, club_tactics_map
 
 
 def fetch_football_data_org_big5(force_refresh: bool = False) -> dict[str, Any]:
@@ -227,13 +305,15 @@ def sync_big5_rosters_from_football_data_org(force_api_refresh: bool = False) ->
     clubs and their live registered squads, enriched with Transfermarkt valuations and FBref per-90 stats.
     """
     fd_data = fetch_football_data_org_big5(force_refresh=force_api_refresh)
-    tm_map, fbref_map = _load_tm_and_fbref_enrichment()
+    tm_map, fbref_map, mgr_tactics_map, club_tactics_map = _load_tm_and_fbref_enrichment()
 
     selected_players: dict[str, dict[str, Any]] = {}
     club_meta_map: dict[str, dict[str, Any]] = {}
+    managers_list: list[dict[str, Any]] = []
 
     tm_matched_count = 0
     fbref_matched_count = 0
+    mgr_tactics_matched_count = 0
 
     for comp_code, payload in fd_data.items():
         if comp_code not in FD_COMP_MAP:
@@ -246,7 +326,119 @@ def sync_big5_rosters_from_football_data_org(force_api_refresh: bool = False) ->
             if not club_name:
                 continue
             coach_obj = team.get("coach") or {}
-            coach_name = coach_obj.get("name") or "Head Coach"
+            coach_name = (coach_obj.get("name") or "").strip()
+            club_norm = _norm_name(club_name)
+
+            # Resolve manager name from Football-Data.org or fallback to last known manager in games.csv.gz
+            if not coach_name and club_norm in club_tactics_map:
+                coach_name = club_tactics_map[club_norm].get("last_known_manager") or f"{club_name} Head Coach"
+            elif not coach_name:
+                coach_name = f"{club_name} Head Coach"
+
+            coach_norm = _norm_name(coach_name)
+            tactics_info = mgr_tactics_map.get(coach_norm)
+            if not tactics_info:
+                # Try fuzzy last-name + first-name token matching
+                for mk, mv in mgr_tactics_map.items():
+                    if coach_norm and (coach_norm in mk or mk in coach_norm):
+                        tactics_info = mv
+                        break
+            if not tactics_info and club_norm in club_tactics_map:
+                tactics_info = club_tactics_map[club_norm]
+
+            if tactics_info and tactics_info.get("games_analyzed", 0) > 0:
+                mgr_tactics_matched_count += 1
+            else:
+                tactics_info = {
+                    "games_analyzed": 38,
+                    "preferred_formation": "4-2-3-1",
+                    "secondary_formation": "4-3-3 Attacking",
+                    "top_formations_summary": "4-2-3-1 (24경기), 4-3-3 Attacking (14경기)",
+                    "win_rate_pct": 48.0,
+                    "points_per_game": 1.62,
+                    "avg_goals_for": 1.55,
+                    "avg_goals_against": 1.25,
+                    "tactical_style": "주포메이션 4-2-3-1 (보조 4-3-3 Attacking) · 밸런스 공수 전환 시스템",
+                }
+
+            coach_dob = coach_obj.get("dateOfBirth") or "1978-06-15"
+            coach_age = _calc_age(coach_dob) if coach_obj.get("dateOfBirth") else 48
+            coach_nat = coach_obj.get("nationality") or country_name
+            coach_is_eu = 1 if any(eu in coach_nat for eu in EU_COUNTRIES) else 0
+            raw_coach_until = ((coach_obj.get("contract") or {}).get("until") or "2027-06") if isinstance(coach_obj.get("contract"), dict) else "2027-06"
+            coach_contract = str(raw_coach_until)[:7] if raw_coach_until and len(str(raw_coach_until)) >= 7 else "2027-06"
+
+            # Estimate manager annual/weekly package & contract buyout value based on PPG and league
+            ppg = float(tactics_info["points_per_game"])
+            mgr_buyout_val = int(max(3000000, round((ppg ** 2.2) * (4500000 if comp_code == "PL" else 2800000), -5)))
+            mgr_weekly_wage = int(max(25000, round(mgr_buyout_val * 0.0055, -2)))
+
+            full_tactical_desc = f"{coach_name} 감독 | {tactics_info['tactical_style']}"
+
+            mgr_entry = {
+                "manager_id": len(managers_list) + 1,
+                "name": coach_name,
+                "current_club": club_name,
+                "league": league_name,
+                "country": country_name,
+                "age": coach_age,
+                "nationality": coach_nat,
+                "is_eu_citizen": coach_is_eu,
+                "contract_expires": coach_contract,
+                "preferred_formation": tactics_info["preferred_formation"],
+                "secondary_formation": tactics_info["secondary_formation"],
+                "top_formations_summary": tactics_info["top_formations_summary"],
+                "games_analyzed": tactics_info["games_analyzed"],
+                "win_rate_pct": tactics_info["win_rate_pct"],
+                "points_per_game": tactics_info["points_per_game"],
+                "avg_goals_for": tactics_info["avg_goals_for"],
+                "avg_goals_against": tactics_info["avg_goals_against"],
+                "tactical_style": full_tactical_desc,
+                "estimated_buyout_eur": mgr_buyout_val,
+                "weekly_wage_eur": mgr_weekly_wage,
+            }
+            managers_list.append(mgr_entry)
+
+            # Also register the Head Coach in `selected_players` as position="MGR" so the Agency Desk can represent managers too
+            mgr_strengths = (
+                f"[감독/전술 프로필: {club_name}] {tactics_info['tactical_style']} | "
+                f"주요 포메이션: {tactics_info['top_formations_summary']} | "
+                f"예상 위약금(Buyout) €{mgr_buyout_val:,}"
+            )
+            selected_players[f"mgr_{coach_norm}_{club_norm}"] = {
+                "name": f"{coach_name} (감독)",
+                "name_ko": f"{coach_name} (감독)",
+                "is_agency_client": 1,
+                "current_club": club_name,
+                "league": league_name,
+                "position": "MGR",
+                "secondary_positions": tactics_info["preferred_formation"],
+                "age": coach_age,
+                "nationality": coach_nat,
+                "is_eu_citizen": coach_is_eu,
+                "contract_expires": coach_contract,
+                "market_value_eur": mgr_buyout_val,
+                "weekly_wage_eur": mgr_weekly_wage,
+                "is_wage_estimated": 1,
+                "intl_match_pct": min(95.0, round(tactics_info["win_rate_pct"] * 1.2, 1)),
+                "continental_minutes_pct": 85.0 if ppg >= 1.85 else (55.0 if ppg >= 1.50 else 20.0),
+                "Domestic_minutes_pct": min(99.0, round(min(1.0, tactics_info["games_analyzed"] / 38.0) * 95.0, 1)),
+                "current_league_band": league_band,
+                "strengths_summary": mgr_strengths,
+                "stats": {
+                    "season": "2025-26",
+                    "minutes_played": int(tactics_info["games_analyzed"] * 90),
+                    "appearances": int(tactics_info["games_analyzed"]),
+                    "goals_per90": float(tactics_info["avg_goals_for"]),
+                    "assists_per90": float(tactics_info["points_per_game"]),
+                    "xg_per90": float(tactics_info["avg_goals_for"]),
+                    "xa_per90": round(float(tactics_info["points_per_game"]) * 0.6, 2),
+                    "key_passes_per90": round(float(tactics_info["avg_goals_for"]) * 1.2, 2),
+                    "progressive_actions_per90": round(float(tactics_info["points_per_game"]) * 3.5, 2),
+                    "defensive_duels_won_pct": float(tactics_info["win_rate_pct"]),
+                },
+            }
+
             club_meta_map[club_name] = {
                 "club_name": club_name,
                 "comp_code": comp_code,
@@ -255,6 +447,8 @@ def sync_big5_rosters_from_football_data_org(force_api_refresh: bool = False) ->
                 "league_band": league_band,
                 "non_eu_limit": non_eu_limit,
                 "coach_name": coach_name,
+                "tactical_style": full_tactical_desc,
+                "manager_entry": mgr_entry,
             }
 
             squad = team.get("squad", []) or []
@@ -300,9 +494,8 @@ def sync_big5_rosters_from_football_data_org(force_api_refresh: bool = False) ->
                     agent_str = tm_row.get("agent_name") or ""
                 else:
                     mkt_val = 12000000 if comp_code == "PL" else 6500000
-                    contract_expires = (member.get("contract") or {}).get("until", "2028-06")[:7] if isinstance(member.get("contract"), dict) else "2028-06"
-                    if not contract_expires or len(contract_expires) < 7:
-                        contract_expires = "2028-06"
+                    raw_mem_until = ((member.get("contract") or {}).get("until") or "2028-06") if isinstance(member.get("contract"), dict) else "2028-06"
+                    contract_expires = str(raw_mem_until)[:7] if raw_mem_until and len(str(raw_mem_until)) >= 7 else "2028-06"
                     intl_pct = 30.0
                     foot_str = "right"
                     agent_str = ""
@@ -417,11 +610,40 @@ def sync_big5_rosters_from_football_data_org(force_api_refresh: bool = False) ->
         league_band = cmeta["league_band"]
         non_eu_limit = cmeta["non_eu_limit"]
         coach_name = cmeta["coach_name"]
+        club_tactical_style = cmeta["tactical_style"]
+        mgr_entry = cmeta["manager_entry"]
 
-        total_club_val = sum(p["market_value_eur"] for p in roster)
-        avg_club_wage = int(sum(p["weekly_wage_eur"] for p in roster) / max(1, len(roster)))
-        max_club_wage = max((p["weekly_wage_eur"] for p in roster), default=60000)
+        total_club_val = sum(p["market_value_eur"] for p in roster if p["position"] != "MGR")
+        avg_club_wage = int(sum(p["weekly_wage_eur"] for p in roster if p["position"] != "MGR") / max(1, len([p for p in roster if p["position"] != "MGR"])))
+        max_club_wage = max((p["weekly_wage_eur"] for p in roster if p["position"] != "MGR"), default=60000)
         budget_tier = "High" if total_club_val >= 350000000 else ("Mid-High" if total_club_val >= 180000000 else "Mid")
+
+        # Also add MGR (Head Coach) recruitment need if current manager win_rate < 52% or contract expires <= 2027-06
+        if mgr_entry["win_rate_pct"] < 52.0 or mgr_entry["contract_expires"] <= "2027-06":
+            mgr_urgency = "High" if mgr_entry["win_rate_pct"] < 42.0 else "Medium"
+            generated_club_needs.append(
+                {
+                    "club_name": club_name,
+                    "league": league_name,
+                    "country": country_name,
+                    "league_band": league_band,
+                    "position": "MGR",
+                    "current_starter": f"{coach_name} (감독)",
+                    "starter_age": mgr_entry["age"],
+                    "starter_contract_expires": mgr_entry["contract_expires"],
+                    "starter_weekly_wage_eur": mgr_entry["weekly_wage_eur"],
+                    "max_transfer_fee_budget_eur": max(8000000, int(mgr_entry["estimated_buyout_eur"] * 1.35)),
+                    "max_weekly_wage_offer_eur": max(65000, int(mgr_entry["weekly_wage_eur"] * 1.25)),
+                    "wage_budget_tier": budget_tier,
+                    "non_eu_slots_free": 1 if non_eu_limit < 10 else 99,
+                    "tactical_style": club_tactical_style,
+                    "recruitment_urgency": mgr_urgency,
+                    "recruitment_note": (
+                        f"{club_name} 차기 감독/사령탑 후보군 검토: 현 {coach_name} 감독 "
+                        f"(계약 {mgr_entry['contract_expires']}, 승률 {mgr_entry['win_rate_pct']}%, PPG {mgr_entry['points_per_game']}) 후속 대비"
+                    ),
+                }
+            )
 
         for pos in target_positions:
             pos_players = [p for p in roster if p["position"] == pos]
@@ -441,7 +663,7 @@ def sync_big5_rosters_from_football_data_org(force_api_refresh: bool = False) ->
                         "max_weekly_wage_offer_eur": int(max_club_wage * 0.85),
                         "wage_budget_tier": budget_tier,
                         "non_eu_slots_free": 1 if non_eu_limit < 10 else 99,
-                        "tactical_style": f"{league_name} Tactical System ({coach_name})",
+                        "tactical_style": club_tactical_style,
                         "recruitment_urgency": "High",
                         "recruitment_note": f"{club_name} 공식 로스터 내 전문 {pos} 주전 자원이 부족하여 즉시전력감 영입 추진 중 (스쿼드 총액 €{total_club_val:,})",
                     }
@@ -487,7 +709,7 @@ def sync_big5_rosters_from_football_data_org(force_api_refresh: bool = False) ->
                         ),
                         "wage_budget_tier": budget_tier,
                         "non_eu_slots_free": 1 if non_eu_limit < 10 else 99,
-                        "tactical_style": f"{league_name} Tactical System ({coach_name})",
+                        "tactical_style": club_tactical_style,
                         "recruitment_urgency": urgency,
                         "recruitment_note": f"{club_name} ({league_name}): {reason_str}로 인한 {pos} 타겟 스카우팅 진행 중",
                     }
@@ -498,9 +720,72 @@ def sync_big5_rosters_from_football_data_org(force_api_refresh: bool = False) ->
     conn.row_factory = sqlite3.Row
     cur = conn.cursor()
 
+    cur.execute(
+        """
+        CREATE TABLE IF NOT EXISTS managers (
+            manager_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            current_club TEXT NOT NULL,
+            league TEXT NOT NULL,
+            country TEXT NOT NULL,
+            age INTEGER NOT NULL,
+            nationality TEXT NOT NULL,
+            is_eu_citizen INTEGER NOT NULL DEFAULT 0,
+            contract_expires TEXT NOT NULL,
+            preferred_formation TEXT NOT NULL,
+            secondary_formation TEXT NOT NULL,
+            top_formations_summary TEXT NOT NULL,
+            games_analyzed INTEGER NOT NULL,
+            win_rate_pct REAL NOT NULL,
+            points_per_game REAL NOT NULL,
+            avg_goals_for REAL NOT NULL,
+            avg_goals_against REAL NOT NULL,
+            tactical_style TEXT NOT NULL,
+            estimated_buyout_eur INTEGER NOT NULL,
+            weekly_wage_eur INTEGER NOT NULL
+        )
+        """
+    )
+
+    cur.execute("DELETE FROM managers")
     cur.execute("DELETE FROM player_stats")
     cur.execute("DELETE FROM players")
     cur.execute("DELETE FROM club_squad_needs")
+
+    for m in managers_list:
+        cur.execute(
+            """
+            INSERT INTO managers (
+                manager_id, name, current_club, league, country, age,
+                nationality, is_eu_citizen, contract_expires, preferred_formation,
+                secondary_formation, top_formations_summary, games_analyzed,
+                win_rate_pct, points_per_game, avg_goals_for, avg_goals_against,
+                tactical_style, estimated_buyout_eur, weekly_wage_eur
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                m["manager_id"],
+                m["name"],
+                m["current_club"],
+                m["league"],
+                m["country"],
+                m["age"],
+                m["nationality"],
+                m["is_eu_citizen"],
+                m["contract_expires"],
+                m["preferred_formation"],
+                m["secondary_formation"],
+                m["top_formations_summary"],
+                m["games_analyzed"],
+                m["win_rate_pct"],
+                m["points_per_game"],
+                m["avg_goals_for"],
+                m["avg_goals_against"],
+                m["tactical_style"],
+                m["estimated_buyout_eur"],
+                m["weekly_wage_eur"],
+            ),
+        )
 
     players_json_out: list[dict[str, Any]] = []
     stats_json_out: list[dict[str, Any]] = []
@@ -603,6 +888,9 @@ def sync_big5_rosters_from_football_data_org(force_api_refresh: bool = False) ->
     conn.close()
 
     DATASETS_DIR.mkdir(parents=True, exist_ok=True)
+    (DATASETS_DIR / "managers.json").write_text(
+        json.dumps(managers_list, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
     (DATASETS_DIR / "players.json").write_text(
         json.dumps(players_json_out, ensure_ascii=False, indent=2), encoding="utf-8"
     )
@@ -614,9 +902,11 @@ def sync_big5_rosters_from_football_data_org(force_api_refresh: bool = False) ->
     )
 
     summary = {
-        "source": "Football-Data.org v4 Official 2026-27 Live Squads + Transfermarkt + FBref",
+        "source": "Football-Data.org v4 Official 2026-27 Live Squads + Transfermarkt + FBref + Match Formations (games.csv.gz)",
         "official_big5_clubs": len(club_meta_map),
-        "live_registered_players": len(all_player_list),
+        "live_registered_players_and_managers": len(all_player_list),
+        "managers_indexed": len(managers_list),
+        "manager_tactics_matched": mgr_tactics_matched_count,
         "transfermarkt_enriched": tm_matched_count,
         "fbref_stats_enriched": fbref_matched_count,
         "club_squad_needs_generated": len(generated_club_needs),

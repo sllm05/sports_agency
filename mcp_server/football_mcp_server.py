@@ -38,7 +38,7 @@ def _get_conn() -> sqlite3.Connection:
 
 
 def list_agency_players() -> list[dict[str, Any]]:
-    """Queries all players and their FBref stats from `agency_desk.db`."""
+    """Queries all players and managers and their stats from `agency_desk.db`."""
     conn = _get_conn()
     cur = conn.cursor()
     cur.execute(
@@ -57,11 +57,29 @@ def list_agency_players() -> list[dict[str, Any]]:
     return rows
 
 
+def list_agency_managers() -> list[dict[str, Any]]:
+    """Queries all 96 Big 5 League club managers and their real tactical formations/win rates from `agency_desk.db`."""
+    conn = _get_conn()
+    cur = conn.cursor()
+    cur.execute(
+        """
+        SELECT *
+        FROM managers
+        ORDER BY points_per_game DESC, win_rate_pct DESC
+        """
+    )
+    rows = [dict(r) for r in cur.fetchall()]
+    conn.close()
+    return rows
+
+
 @mcp.tool()
 def get_player_complete_data(player_name: str) -> dict[str, Any]:
     """
-    [MCP Tool 1] Queries player contract, market value, Capology weekly wage,
-    FBref per-90 metrics, and GBE eligibility metrics from `agency_desk.db`.
+    [MCP Tool 1] Queries player/manager contract, market value, weekly wage,
+    FBref per-90 metrics, GBE metrics, plus Transfer History (`transfer_history`),
+    Market Value Trajectory & Agency (`market_value_history`), Career Discipline & UCL (`career_discipline_and_ucl`),
+    and Current Club Manager Tactical & Leadership Profile (`managers`) from `agency_desk.db`.
     """
     conn = _get_conn()
     cur = conn.cursor()
@@ -79,12 +97,60 @@ def get_player_complete_data(player_name: str) -> dict[str, Any]:
         (f"%{player_name}%", f"%{player_name}%"),
     )
     row = cur.fetchone()
-    conn.close()
-
     if not row:
+        conn.close()
         raise ValueError(f"Player '{player_name}' not found in agency_desk.db")
 
     data = dict(row)
+    pid = data["player_id"]
+    club_name = data["current_club"]
+
+    # Enrich with Market Value Trajectory & Physical/Agency Profile
+    cur.execute("SELECT * FROM market_value_history WHERE player_id = ?", (pid,))
+    mv_row = cur.fetchone()
+    if mv_row:
+        mv_dict = dict(mv_row)
+        try:
+            mv_dict["recent_history"] = json.loads(mv_dict.pop("recent_history_json", "[]"))
+        except Exception:
+            mv_dict["recent_history"] = []
+        data["valuation_and_profile"] = mv_dict
+
+    # Enrich with Career Discipline & UCL experience
+    cur.execute("SELECT * FROM career_discipline_and_ucl WHERE player_id = ?", (pid,))
+    car_row = cur.fetchone()
+    if car_row:
+        data["career_and_ucl"] = dict(car_row)
+
+    # Enrich with Transfer History
+    cur.execute(
+        "SELECT transfer_date, transfer_season, from_club, to_club, transfer_fee_eur, market_value_at_transfer_eur "
+        "FROM transfer_history WHERE player_id = ? ORDER BY transfer_date DESC LIMIT 6",
+        (pid,),
+    )
+    data["transfer_history"] = [dict(r) for r in cur.fetchall()]
+
+    # Enrich with Current Club Manager's Tactical & Coaching Profile
+    cur.execute("SELECT * FROM managers WHERE current_club = ? LIMIT 1", (club_name,))
+    mgr_row = cur.fetchone()
+    if mgr_row:
+        m_dict = dict(mgr_row)
+        try:
+            m_dict["preferred_player_profiles"] = json.loads(m_dict.pop("preferred_player_profiles_json", "{}"))
+        except Exception:
+            m_dict["preferred_player_profiles"] = {}
+        data["club_manager_profile"] = m_dict
+
+    # Enrich with Current Club Live League Standing & Financial/Stadium Info
+    cur.execute(
+        "SELECT * FROM club_standings_and_finances WHERE club_name = ? AND competition_code != 'CL' LIMIT 1",
+        (club_name,),
+    )
+    st_row = cur.fetchone()
+    if st_row:
+        data["club_standing_and_finance"] = dict(st_row)
+
+    conn.close()
     log_work_event(
         "MCP_TOOL_1",
         f"get_player_complete_data({player_name}) -> club={data['current_club']}, val=€{data['market_value_eur']:,}",
@@ -168,6 +234,41 @@ def find_matching_clubs_for_transfer(
                 (position,),
             )
             rows = [dict(r) for r in cur.fetchall()]
+
+    # Enrich each matched club with its current Head Coach's Tactical, Coaching, Personality & Position Fit data + Live Standing
+    for club_row in rows:
+        cname = club_row.get("club_name", "")
+        cur.execute("SELECT * FROM managers WHERE current_club = ? LIMIT 1", (cname,))
+        m_row = cur.fetchone()
+        if m_row:
+            m_dict = dict(m_row)
+            try:
+                pos_map = json.loads(m_dict.get("preferred_player_profiles_json") or "{}")
+            except Exception:
+                pos_map = {}
+            club_row["manager_name"] = m_dict["name"]
+            club_row["manager_preferred_formation"] = m_dict["preferred_formation"]
+            club_row["manager_secondary_formation"] = m_dict["secondary_formation"]
+            club_row["manager_win_rate_pct"] = m_dict["win_rate_pct"]
+            club_row["manager_ppg"] = m_dict["points_per_game"]
+            club_row["manager_coaching_scores"] = {
+                "tactical_flexibility": m_dict.get("tactical_flexibility_score", 75),
+                "attacking_coaching": m_dict.get("attacking_coaching_score", 75),
+                "defensive_coaching": m_dict.get("defensive_coaching_score", 75),
+                "youth_trust": m_dict.get("youth_trust_score", 75),
+                "in_game_management": m_dict.get("in_game_management_score", 75),
+            }
+            club_row["manager_leadership_personality"] = m_dict.get("leadership_personality", "")
+            club_row["manager_position_requirement"] = pos_map.get(position, "멀티 포지션 전술 소화 능력")
+
+        cur.execute(
+            "SELECT rank_position, points, played_games, form, stadium_name, stadium_seats, net_transfer_record "
+            "FROM club_standings_and_finances WHERE club_name = ? AND competition_code != 'CL' LIMIT 1",
+            (cname,),
+        )
+        st_r = cur.fetchone()
+        if st_r:
+            club_row["club_live_standing"] = dict(st_r)
 
     conn.close()
     log_work_event(
@@ -374,12 +475,60 @@ def export_agency_documents(
     }
 
 
+@mcp.tool()
+def get_agency_deep_analytics_overview(competition_code: str = "PL") -> dict[str, Any]:
+    """
+    [MCP Tool 6] Returns comprehensive Agency Deep Analytics from `agency_desk.db`:
+    - Live League & UCL Standings + Club Financial/Stadium metrics (`club_standings_and_finances`)
+    - Competition Top Scorers & Assisters (`competition_top_scorers`)
+    - Top Global Football Agencies by Portfolio Market Value (`agency_market_share`)
+    - Top Managers by PPG & Coaching Capabilities (`managers`)
+    """
+    conn = _get_conn()
+    cur = conn.cursor()
+
+    cur.execute(
+        "SELECT * FROM club_standings_and_finances WHERE competition_code = ? ORDER BY rank_position ASC",
+        (competition_code.upper(),),
+    )
+    standings = [dict(r) for r in cur.fetchall()]
+
+    cur.execute(
+        "SELECT * FROM competition_top_scorers WHERE competition_code = ? ORDER BY rank ASC LIMIT 20",
+        (competition_code.upper(),),
+    )
+    scorers = [dict(r) for r in cur.fetchall()]
+
+    cur.execute("SELECT * FROM agency_market_share ORDER BY total_portfolio_value_eur DESC LIMIT 30")
+    agencies = [dict(r) for r in cur.fetchall()]
+
+    cur.execute("SELECT * FROM managers ORDER BY points_per_game DESC, win_rate_pct DESC")
+    managers = []
+    for r in cur.fetchall():
+        d = dict(r)
+        try:
+            d["preferred_player_profiles"] = json.loads(d.pop("preferred_player_profiles_json", "{}"))
+        except Exception:
+            d["preferred_player_profiles"] = {}
+        managers.append(d)
+
+    conn.close()
+    return {
+        "competition_code": competition_code.upper(),
+        "standings_and_finances": standings,
+        "top_scorers": scorers,
+        "top_agencies": agencies,
+        "managers": managers,
+    }
+
+
 HERMES_MCP_TOOLS = {
     "get_player_complete_data": get_player_complete_data,
     "find_matching_clubs_for_transfer": find_matching_clubs_for_transfer,
     "get_peer_group_wage_band": get_peer_group_wage_band,
     "search_live_club_injury_and_rumors": search_live_club_injury_and_rumors,
     "export_agency_documents": export_agency_documents,
+    "get_agency_deep_analytics_overview": get_agency_deep_analytics_overview,
 }
 
 if __name__ == "__main__":

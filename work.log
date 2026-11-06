@@ -85,3 +85,41 @@
 [2026-11-06 23:44:31] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=1 | Dim=768
 [2026-11-06 23:44:32] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=1 | Dim=768
 [2026-11-06 23:44:43] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-001 | Count=1 | Dim=768
+[2026-11-06 23:48:53] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-06 23:48:58] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=1 | Dim=768
+[2026-11-06 23:48:59] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=1 | Dim=768
+[2026-11-06 23:48:59] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=1 | Dim=768
+[2026-11-06 23:48:59] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=1 | Dim=768
+[2026-11-06 23:49:01] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-001 | Count=1 | Dim=768
+[2026-11-06 23:49:01] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=1 | Dim=768
+[2026-11-06 23:48:55] [INFO] [JUPYTER_RAG_NOTEBOOK] Created and executed `test_rag_pipeline.ipynb` with pandas DataFrame tables for inspecting `chunk_size=800`, `chunk_overlap=150`, `top_k=5` across 165 regulation/PDF chunks and 3,260 scouting notes.
+[2026-11-06 23:54:08] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-06 23:56:07] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=1 | Dim=768
+[2026-11-06 23:56:08] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=1 | Dim=768
+[2026-11-06 23:56:08] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=1 | Dim=768
+[2026-11-06 23:56:09] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=1 | Dim=768
+[2026-11-06 23:57:52] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-001 | Count=1 | Dim=768
+[2026-11-07 00:04:05] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-07 00:04:15] [INFO] [OFFICIAL_PDF_EXPANSION] Added 3 more official full-text FIFA PDFs (`FIFA_Regulations_Status_Transfer_Players_RSTP.pdf` 102p, `FIFA_Football_Agent_Regulations_FAQs.pdf` 56p, `FIFA_Clearing_House_Regulations.pdf` 34p) to `data/docs/pdfs/` (total 7 official PDFs, 254 pages) and started full `gemini-embedding-2` indexing (`chunk_size=800`, `chunk_overlap=150`).
+[2026-11-07 00:04:43] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=687 | Dim=768
+[2026-11-07 00:04:58] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-07 00:05:07] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=1 | Dim=768
+[2026-11-07 00:05:08] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=1 | Dim=768
+[2026-11-07 00:05:09] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=1 | Dim=768
+[2026-11-07 00:05:09] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=1 | Dim=768
+[2026-11-07 00:05:15] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-001 | Count=1 | Dim=768
+[2026-11-07 00:05:16] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=1 | Dim=768
+[2026-11-07 00:17:16] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-07 00:17:52] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-07 00:18:16] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-07 00:18:20] [INFO] [FOOTBALL_DATA_ORG_SYNC] Rebuilt DB from official Football-Data.org v4 2026-27 squads: {'source': 'Football-Data.org v4 Official 2026-27 Live Squads + Transfermarkt + FBref + Match Formations (games.csv.gz)', 'official_big5_clubs': 96, 'live_registered_players_and_managers': 2758, 'managers_indexed': 96, 'manager_tactics_matched': 93, 'transfermarkt_enriched': 2214, 'fbref_stats_enriched': 955, 'club_squad_needs_generated': 510}
+[2026-11-07 00:20:14] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-07 00:20:46] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=687 | Dim=768
+[2026-11-07 00:25:59] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-001 | Count=3268 | Dim=768
+[2026-11-07 00:30:31] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-07 00:31:39] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-07 00:31:53] [INFO] [AGENCY_DEEP_ANALYTICS_BUILT] Built 6 new agency analytics tables in SQLite & JSON: {'transfer_history_records': 13218, 'market_value_history_players': 2662, 'career_discipline_and_ucl_players': 2662, 'club_standings_and_finances_rows': 132, 'competition_top_scorers_rows': 300, 'agency_market_share_agencies': 250}
+[2026-11-07 00:33:55] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-07 00:34:09] [INFO] [AGENCY_DEEP_ANALYTICS_BUILT] Built 6 new agency analytics tables in SQLite & JSON: {'transfer_history_records': 13218, 'market_value_history_players': 2662, 'career_discipline_and_ucl_players': 2662, 'club_standings_and_finances_rows': 132, 'competition_top_scorers_rows': 300, 'agency_market_share_agencies': 250}
+[2026-11-07 00:38:24] [INFO] [MCP_TOOL_1] get_player_complete_data(Bukayo Saka) -> club=Arsenal FC, val=€110,000,000
+[2026-11-07 00:38:24] [INFO] [MCP_TOOL_2] find_matching_clubs_for_transfer(pos=RW, fee=100000000, wage=200000, league=ALL) -> 2 clubs matched

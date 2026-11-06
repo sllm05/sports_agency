@@ -36,26 +36,44 @@ PDF_METADATA_MAP: dict[str, dict[str, str]] = {
     "FIFA_Football_Agent_Regulations_FFAR.pdf": {
         "doc_category": "FIFA_FFAR_FEE",
         "title": "FIFA Football Agent Regulations (FFAR Official Full Text PDF)",
-        "source_citation": "FIFA Football Agent Regulations (Official FIFA PDF, 2022/2023 Edition)",
+        "source_citation": "FIFA Football Agent Regulations (Official FIFA PDF, 39 Pages)",
         "effective_date": "2023년 10월 1일 발효 (Circular 1873 일부 유예 병행)",
     },
     "FIFA_Circular_1873_FFAR_Suspension.pdf": {
         "doc_category": "FIFA_FFAR_FEE",
         "title": "FIFA Circular No. 1873 — FFAR Worldwide Temporary Suspension Update",
-        "source_citation": "FIFA Circular no. 1873 (Zurich, 30 December 2023 Official PDF)",
+        "source_citation": "FIFA Circular no. 1873 (Zurich, 30 December 2023 Official PDF, 3 Pages)",
         "effective_date": "2023년 12월 30일 발효 ~ 2026년 현재 유효",
     },
     "FIFA_Enclosure_1_Explanatory_Notes_FFAR.pdf": {
         "doc_category": "FIFA_FFAR_FEE",
         "title": "Explanatory Notes on the FIFA Football Agent Regulations (Enclosure 1)",
-        "source_citation": "FIFA FFAR Explanatory Notes (Official PDF Enclosure 1)",
+        "source_citation": "FIFA FFAR Explanatory Notes (Official PDF Enclosure 1, 10 Pages)",
         "effective_date": "2023-2026 시즌 기준",
     },
     "FIFA_Enclosure_2_Application_FFAR.pdf": {
         "doc_category": "FIFA_FFAR_FEE",
         "title": "Information Concerning the Application of the FIFA FFAR (Enclosure 2)",
-        "source_citation": "FIFA FFAR Application Guidelines (Official PDF Enclosure 2)",
+        "source_citation": "FIFA FFAR Application Guidelines (Official PDF Enclosure 2, 10 Pages)",
         "effective_date": "2023-2026 시즌 기준",
+    },
+    "FIFA_Football_Agent_Regulations_FAQs.pdf": {
+        "doc_category": "FIFA_FFAR_FEE",
+        "title": "FIFA Football Agent Regulations Official FAQs (March 2023 Edition)",
+        "source_citation": "FIFA Football Agent Regulations FAQs (Official FIFA PDF, 56 Pages)",
+        "effective_date": "2023-2026 시즌 기준",
+    },
+    "FIFA_Regulations_Status_Transfer_Players_RSTP.pdf": {
+        "doc_category": "PSR_CONTRACT_LAW",
+        "title": "FIFA Regulations on the Status and Transfer of Players (RSTP Official Full Text)",
+        "source_citation": "FIFA RSTP (Regulations on the Status and Transfer of Players Official PDF, 102 Pages)",
+        "effective_date": "2024년 10월 / 2025-2026 시즌 발효판",
+    },
+    "FIFA_Clearing_House_Regulations.pdf": {
+        "doc_category": "PSR_CONTRACT_LAW",
+        "title": "FIFA Clearing House Regulations (Official Full Text PDF)",
+        "source_citation": "FIFA Clearing House Regulations (Official FIFA PDF, 34 Pages)",
+        "effective_date": "2026년 1월 발효판",
     },
 }
 

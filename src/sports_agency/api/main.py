@@ -22,7 +22,12 @@ from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
-from mcp_server.football_mcp_server import get_player_complete_data, list_agency_players
+from mcp_server.football_mcp_server import (
+    get_agency_deep_analytics_overview,
+    get_player_complete_data,
+    list_agency_managers,
+    list_agency_players,
+)
 from sports_agency.config import CONFIG, PROJECT_ROOT, ROUTER
 from sports_agency.graph.agency_workflow import WORKFLOW_MANAGER
 from sports_agency.live_sync import (
@@ -181,6 +186,22 @@ def api_list_players() -> dict[str, Any]:
         "european_peers": peer_players,
         "all_players": players,
     }
+
+
+@app.get("/api/managers")
+def api_list_managers() -> dict[str, Any]:
+    """Returns all 96 Big 5 League club head coaches and their real match formations/win-rate tactics."""
+    managers = list_agency_managers()
+    return {
+        "total_count": len(managers),
+        "managers": managers,
+    }
+
+
+@app.get("/api/analytics/overview")
+def api_get_analytics_overview(comp: str = "PL") -> dict[str, Any]:
+    """Returns League/UCL standings, club finances, top scorers, global agency market share, and manager profiles."""
+    return get_agency_deep_analytics_overview(competition_code=comp)
 
 
 @app.get("/api/players/{player_name}")

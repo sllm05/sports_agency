@@ -102,7 +102,166 @@ def init_db() -> None:
         """
     )
 
-    for tbl in ["players", "player_stats", "club_squad_needs", "gbe_scoring_rules"]:
+    cur.execute(
+        """
+        CREATE TABLE IF NOT EXISTS managers (
+            manager_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            current_club TEXT NOT NULL,
+            league TEXT NOT NULL,
+            country TEXT NOT NULL,
+            age INTEGER NOT NULL,
+            nationality TEXT NOT NULL,
+            is_eu_citizen INTEGER NOT NULL DEFAULT 0,
+            contract_expires TEXT NOT NULL,
+            preferred_formation TEXT NOT NULL,
+            secondary_formation TEXT NOT NULL,
+            top_formations_summary TEXT NOT NULL,
+            games_analyzed INTEGER NOT NULL,
+            win_rate_pct REAL NOT NULL,
+            points_per_game REAL NOT NULL,
+            avg_goals_for REAL NOT NULL,
+            avg_goals_against REAL NOT NULL,
+            tactical_style TEXT NOT NULL,
+            estimated_buyout_eur INTEGER NOT NULL,
+            weekly_wage_eur INTEGER NOT NULL,
+            tactical_flexibility_score INTEGER NOT NULL DEFAULT 75,
+            attacking_coaching_score INTEGER NOT NULL DEFAULT 75,
+            defensive_coaching_score INTEGER NOT NULL DEFAULT 75,
+            youth_trust_score INTEGER NOT NULL DEFAULT 75,
+            in_game_management_score INTEGER NOT NULL DEFAULT 75,
+            leadership_personality TEXT NOT NULL DEFAULT '',
+            preferred_player_profiles_json TEXT NOT NULL DEFAULT '{}'
+        )
+        """
+    )
+
+    cur.execute(
+        """
+        CREATE TABLE IF NOT EXISTS transfer_history (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            player_id INTEGER NOT NULL,
+            player_name TEXT NOT NULL,
+            transfer_date TEXT NOT NULL,
+            transfer_season TEXT NOT NULL,
+            from_club TEXT NOT NULL,
+            to_club TEXT NOT NULL,
+            transfer_fee_eur INTEGER NOT NULL,
+            market_value_at_transfer_eur INTEGER NOT NULL
+        )
+        """
+    )
+
+    cur.execute(
+        """
+        CREATE TABLE IF NOT EXISTS market_value_history (
+            player_id INTEGER PRIMARY KEY,
+            player_name TEXT NOT NULL,
+            current_club TEXT NOT NULL,
+            current_market_value_eur INTEGER NOT NULL,
+            highest_market_value_eur INTEGER NOT NULL,
+            peak_date TEXT NOT NULL,
+            previous_market_value_eur INTEGER NOT NULL,
+            valuation_change_pct REAL NOT NULL,
+            height_cm INTEGER NOT NULL,
+            preferred_foot TEXT NOT NULL,
+            international_caps INTEGER NOT NULL,
+            international_goals INTEGER NOT NULL,
+            agency_name TEXT NOT NULL,
+            recent_history_json TEXT NOT NULL
+        )
+        """
+    )
+
+    cur.execute(
+        """
+        CREATE TABLE IF NOT EXISTS career_discipline_and_ucl (
+            player_id INTEGER PRIMARY KEY,
+            player_name TEXT NOT NULL,
+            current_club TEXT NOT NULL,
+            career_matches INTEGER NOT NULL,
+            career_minutes INTEGER NOT NULL,
+            career_goals INTEGER NOT NULL,
+            career_assists INTEGER NOT NULL,
+            career_yellow_cards INTEGER NOT NULL,
+            career_red_cards INTEGER NOT NULL,
+            ucl_matches INTEGER NOT NULL,
+            ucl_goals INTEGER NOT NULL,
+            ucl_assists INTEGER NOT NULL
+        )
+        """
+    )
+
+    cur.execute(
+        """
+        CREATE TABLE IF NOT EXISTS club_standings_and_finances (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            competition_code TEXT NOT NULL,
+            competition_name TEXT NOT NULL,
+            club_name TEXT NOT NULL,
+            rank_position INTEGER NOT NULL,
+            played_games INTEGER NOT NULL,
+            won INTEGER NOT NULL,
+            draw INTEGER NOT NULL,
+            lost INTEGER NOT NULL,
+            points INTEGER NOT NULL,
+            goals_for INTEGER NOT NULL,
+            goals_against INTEGER NOT NULL,
+            goal_difference INTEGER NOT NULL,
+            form TEXT NOT NULL,
+            stadium_name TEXT NOT NULL,
+            stadium_seats INTEGER NOT NULL,
+            net_transfer_record TEXT NOT NULL,
+            foreigners_pct REAL NOT NULL,
+            national_team_players INTEGER NOT NULL
+        )
+        """
+    )
+
+    cur.execute(
+        """
+        CREATE TABLE IF NOT EXISTS competition_top_scorers (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            competition_code TEXT NOT NULL,
+            competition_name TEXT NOT NULL,
+            rank INTEGER NOT NULL,
+            player_name TEXT NOT NULL,
+            nationality TEXT NOT NULL,
+            club_name TEXT NOT NULL,
+            played_matches INTEGER NOT NULL,
+            goals INTEGER NOT NULL,
+            assists INTEGER NOT NULL,
+            penalties INTEGER NOT NULL
+        )
+        """
+    )
+
+    cur.execute(
+        """
+        CREATE TABLE IF NOT EXISTS agency_market_share (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            agency_name TEXT NOT NULL,
+            big5_client_count INTEGER NOT NULL,
+            total_portfolio_value_eur INTEGER NOT NULL,
+            avg_client_value_eur INTEGER NOT NULL,
+            top_clients_summary TEXT NOT NULL
+        )
+        """
+    )
+
+    for tbl in [
+        "players",
+        "player_stats",
+        "club_squad_needs",
+        "gbe_scoring_rules",
+        "managers",
+        "transfer_history",
+        "market_value_history",
+        "career_discipline_and_ucl",
+        "club_standings_and_finances",
+        "competition_top_scorers",
+        "agency_market_share",
+    ]:
         json_file = DATASETS_DIR / f"{tbl}.json"
         if not json_file.exists():
             continue

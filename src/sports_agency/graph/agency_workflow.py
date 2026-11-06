@@ -209,13 +209,23 @@ def hermes_transfer_node(state: AgencyGraphState) -> dict[str, Any]:
     band_q25 = peer_band["wage_band_eur"]["q25_conservative"]
     band_q75 = peer_band["wage_band_eur"]["q75_ambitious"]
 
+    top_club = clubs[0] if clubs else {}
+    mgr_info = (
+        f"감독 {top_club.get('manager_name', '')} (포메이션 {top_club.get('manager_preferred_formation', '')}, "
+        f"리더십/성향: {top_club.get('manager_leadership_personality', '')}, "
+        f"포지션 요구사항: {top_club.get('manager_position_requirement', '')})"
+        if top_club else ""
+    )
+    ucl_info = profile.get("career_and_ucl", {})
+    vp_info = profile.get("valuation_and_profile", {})
+
     prompt = (
         f"당신은 NousResearch Hermes 아키텍처 기반의 축구 데이터 분석 에이전트입니다.\n"
-        f"아래 실제 SQLite DB 조회 및 실시간 검색 결과를 바탕으로 3문장 이내의 핵심 스카우팅 & 밸류에이션 분석 요약을 작성하세요:\n"
-        f"- 선수: {profile['name_ko']} ({profile['name']}), 포지션 {pos}, 시세 €{val:,}, 현재 주급 €{cur_wage:,}\n"
-        f"- 핵심 스탯: 90분당 전진액션 {profile['progressive_actions_per90']}회, 키패스 {profile['key_passes_per90']}회, 상위 {100 - profile['pos_percentile'] + 1}%\n"
+        f"아래 실제 SQLite DB 조회 및 실시간 검색 결과를 바탕으로 3~4문장의 핵심 스카우팅 & 밸류에이션 분석 요약을 작성하세요:\n"
+        f"- 고객(선수/감독): {profile['name_ko']} ({profile['name']}), 포지션 {pos}, 시세 €{val:,} (커리어 최고 €{vp_info.get('highest_market_value_eur', val):,}), 현재 주급 €{cur_wage:,}\n"
+        f"- 핵심 스탯 & 커리어: 90분당 전진액션 {profile['progressive_actions_per90']}회, 키패스 {profile['key_passes_per90']}회, 상위 {100 - profile['pos_percentile'] + 1}%, 통산 {ucl_info.get('career_matches', 0)}경기 (UCL/유럽대항전 {ucl_info.get('ucl_matches', 0)}경기)\n"
         f"- 동급 Peer 주급 밴드: Q25 €{band_q25:,} ~ 중앙값 €{peer_band['wage_band_eur']['median_fair']:,} ~ Q75 €{band_q75:,}\n"
-        f"- 매칭 1순위 구단: {target_club_for_news} ({live_news.get('tactical_context', '')})"
+        f"- 매칭 1순위 구단 및 감독 전술 적합도: {target_club_for_news} | {mgr_info} | ({live_news.get('tactical_context', '')})"
     )
     ai_summary, model_used = ROUTER.generate_text(
         prompt,
