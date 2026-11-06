@@ -769,6 +769,7 @@
         const d = await res.json();
         const vp = d.valuation_and_profile || {};
         const cu = d.career_and_ucl || {};
+        const pt = d.playstyle_and_tendencies || {};
         const mgr = d.club_manager_profile || {};
         const trs = d.transfer_history || [];
         const st = d.club_standing_and_finance || {};
@@ -784,15 +785,17 @@
         const posReq = (mgr.preferred_player_profiles && mgr.preferred_player_profiles[d.position]) || '전술 멀티 소화력 및 공수 전환 가담';
 
         box.innerHTML = `
-          <div class="text-emerald-300 font-bold">📊 에이전시 심층 프로파일 & 현 소속팀 감독 전술/성향 분석</div>
-          <div>• <b>신체/A매치/에이전시:</b> ${vp.height_cm || 180}cm (${vp.preferred_foot || 'right'}발) | A매치 ${vp.international_caps || 0}경기 ${vp.international_goals || 0}골 | 커리어 최고 몸값 <b class="text-emerald-400">€${((vp.highest_market_value_eur || d.market_value_eur)/1000000).toFixed(1)}M</b> (${vp.peak_date || '2026'}) | 소속 에이전시: <span class="text-sky-300">${vp.agency_name || '독립'}</span></div>
-          <div>• <b>통산/챔스/징계 기록:</b> 통산 ${cu.career_matches || 0}경기 (${cu.career_goals || 0}골 ${cu.career_assists || 0}도움) | <b>UCL/유럽대항전 ${cu.ucl_matches || 0}경기 (${cu.ucl_goals || 0}골 ${cu.ucl_assists || 0}도움)</b> | 경고 ${cu.career_yellow_cards || 0}회·퇴장 ${cu.career_red_cards || 0}회</div>
-          <div>• <b>이적 히스토리:</b> ${trText}</div>
-          <div>• <b>소속 구단 현황 (${d.current_club}):</b> 리그 <b>${st.rank_position || '-'}위</b> (${st.points || 0}점, 폼 ${st.form || '-'}) | 구장 ${st.stadium_name || '-'} (${(st.stadium_seats || 0).toLocaleString()}석) | 순이적지출 ${st.net_transfer_record || '€0'}</div>
+          <div class="text-emerald-300 font-bold">📊 에이전시 심층 프로파일 · 축구 스타일(장·단점) & 팩트 성향 분석</div>
+          <div>• <b>신체/A매치/에이전시:</b> ${vp.height_cm || 180}cm (${vp.preferred_foot || 'right'}발) | A매치 ${vp.international_caps || 0}경기 ${vp.international_goals || 0}골 | 최고 몸값 <b class="text-emerald-400">€${((vp.highest_market_value_eur || d.market_value_eur)/1000000).toFixed(1)}M</b> (${vp.peak_date || '2026'}) | 에이전시: <span class="text-sky-300">${vp.agency_name || '독립'}</span></div>
+          <div>• <b>축구 스타일 (전술 아키타입):</b> <b class="text-amber-300">${pt.tactical_archetype || '-'}</b></div>
+          <div>• <b>🔥 핵심 장점 (Strengths):</b> <span class="text-emerald-300">${pt.strengths_tags || '-'}</span></div>
+          <div>• <b>⚠️ 보완점/단점 (Weaknesses):</b> <span class="text-rose-300">${pt.weaknesses_tags || '-'}</span></div>
+          <div>• <b>📌 객관적 온볼/마무리 성향 (Fact):</b> ${pt.progression_tendency || '-'} | ${pt.finishing_clinicality || '-'}</div>
+          <div>• <b>📌 객관적 경합·징계·이적·빅게임 지표 (Fact):</b> ${pt.temperament_and_discipline || '-'} | ${pt.loyalty_and_mobility || '-'} | ${pt.big_game_and_leadership || '-'} | ${trText}</div>
           <div class="pt-1 mt-1 border-t border-slate-800">
-            <div>👔 <b>현 소속팀 감독 (${mgr.name || '-'}):</b> 주포메이션 <b class="text-amber-300">${mgr.preferred_formation || '-'}</b> (보조 ${mgr.secondary_formation || '-'}) | 승률 ${mgr.win_rate_pct || 0}% (PPG ${mgr.points_per_game || 0})</div>
+            <div>👔 <b>현 소속팀 감독 (${mgr.name || '-'} · ${d.current_club} ${st.rank_position || '-'}위):</b> 주포메이션 <b class="text-amber-300">${mgr.preferred_formation || '-'}</b> (보조 ${mgr.secondary_formation || '-'}) | 승률 ${mgr.win_rate_pct || 0}% (PPG ${mgr.points_per_game || 0})</div>
             <div>🧠 <b>감독 코칭 능력치:</b> ${mgrScores}</div>
-            <div>🎭 <b>감독 리더십/성격:</b> <span class="text-slate-200">${mgr.leadership_personality || '-'}</span></div>
+            <div>📈 <b>감독 전술/선수단 운용 지표 (Fact):</b> <span class="text-slate-200">${mgr.leadership_personality || '-'}</span></div>
             <div>🎯 <b>감독의 ${d.position} 포지션 요구사항:</b> <span class="text-sky-300">${posReq}</span></div>
           </div>
         `;

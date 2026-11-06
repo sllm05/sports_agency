@@ -249,6 +249,26 @@ def init_db() -> None:
         """
     )
 
+    cur.execute(
+        """
+        CREATE TABLE IF NOT EXISTS player_playstyle_and_tendencies (
+            player_id INTEGER PRIMARY KEY,
+            player_name TEXT NOT NULL,
+            current_club TEXT NOT NULL,
+            position TEXT NOT NULL,
+            tactical_archetype TEXT NOT NULL,
+            strengths_tags TEXT NOT NULL DEFAULT '',
+            weaknesses_tags TEXT NOT NULL DEFAULT '',
+            progression_tendency TEXT NOT NULL,
+            finishing_clinicality TEXT NOT NULL,
+            temperament_and_discipline TEXT NOT NULL,
+            loyalty_and_mobility TEXT NOT NULL,
+            big_game_and_leadership TEXT NOT NULL,
+            starter_ratio_pct REAL NOT NULL
+        )
+        """
+    )
+
     for tbl in [
         "players",
         "player_stats",
@@ -261,6 +281,7 @@ def init_db() -> None:
         "club_standings_and_finances",
         "competition_top_scorers",
         "agency_market_share",
+        "player_playstyle_and_tendencies",
     ]:
         json_file = DATASETS_DIR / f"{tbl}.json"
         if not json_file.exists():

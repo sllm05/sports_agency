@@ -123,3 +123,27 @@
 [2026-11-07 00:34:09] [INFO] [AGENCY_DEEP_ANALYTICS_BUILT] Built 6 new agency analytics tables in SQLite & JSON: {'transfer_history_records': 13218, 'market_value_history_players': 2662, 'career_discipline_and_ucl_players': 2662, 'club_standings_and_finances_rows': 132, 'competition_top_scorers_rows': 300, 'agency_market_share_agencies': 250}
 [2026-11-07 00:38:24] [INFO] [MCP_TOOL_1] get_player_complete_data(Bukayo Saka) -> club=Arsenal FC, val=€110,000,000
 [2026-11-07 00:38:24] [INFO] [MCP_TOOL_2] find_matching_clubs_for_transfer(pos=RW, fee=100000000, wage=200000, league=ALL) -> 2 clubs matched
+[2026-11-07 00:48:58] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-07 00:49:11] [INFO] [AGENCY_DEEP_ANALYTICS_BUILT] Built 6 new agency analytics tables in SQLite & JSON: {'transfer_history_records': 13218, 'market_value_history_players': 2662, 'career_discipline_and_ucl_players': 2662, 'player_playstyle_and_tendencies_players': 2662, 'club_standings_and_finances_rows': 132, 'competition_top_scorers_rows': 300, 'agency_market_share_agencies': 250}
+[2026-11-07 00:49:31] [INFO] [MCP_TOOL_1] get_player_complete_data(Bukayo Saka) -> club=Arsenal FC, val=€110,000,000
+[2026-11-07 00:49:31] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€200,000,000
+[2026-11-07 00:49:31] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-07 00:49:31] [INFO] [MCP_TOOL_1] get_player_complete_data(Kang-in Lee) -> club=Club Atlético de Madrid, val=€28,000,000
+[2026-11-07 01:01:43] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-07 01:01:58] [INFO] [AGENCY_DEEP_ANALYTICS_BUILT] Built 6 new agency analytics tables in SQLite & JSON: {'transfer_history_records': 13218, 'market_value_history_players': 2662, 'career_discipline_and_ucl_players': 2662, 'player_playstyle_and_tendencies_players': 2662, 'club_standings_and_finances_rows': 132, 'competition_top_scorers_rows': 300, 'agency_market_share_agencies': 250}
+[2026-11-07 01:02:09] [INFO] [MCP_TOOL_1] get_player_complete_data(Bukayo Saka) -> club=Arsenal FC, val=€110,000,000
+[2026-11-07 01:02:09] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€200,000,000
+[2026-11-07 01:02:09] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-07 01:02:09] [INFO] [MCP_TOOL_1] get_player_complete_data(Kang-in Lee) -> club=Club Atlético de Madrid, val=€28,000,000
+[2026-11-07 01:09:22] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-07 01:09:37] [INFO] [AGENCY_DEEP_ANALYTICS_BUILT] Built 6 new agency analytics tables in SQLite & JSON: {'transfer_history_records': 13218, 'market_value_history_players': 2662, 'career_discipline_and_ucl_players': 2662, 'player_playstyle_and_tendencies_players': 2662, 'club_standings_and_finances_rows': 132, 'competition_top_scorers_rows': 300, 'agency_market_share_agencies': 250}
+[2026-11-07 01:09:47] [INFO] [MCP_TOOL_1] get_player_complete_data(Bukayo Saka) -> club=Arsenal FC, val=€110,000,000
+[2026-11-07 01:09:47] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€200,000,000
+[2026-11-07 01:09:47] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-07 01:09:47] [INFO] [MCP_TOOL_1] get_player_complete_data(Kang-in Lee) -> club=Club Atlético de Madrid, val=€28,000,000
+[2026-11-07 01:11:23] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-07 01:11:39] [INFO] [AGENCY_DEEP_ANALYTICS_BUILT] Built 6 new agency analytics tables in SQLite & JSON: {'transfer_history_records': 13218, 'market_value_history_players': 2662, 'career_discipline_and_ucl_players': 2662, 'player_playstyle_and_tendencies_players': 2662, 'club_standings_and_finances_rows': 132, 'competition_top_scorers_rows': 300, 'agency_market_share_agencies': 250}
+[2026-11-07 01:11:53] [INFO] [MCP_TOOL_1] get_player_complete_data(Bukayo Saka) -> club=Arsenal FC, val=€110,000,000
+[2026-11-07 01:11:53] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€200,000,000
+[2026-11-07 01:11:53] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-07 01:11:53] [INFO] [MCP_TOOL_1] get_player_complete_data(Kang-in Lee) -> club=Club Atlético de Madrid, val=€28,000,000

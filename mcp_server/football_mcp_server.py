@@ -122,6 +122,12 @@ def get_player_complete_data(player_name: str) -> dict[str, Any]:
     if car_row:
         data["career_and_ucl"] = dict(car_row)
 
+    # Enrich with Player Playstyle & On-Pitch/Off-Pitch Tendencies
+    cur.execute("SELECT * FROM player_playstyle_and_tendencies WHERE player_id = ?", (pid,))
+    tend_row = cur.fetchone()
+    if tend_row:
+        data["playstyle_and_tendencies"] = dict(tend_row)
+
     # Enrich with Transfer History
     cur.execute(
         "SELECT transfer_date, transfer_season, from_club, to_club, transfer_fee_eur, market_value_at_transfer_eur "
