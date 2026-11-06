@@ -58,3 +58,30 @@
 [2026-11-06 22:01:29] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
 [2026-11-06 22:01:37] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=11 | Dim=768
 [2026-11-06 22:02:43] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-001 | Count=644 | Dim=768
+[2026-11-06 22:13:46] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-06 22:13:53] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=11 | Dim=768
+[2026-11-06 22:16:12] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-001 | Count=3260 | Dim=768
+[2026-11-06 22:16:25] [INFO] [ETL_FULL_SYNC] Strictly filtered European Big 5 Leagues (3,005 players across 96 clubs, 255 club squad needs) and synchronized both SQLite `data/agency_desk.db` and `data/datasets/*.json`. Re-indexed `scouting_notes_vec` (3,260 chunks via `gemini-embedding-001`) and `rag_regulations_vec` (11 chunks via `gemini-embedding-2`). Updated `index.html` with League/Club/Position filters and pagination.
+[2026-11-06 22:31:50] [INFO] [MCP_TOOL_2] find_matching_clubs_for_transfer(pos=ST, fee=80000000, wage=150000, league=La Liga) -> 0 clubs matched
+[2026-11-06 22:32:23] [INFO] [MCP_TOOL_2] find_matching_clubs_for_transfer(pos=ST, fee=80000000, wage=150000, league=La Liga) -> 2 clubs matched
+[2026-11-06 22:32:25] [INFO] [BACKEND_AUDIT_COMPLETE] Audited all requirements against `SPORTS_AGENCY_HYBRID_PLAN.md`: added `@mcp.tool()` decorators (`MCPServer`) in `mcp_server/football_mcp_server.py`, added `preferred_league` parameter end-to-end (`index.html` -> `main.py` -> `agency_workflow.py` -> `find_matching_clubs_for_transfer`), and generalized EU/Non-EU citizenship check in `legal_and_gbe_rag_node`.
+[2026-11-06 22:57:10] [FIX] [STRICT_96_CLUBS_FILTER] Removed `or comp_id in BIG5_COMP_IDS` bug in `data/fetch_and_build_real_db.py` which had allowed 154 players from 47 relegated/2nd-tier clubs (e.g., Schalke 04, Luton Town, Leicester City, Bochum, Monza) into `players`. Rebuilt `data/agency_desk.db` and `data/datasets/*.json` with strictly the 96 active Big 5 League clubs (2,851 players).
+[2026-11-06 23:08:45] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-06 23:08:45] [INFO] [FOOTBALL_DATA_ORG_SYNC] Synced official Big 5 squads: checked=2662, updated_transfers=606, new_signings=962, total_db=3813
+[2026-11-06 23:11:56] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-06 23:12:15] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-06 23:12:17] [INFO] [FOOTBALL_DATA_ORG_SYNC] Rebuilt DB from official Football-Data.org v4 2026-27 squads: {'source': 'Football-Data.org v4 Official 2026-27 Live Squads + Transfermarkt + FBref', 'official_big5_clubs': 96, 'live_registered_players': 2662, 'transfermarkt_enriched': 2214, 'fbref_stats_enriched': 955, 'club_squad_needs_generated': 414}
+[2026-11-06 23:14:00] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-06 23:14:10] [INFO] [VERTEX_LIVE_PLAYER_SYNC] Live-synced Bukayo Saka via Google Search Grounding -> club=Arsenal FC (Premier League), val=€110,000,000, wage=€354,622
+[2026-11-06 23:14:05] [INFO] [HYBRID_LIVE_SYNC_IMPLEMENTED] Implemented `src/sports_agency/live_sync.py`, added `/api/sync/football-data-org` and `/api/sync/live-player` to `src/sports_agency/api/main.py`, and added 1-click sync buttons to `src/sports_agency/api/static/index.html`.
+[2026-11-06 23:18:35] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-06 23:37:15] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-06 23:37:30] [INFO] [RAG_PDF_UPGRADE] Downloaded 4 official FIFA PDFs (62 pages) into `data/docs/pdfs/`, configured `RecursiveCharacterTextSplitter(chunk_size=800, chunk_overlap=150)` and `top_k=5` in `src/sports_agency/rag/sqlite_vector_store.py`, and created `test_rag_pipeline.py`.
+[2026-11-06 23:38:24] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=165 | Dim=768
+[2026-11-06 23:44:18] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-06 23:44:30] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=165 | Dim=768
+[2026-11-06 23:44:30] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=1 | Dim=768
+[2026-11-06 23:44:31] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=1 | Dim=768
+[2026-11-06 23:44:31] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=1 | Dim=768
+[2026-11-06 23:44:32] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=1 | Dim=768
+[2026-11-06 23:44:43] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-001 | Count=1 | Dim=768

@@ -17,6 +17,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from mcp.server.mcpserver import MCPServer
+
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(PROJECT_ROOT / "src") not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT / "src"))
@@ -25,6 +27,8 @@ from sports_agency.logger import log_work_event
 
 DB_PATH = PROJECT_ROOT / "data" / "agency_desk.db"
 OUTPUT_DIR = PROJECT_ROOT / "outputs"
+
+mcp = MCPServer("Football Agency Strategy Desk MCP Server")
 
 
 def _get_conn() -> sqlite3.Connection:
@@ -45,7 +49,7 @@ def list_agency_players() -> list[dict[str, Any]]:
                s.defensive_duels_won_pct, s.pos_percentile
         FROM players p
         LEFT JOIN player_stats s ON p.player_id = s.player_id
-        ORDER BY p.is_agency_client DESC, p.market_value_eur DESC
+        ORDER BY p.market_value_eur DESC
         """
     )
     rows = [dict(r) for r in cur.fetchall()]
@@ -53,6 +57,7 @@ def list_agency_players() -> list[dict[str, Any]]:
     return rows
 
 
+@mcp.tool()
 def get_player_complete_data(player_name: str) -> dict[str, Any]:
     """
     [MCP Tool 1] Queries player contract, market value, Capology weekly wage,
@@ -87,39 +92,92 @@ def get_player_complete_data(player_name: str) -> dict[str, Any]:
     return data
 
 
+@mcp.tool()
 def find_matching_clubs_for_transfer(
     position: str,
     max_fee_eur: int,
     target_weekly_wage_eur: int,
+    preferred_league: str = "ALL",
 ) -> list[dict[str, Any]]:
     """
     [MCP Tool 2 - Track A] Queries `club_squad_needs` in `agency_desk.db` for target clubs
-    matching the player's position, transfer fee budget, and weekly wage capacity.
+    matching the player's position, transfer fee budget, weekly wage capacity, and optional preferred league.
     """
     conn = _get_conn()
     cur = conn.cursor()
-    cur.execute(
-        """
-        SELECT *
-        FROM club_squad_needs
-        WHERE position = ?
-          AND max_transfer_fee_budget_eur >= ?
-          AND max_weekly_wage_offer_eur >= ?
-        ORDER BY
-          CASE recruitment_urgency WHEN 'High' THEN 1 WHEN 'Medium' THEN 2 ELSE 3 END,
-          starter_age DESC
-        """,
-        (position, int(max_fee_eur * 0.7), int(target_weekly_wage_eur * 0.85)),
-    )
+    if preferred_league and preferred_league != "ALL":
+        cur.execute(
+            """
+            SELECT *
+            FROM club_squad_needs
+            WHERE position = ?
+              AND league = ?
+              AND max_transfer_fee_budget_eur >= ?
+              AND max_weekly_wage_offer_eur >= ?
+            ORDER BY
+              CASE recruitment_urgency WHEN 'High' THEN 1 WHEN 'Medium' THEN 2 ELSE 3 END,
+              starter_age DESC
+            LIMIT 5
+            """,
+            (position, preferred_league, int(max_fee_eur * 0.7), int(target_weekly_wage_eur * 0.85)),
+        )
+    else:
+        cur.execute(
+            """
+            SELECT *
+            FROM club_squad_needs
+            WHERE position = ?
+              AND max_transfer_fee_budget_eur >= ?
+              AND max_weekly_wage_offer_eur >= ?
+            ORDER BY
+              CASE recruitment_urgency WHEN 'High' THEN 1 WHEN 'Medium' THEN 2 ELSE 3 END,
+              starter_age DESC
+            LIMIT 5
+            """,
+            (position, int(max_fee_eur * 0.7), int(target_weekly_wage_eur * 0.85)),
+        )
     rows = [dict(r) for r in cur.fetchall()]
+
+    # If strict budget/preferred_league filter returns fewer than 3 clubs, rank by budget proximity & urgency
+    if len(rows) < 3:
+        if preferred_league and preferred_league != "ALL":
+            cur.execute(
+                """
+                SELECT *
+                FROM club_squad_needs
+                WHERE position = ? AND league = ?
+                ORDER BY
+                  CASE recruitment_urgency WHEN 'High' THEN 1 WHEN 'Medium' THEN 2 ELSE 3 END,
+                  max_weekly_wage_offer_eur DESC
+                LIMIT 5
+                """,
+                (position, preferred_league),
+            )
+            rows = [dict(r) for r in cur.fetchall()]
+        if not rows:
+            cur.execute(
+                """
+                SELECT *
+                FROM club_squad_needs
+                WHERE position = ?
+                ORDER BY
+                  CASE recruitment_urgency WHEN 'High' THEN 1 WHEN 'Medium' THEN 2 ELSE 3 END,
+                  max_weekly_wage_offer_eur DESC
+                LIMIT 5
+                """,
+                (position,),
+            )
+            rows = [dict(r) for r in cur.fetchall()]
+
     conn.close()
     log_work_event(
         "MCP_TOOL_2",
-        f"find_matching_clubs_for_transfer(pos={position}, fee={max_fee_eur}, wage={target_weekly_wage_eur}) -> {len(rows)} clubs matched",
+        f"find_matching_clubs_for_transfer(pos={position}, fee={max_fee_eur}, wage={target_weekly_wage_eur}, league={preferred_league}) -> {len(rows)} clubs matched",
     )
     return rows
 
 
+@mcp.tool()
 def get_peer_group_wage_band(
     position: str,
     age: int,
@@ -177,6 +235,7 @@ def get_peer_group_wage_band(
     }
 
 
+@mcp.tool()
 def search_live_club_injury_and_rumors(club_name: str, position: str) -> dict[str, Any]:
     """
     [MCP Tool 4] Performs live web search via Vertex AI Google Search Grounding (`gemini-3.5-flash`)
@@ -211,6 +270,7 @@ def search_live_club_injury_and_rumors(club_name: str, position: str) -> dict[st
     return grounded
 
 
+@mcp.tool()
 def calculate_gbe_points_from_db(
     intl_match_pct: float,
     continental_minutes_pct: float,
@@ -286,6 +346,7 @@ def calculate_gbe_points_from_db(
     }
 
 
+@mcp.tool()
 def export_agency_documents(
     player_name: str,
     deal_prep_md: str,
@@ -320,3 +381,6 @@ HERMES_MCP_TOOLS = {
     "search_live_club_injury_and_rumors": search_live_club_injury_and_rumors,
     "export_agency_documents": export_agency_documents,
 }
+
+if __name__ == "__main__":
+    mcp.run()

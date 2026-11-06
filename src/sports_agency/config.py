@@ -36,12 +36,18 @@ class AgencyConfig:
     light_embedding_model: str = os.getenv("LIGHT_EMBEDDING_MODEL", "gemini-embedding-001")
     embedding_dimension: int = int(os.getenv("EMBEDDING_DIMENSION", "768"))
 
+    rag_chunk_size: int = int(os.getenv("RAG_CHUNK_SIZE", "800"))
+    rag_chunk_overlap: int = int(os.getenv("RAG_CHUNK_OVERLAP", "150"))
+    rag_default_top_k: int = int(os.getenv("RAG_DEFAULT_TOP_K", "5"))
+
     use_google_search_grounding: bool = (
         os.getenv("USE_GOOGLE_SEARCH_GROUNDING", "true").lower() == "true"
     )
+    football_data_api_key: str = os.getenv("FOOTBALL_DATA_API_KEY", "").strip()
     db_path: Path = PROJECT_ROOT / "data" / "agency_desk.db"
     checkpoint_db_path: Path = PROJECT_ROOT / "data" / "agency_checkpoints.db"
     docs_path: Path = PROJECT_ROOT / "data" / "docs" / "regulations.md"
+    pdfs_dir: Path = PROJECT_ROOT / "data" / "docs" / "pdfs"
     output_dir: Path = PROJECT_ROOT / "outputs"
 
 
@@ -109,12 +115,16 @@ class GeminiVertexRouter:
             "project_id": self.detected_project or None,
             "location": self.config.gcp_location,
             "status_message": self.auth_status_message,
+            "football_data_api_configured": bool(os.getenv("FOOTBALL_DATA_API_KEY", "").strip() or self.config.football_data_api_key),
             "models": {
                 "primary_llm": self.config.primary_llm_model,
                 "light_llm": self.config.light_llm_model,
                 "primary_embedding": self.config.primary_embedding_model,
                 "light_embedding": self.config.light_embedding_model,
                 "embedding_dimension": self.config.embedding_dimension,
+                "rag_chunk_size": self.config.rag_chunk_size,
+                "rag_chunk_overlap": self.config.rag_chunk_overlap,
+                "rag_default_top_k": self.config.rag_default_top_k,
             },
         }
 
@@ -275,24 +285,32 @@ class GeminiVertexRouter:
         cfg = types.EmbedContentConfig(output_dimensionality=dim)
 
         all_vectors: list[list[float]] = []
-        batch_size = 100 if use_light_model else 1
-        for i in range(0, len(texts), batch_size):
-            batch = texts[i : i + batch_size]
-            resp = self._client.models.embed_content(
-                model=model_name,
-                contents=batch if len(batch) > 1 else batch[0],
-                config=cfg,
-            )
-            if len(resp.embeddings) == len(batch):
+        if use_light_model:
+            batch_size = 100
+            for i in range(0, len(texts), batch_size):
+                batch = texts[i : i + batch_size]
+                resp = self._client.models.embed_content(
+                    model=model_name,
+                    contents=batch if len(batch) > 1 else batch[0],
+                    config=cfg,
+                )
                 all_vectors.extend(list(e.values) for e in resp.embeddings)
+        else:
+            from concurrent.futures import ThreadPoolExecutor
+
+            def _embed_single(txt: str) -> list[float]:
+                r = self._client.models.embed_content(
+                    model=model_name,
+                    contents=txt,
+                    config=cfg,
+                )
+                return list(r.embeddings[0].values)
+
+            if len(texts) == 1:
+                all_vectors = [_embed_single(texts[0])]
             else:
-                for single_text in batch:
-                    single_resp = self._client.models.embed_content(
-                        model=model_name,
-                        contents=single_text,
-                        config=cfg,
-                    )
-                    all_vectors.append(list(single_resp.embeddings[0].values))
+                with ThreadPoolExecutor(max_workers=12) as pool:
+                    all_vectors = list(pool.map(_embed_single, texts))
 
         log_work_event(
             "VERTEX_EMBEDDING_CALL",

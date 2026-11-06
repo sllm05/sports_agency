@@ -61,6 +61,7 @@ class AgencyGraphState(TypedDict, total=False):
     track_mode: str
     target_wage_increase_pct: int
     priority_goal: str
+    preferred_league: str
     human_action_choice: str
 
     supervisor_note: str
@@ -181,6 +182,7 @@ def hermes_transfer_node(state: AgencyGraphState) -> dict[str, Any]:
             "position": pos,
             "max_fee_eur": val,
             "target_weekly_wage_eur": target_wage,
+            "preferred_league": state.get("preferred_league", "ALL"),
         },
     )
 
@@ -361,10 +363,11 @@ def legal_and_gbe_rag_node(state: AgencyGraphState) -> dict[str, Any]:
         f"[{c['title']} | 출처: {c['source_citation']} | 기준일: {c['effective_date']}]\n{c['content']}"
         for c in retrieved_chunks
     )
+    eu_status_label = "EU 시민권자 (Non-EU 쿼터 무관)" if p.get("is_eu_citizen") else f"Non-EU 국적 ({p.get('nationality', 'Unknown')})"
     legal_prompt = (
         f"아래 SQLite 벡터 DB에서 검색된 공식 규정 원문만을 근거로 다음 2가지 항목을 JSON 객체로 작성해줘:\n"
         f"1) 'non_eu_quota_result': 타겟 구단({target_club['club_name']}, 리그: {target_club['league']}, 잔여 Non-EU 슬롯 코드: {target_club['non_eu_slots_free']})에 "
-        f"비유럽(한국) 선수를 등록할 때의 리그 Non-EU 쿼터 규정 판독 결과 (1~2문장)\n"
+        f"선수({p['name']}, 국적/자격: {eu_status_label})를 등록할 때의 리그 외국인/Non-EU 쿼터 규정 판독 결과 (1~2문장)\n"
         f"2) 'ffar_fee_guidance': 구단이 FIFA FFAR 제15조를 근거로 에이전트 수수료를 3%로 제한하려 할 때, "
         f"유예 공문(Circular No. 1873 등)과 출처/기준일을 들어 반박하는 법률 자문 요약 (2~3문장)\n\n"
         f"[검색된 규정 원문]\n{chunks_context}"
@@ -725,6 +728,7 @@ class AgencyWorkflowManager:
         track_mode: str = "TRACK_A_TRANSFER",
         target_wage_increase_pct: int = 25,
         priority_goal: str = "주전 출전 시간 보장 + 주급 인상",
+        preferred_league: str = "ALL",
         auto_complete: bool = False,
         human_action_choice: str = "OPTION_2_BONUS_AND_RELEASE_CLAUSE",
     ) -> dict[str, Any]:
@@ -734,6 +738,7 @@ class AgencyWorkflowManager:
             "track_mode": track_mode,
             "target_wage_increase_pct": target_wage_increase_pct,
             "priority_goal": priority_goal,
+            "preferred_league": preferred_league,
             "human_action_choice": human_action_choice,
             "model_usage_log": [],
             "hermes_tool_trace": [],

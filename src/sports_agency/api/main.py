@@ -25,6 +25,10 @@ from pydantic import BaseModel, Field
 from mcp_server.football_mcp_server import get_player_complete_data, list_agency_players
 from sports_agency.config import CONFIG, PROJECT_ROOT, ROUTER
 from sports_agency.graph.agency_workflow import WORKFLOW_MANAGER
+from sports_agency.live_sync import (
+    sync_big5_rosters_from_football_data_org,
+    sync_single_player_via_vertex_grounding,
+)
 from sports_agency.rag.sqlite_vector_store import VECTOR_STORE
 
 STATIC_DIR = Path(__file__).resolve().parent / "static"
@@ -51,13 +55,14 @@ if STATIC_DIR.exists():
 # Request Schemas
 # ============================================================================
 class StartWorkflowRequest(BaseModel):
-    player_name: str = Field(..., description="선수 이름 (예: 설영우, 손흥민, 이강인)")
+    player_name: str = Field(..., description="선수 이름 (예: 손흥민, 이강인, 김민재, Bukayo Saka)")
     track_mode: str = Field(
         "TRACK_A_TRANSFER",
         description="TRACK_A_TRANSFER (이적 역제의) 또는 TRACK_B_RENEWAL (재계약 협상)",
     )
     target_wage_increase_pct: int = Field(25, ge=0, le=300)
     priority_goal: str = Field("주전 출전 시간 보장 + 적정 주급 확보")
+    preferred_league: str = Field("ALL", description="희망 이적 리그 필터 (ALL, Premier League, La Liga, Serie A, Bundesliga, Ligue 1)")
     auto_complete: bool = Field(
         False,
         description="True일 경우 Human-in-the-Loop 일시정지 없이 끝까지 즉시 실행",
@@ -80,12 +85,20 @@ class RagSearchRequest(BaseModel):
         description="REGULATIONS (gemini-embedding-2) 또는 TACTICAL (gemini-embedding-001)",
     )
     position: str = Field("RB", description="전술 검색 시 포지션 필터")
-    top_k: int = Field(4, ge=1, le=10)
+    top_k: int = Field(5, ge=1, le=10)
 
 
 class GcpConfigUpdateRequest(BaseModel):
     gcp_project: str = Field(..., description="설정할 GCP Project ID")
     gcp_location: str = Field("global", description="Vertex AI 리전 (Gemini 3.8/Embedding-2는 global 권장)")
+
+
+class LivePlayerSyncRequest(BaseModel):
+    player_name: str = Field(..., description="실시간 웹 검색으로 소속팀/시세/계약만료일을 동기화할 선수 이름")
+
+
+class FootballDataSyncRequest(BaseModel):
+    force_api_refresh: bool = Field(False, description="True일 경우 Football-Data.org v4 API를 새로 호출하여 96개 구단 스쿼드 전체 갱신")
 
 
 # ============================================================================
@@ -178,6 +191,26 @@ def api_get_player(player_name: str) -> dict[str, Any]:
     return data
 
 
+@app.post("/api/sync/football-data-org")
+def api_sync_football_data_org(req: FootballDataSyncRequest) -> dict[str, Any]:
+    """Synchronizes all 96 Big 5 League clubs & live squads from official Football-Data.org v4 API."""
+    try:
+        summary = sync_big5_rosters_from_football_data_org(force_api_refresh=req.force_api_refresh)
+        return {"status": "ok", "summary": summary}
+    except Exception as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
+@app.post("/api/sync/live-player")
+def api_sync_live_player(req: LivePlayerSyncRequest) -> dict[str, Any]:
+    """Patches a single player's real-time club, market value, and contract via Vertex AI Google Search Grounding."""
+    try:
+        result = sync_single_player_via_vertex_grounding(req.player_name)
+        return result
+    except Exception as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
 @app.post("/api/workflow/start")
 def api_start_workflow(req: StartWorkflowRequest) -> dict[str, Any]:
     thread_id = req.thread_id or f"deal_{uuid.uuid4().hex[:10]}"
@@ -187,6 +220,7 @@ def api_start_workflow(req: StartWorkflowRequest) -> dict[str, Any]:
         track_mode=req.track_mode,
         target_wage_increase_pct=req.target_wage_increase_pct,
         priority_goal=req.priority_goal,
+        preferred_league=req.preferred_league,
         auto_complete=req.auto_complete,
     )
     return result

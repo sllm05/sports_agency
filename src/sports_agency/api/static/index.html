@@ -85,6 +85,10 @@
             🔄
           </button>
         </div>
+        <button id="btn-sync-fd" onclick="syncFootballDataOrg()"
+          class="text-xs bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/40 text-emerald-300 font-bold px-3 py-1.5 rounded-lg transition flex items-center gap-1">
+          <span>⚽ Football-Data.org 공식 96구단 로스터 동기화</span>
+        </button>
       </div>
     </div>
 
@@ -111,19 +115,61 @@
       <div class="lg:col-span-5 glass-card rounded-2xl p-5 flex flex-col justify-between">
         <div>
           <div class="flex items-center justify-between mb-2">
-            <h2 class="text-sm font-bold text-emerald-400 uppercase tracking-wider">Step 1 · 선수 선택 (5대 리그 3,172명 실데이터)</h2>
-            <span id="roster-count" class="text-xs text-slate-400">로딩 중...</span>
+            <h2 class="text-sm font-bold text-emerald-400 uppercase tracking-wider">Step 1 · 5대 리그 공식 실시간 스쿼드 (96개 구단 · 2,662명)</h2>
+            <span id="roster-count" class="text-xs font-semibold text-emerald-300">로딩 중...</span>
           </div>
+
+          <!-- League, Club, Position & Search Filters -->
+          <div class="grid grid-cols-3 gap-1.5 mb-2">
+            <select id="league-filter-select" onchange="onLeagueFilterChange()"
+              class="bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-[11px] text-white focus:outline-none focus:border-emerald-500">
+              <option value="ALL">🌍 전체 5대 리그 (2,662명)</option>
+              <option value="Premier League">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League</option>
+              <option value="La Liga">🇪🇸 La Liga</option>
+              <option value="Serie A">🇮🇹 Serie A</option>
+              <option value="Bundesliga">🇩🇪 Bundesliga</option>
+              <option value="Ligue 1">🇫🇷 Ligue 1</option>
+            </select>
+            <select id="club-filter-select" onchange="applyRosterFilters()"
+              class="bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-[11px] text-white focus:outline-none focus:border-emerald-500">
+              <option value="ALL">🏟️ 전체 96개 구단</option>
+            </select>
+            <select id="pos-filter-select" onchange="applyRosterFilters()"
+              class="bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-[11px] text-white focus:outline-none focus:border-emerald-500">
+              <option value="ALL">🏃 전체 포지션</option>
+              <option value="ST">ST (스트라이커)</option>
+              <option value="LW">LW (좌측 윙어)</option>
+              <option value="RW">RW (우측 윙어)</option>
+              <option value="AM">AM (공격형 미드필더)</option>
+              <option value="CM">CM (중앙 미드필더)</option>
+              <option value="DM">DM (수비형 미드필더)</option>
+              <option value="CB">CB (센터백)</option>
+              <option value="RB">RB (우측 풀백)</option>
+              <option value="LB">LB (좌측 풀백)</option>
+              <option value="GK">GK (골키퍼)</option>
+            </select>
+          </div>
+
           <div class="flex gap-1.5 mb-2.5">
-            <input id="player-search-input" type="text" oninput="filterPlayerCards()"
-              placeholder="🔍 선수명, 소속 구단, 포지션 검색 (예: 손흥민, Mbappe, Saka, Arsenal, CB)"
+            <input id="player-search-input" type="text" oninput="applyRosterFilters()"
+              placeholder="🔍 2,851명 전체 검색: 이름, 구단, 국적 (예: Haaland, Yamal, Mbappe, Saka, 김민재, 이강인)"
               class="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500" />
-            <button onclick="resetPlayerFilter()" class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-[11px] text-emerald-300 font-bold">
-              🇰🇷 코리안리거
+            <button onclick="filterKoreanBig5()" class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-[11px] text-emerald-300 font-bold whitespace-nowrap">
+              🇰🇷 5대리그 코리안
+            </button>
+            <button onclick="resetPlayerFilter()" class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-[11px] text-slate-300 font-bold whitespace-nowrap">
+              전체 초기화
             </button>
           </div>
-          <div id="player-roster-grid" class="grid grid-cols-2 gap-2.5 max-h-[300px] overflow-y-auto pr-1">
+
+          <div id="player-roster-grid" class="grid grid-cols-2 gap-2.5 max-h-[290px] overflow-y-auto pr-1">
             <!-- Populated by JS -->
+          </div>
+          <div id="load-more-container" class="mt-2 hidden">
+            <button id="btn-load-more" onclick="loadMorePlayers()"
+              class="w-full py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-[11px] font-bold text-sky-300 transition">
+              + 선수 더 보기
+            </button>
           </div>
         </div>
 
@@ -142,6 +188,12 @@
             </div>
           </div>
           <p id="sp-strengths" class="mt-2 text-xs text-slate-300 bg-slate-900/90 p-2.5 rounded-lg border border-slate-800"></p>
+          <div class="mt-2 flex justify-end">
+            <button id="btn-live-player-sync" onclick="syncSelectedPlayerLive()"
+              class="px-3 py-1.5 rounded-lg bg-sky-600/20 hover:bg-sky-600/30 border border-sky-500/40 text-[11px] font-bold text-sky-300 transition flex items-center gap-1">
+              <span>⚡ 현시점 소속팀·시세·주급 실시간 검색 패치 (Vertex AI Grounding)</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -197,16 +249,30 @@
             </div>
           </div>
 
-          <!-- Priority Goal Select -->
-          <div>
-            <label class="text-xs font-semibold text-slate-300 block mb-1">협상 최우선 가치 (Priority Goal)</label>
-            <select id="priority-select"
-              class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
-              <option value="유럽 5대 리그 즉시 주전 도약 + 적정 주급 확보">유럽 5대 리그 즉시 주전 도약 + 적정 주급 확보</option>
-              <option value="고정 기본급 극대화 + 다년 계약 안정성 확보">고정 기본급 극대화 + 다년 계약 안정성 확보</option>
-              <option value="출전/공격포인트 인센티브 극대화 + 바이아웃 하향">출전/공격포인트 인센티브 극대화 + 바이아웃 하향</option>
-              <option value="UCL/UEL 유럽 대항전 출전 구단 진입 최우선">UCL/UEL 유럽 대항전 출전 구단 진입 최우선</option>
-            </select>
+          <!-- Priority Goal & Preferred League Select -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+            <div>
+              <label class="text-xs font-semibold text-slate-300 block mb-1">협상 최우선 가치 (Priority Goal)</label>
+              <select id="priority-select"
+                class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
+                <option value="유럽 5대 리그 즉시 주전 도약 + 적정 주급 확보">유럽 5대 리그 즉시 주전 도약 + 적정 주급 확보</option>
+                <option value="고정 기본급 극대화 + 다년 계약 안정성 확보">고정 기본급 극대화 + 다년 계약 안정성 확보</option>
+                <option value="출전/공격포인트 인센티브 극대화 + 바이아웃 하향">출전/공격포인트 인센티브 극대화 + 바이아웃 하향</option>
+                <option value="UCL/UEL 유럽 대항전 출전 구단 진입 최우선">UCL/UEL 유럽 대항전 출전 구단 진입 최우선</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-xs font-semibold text-slate-300 block mb-1">희망 이적 리그 (Track A 타겟 리그)</label>
+              <select id="preferred-league-select"
+                class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
+                <option value="ALL">🌍 유럽 5대 리그 전체 자동 탐색</option>
+                <option value="Premier League">🏴󠁧󠁢󠁥󠁮󠁧󠁿 잉글랜드 Premier League</option>
+                <option value="La Liga">🇪🇸 스페인 La Liga</option>
+                <option value="Serie A">🇮🇹 이탈리아 Serie A</option>
+                <option value="Bundesliga">🇩🇪 독일 Bundesliga</option>
+                <option value="Ligue 1">🇫🇷 프랑스 Ligue 1</option>
+              </select>
+            </div>
           </div>
         </div>
 
@@ -462,23 +528,156 @@
       renderAuthStatus(data);
     }
 
+    async function syncFootballDataOrg() {
+      const btn = document.getElementById('btn-sync-fd');
+      btn.disabled = true;
+      btn.innerHTML = '<span>⏳ Football-Data.org 공식 96구단 로스터 동기화 중...</span>';
+      try {
+        const res = await fetch('/api/sync/football-data-org', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ force_api_refresh: true })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.detail || '동기화 실패');
+        await loadPlayers();
+        alert(`✅ Football-Data.org v4 공식 96구단 로스터 동기화 완료!\n- 공식 5대 리그 구단: ${data.summary.official_big5_clubs}개\n- 실시간 등록 선수: ${data.summary.live_registered_players}명\n- 구단 스쿼드 니즈: ${data.summary.club_squad_needs_generated}건`);
+      } catch (e) {
+        alert('Football-Data.org 동기화 오류: ' + e);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<span>⚽ Football-Data.org 공식 96구단 로스터 동기화</span>';
+      }
+    }
+
+    async function syncSelectedPlayerLive() {
+      if (!selectedPlayer) return;
+      const btn = document.getElementById('btn-live-player-sync');
+      btn.disabled = true;
+      btn.innerHTML = '<span>⏳ Vertex AI 실시간 구글 검색으로 최신 이적/시세 검증 중...</span>';
+      try {
+        const res = await fetch('/api/sync/live-player', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ player_name: selectedPlayer.name })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.detail || '실시간 패치 실패');
+        await loadPlayers();
+        selectPlayer(data.player);
+        alert(`⚡ [${data.player.name}] 실시간 DB 패치 완료!\n- 현 소속 구단: ${data.player.current_club} (${data.player.league})\n- 시세: €${data.player.market_value_eur.toLocaleString()} | 주급: €${data.player.weekly_wage_eur.toLocaleString()}\n- 메모: ${data.transfer_status_note || '최신 상태 확인됨'}`);
+      } catch (e) {
+        alert('실시간 선수 동기화 오류: ' + e);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<span>⚡ 현시점 소속팀·시세·주급 실시간 검색 패치 (Vertex AI Grounding)</span>';
+      }
+    }
+
     let koreanRosterList = [];
+    let filteredPlayersList = [];
+    let currentDisplayLimit = 80;
+    let onlyKoreanMode = false;
 
     async function loadPlayers() {
       const res = await fetch('/api/players');
       const data = await res.json();
       allPlayers = data.all_players || [];
       koreanRosterList = data.korean_roster || [];
-      document.getElementById('roster-count').textContent = `코리안리거 ${koreanRosterList.length}명 / 유럽 5대리그 전체 ${allPlayers.length.toLocaleString()}명`;
+      filteredPlayersList = allPlayers;
 
-      renderPlayerGrid(koreanRosterList.concat(allPlayers.slice(0, 30)), true);
+      populateClubDropdown('ALL');
+      updateRosterCountText(allPlayers.length);
+      renderPlayerGrid(filteredPlayersList, true);
+    }
+
+    function updateRosterCountText(filteredLen) {
+      const total = allPlayers.length;
+      if (filteredLen === total) {
+        document.getElementById('roster-count').textContent = `전체 ${total.toLocaleString()}명 (96개 구단)`;
+      } else {
+        document.getElementById('roster-count').textContent = `필터됨 ${filteredLen.toLocaleString()}명 / 전체 ${total.toLocaleString()}명`;
+      }
+    }
+
+    function populateClubDropdown(leagueFilter) {
+      const clubSelect = document.getElementById('club-filter-select');
+      const clubsSet = new Set();
+      allPlayers.forEach(p => {
+        if (leagueFilter === 'ALL' || p.league === leagueFilter) {
+          clubsSet.add(p.current_club);
+        }
+      });
+      const clubs = Array.from(clubsSet).sort();
+      clubSelect.innerHTML = `<option value="ALL">🏟️ 전체 구단 (${clubs.length}개)</option>` +
+        clubs.map(c => `<option value="${c}">${c}</option>`).join('');
+    }
+
+    function onLeagueFilterChange() {
+      const lg = document.getElementById('league-filter-select').value;
+      populateClubDropdown(lg);
+      onlyKoreanMode = false;
+      currentDisplayLimit = 80;
+      applyRosterFilters();
+    }
+
+    function applyRosterFilters() {
+      const lg = document.getElementById('league-filter-select').value;
+      const club = document.getElementById('club-filter-select').value;
+      const pos = document.getElementById('pos-filter-select').value;
+      const q = document.getElementById('player-search-input').value.trim().toLowerCase();
+
+      filteredPlayersList = allPlayers.filter(p => {
+        if (onlyKoreanMode && p.nationality !== 'South Korea') return false;
+        if (lg !== 'ALL' && p.league !== lg) return false;
+        if (club !== 'ALL' && p.current_club !== club) return false;
+        if (pos !== 'ALL' && p.position !== pos) return false;
+        if (q) {
+          const matchName = p.name && p.name.toLowerCase().includes(q);
+          const matchKo = p.name_ko && p.name_ko.toLowerCase().includes(q);
+          const matchClub = p.current_club && p.current_club.toLowerCase().includes(q);
+          const matchNat = p.nationality && p.nationality.toLowerCase().includes(q);
+          const matchPos = p.position && p.position.toLowerCase() === q;
+          if (!matchName && !matchKo && !matchClub && !matchNat && !matchPos) return false;
+        }
+        return true;
+      });
+
+      updateRosterCountText(filteredPlayersList.length);
+      renderPlayerGrid(filteredPlayersList, false);
+    }
+
+    function loadMorePlayers() {
+      currentDisplayLimit += 100;
+      renderPlayerGrid(filteredPlayersList, false);
+    }
+
+    function filterKoreanBig5() {
+      onlyKoreanMode = true;
+      document.getElementById('league-filter-select').value = 'ALL';
+      populateClubDropdown('ALL');
+      document.getElementById('pos-filter-select').value = 'ALL';
+      document.getElementById('player-search-input').value = '';
+      currentDisplayLimit = 80;
+      applyRosterFilters();
+    }
+
+    function resetPlayerFilter() {
+      onlyKoreanMode = false;
+      document.getElementById('league-filter-select').value = 'ALL';
+      populateClubDropdown('ALL');
+      document.getElementById('pos-filter-select').value = 'ALL';
+      document.getElementById('player-search-input').value = '';
+      currentDisplayLimit = 80;
+      applyRosterFilters();
     }
 
     function renderPlayerGrid(list, selectFirst = false) {
       const grid = document.getElementById('player-roster-grid');
       grid.innerHTML = '';
 
-      list.slice(0, 60).forEach((p, idx) => {
+      const slice = list.slice(0, currentDisplayLimit);
+      slice.forEach((p, idx) => {
         const card = document.createElement('button');
         card.id = `player-card-${p.player_id}`;
         card.onclick = () => selectPlayer(p);
@@ -504,26 +703,15 @@
         grid.appendChild(card);
         if (selectFirst && idx === 0) selectPlayer(p);
       });
-    }
 
-    function filterPlayerCards() {
-      const q = document.getElementById('player-search-input').value.trim().toLowerCase();
-      if (!q) {
-        renderPlayerGrid(koreanRosterList.concat(allPlayers.slice(0, 30)), false);
-        return;
+      const loadMoreContainer = document.getElementById('load-more-container');
+      const btnLoadMore = document.getElementById('btn-load-more');
+      if (list.length > currentDisplayLimit) {
+        loadMoreContainer.classList.remove('hidden');
+        btnLoadMore.textContent = `+ 선수 더 보기 (${currentDisplayLimit.toLocaleString()} / ${list.length.toLocaleString()}명 표시 중)`;
+      } else {
+        loadMoreContainer.classList.add('hidden');
       }
-      const matched = allPlayers.filter(p =>
-        (p.name && p.name.toLowerCase().includes(q)) ||
-        (p.name_ko && p.name_ko.toLowerCase().includes(q)) ||
-        (p.current_club && p.current_club.toLowerCase().includes(q)) ||
-        (p.position && p.position.toLowerCase() === q)
-      );
-      renderPlayerGrid(matched, false);
-    }
-
-    function resetPlayerFilter() {
-      document.getElementById('player-search-input').value = '';
-      renderPlayerGrid(koreanRosterList, false);
     }
 
     function selectPlayer(p) {
@@ -622,6 +810,7 @@
           track_mode: selectedTrack,
           target_wage_increase_pct: parseInt(document.getElementById('wage-slider').value, 10),
           priority_goal: document.getElementById('priority-select').value,
+          preferred_league: document.getElementById('preferred-league-select').value,
           auto_complete: false
         };
         const res = await fetch('/api/workflow/start', {

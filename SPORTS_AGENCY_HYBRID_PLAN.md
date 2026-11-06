@@ -42,13 +42,13 @@
 
 요구하신 **5가지 핵심 기술(`RAG`, `LangGraph`, `LangChain`, `MCP`, `Hermes Agent`)**을 모두 빠짐없이, 각 기술이 가장 빛나는 위치에 배치합니다.
 
-| 기술 스택 | 시스템 내 핵심 역할 및 실무적 당위성 |
-| :--- | :--- |
-| **1. LangGraph**<br>*(워크플로우 & 상태 제어)* | • **조건부 라우팅(`Conditional Edge`)**: Supervisor가 요청을 `Track A(이적 스카우팅)`와 `Track B(재계약 벤치마킹)`로 분기<br>• **순환 루프(`Cycle`)**: `선수 에이전트 AI ↔ 구단 디렉터 AI` 간의 다회차 모의 협상(Sparring Loop) 구현<br>• **Human-in-the-Loop (`interrupt`)**: 모의 협상 중간에 실제 사람 에이전트가 전략 방향(강행/타협/옵션조정)을 결정 |
+| 기술 스택                                                           | 시스템 내 핵심 역할 및 실무적 당위성                                                                                                                                                                                                                                                                |
+| :-------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **1. LangGraph**<br>*(워크플로우 & 상태 제어)*                           | • **조건부 라우팅(`Conditional Edge`)**: Supervisor가 요청을 `Track A(이적 스카우팅)`와 `Track B(재계약 벤치마킹)`로 분기<br>• **순환 루프(`Cycle`)**: `선수 에이전트 AI ↔ 구단 디렉터 AI` 간의 다회차 모의 협상(Sparring Loop) 구현<br>• **Human-in-the-Loop (`interrupt`)**: 모의 협상 중간에 실제 사람 에이전트가 전략 방향(강행/타협/옵션조정)을 결정                |
 | **2. Hermes Agent**<br>*(NousResearch Tool-Calling & 정량 분석 전담)* | • 복잡한 다단계 도구 호출(Multi-step Tool Calling)과 엄격한 JSON 스키마 출력에 특화된 **Hermes 에이전트 아키텍처(또는 Hermes-3 기반 Function-Calling 프롬프트/런타임)**를 **'데이터 & 밸류에이션 분석 에이전트(Track A/B Analyst)'** 엔진으로 탑재<br>• 선수 스탯 조회 → 비교군 5인 필터링 → 주급 사분위수(25%~75%) 밴드 계산 → 구단 포지션 노쇠화 매칭까지 자율적으로 도구를 연쇄 호출해 정량 테이블 생성 |
-| **3. MCP (`FastMCP`)**<br>*(데이터 & 외부 검색 표준화)* | • 에이전트 코드와 데이터 소스를 분리하여 표준 MCP 서버(`football_mcp_server.py`)로 구축<br>• **정적 실데이터 조회 Tool**: 로컬 SQLite(`agency_desk.db`)에 적재된 Transfermarkt + FBref + Capology 데이터 조회<br>• **실시간 동향 검색 Tool**: `Tavily API` / `SerpAPI`를 통해 구단 주전 부상 소식·감독 전술 인터뷰 실시간 수집 |
-| **4. RAG (ChromaDB / FAISS)**<br>*(규정 · 워크퍼밋 · 수수료 검증)* | • **영국 FA GBE(워크퍼밋) 점수표 PDF**, **유럽 5대 리그 Non-EU 외국인 규정**, **FIFA 에이전트 규정(FFAR) 및 유예 공문** 인덱싱<br>• 에이전트 수수료 상한(FFAR 15조)처럼 국가별·시점별로 유예/변동되는 규정을 하드코딩하지 않고, 반드시 **`[출처 문서명 + 조항 + 기준일]`**을 명시하여 법적 정확성 확보 |
-| **5. LangChain**<br>*(파이프라인 & 구조화 출력)* | • 규정 문서 로더/청킹 파이프라인 구성 및 에이전트 최종 산출물(`DealPrepSheet`, `ClubPitchDeck` Pydantic 스키마)의 `with_structured_output` 강제 변환 |
+| **3. MCP (`FastMCP`)**<br>*(데이터 & 외부 검색 표준화)*                   | • 에이전트 코드와 데이터 소스를 분리하여 표준 MCP 서버(`football_mcp_server.py`)로 구축<br>• **정적 실데이터 조회 Tool**: 로컬 SQLite(`agency_desk.db`)에 적재된 Transfermarkt + FBref + Capology 데이터 조회<br>• **실시간 동향 검색 Tool**: `Tavily API` / `SerpAPI`를 통해 구단 주전 부상 소식·감독 전술 인터뷰 실시간 수집                                |
+| **4. RAG (ChromaDB / FAISS)**<br>*(규정 · 워크퍼밋 · 수수료 검증)*         | • **영국 FA GBE(워크퍼밋) 점수표 PDF**, **유럽 5대 리그 Non-EU 외국인 규정**, **FIFA 에이전트 규정(FFAR) 및 유예 공문** 인덱싱<br>• 에이전트 수수료 상한(FFAR 15조)처럼 국가별·시점별로 유예/변동되는 규정을 하드코딩하지 않고, 반드시 **`[출처 문서명 + 조항 + 기준일]`**을 명시하여 법적 정확성 확보                                                                             |
+| **5. LangChain**<br>*(파이프라인 & 구조화 출력)*                          | • 규정 문서 로더/청킹 파이프라인 구성 및 에이전트 최종 산출물(`DealPrepSheet`, `ClubPitchDeck` Pydantic 스키마)의 `with_structured_output` 강제 변환                                                                                                                                                                  |
 
 ---
 
