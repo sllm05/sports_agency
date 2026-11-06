@@ -281,12 +281,231 @@
               </select>
             </div>
           </div>
+
+          <!-- Confidential Contract Override (Optional Accordion for Real Agents) -->
+          <details class="bg-slate-900/80 border border-slate-700/80 rounded-xl p-2.5 text-xs">
+            <summary class="font-bold text-amber-300 cursor-pointer flex items-center justify-between">
+              <span>🔐 에이전트 기밀 계약서 수치 직접 입력 (Contract Override)</span>
+              <span class="text-[10px] text-slate-400">선택사항</span>
+            </summary>
+            <div class="grid grid-cols-2 gap-2 mt-2.5 pt-2 border-t border-slate-800">
+              <div>
+                <label class="text-[10px] text-slate-400 block">실제 현재 주급 (€/주, 0=자동)</label>
+                <input id="ov-actual-wage" type="number" value="0" step="1000" oninput="previewPsrLive()"
+                  class="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1 text-xs text-emerald-300 font-bold" />
+              </div>
+              <div>
+                <label class="text-[10px] text-slate-400 block">목표 이적료/시세 (€, 0=자동)</label>
+                <input id="ov-market-val" type="number" value="0" step="1000000" oninput="previewPsrLive()"
+                  class="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1 text-xs text-sky-300 font-bold" />
+              </div>
+              <div>
+                <label class="text-[10px] text-slate-400 block">계약 기간 (년, 감가상각 5년 상한)</label>
+                <input id="ov-contract-years" type="number" value="4" min="1" max="8" oninput="previewPsrLive()"
+                  class="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1 text-xs text-white" />
+              </div>
+              <div>
+                <label class="text-[10px] text-slate-400 block">사이닝 보너스 (€) & 수수료 (%)</label>
+                <div class="flex gap-1">
+                  <input id="ov-signing-bonus" type="number" value="1500000" step="250000" oninput="previewPsrLive()"
+                    class="w-2/3 bg-slate-950 border border-slate-700 rounded px-1.5 py-1 text-[11px] text-white" />
+                  <input id="ov-agent-fee" type="number" value="7.0" step="0.5" min="1" max="15" oninput="previewPsrLive()"
+                    class="w-1/3 bg-slate-950 border border-slate-700 rounded px-1.5 py-1 text-[11px] text-amber-300 font-bold" />
+                </div>
+              </div>
+            </div>
+            <div id="live-psr-mini-preview" class="mt-2 p-2 rounded bg-slate-950 border border-slate-800 text-[10px] text-slate-300">
+              선수를 선택하거나 수치를 변경하면 구단 연간 PSR 장부 비용과 세후 실수령액이 즉시 계산됩니다.
+            </div>
+          </details>
         </div>
 
         <button id="btn-start-workflow" onclick="startWorkflow()"
           class="mt-4 w-full py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-extrabold text-sm shadow-lg shadow-emerald-900/40 transition flex items-center justify-center gap-2">
           <span>🚀 전략 생성 & 1차 모의 협상 시작</span>
         </button>
+      </div>
+    </section>
+
+    <!-- PRACTITIONER WORKBENCH: 1) PSR/Net-Gross Tax Calculator, 2) Bosman & Aging Starter Radar, 3) Custom Prospect Onboarding -->
+    <section class="no-print glass-card rounded-2xl p-5 space-y-4 border border-emerald-500/25">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+        <div>
+          <h2 class="text-sm font-extrabold text-white flex items-center gap-2">
+            <span>🧰 현업 에이전트 실무 워크벤치 (Practitioner Pro Suite)</span>
+            <span class="text-[10px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold">Real Agency Tools</span>
+          </h2>
+          <p class="text-[11px] text-slate-400">
+            구단 CFO 설득용 PSR 연간 감가상각·세후 연봉 계산기, 계약만료(보스만 룰)·노쇠화 주전 타겟 레이더, 5대 리그 외부 유망주(K리그 등) 직접 등록 및 역제의 도구
+          </p>
+        </div>
+        <div class="flex flex-wrap gap-1.5">
+          <button id="wb-tab-bosman" onclick="switchWorkbenchTab('bosman')"
+            class="px-3 py-1.5 rounded-lg text-xs font-extrabold bg-emerald-600 text-white transition">
+            🎯 보스만 룰(계약만료) & 세대교체 타겟 구단 레이더
+          </button>
+          <button id="wb-tab-psr" onclick="switchWorkbenchTab('psr')"
+            class="px-3 py-1.5 rounded-lg text-xs font-extrabold bg-slate-800 text-slate-300 hover:bg-slate-700 transition">
+            💶 구단 PSR 연간 장부비용 & 5대리그 세전/세후(Net-Gross) 계산기
+          </button>
+          <button id="wb-tab-custom" onclick="switchWorkbenchTab('custom')"
+            class="px-3 py-1.5 rounded-lg text-xs font-extrabold bg-slate-800 text-sky-300 hover:bg-slate-700 transition">
+            🌟 외부 리그 선수(K리그/유망주) 신규 등록 & 빅리그 역제의
+          </button>
+        </div>
+      </div>
+
+      <!-- Tab 1: Bosman & Replacement Radar -->
+      <div id="wb-panel-bosman" class="space-y-3">
+        <div class="flex flex-wrap items-center gap-2">
+          <select id="bosman-pos-select" onchange="loadBosmanRadar()"
+            class="bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white">
+            <option value="ALL">🏃 전체 포지션 스캔</option>
+            <option value="ST">ST (스트라이커)</option>
+            <option value="LW">LW (좌측 윙어)</option>
+            <option value="RW">RW (우측 윙어)</option>
+            <option value="AM">AM (공격형 미드필더)</option>
+            <option value="CM">CM (중앙 미드필더)</option>
+            <option value="DM">DM (수비형 미드필더)</option>
+            <option value="CB">CB (센터백)</option>
+            <option value="RB">RB (우측 풀백)</option>
+            <option value="LB">LB (좌측 풀백)</option>
+          </select>
+          <select id="bosman-league-select" onchange="loadBosmanRadar()"
+            class="bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white">
+            <option value="ALL">🌍 유럽 5대 리그 전체</option>
+            <option value="Premier League">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League</option>
+            <option value="La Liga">🇪🇸 La Liga</option>
+            <option value="Serie A">🇮🇹 Serie A</option>
+            <option value="Bundesliga">🇩🇪 Bundesliga</option>
+            <option value="Ligue 1">🇫🇷 Ligue 1</option>
+          </select>
+          <span id="bosman-count-badge" class="text-xs font-bold text-emerald-400 ml-auto">스캔 중...</span>
+        </div>
+        <div id="bosman-radar-grid" class="grid grid-cols-1 md:grid-cols-3 gap-2.5 max-h-56 overflow-y-auto pr-1"></div>
+      </div>
+
+      <!-- Tab 2: PSR & Net-Gross Tax Simulator -->
+      <div id="wb-panel-psr" class="hidden space-y-3">
+        <div class="grid grid-cols-2 md:grid-cols-6 gap-2.5">
+          <div>
+            <label class="text-[11px] text-slate-400 block mb-1">대상 리그 (세법 기준)</label>
+            <select id="calc-league" onchange="runStandalonePsrCalc()"
+              class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white">
+              <option value="Premier League">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League (세전 주급)</option>
+              <option value="La Liga">🇪🇸 La Liga (세후 연봉 + 의무 바이아웃)</option>
+              <option value="Serie A">🇮🇹 Serie A (세후 연봉 협상)</option>
+              <option value="Bundesliga">🇩🇪 Bundesliga (세전 연봉)</option>
+              <option value="Ligue 1">🇫🇷 Ligue 1 (세전 월급 + 패트리아트)</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-[11px] text-slate-400 block mb-1">예상 이적료 (€)</label>
+            <input id="calc-fee" type="number" value="30000000" step="1000000" oninput="runStandalonePsrCalc()"
+              class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-emerald-300 font-bold" />
+          </div>
+          <div>
+            <label class="text-[11px] text-slate-400 block mb-1">세전 주급 (€/주)</label>
+            <input id="calc-wage" type="number" value="95000" step="5000" oninput="runStandalonePsrCalc()"
+              class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-sky-300 font-bold" />
+          </div>
+          <div>
+            <label class="text-[11px] text-slate-400 block mb-1">계약 연수 (년)</label>
+            <input id="calc-years" type="number" value="5" min="1" max="8" oninput="runStandalonePsrCalc()"
+              class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white" />
+          </div>
+          <div>
+            <label class="text-[11px] text-slate-400 block mb-1">사이닝 보너스 (€)</label>
+            <input id="calc-bonus" type="number" value="2000000" step="500000" oninput="runStandalonePsrCalc()"
+              class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white" />
+          </div>
+          <div>
+            <label class="text-[11px] text-slate-400 block mb-1">에이전트 수수료 (%)</label>
+            <input id="calc-agent-pct" type="number" value="7.0" step="0.5" oninput="runStandalonePsrCalc()"
+              class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-amber-300 font-bold" />
+          </div>
+        </div>
+        <div id="standalone-psr-result" class="bg-slate-950/90 border border-slate-800 rounded-xl p-3.5 text-xs"></div>
+      </div>
+
+      <!-- Tab 3: Custom External Prospect Registration (K League / Eredivisie / Championship etc.) -->
+      <div id="wb-panel-custom" class="hidden space-y-3">
+        <div class="grid grid-cols-2 md:grid-cols-6 gap-2.5">
+          <div>
+            <label class="text-[10px] text-slate-400 block">한글 이름</label>
+            <input id="cust-name-ko" type="text" value="양민혁" class="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1.5 text-xs text-white" />
+          </div>
+          <div>
+            <label class="text-[10px] text-slate-400 block">영문 이름 (고유 식별)</label>
+            <input id="cust-name-en" type="text" value="Yang Min-hyeok" class="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1.5 text-xs text-white" />
+          </div>
+          <div>
+            <label class="text-[10px] text-slate-400 block">주 포지션 / 부 포지션</label>
+            <div class="flex gap-1">
+              <select id="cust-pos" class="w-1/2 bg-slate-900 border border-slate-700 rounded px-1.5 py-1.5 text-xs text-emerald-300 font-bold">
+                <option value="RW">RW</option><option value="LW">LW</option><option value="ST">ST</option>
+                <option value="AM">AM</option><option value="CM">CM</option><option value="DM">DM</option>
+                <option value="CB">CB</option><option value="RB">RB</option><option value="LB">LB</option>
+              </select>
+              <input id="cust-sec-pos" type="text" value="LW, AM" class="w-1/2 bg-slate-900 border border-slate-700 rounded px-1.5 py-1.5 text-xs text-white" />
+            </div>
+          </div>
+          <div>
+            <label class="text-[10px] text-slate-400 block">현 소속 구단 & 리그</label>
+            <div class="flex gap-1">
+              <input id="cust-club" type="text" value="Gangwon / QPR" class="w-1/2 bg-slate-900 border border-slate-700 rounded px-1.5 py-1.5 text-xs text-white" />
+              <input id="cust-league" type="text" value="K League 1 / Championship" class="w-1/2 bg-slate-900 border border-slate-700 rounded px-1.5 py-1.5 text-xs text-white" />
+            </div>
+          </div>
+          <div>
+            <label class="text-[10px] text-slate-400 block">나이 / GBE 리그 밴드(1~6)</label>
+            <div class="flex gap-1">
+              <input id="cust-age" type="number" value="20" class="w-1/2 bg-slate-900 border border-slate-700 rounded px-1.5 py-1.5 text-xs text-white" />
+              <input id="cust-band" type="number" value="2" min="1" max="6" class="w-1/2 bg-slate-900 border border-slate-700 rounded px-1.5 py-1.5 text-xs text-amber-300 font-bold" />
+            </div>
+          </div>
+          <div>
+            <label class="text-[10px] text-slate-400 block">시세(€) / 현재 주급(€/주)</label>
+            <div class="flex gap-1">
+              <input id="cust-val" type="number" value="4500000" step="500000" class="w-1/2 bg-slate-900 border border-slate-700 rounded px-1.5 py-1.5 text-xs text-emerald-300 font-bold" />
+              <input id="cust-wage" type="number" value="15000" step="1000" class="w-1/2 bg-slate-900 border border-slate-700 rounded px-1.5 py-1.5 text-xs text-sky-300 font-bold" />
+            </div>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-6 gap-2.5">
+          <div>
+            <label class="text-[10px] text-slate-400 block">90분당 득점 / 도움</label>
+            <div class="flex gap-1">
+              <input id="cust-g90" type="number" value="0.35" step="0.05" class="w-1/2 bg-slate-900 border border-slate-700 rounded px-1.5 py-1 text-xs text-white" />
+              <input id="cust-a90" type="number" value="0.22" step="0.05" class="w-1/2 bg-slate-900 border border-slate-700 rounded px-1.5 py-1 text-xs text-white" />
+            </div>
+          </div>
+          <div>
+            <label class="text-[10px] text-slate-400 block">90분당 전진액션 / 키패스</label>
+            <div class="flex gap-1">
+              <input id="cust-prog90" type="number" value="6.8" step="0.2" class="w-1/2 bg-slate-900 border border-slate-700 rounded px-1.5 py-1 text-xs text-white" />
+              <input id="cust-kp90" type="number" value="1.75" step="0.1" class="w-1/2 bg-slate-900 border border-slate-700 rounded px-1.5 py-1 text-xs text-white" />
+            </div>
+          </div>
+          <div>
+            <label class="text-[10px] text-slate-400 block">A매치 출전율(%) / 대륙컵(%)</label>
+            <div class="flex gap-1">
+              <input id="cust-intl" type="number" value="45" class="w-1/2 bg-slate-900 border border-slate-700 rounded px-1.5 py-1 text-xs text-white" />
+              <input id="cust-cont" type="number" value="60" class="w-1/2 bg-slate-900 border border-slate-700 rounded px-1.5 py-1 text-xs text-white" />
+            </div>
+          </div>
+          <div class="md:col-span-2">
+            <label class="text-[10px] text-slate-400 block">핵심 스카우팅 강점 요약 (유럽 5대 리그 감독 전술 벡터 매칭용)</label>
+            <input id="cust-strengths" type="text" value="폭발적인 터치라인 1대1 드리블 돌파, 빠른 공수 전환 스피드, 박스 근처 양발 슈팅 결정력"
+              class="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs text-white" />
+          </div>
+          <div class="flex items-end">
+            <button onclick="registerCustomClient()"
+              class="w-full py-1.5 px-3 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-extrabold text-xs transition">
+              ➕ 외부 선수 DB 즉시 등록 & 선택
+            </button>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -473,7 +692,7 @@
     let radarChartInstance = null;
 
     async function initDashboard() {
-      await Promise.all([loadSystemStatus(), loadPlayers()]);
+      await Promise.all([loadSystemStatus(), loadPlayers(), loadBosmanRadar(), runStandalonePsrCalc()]);
     }
 
     async function loadSystemStatus() {
@@ -757,6 +976,7 @@
 
       updateRadarChart(p);
       loadPlayerDeepAnalytics(p.name);
+      previewPsrLive();
     }
 
     async function loadPlayerDeepAnalytics(playerName) {
@@ -790,6 +1010,7 @@
           <div>• <b>축구 스타일 (전술 아키타입):</b> <b class="text-amber-300">${pt.tactical_archetype || '-'}</b></div>
           <div>• <b>🔥 핵심 장점 (Strengths):</b> <span class="text-emerald-300">${pt.strengths_tags || '-'}</span></div>
           <div>• <b>⚠️ 보완점/단점 (Weaknesses):</b> <span class="text-rose-300">${pt.weaknesses_tags || '-'}</span></div>
+          <div>• <b>🛡️ 내구성·가용률 (Availability Risk):</b> <span class="text-amber-200">${pt.durability_and_availability_note || '-'}</span></div>
           <div>• <b>📌 객관적 온볼/마무리 성향 (Fact):</b> ${pt.progression_tendency || '-'} | ${pt.finishing_clinicality || '-'}</div>
           <div>• <b>📌 객관적 경합·징계·이적·빅게임 지표 (Fact):</b> ${pt.temperament_and_discipline || '-'} | ${pt.loyalty_and_mobility || '-'} | ${pt.big_game_and_leadership || '-'} | ${trText}</div>
           <div class="pt-1 mt-1 border-t border-slate-800">
@@ -868,12 +1089,21 @@
       btn.innerHTML = '<span>⏳ LangGraph 에이전트 파이프라인 실행 중...</span>';
 
       try {
+        const contractOverride = {
+          actual_weekly_wage_eur: parseInt(document.getElementById('ov-actual-wage').value || '0', 10),
+          custom_market_value_eur: parseInt(document.getElementById('ov-market-val').value || '0', 10),
+          contract_years: parseInt(document.getElementById('ov-contract-years').value || '4', 10),
+          signing_bonus_eur: parseInt(document.getElementById('ov-signing-bonus').value || '0', 10),
+          current_release_clause_eur: 0,
+          agent_fee_pct: parseFloat(document.getElementById('ov-agent-fee').value || '7.0')
+        };
         const payload = {
           player_name: selectedPlayer.name,
           track_mode: selectedTrack,
           target_wage_increase_pct: parseInt(document.getElementById('wage-slider').value, 10),
           priority_goal: document.getElementById('priority-select').value,
           preferred_league: document.getElementById('preferred-league-select').value,
+          contract_override: contractOverride,
           auto_complete: false
         };
         const res = await fetch('/api/workflow/start', {
@@ -921,9 +1151,21 @@
         </span>
       `).join('');
 
-      // Card 1: Hermes & Peer Wage Band
+      // Card 1: Hermes & Peer Wage Band + PSR Annual Book Cost
       document.getElementById('hermes-ai-summary').textContent = st.hermes_ai_summary || '';
       const band = (st.peer_wage_band || {}).wage_band_eur || {};
+      const psr = st.psr_and_tax_breakdown || {};
+      const psrHtml = psr.annual_psr_book_cost_eur ? `
+        <div class="p-2.5 rounded-xl bg-amber-950/30 border border-amber-700/50 space-y-1 mt-1">
+          <div class="flex justify-between font-bold text-amber-300">
+            <span>💶 구단 연간 PSR 장부 총비용 (${psr.league})</span>
+            <span>€${(psr.annual_psr_book_cost_eur || 0).toLocaleString()} / 년</span>
+          </div>
+          <div class="text-[10px] text-slate-300">
+            이적료 감가상각(${psr.amortization_years_applied}년): €${(psr.annual_transfer_amortization_eur || 0).toLocaleString()}/년 · 세후 실수령 주급: <b class="text-emerald-300">€${(psr.weekly_net_wage_eur || 0).toLocaleString()}/주</b> (소득세율 ${psr.top_income_tax_rate_pct}%)
+          </div>
+        </div>
+      ` : '';
       document.getElementById('wage-band-bars').innerHTML = `
         <div class="flex justify-between p-2 rounded bg-slate-900 border border-slate-800">
           <span class="text-slate-400">보수적 하한 (Q25)</span>
@@ -937,6 +1179,7 @@
           <span class="text-sky-300">공격적 상한 (Q75)</span>
           <span class="font-bold text-sky-400">€${(band.q75_ambitious || 0).toLocaleString()} / 주</span>
         </div>
+        ${psrHtml}
       `;
 
       document.getElementById('hermes-tool-trace').innerHTML = (st.hermes_tool_trace || []).map(t =>
@@ -1152,6 +1395,200 @@
             <div class="text-xs text-slate-200">${r.tactical_note}</div>
           </div>
         `).join('');
+      }
+    }
+
+    function switchWorkbenchTab(tab) {
+      ['bosman', 'psr', 'custom'].forEach(t => {
+        document.getElementById(`wb-panel-${t}`).classList.toggle('hidden', t !== tab);
+      });
+      document.getElementById('wb-tab-bosman').className = tab === 'bosman'
+        ? 'px-3 py-1.5 rounded-lg text-xs font-extrabold bg-emerald-600 text-white transition'
+        : 'px-3 py-1.5 rounded-lg text-xs font-extrabold bg-slate-800 text-slate-300 hover:bg-slate-700 transition';
+      document.getElementById('wb-tab-psr').className = tab === 'psr'
+        ? 'px-3 py-1.5 rounded-lg text-xs font-extrabold bg-amber-600 text-white transition'
+        : 'px-3 py-1.5 rounded-lg text-xs font-extrabold bg-slate-800 text-slate-300 hover:bg-slate-700 transition';
+      document.getElementById('wb-tab-custom').className = tab === 'custom'
+        ? 'px-3 py-1.5 rounded-lg text-xs font-extrabold bg-sky-600 text-white transition'
+        : 'px-3 py-1.5 rounded-lg text-xs font-extrabold bg-slate-800 text-sky-300 hover:bg-slate-700 transition';
+    }
+
+    async function previewPsrLive() {
+      if (!selectedPlayer) return;
+      const box = document.getElementById('live-psr-mini-preview');
+      if (!box) return;
+      const ovWage = parseInt(document.getElementById('ov-actual-wage').value || '0', 10);
+      const ovVal = parseInt(document.getElementById('ov-market-val').value || '0', 10);
+      const years = parseInt(document.getElementById('ov-contract-years').value || '4', 10);
+      const bonus = parseInt(document.getElementById('ov-signing-bonus').value || '0', 10);
+      const feePct = parseFloat(document.getElementById('ov-agent-fee').value || '7.0');
+      const incPct = parseInt(document.getElementById('wage-slider').value || '30', 10);
+
+      const baseWage = ovWage > 0 ? ovWage : selectedPlayer.weekly_wage_eur;
+      const targetWage = Math.round(baseWage * (1 + incPct / 100.0));
+      const fee = selectedTrack === 'TRACK_B_RENEWAL' ? 0 : (ovVal > 0 ? ovVal : selectedPlayer.market_value_eur);
+      const prefLg = document.getElementById('preferred-league-select').value;
+      const league = prefLg !== 'ALL' ? prefLg : selectedPlayer.league;
+
+      try {
+        const res = await fetch('/api/finance/psr-tax', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            league,
+            transfer_fee_eur: fee,
+            weekly_wage_eur: targetWage,
+            contract_years: years,
+            agent_fee_pct: feePct,
+            signing_bonus_eur: bonus
+          })
+        });
+        const d = await res.json();
+        box.innerHTML = `
+          <div class="flex justify-between font-bold text-emerald-300">
+            <span>📊 목표 주급 €${targetWage.toLocaleString()}/주 기준 (${d.league} · ${d.negotiation_basis})</span>
+            <span>실수령(Net): €${d.weekly_net_wage_eur.toLocaleString()}/주</span>
+          </div>
+          <div class="text-slate-300 mt-0.5">
+            • <b>구단 연간 PSR 장부 총비용:</b> <b class="text-amber-300">€${d.annual_psr_book_cost_eur.toLocaleString()}/년</b>
+            (이적료 상각 €${d.annual_transfer_amortization_eur.toLocaleString()} + 세전연봉 €${d.annual_gross_wage_eur.toLocaleString()} + 사회보장세/수수료)
+          </div>
+        `;
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    async function runStandalonePsrCalc() {
+      const box = document.getElementById('standalone-psr-result');
+      if (!box) return;
+      const league = document.getElementById('calc-league').value;
+      const fee = parseInt(document.getElementById('calc-fee').value || '0', 10);
+      const wage = parseInt(document.getElementById('calc-wage').value || '0', 10);
+      const years = parseInt(document.getElementById('calc-years').value || '4', 10);
+      const bonus = parseInt(document.getElementById('calc-bonus').value || '0', 10);
+      const pct = parseFloat(document.getElementById('calc-agent-pct').value || '7.0');
+
+      try {
+        const res = await fetch('/api/finance/psr-tax', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            league,
+            transfer_fee_eur: fee,
+            weekly_wage_eur: wage,
+            contract_years: years,
+            agent_fee_pct: pct,
+            signing_bonus_eur: bonus
+          })
+        });
+        const d = await res.json();
+        box.innerHTML = `
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-2">
+            <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800">
+              <div class="text-[10px] text-slate-400">구단 연간 PSR 장부 총비용 (감가상각 ${d.amortization_years_applied}년 한도)</div>
+              <div class="text-sm font-extrabold text-amber-400 mt-0.5">€${d.annual_psr_book_cost_eur.toLocaleString()} / 년</div>
+              <div class="text-[10px] text-slate-400">이적료 상각: €${d.annual_transfer_amortization_eur.toLocaleString()}/년</div>
+            </div>
+            <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800">
+              <div class="text-[10px] text-slate-400">선수 세전(Gross) vs 세후(Net) 실수령액</div>
+              <div class="text-sm font-extrabold text-emerald-400 mt-0.5">세후 €${d.weekly_net_wage_eur.toLocaleString()}/주 (연 €${d.annual_net_wage_eur.toLocaleString()})</div>
+              <div class="text-[10px] text-slate-400">세전 연봉 €${d.annual_gross_wage_eur.toLocaleString()} · 소득세율 ${d.top_income_tax_rate_pct}%</div>
+            </div>
+            <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800">
+              <div class="text-[10px] text-slate-400">에이전트 총 수수료 (${d.agent_fee_pct}%) & 사이닝 보너스</div>
+              <div class="text-sm font-extrabold text-sky-400 mt-0.5">수수료 €${d.agent_commission_total_eur.toLocaleString()}</div>
+              <div class="text-[10px] text-slate-400">사이닝 보너스 €${d.signing_bonus_eur.toLocaleString()} · 구단 사회보장세 연 €${d.employer_social_tax_annual_eur.toLocaleString()}</div>
+            </div>
+            <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800">
+              <div class="text-[10px] text-slate-400">${d.contract_years}년 총 딜 패키지 현금 지출액 (Total Outlay)</div>
+              <div class="text-sm font-extrabold text-purple-300 mt-0.5">€${d.total_deal_package_cost_eur.toLocaleString()}</div>
+              <div class="text-[10px] text-slate-400">협상 관행: <b>${d.negotiation_basis}</b> ${d.mandatory_release_clause ? '· 의무 바이아웃 필수' : ''}</div>
+            </div>
+          </div>
+          <div class="text-[11px] text-slate-300">📌 <b>세제 & 재정 규정 가이드:</b> ${d.tax_regime_note}</div>
+        `;
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    async function loadBosmanRadar() {
+      const pos = document.getElementById('bosman-pos-select').value;
+      const lg = document.getElementById('bosman-league-select').value;
+      const grid = document.getElementById('bosman-radar-grid');
+      const badge = document.getElementById('bosman-count-badge');
+      try {
+        const res = await fetch(`/api/radar/bosman?position=${encodeURIComponent(pos)}&league=${encodeURIComponent(lg)}`);
+        const data = await res.json();
+        const list = data.targets || [];
+        badge.textContent = `포착된 타겟 구단 ${list.length}개`;
+        grid.innerHTML = list.map(t => `
+          <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 hover:border-emerald-500/50 transition space-y-1 text-xs">
+            <div class="flex items-center justify-between font-bold text-white">
+              <span>🏟️ ${t.club_name} (${t.league} · ${t.position})</span>
+              <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300">우선순위 ${t.priority_score}점</span>
+            </div>
+            <div class="text-[11px] text-amber-300 font-semibold">⚡ ${t.opportunity_type}</div>
+            <div class="text-[11px] text-slate-300">
+              현 주전: <b>${t.current_starter}</b> (${t.starter_age}세, 만료 ${t.starter_contract_expires}) · 주급 €${(t.starter_weekly_wage_eur || 0).toLocaleString()}
+            </div>
+            <div class="text-[10px] text-sky-300">
+              👔 감독 ${t.manager_name || '-'} (${t.preferred_formation || '-'}): ${t.manager_tactical_requirement || ''}
+            </div>
+            <div class="flex items-center justify-between pt-1 border-t border-slate-800 text-[10px] text-slate-400">
+              <span>이적료 예산 €${((t.max_transfer_fee_budget_eur || 0)/1000000).toFixed(1)}M</span>
+              <span class="text-emerald-400 font-bold">최대 주급 €${(t.max_weekly_wage_offer_eur || 0).toLocaleString()}/주</span>
+            </div>
+          </div>
+        `).join('');
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    async function registerCustomClient() {
+      const payload = {
+        name_ko: document.getElementById('cust-name-ko').value.trim(),
+        name: document.getElementById('cust-name-en').value.trim(),
+        position: document.getElementById('cust-pos').value,
+        secondary_positions: document.getElementById('cust-sec-pos').value.trim(),
+        current_club: document.getElementById('cust-club').value.trim(),
+        league: document.getElementById('cust-league').value.trim(),
+        age: parseInt(document.getElementById('cust-age').value || '20', 10),
+        current_league_band: parseInt(document.getElementById('cust-band').value || '2', 10),
+        market_value_eur: parseInt(document.getElementById('cust-val').value || '4500000', 10),
+        weekly_wage_eur: parseInt(document.getElementById('cust-wage').value || '15000', 10),
+        contract_expires: '2027-06-30',
+        nationality: 'South Korea',
+        goals_per90: parseFloat(document.getElementById('cust-g90').value || '0.35'),
+        assists_per90: parseFloat(document.getElementById('cust-a90').value || '0.22'),
+        xg_per90: parseFloat(document.getElementById('cust-g90').value || '0.30') * 0.88,
+        xa_per90: parseFloat(document.getElementById('cust-a90').value || '0.20') * 0.88,
+        progressive_actions_per90: parseFloat(document.getElementById('cust-prog90').value || '6.5'),
+        key_passes_per90: parseFloat(document.getElementById('cust-kp90').value || '1.7'),
+        defensive_duels_won_pct: 57.5,
+        minutes_played: 2580,
+        appearances: 31,
+        intl_match_pct: parseFloat(document.getElementById('cust-intl').value || '45'),
+        continental_minutes_pct: parseFloat(document.getElementById('cust-cont').value || '60'),
+        is_eu_citizen: 0,
+        strengths_summary: document.getElementById('cust-strengths').value.trim(),
+        weaknesses_summary: ''
+      };
+      try {
+        const res = await fetch('/api/players/custom', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.detail || '등록 실패');
+        await loadPlayers();
+        selectPlayer(data.player);
+        alert(`🌟 외부 리그 선수 [${data.player.name_ko} (${data.player.name})] DB 등록 및 선택 완료!\n이제 우측 '전략 생성 & 1차 모의 협상 시작' 버튼을 누르면 유럽 5대 리그 96개 구단·감독과 전술/재정 매칭을 즉시 실행합니다.`);
+      } catch (e) {
+        alert('외부 선수 등록 오류: ' + e);
       }
     }
 

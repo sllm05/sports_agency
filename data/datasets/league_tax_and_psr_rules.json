@@ -1,0 +1,57 @@
+[
+  {
+    "league": "Premier League",
+    "country": "England",
+    "negotiation_basis": "GROSS_WEEKLY",
+    "top_income_tax_rate_pct": 45.0,
+    "employer_social_rate_pct": 13.8,
+    "max_amortization_years": 5,
+    "psr_squad_cost_cap_pct": 70.0,
+    "mandatory_release_clause": 0,
+    "tax_regime_note": "영국 EPL: 세전 주급(Gross Weekly Wage) 기준 협상 관행, 소득세 45% + 국민보험(NI) 2% 및 구단 고용주 부담분 13.8%, EPL PSR 및 UEFA FSR 상 이적료 감가상각 최대 5년 상한 적용"
+  },
+  {
+    "league": "La Liga",
+    "country": "Spain",
+    "negotiation_basis": "NET_ANNUAL",
+    "top_income_tax_rate_pct": 47.0,
+    "employer_social_rate_pct": 6.5,
+    "max_amortization_years": 5,
+    "psr_squad_cost_cap_pct": 70.0,
+    "mandatory_release_clause": 1,
+    "tax_regime_note": "스페인 라리가: 세후 연봉(Net Annual Salary) 기준 협상 관행, 최고세율 약 47%, Royal Decree 1006/1985에 따른 의무 바이아웃(Mandatory Release Clause) 필수 명시 및 라리가 샐러리캡(LCPD) 엄격 적용"
+  },
+  {
+    "league": "Serie A",
+    "country": "Italy",
+    "negotiation_basis": "NET_ANNUAL",
+    "top_income_tax_rate_pct": 43.0,
+    "employer_social_rate_pct": 9.2,
+    "max_amortization_years": 5,
+    "psr_squad_cost_cap_pct": 70.0,
+    "mandatory_release_clause": 0,
+    "tax_regime_note": "이탈리아 세리에 A: 100% 세후 연봉(Net Annual Salary) 기준 협상 관행, IRPEF 최고세율 43% + 지방세 약 2~3% (신규 세제 개편 이후 구단 세전 부담률 약 1.85배), 이적료 최대 5년 감가상각"
+  },
+  {
+    "league": "Bundesliga",
+    "country": "Germany",
+    "negotiation_basis": "GROSS_ANNUAL",
+    "top_income_tax_rate_pct": 45.0,
+    "employer_social_rate_pct": 8.0,
+    "max_amortization_years": 5,
+    "psr_squad_cost_cap_pct": 70.0,
+    "mandatory_release_clause": 0,
+    "tax_regime_note": "독일 분데스리가: 세전 연봉(Gross Annual Salary) 기준 협상 관행, 부유세(Reichensteuer) 45% + 연대세, DFL 재정 건전성 심사 및 Non-EU 쿼터 무제한 혜택"
+  },
+  {
+    "league": "Ligue 1",
+    "country": "France",
+    "negotiation_basis": "GROSS_MONTHLY",
+    "top_income_tax_rate_pct": 45.0,
+    "employer_social_rate_pct": 18.5,
+    "max_amortization_years": 5,
+    "psr_squad_cost_cap_pct": 70.0,
+    "mandatory_release_clause": 0,
+    "tax_regime_note": "프랑스 리그 1: 세전 월급(Gross Monthly) 기준 협상 관행, 프랑스 사회보장 분담금(Cotisations Sociales) 비중이 높아 해외 영입 선수 대상 패트리아트(Impatriate Tax Regime, 최대 30% 비과세) 절세 설계 필수, 공식 바이아웃 조항 금지(LFP 규정상 사적 신사협정만 가능)"
+  }
+]

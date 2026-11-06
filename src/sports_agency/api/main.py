@@ -23,10 +23,13 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from mcp_server.football_mcp_server import (
+    calculate_psr_and_tax_breakdown,
     get_agency_deep_analytics_overview,
     get_player_complete_data,
     list_agency_managers,
     list_agency_players,
+    register_custom_external_client,
+    scan_bosman_and_replacement_targets,
 )
 from sports_agency.config import CONFIG, PROJECT_ROOT, ROUTER
 from sports_agency.graph.agency_workflow import WORKFLOW_MANAGER
@@ -59,6 +62,15 @@ if STATIC_DIR.exists():
 # ============================================================================
 # Request Schemas
 # ============================================================================
+class ContractOverrideInput(BaseModel):
+    actual_weekly_wage_eur: int = Field(0, description="에이전트가 보유한 실제 기밀 현재 주급(EUR, 0이면 DB 기본값 사용)")
+    custom_market_value_eur: int = Field(0, description="에이전트 희망 이적료/시세 Override(EUR, 0이면 DB 기본값 사용)")
+    contract_years: int = Field(4, ge=1, le=8, description="목표 계약 기간(년)")
+    signing_bonus_eur: int = Field(0, ge=0, description="사이닝 보너스(Signing-on Fee, EUR)")
+    current_release_clause_eur: int = Field(0, ge=0, description="현재 계약서상 바이아웃(EUR)")
+    agent_fee_pct: float = Field(7.0, ge=1.0, le=15.0, description="목표 에이전트 수수료율(%)")
+
+
 class StartWorkflowRequest(BaseModel):
     player_name: str = Field(..., description="선수 이름 (예: 손흥민, 이강인, 김민재, Bukayo Saka)")
     track_mode: str = Field(
@@ -72,7 +84,46 @@ class StartWorkflowRequest(BaseModel):
         False,
         description="True일 경우 Human-in-the-Loop 일시정지 없이 끝까지 즉시 실행",
     )
+    contract_override: ContractOverrideInput | None = None
     thread_id: str | None = None
+
+
+class PsrSimulatorRequest(BaseModel):
+    league: str = Field("Premier League", description="대상 리그 (Premier League, La Liga, Serie A, Bundesliga, Ligue 1)")
+    transfer_fee_eur: int = Field(25000000, ge=0)
+    weekly_wage_eur: int = Field(80000, ge=0)
+    contract_years: int = Field(4, ge=1, le=8)
+    agent_fee_pct: float = Field(7.0, ge=0.0, le=15.0)
+    signing_bonus_eur: int = Field(2000000, ge=0)
+
+
+class CustomClientRegistrationRequest(BaseModel):
+    name: str = Field(..., description="영문 이름 (예: Yang Min-hyeok)")
+    name_ko: str = Field(..., description="한글 이름 (예: 양민혁)")
+    position: str = Field("RW", description="주 포지션 (ST, LW, RW, AM, CM, DM, CB, RB, LB, GK)")
+    secondary_positions: str = Field("LW, AM")
+    age: int = Field(20, ge=15, le=45)
+    nationality: str = Field("South Korea")
+    current_club: str = Field("QPR / K League Prospect")
+    league: str = Field("EFL Championship / K League 1")
+    current_league_band: int = Field(2, ge=1, le=6)
+    market_value_eur: int = Field(4500000, ge=50000)
+    weekly_wage_eur: int = Field(15000, ge=500)
+    contract_expires: str = Field("2027-06-30")
+    goals_per90: float = Field(0.34)
+    assists_per90: float = Field(0.22)
+    xg_per90: float = Field(0.29)
+    xa_per90: float = Field(0.19)
+    key_passes_per90: float = Field(1.65)
+    progressive_actions_per90: float = Field(6.4)
+    defensive_duels_won_pct: float = Field(56.5)
+    minutes_played: int = Field(2650)
+    appearances: int = Field(32)
+    intl_match_pct: float = Field(45.0)
+    continental_minutes_pct: float = Field(60.0)
+    is_eu_citizen: int = Field(0)
+    strengths_summary: str = Field("")
+    weaknesses_summary: str = Field("")
 
 
 class ResumeWorkflowRequest(BaseModel):
@@ -235,6 +286,7 @@ def api_sync_live_player(req: LivePlayerSyncRequest) -> dict[str, Any]:
 @app.post("/api/workflow/start")
 def api_start_workflow(req: StartWorkflowRequest) -> dict[str, Any]:
     thread_id = req.thread_id or f"deal_{uuid.uuid4().hex[:10]}"
+    override_dict = req.contract_override.model_dump() if req.contract_override else {}
     result = WORKFLOW_MANAGER.start_session(
         thread_id=thread_id,
         player_name=req.player_name,
@@ -243,8 +295,49 @@ def api_start_workflow(req: StartWorkflowRequest) -> dict[str, Any]:
         priority_goal=req.priority_goal,
         preferred_league=req.preferred_league,
         auto_complete=req.auto_complete,
+        contract_override=override_dict,
     )
     return result
+
+
+@app.post("/api/finance/psr-tax")
+def api_calculate_psr_and_tax(req: PsrSimulatorRequest) -> dict[str, Any]:
+    """Calculates UEFA FSR / EPL PSR Annualized Squad Cost (Amortization + Gross Wage + Agent Commission) & Net-Gross salary conversion."""
+    return calculate_psr_and_tax_breakdown(
+        league=req.league,
+        transfer_fee_eur=req.transfer_fee_eur,
+        weekly_wage_eur=req.weekly_wage_eur,
+        contract_years=req.contract_years,
+        agent_fee_pct=req.agent_fee_pct,
+        signing_bonus_eur=req.signing_bonus_eur,
+    )
+
+
+@app.get("/api/radar/bosman")
+def api_scan_bosman_radar(
+    position: str = "ALL",
+    league: str = "ALL",
+    max_contract_year: int = 2027,
+    min_starter_age: int = 29,
+) -> dict[str, Any]:
+    """Scans all 96 Big 5 League clubs for Bosman Rule / Contract Expiry windows and aging starter replacement targets."""
+    targets = scan_bosman_and_replacement_targets(
+        position=position,
+        league=league,
+        max_contract_year=max_contract_year,
+        min_starter_age=min_starter_age,
+    )
+    return {"count": len(targets), "targets": targets}
+
+
+@app.post("/api/players/custom")
+def api_register_custom_client(req: CustomClientRegistrationRequest) -> dict[str, Any]:
+    """Registers an external prospect (e.g., K League, J League, Eredivisie, Liga Portugal, Championship) into `agency_desk.db`."""
+    try:
+        profile = register_custom_external_client(**req.model_dump())
+        return {"status": "ok", "player": profile}
+    except Exception as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
 
 
 @app.post("/api/workflow/resume")

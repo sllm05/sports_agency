@@ -32,8 +32,10 @@ mcp = MCPServer("Football Agency Strategy Desk MCP Server")
 
 
 def _get_conn() -> sqlite3.Connection:
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(DB_PATH, timeout=30.0)
     conn.row_factory = sqlite3.Row
+    conn.execute("PRAGMA journal_mode=WAL;")
+    conn.execute("PRAGMA synchronous=NORMAL;")
     return conn
 
 
@@ -528,6 +530,351 @@ def get_agency_deep_analytics_overview(competition_code: str = "PL") -> dict[str
     }
 
 
+@mcp.tool()
+def calculate_psr_and_tax_breakdown(
+    league: str,
+    transfer_fee_eur: int,
+    weekly_wage_eur: int,
+    contract_years: int = 4,
+    agent_fee_pct: float = 6.0,
+    signing_bonus_eur: int = 0,
+) -> dict[str, Any]:
+    """
+    [MCP Tool 7] Calculates UEFA FSR / EPL PSR Annualized Total Squad Cost (Amortization + Gross Salary + Agent Fee)
+    and Country-specific Net vs. Gross Salary conversion from `league_tax_and_psr_rules` in `agency_desk.db`.
+    """
+    conn = _get_conn()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM league_tax_and_psr_rules WHERE LOWER(league) = LOWER(?) LIMIT 1", (league,))
+    rule_row = cur.fetchone()
+    if not rule_row:
+        cur.execute("SELECT * FROM league_tax_and_psr_rules WHERE league = 'Premier League' LIMIT 1")
+        rule_row = cur.fetchone()
+    conn.close()
+
+    rule = dict(rule_row) if rule_row else {
+        "league": league,
+        "country": "Europe",
+        "negotiation_basis": "GROSS_WEEKLY",
+        "top_income_tax_rate_pct": 45.0,
+        "employer_social_rate_pct": 12.0,
+        "max_amortization_years": 5,
+        "psr_squad_cost_cap_pct": 70.0,
+        "mandatory_release_clause": 0,
+        "tax_regime_note": "유럽 5대 리그 표준 세율(45%) 및 최대 5년 감가상각 적용",
+    }
+
+    years = max(1, int(contract_years))
+    amort_years = min(years, int(rule["max_amortization_years"]))
+    annual_gross_wage = int(weekly_wage_eur * 52)
+    tax_rate = float(rule["top_income_tax_rate_pct"]) / 100.0
+    social_rate = float(rule["employer_social_rate_pct"]) / 100.0
+
+    annual_net_wage = int(round(annual_gross_wage * (1.0 - tax_rate)))
+    weekly_net_wage = int(round(annual_net_wage / 52.0))
+    employer_social_cost = int(round(annual_gross_wage * social_rate))
+    total_contract_gross_wage = annual_gross_wage * years
+
+    # Agent commission (on gross salary package + transfer fee blend) and signing bonus
+    agent_commission_total = int(round((total_contract_gross_wage + transfer_fee_eur * 0.5) * (agent_fee_pct / 100.0)))
+    annual_fee_amortization = int(round(transfer_fee_eur / amort_years))
+    annual_bonus_and_agent_amort = int(round((signing_bonus_eur + agent_commission_total) / amort_years))
+    annual_psr_book_cost = annual_fee_amortization + annual_gross_wage + employer_social_cost + annual_bonus_and_agent_amort
+    total_cash_outlay = transfer_fee_eur + (annual_gross_wage + employer_social_cost) * years + signing_bonus_eur + agent_commission_total
+
+    log_work_event(
+        "MCP_TOOL_7",
+        f"calculate_psr_and_tax_breakdown(league={league}, fee=€{transfer_fee_eur:,}, wage=€{weekly_wage_eur:,}/wk, {years}yr) -> annual_psr=€{annual_psr_book_cost:,}",
+    )
+    return {
+        "league": rule["league"],
+        "country": rule["country"],
+        "negotiation_basis": rule["negotiation_basis"],
+        "contract_years": years,
+        "amortization_years_applied": amort_years,
+        "weekly_gross_wage_eur": weekly_wage_eur,
+        "weekly_net_wage_eur": weekly_net_wage,
+        "annual_gross_wage_eur": annual_gross_wage,
+        "annual_net_wage_eur": annual_net_wage,
+        "employer_social_tax_annual_eur": employer_social_cost,
+        "top_income_tax_rate_pct": rule["top_income_tax_rate_pct"],
+        "employer_social_rate_pct": rule["employer_social_rate_pct"],
+        "transfer_fee_eur": transfer_fee_eur,
+        "annual_transfer_amortization_eur": annual_fee_amortization,
+        "agent_fee_pct": agent_fee_pct,
+        "agent_commission_total_eur": agent_commission_total,
+        "signing_bonus_eur": signing_bonus_eur,
+        "annual_psr_book_cost_eur": annual_psr_book_cost,
+        "total_deal_package_cost_eur": total_cash_outlay,
+        "mandatory_release_clause": bool(rule["mandatory_release_clause"]),
+        "tax_regime_note": rule["tax_regime_note"],
+    }
+
+
+@mcp.tool()
+def scan_bosman_and_replacement_targets(
+    position: str = "ALL",
+    league: str = "ALL",
+    max_contract_year: int = 2027,
+    min_starter_age: int = 29,
+) -> list[dict[str, Any]]:
+    """
+    [MCP Tool 8] Scans all 96 Big 5 League clubs for Bosman Rule / Contract Expiry windows (FIFA RSTP Art. 18 par. 3)
+    and aging starter replacement opportunities (`starter_age >= min_starter_age` OR `starter_contract_expires <= max_contract_year`).
+    """
+    conn = _get_conn()
+    cur = conn.cursor()
+
+    query = """
+        SELECT c.*, m.name as manager_name, m.preferred_formation, m.win_rate_pct, m.points_per_game,
+               m.preferred_player_profiles_json
+        FROM club_squad_needs c
+        LEFT JOIN managers m ON c.club_name = m.current_club
+        WHERE 1=1
+    """
+    params: list[Any] = []
+    if position and position.upper() != "ALL":
+        query += " AND c.position = ?"
+        params.append(position.upper())
+    if league and league != "ALL":
+        query += " AND c.league = ?"
+        params.append(league)
+
+    cur.execute(query, tuple(params))
+    raw_rows = [dict(r) for r in cur.fetchall()]
+    conn.close()
+
+    opportunities: list[dict[str, Any]] = []
+    for r in raw_rows:
+        exp_str = str(r.get("starter_contract_expires") or "2027-06-30")
+        exp_year = int(exp_str[:4]) if exp_str[:4].isdigit() else 2027
+        s_age = int(r.get("starter_age") or 27)
+        urgency = r.get("recruitment_urgency") or "Medium"
+
+        is_expiring = exp_year <= max_contract_year
+        is_aging = s_age >= min_starter_age
+        if not (is_expiring or is_aging or urgency == "High"):
+            continue
+
+        reasons: list[str] = []
+        if exp_year <= 2026:
+            reasons.append(f"보스만 룰/자유계약 임박(주전 계약만료 {exp_str})")
+        elif is_expiring:
+            reasons.append(f"계약 최종 1년차 진입({exp_str} 만료 — 매각 또는 대체 필수)")
+        if is_aging:
+            reasons.append(f"주전 노쇠화 세대교체 타겟(만 {s_age}세)")
+        if urgency == "High":
+            reasons.append("구단 최우선 보강 포지션(Urgency: High)")
+
+        try:
+            pos_map = json.loads(r.pop("preferred_player_profiles_json", "{}") or "{}")
+        except Exception:
+            pos_map = {}
+
+        r["opportunity_type"] = " + ".join(reasons)
+        r["manager_tactical_requirement"] = pos_map.get(r["position"], "즉시 전력감 전술 수행 능력")
+        r["priority_score"] = (35 if exp_year <= 2026 else (22 if is_expiring else 0)) + max(0, (s_age - 27) * 6) + (20 if urgency == "High" else 8)
+        opportunities.append(r)
+
+    opportunities.sort(key=lambda x: (x["priority_score"], x["max_weekly_wage_offer_eur"]), reverse=True)
+    log_work_event(
+        "MCP_TOOL_8",
+        f"scan_bosman_and_replacement_targets(pos={position}, league={league}) -> {len(opportunities[:25])} club targets found",
+    )
+    return opportunities[:25]
+
+
+@mcp.tool()
+def register_custom_external_client(
+    name: str,
+    name_ko: str,
+    position: str,
+    secondary_positions: str,
+    age: int,
+    nationality: str,
+    current_club: str,
+    league: str,
+    current_league_band: int,
+    market_value_eur: int,
+    weekly_wage_eur: int,
+    contract_expires: str,
+    goals_per90: float = 0.25,
+    assists_per90: float = 0.18,
+    xg_per90: float = 0.22,
+    xa_per90: float = 0.16,
+    key_passes_per90: float = 1.4,
+    progressive_actions_per90: float = 5.2,
+    defensive_duels_won_pct: float = 58.0,
+    minutes_played: int = 2520,
+    appearances: int = 30,
+    intl_match_pct: float = 50.0,
+    continental_minutes_pct: float = 40.0,
+    is_eu_citizen: int = 0,
+    strengths_summary: str = "",
+    weaknesses_summary: str = "",
+) -> dict[str, Any]:
+    """
+    [MCP Tool 9] Registers an external prospect or non-Big-5 league player (e.g., K League 1, J1 League, Eredivisie, Liga Portugal, Championship)
+    directly into `agency_desk.db` (`players`, `player_stats`, `market_value_history`, `career_discipline_and_ucl`, `player_playstyle_and_tendencies`)
+    so the agent can run full Big 5 League outbound pitching and negotiation simulations.
+    """
+    conn = _get_conn()
+    cur = conn.cursor()
+
+    cur.execute("SELECT player_id FROM players WHERE LOWER(name) = LOWER(?) LIMIT 1", (name.strip(),))
+    existing = cur.fetchone()
+    if existing:
+        pid = int(existing["player_id"])
+    else:
+        cur.execute("SELECT COALESCE(MAX(player_id), 3000) + 1 AS next_id FROM players")
+        pid = int(cur.fetchone()["next_id"])
+
+    pos = position.upper().strip()
+    pos_percentile = min(99, max(55, int(round(65 + progressive_actions_per90 * 2.5 + (goals_per90 + assists_per90) * 18))))
+    if not strengths_summary.strip():
+        strengths_summary = (
+            f"[{league} 검증 유망주/핵심 자원] 90분당 전진 액션 {progressive_actions_per90}회, 키패스 {key_passes_per90}회, "
+            f"공격포인트 {round(goals_per90 + assists_per90, 2)}/90, 수비경합 승리율 {defensive_duels_won_pct}%를 기록 중인 맞춤형 타겟"
+        )
+    if not weaknesses_summary.strip():
+        weaknesses_summary = "유럽 5대 리그 빅클럽 상대 초기 템포 적응 및 피지컬 경합 검증 필요 (인센티브 연동 계약으로 구단 리스크 헷지 가능)"
+
+    avail_pct = round(min(100.0, (minutes_played / 3060.0) * 100.0), 1)
+
+    cur.execute("DELETE FROM players WHERE player_id = ?", (pid,))
+    cur.execute(
+        """
+        INSERT INTO players (
+            player_id, name, name_ko, current_club, league, current_league_band,
+            position, secondary_positions, age, nationality, is_eu_citizen,
+            market_value_eur, weekly_wage_eur, is_wage_estimated, contract_expires,
+            intl_match_pct, continental_minutes_pct, Domestic_minutes_pct, is_agency_client, strengths_summary
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, 1, ?)
+        """,
+        (
+            pid,
+            name.strip(),
+            name_ko.strip() or name.strip(),
+            current_club.strip(),
+            league.strip(),
+            int(current_league_band),
+            pos,
+            secondary_positions.strip() or pos,
+            int(age),
+            nationality.strip(),
+            int(is_eu_citizen),
+            int(market_value_eur),
+            int(weekly_wage_eur),
+            contract_expires.strip(),
+            float(intl_match_pct),
+            float(continental_minutes_pct),
+            float(avail_pct),
+            strengths_summary,
+        ),
+    )
+
+    cur.execute("DELETE FROM player_stats WHERE player_id = ?", (pid,))
+    cur.execute(
+        """
+        INSERT INTO player_stats (
+            player_id, season, minutes_played, appearances,
+            goals_per90, assists_per90, xg_per90, xa_per90,
+            key_passes_per90, progressive_actions_per90, defensive_duels_won_pct, pos_percentile
+        ) VALUES (?, '2025-2026', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """,
+        (
+            pid,
+            int(minutes_played),
+            int(appearances),
+            float(goals_per90),
+            float(assists_per90),
+            float(xg_per90),
+            float(xa_per90),
+            float(key_passes_per90),
+            float(progressive_actions_per90),
+            float(defensive_duels_won_pct),
+            pos_percentile,
+        ),
+    )
+
+    cur.execute("DELETE FROM market_value_history WHERE player_id = ?", (pid,))
+    cur.execute(
+        """
+        INSERT INTO market_value_history (
+            player_id, player_name, current_club, current_market_value_eur,
+            highest_market_value_eur, peak_date, previous_market_value_eur,
+            valuation_change_pct, height_cm, preferred_foot,
+            international_caps, international_goals, agency_name, recent_history_json
+        ) VALUES (?, ?, ?, ?, ?, '2026-06-01', ?, 25.0, 181, 'Right', ?, 0, 'Custom Agency Client (Verified)', '[]')
+        """,
+        (
+            pid,
+            name.strip(),
+            current_club.strip(),
+            int(market_value_eur),
+            int(market_value_eur),
+            int(market_value_eur * 0.8),
+            max(0, int(intl_match_pct // 5)),
+        ),
+    )
+
+    cur.execute("DELETE FROM career_discipline_and_ucl WHERE player_id = ?", (pid,))
+    cur.execute(
+        """
+        INSERT INTO career_discipline_and_ucl (
+            player_id, player_name, current_club, career_matches, career_minutes,
+            career_goals, career_assists, career_yellow_cards, career_red_cards,
+            ucl_matches, ucl_goals, ucl_assists
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, 2, 0, ?, 0, 0)
+        """,
+        (
+            pid,
+            name.strip(),
+            current_club.strip(),
+            int(appearances * 2),
+            int(minutes_played * 2),
+            int(round(goals_per90 * (minutes_played / 90.0))),
+            int(round(assists_per90 * (minutes_played / 90.0))),
+            int(round(continental_minutes_pct / 10.0)),
+        ),
+    )
+
+    avail_pct = round(min(100.0, (minutes_played / 3060.0) * 100.0), 1)
+    cur.execute("DELETE FROM player_playstyle_and_tendencies WHERE player_id = ?", (pid,))
+    cur.execute(
+        """
+        INSERT INTO player_playstyle_and_tendencies (
+            player_id, player_name, current_club, position,
+            tactical_archetype, strengths_tags, weaknesses_tags,
+            progression_tendency, finishing_clinicality, temperament_and_discipline,
+            loyalty_and_mobility, big_game_and_leadership, starter_ratio_pct,
+            minutes_availability_pct, durability_and_availability_note
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 88.0, ?, ?)
+        """,
+        (
+            pid,
+            name.strip(),
+            current_club.strip(),
+            pos,
+            f"{league} 최상위 크랙 & 유럽 5대 리그 직행 타겟 ({pos})",
+            f"[실측 강점] {strengths_summary}",
+            f"[실측 보완점] {weaknesses_summary}",
+            f"90분당 전진 액션 {progressive_actions_per90}회 · 키패스 {key_passes_per90}회",
+            f"90분당 득점 {goals_per90}골 (xG {xg_per90}) · 도움 {assists_per90}",
+            f"수비 경합 승리율 {defensive_duels_won_pct}% · 카드 리스크 최소화",
+            f"현 소속팀({current_club}) 핵심 주전 (계약만료 {contract_expires})",
+            f"A매치 출전율 {intl_match_pct}% · 대륙 클럽대항전 출전율 {continental_minutes_pct}%",
+            avail_pct,
+            f"시즌 {minutes_played:,}분 소화 (가용률 {avail_pct}%) — 유럽 빅리그 즉시 투입 가능한 내구성 검증",
+        ),
+    )
+
+    conn.commit()
+    conn.close()
+    log_work_event("MCP_TOOL_9", f"Registered custom external client {name_ko} ({name}, {current_club}) -> player_id={pid}")
+    return get_player_complete_data(name.strip())
+
+
 HERMES_MCP_TOOLS = {
     "get_player_complete_data": get_player_complete_data,
     "find_matching_clubs_for_transfer": find_matching_clubs_for_transfer,
@@ -535,6 +882,9 @@ HERMES_MCP_TOOLS = {
     "search_live_club_injury_and_rumors": search_live_club_injury_and_rumors,
     "export_agency_documents": export_agency_documents,
     "get_agency_deep_analytics_overview": get_agency_deep_analytics_overview,
+    "calculate_psr_and_tax_breakdown": calculate_psr_and_tax_breakdown,
+    "scan_bosman_and_replacement_targets": scan_bosman_and_replacement_targets,
+    "register_custom_external_client": register_custom_external_client,
 }
 
 if __name__ == "__main__":

@@ -63,8 +63,10 @@ def _parse_int(v: Any, default: int = 0) -> int:
 
 
 def build_all_agency_analytics() -> dict[str, Any]:
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(DB_PATH, timeout=30.0)
     conn.row_factory = sqlite3.Row
+    conn.execute("PRAGMA journal_mode=WAL;")
+    conn.execute("PRAGMA synchronous=NORMAL;")
     cur = conn.cursor()
 
     cur.execute(
@@ -646,6 +648,25 @@ def build_all_agency_analytics() -> dict[str, Any]:
             f"A매치 통산 {caps}경기 출전 · UEFA 클럽대항전(UCL/UEL) {ucl_m}경기 ({ucl_ga}공격포인트)"
         )
 
+        season_mins = int(db_p.get("minutes_played") or 0)
+        season_apps = int(db_p.get("appearances") or 0)
+        availability_pct = round(min(100.0, (season_mins / 3060.0) * 100.0), 1)
+        if availability_pct >= 75.0 or (season_apps >= 28 and starter_pct >= 75.0):
+            durability_note = (
+                f"철강왕 내구성 검증 (시즌 {season_mins:,}분 소화 · 리그 가용률 {availability_pct}% · 선발 비중 {starter_pct}%) — "
+                f"높은 고정 기본급(Fixed Base Wage) 비중 요구 정당성 확보"
+            )
+        elif availability_pct >= 45.0:
+            durability_note = (
+                f"로테이션/관리형 가용성 (시즌 {season_mins:,}분 소화 · 리그 가용률 {availability_pct}% · 선발 비중 {starter_pct}%) — "
+                f"기본급 보전 + 20~25경기 출전 달성 인센티브 하이브리드 구조 권장"
+            )
+        else:
+            durability_note = (
+                f"출전시간/결장 리스크 방어 필요 (시즌 {season_mins:,}분 소화 · 가용률 {availability_pct}%) — "
+                f"구단의 내구성 우려 불식을 위해 Pay-as-you-play(출전 수당 비중 확대 + 20경기 출전 시 기본급 자동 인상) 특약 설계 필수"
+            )
+
         tendency_rows.append(
             {
                 "player_id": pid,
@@ -661,6 +682,8 @@ def build_all_agency_analytics() -> dict[str, Any]:
                 "loyalty_and_mobility": loyalty_tendency,
                 "big_game_and_leadership": leadership_mentality,
                 "starter_ratio_pct": starter_pct,
+                "minutes_availability_pct": availability_pct,
+                "durability_and_availability_note": durability_note,
             }
         )
 
@@ -1044,9 +1067,97 @@ def build_all_agency_analytics() -> dict[str, Any]:
             temperament_and_discipline TEXT NOT NULL,
             loyalty_and_mobility TEXT NOT NULL,
             big_game_and_leadership TEXT NOT NULL,
-            starter_ratio_pct REAL NOT NULL
+            starter_ratio_pct REAL NOT NULL,
+            minutes_availability_pct REAL NOT NULL,
+            durability_and_availability_note TEXT NOT NULL
         )
         """
+    )
+
+    cur.execute("DROP TABLE IF EXISTS league_tax_and_psr_rules")
+    cur.execute(
+        """
+        CREATE TABLE league_tax_and_psr_rules (
+            league TEXT PRIMARY KEY,
+            country TEXT NOT NULL,
+            negotiation_basis TEXT NOT NULL,
+            top_income_tax_rate_pct REAL NOT NULL,
+            employer_social_rate_pct REAL NOT NULL,
+            max_amortization_years INTEGER NOT NULL,
+            psr_squad_cost_cap_pct REAL NOT NULL,
+            mandatory_release_clause INTEGER NOT NULL,
+            tax_regime_note TEXT NOT NULL
+        )
+        """
+    )
+    tax_psr_rows = [
+        {
+            "league": "Premier League",
+            "country": "England",
+            "negotiation_basis": "GROSS_WEEKLY",
+            "top_income_tax_rate_pct": 45.0,
+            "employer_social_rate_pct": 13.8,
+            "max_amortization_years": 5,
+            "psr_squad_cost_cap_pct": 70.0,
+            "mandatory_release_clause": 0,
+            "tax_regime_note": "영국 EPL: 세전 주급(Gross Weekly Wage) 기준 협상 관행, 소득세 45% + 국민보험(NI) 2% 및 구단 고용주 부담분 13.8%, EPL PSR 및 UEFA FSR 상 이적료 감가상각 최대 5년 상한 적용",
+        },
+        {
+            "league": "La Liga",
+            "country": "Spain",
+            "negotiation_basis": "NET_ANNUAL",
+            "top_income_tax_rate_pct": 47.0,
+            "employer_social_rate_pct": 6.5,
+            "max_amortization_years": 5,
+            "psr_squad_cost_cap_pct": 70.0,
+            "mandatory_release_clause": 1,
+            "tax_regime_note": "스페인 라리가: 세후 연봉(Net Annual Salary) 기준 협상 관행, 최고세율 약 47%, Royal Decree 1006/1985에 따른 의무 바이아웃(Mandatory Release Clause) 필수 명시 및 라리가 샐러리캡(LCPD) 엄격 적용",
+        },
+        {
+            "league": "Serie A",
+            "country": "Italy",
+            "negotiation_basis": "NET_ANNUAL",
+            "top_income_tax_rate_pct": 43.0,
+            "employer_social_rate_pct": 9.2,
+            "max_amortization_years": 5,
+            "psr_squad_cost_cap_pct": 70.0,
+            "mandatory_release_clause": 0,
+            "tax_regime_note": "이탈리아 세리에 A: 100% 세후 연봉(Net Annual Salary) 기준 협상 관행, IRPEF 최고세율 43% + 지방세 약 2~3% (신규 세제 개편 이후 구단 세전 부담률 약 1.85배), 이적료 최대 5년 감가상각",
+        },
+        {
+            "league": "Bundesliga",
+            "country": "Germany",
+            "negotiation_basis": "GROSS_ANNUAL",
+            "top_income_tax_rate_pct": 45.0,
+            "employer_social_rate_pct": 8.0,
+            "max_amortization_years": 5,
+            "psr_squad_cost_cap_pct": 70.0,
+            "mandatory_release_clause": 0,
+            "tax_regime_note": "독일 분데스리가: 세전 연봉(Gross Annual Salary) 기준 협상 관행, 부유세(Reichensteuer) 45% + 연대세, DFL 재정 건전성 심사 및 Non-EU 쿼터 무제한 혜택",
+        },
+        {
+            "league": "Ligue 1",
+            "country": "France",
+            "negotiation_basis": "GROSS_MONTHLY",
+            "top_income_tax_rate_pct": 45.0,
+            "employer_social_rate_pct": 18.5,
+            "max_amortization_years": 5,
+            "psr_squad_cost_cap_pct": 70.0,
+            "mandatory_release_clause": 0,
+            "tax_regime_note": "프랑스 리그 1: 세전 월급(Gross Monthly) 기준 협상 관행, 프랑스 사회보장 분담금(Cotisations Sociales) 비중이 높아 해외 영입 선수 대상 패트리아트(Impatriate Tax Regime, 최대 30% 비과세) 절세 설계 필수, 공식 바이아웃 조항 금지(LFP 규정상 사적 신사협정만 가능)",
+        },
+    ]
+    cur.executemany(
+        """
+        INSERT INTO league_tax_and_psr_rules
+        (league, country, negotiation_basis, top_income_tax_rate_pct, employer_social_rate_pct, max_amortization_years, psr_squad_cost_cap_pct, mandatory_release_clause, tax_regime_note)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """,
+        [tuple(r[k] for k in tax_psr_rows[0].keys()) for r in tax_psr_rows],
+    )
+    (DATASETS_DIR / "league_tax_and_psr_rules.json").write_text(
+        json.dumps(tax_psr_rows, ensure_ascii=False, indent=2),
+        encoding="utf-8",
     )
 
     for tbl, rows in [

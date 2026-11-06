@@ -147,3 +147,35 @@
 [2026-11-07 01:11:53] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€200,000,000
 [2026-11-07 01:11:53] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-jae Kim) -> club=FC Bayern München, val=€20,000,000
 [2026-11-07 01:11:53] [INFO] [MCP_TOOL_1] get_player_complete_data(Kang-in Lee) -> club=Club Atlético de Madrid, val=€28,000,000
+[2026-11-07 01:35:59] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-07 01:36:15] [INFO] [AGENCY_DEEP_ANALYTICS_BUILT] Built 6 new agency analytics tables in SQLite & JSON: {'transfer_history_records': 13218, 'market_value_history_players': 2662, 'career_discipline_and_ucl_players': 2662, 'player_playstyle_and_tendencies_players': 2662, 'club_standings_and_finances_rows': 132, 'competition_top_scorers_rows': 300, 'agency_market_share_agencies': 250}
+[2026-11-07 01:45:56] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-07 01:45:58] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Serie A, fee=€30,000,000, wage=€90,000/wk, 5yr) -> annual_psr=€12,048,160
+[2026-11-07 01:45:58] [INFO] [MCP_TOOL_8] scan_bosman_and_replacement_targets(pos=CB, league=Premier League) -> 4 club targets found
+[2026-11-07 01:46:12] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-07 01:46:49] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-07 01:46:50] [INFO] [MCP_TOOL_9] Registered custom external client 양민혁 (Yang Min-hyeok, Gangwon / QPR) -> player_id=2759
+[2026-11-07 01:46:50] [INFO] [MCP_TOOL_1] get_player_complete_data(Yang Min-hyeok) -> club=Gangwon / QPR, val=€4,500,000
+[2026-11-07 01:46:58] [INFO] [VERTEX_LLM_CALL] Model=gemini-3.5-flash | Temp=0.2 | OutputChars=227
+[2026-11-07 01:46:58] [INFO] [LANGGRAPH_NODE_1] Supervisor routed player=Yang Min-hyeok to mode=TRACK_A_TRANSFER
+[2026-11-07 01:46:58] [INFO] [MCP_TOOL_1] get_player_complete_data(Yang Min-hyeok) -> club=Gangwon / QPR, val=€4,500,000
+[2026-11-07 01:46:58] [INFO] [MCP_TOOL_3] get_peer_group_wage_band(pos=RW, age=20) -> Q25=€10,000, Median=€10,000, Q75=€11,000
+[2026-11-07 01:46:58] [INFO] [MCP_TOOL_2] find_matching_clubs_for_transfer(pos=RW, fee=5000000, wage=28800, league=Premier League) -> 5 clubs matched
+[2026-11-07 01:47:06] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-001 | Count=1 | Dim=768
+[2026-11-07 01:48:47] [INFO] [VERTEX_GROUNDING_SEARCH] Model=gemini-3.5-flash | Club=Liverpool FC | Pos=RW | Headline=Liverpool's RW Dilemma: Salah's Contract Stand-off, Chiesa's
+[2026-11-07 01:48:47] [INFO] [MCP_TOOL_4] search_live_club_injury_and_rumors(club=Liverpool FC, pos=RW) -> source=Vertex AI Google Search Grounding (gemini-3.5-flash)
+[2026-11-07 01:48:47] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€5,000,000, wage=€28,800/wk, 5yr) -> annual_psr=€3,014,089
+[2026-11-07 01:48:56] [INFO] [VERTEX_LLM_CALL] Model=gemini-3.8-flash | Temp=0.3 | OutputChars=430
+[2026-11-07 01:48:56] [INFO] [LANGGRAPH_NODE_2A] Completed Hermes Transfer Analysis for Yang Min-hyeok
+[2026-11-07 01:48:57] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=1 | Dim=768
+[2026-11-07 01:48:58] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=1 | Dim=768
+[2026-11-07 01:49:06] [INFO] [VERTEX_STRUCTURED_LLM_CALL] Model=gemini-3.5-flash | Schema=LegalRagReviewSchema | Temp=0.1
+[2026-11-07 01:49:06] [INFO] [LANGGRAPH_NODE_3] Completed SQLite Vector RAG & GBE calculation (22 pts) for Yang Min-hyeok
+[2026-11-07 01:49:14] [INFO] [VERTEX_STRUCTURED_LLM_CALL] Model=gemini-3.8-flash | Schema=SparringRound1Schema | Temp=0.35
+[2026-11-07 01:49:14] [INFO] [LANGGRAPH_NODE_4A] Sparring Round 1 completed vs Liverpool FC (ask=€28,800, counter=€23,400)
+[2026-11-07 01:49:28] [INFO] [VERTEX_STRUCTURED_LLM_CALL] Model=gemini-3.8-flash | Schema=SparringRound2Schema | Temp=0.3
+[2026-11-07 01:49:28] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€5,000,000, wage=€26,100/wk, 5yr) -> annual_psr=€2,825,212
+[2026-11-07 01:49:28] [INFO] [LANGGRAPH_NODE_4B] Sparring Round 2 resolved with strategy=OPTION_2_BONUS_AND_RELEASE_CLAUSE -> agreed_base=€26,100, bonus=€4,320, annual_psr=€2,825,212
+[2026-11-07 01:50:19] [INFO] [VERTEX_STRUCTURED_LLM_CALL] Model=gemini-3.8-flash | Schema=DualOutputDocsSchema | Temp=0.25
+[2026-11-07 01:50:19] [INFO] [MCP_TOOL_5] export_agency_documents(Yang Min-hyeok) -> saved yang_min-hyeok_deal_prep_sheet.md & yang_min-hyeok_club_pitch_deck.md
+[2026-11-07 01:50:19] [INFO] [LANGGRAPH_NODE_5] Generated & saved Dual-Output Markdown documents for Yang Min-hyeok
