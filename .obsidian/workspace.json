@@ -190,10 +190,11 @@
   },
   "active": "bf761550caf7c1d6",
   "lastOpenFiles": [
-    "outputs/yang_min-hyeok_club_pitch_deck.md",
-    "outputs/yang_min-hyeok_deal_prep_sheet.md",
+    "football_agency_guide.md",
     "data/agency_desk.db-shm",
     "data/agency_desk.db-wal",
+    "outputs/yang_min-hyeok_club_pitch_deck.md",
+    "outputs/yang_min-hyeok_deal_prep_sheet.md",
     "data/agency_checkpoints.db-shm",
     "data/agency_checkpoints.db-wal",
     "data/datasets/league_tax_and_psr_rules.json",

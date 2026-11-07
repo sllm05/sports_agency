@@ -179,3 +179,19 @@
 [2026-11-07 01:50:19] [INFO] [VERTEX_STRUCTURED_LLM_CALL] Model=gemini-3.8-flash | Schema=DualOutputDocsSchema | Temp=0.25
 [2026-11-07 01:50:19] [INFO] [MCP_TOOL_5] export_agency_documents(Yang Min-hyeok) -> saved yang_min-hyeok_deal_prep_sheet.md & yang_min-hyeok_club_pitch_deck.md
 [2026-11-07 01:50:19] [INFO] [LANGGRAPH_NODE_5] Generated & saved Dual-Output Markdown documents for Yang Min-hyeok
+[2026-11-07 01:52:39] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€200,000,000
+[2026-11-07 01:52:41] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€200,000,000
+[2026-11-07 01:53:29] [INFO] [MCP_TOOL_1] get_player_complete_data(Lamine Yamal) -> club=FC Barcelona, val=€200,000,000
+[2026-11-07 01:53:37] [INFO] [MCP_TOOL_1] get_player_complete_data(Michael Olise) -> club=FC Bayern München, val=€150,000,000
+[2026-11-07 01:53:54] [INFO] [MCP_TOOL_1] get_player_complete_data(Bukayo Saka) -> club=Arsenal FC, val=€110,000,000
+[2026-11-07 01:53:55] [INFO] [MCP_TOOL_1] get_player_complete_data(William Saliba) -> club=Arsenal FC, val=€100,000,000
+[2026-11-07 01:53:56] [INFO] [MCP_TOOL_1] get_player_complete_data(Julián Álvarez) -> club=Club Atlético de Madrid, val=€100,000,000
+[2026-11-07 01:53:57] [INFO] [MCP_TOOL_1] get_player_complete_data(Fermín López) -> club=FC Barcelona, val=€100,000,000
+[2026-11-07 01:54:02] [INFO] [MCP_TOOL_1] get_player_complete_data(Florian Wirtz) -> club=Liverpool FC, val=€100,000,000
+[2026-11-07 01:54:03] [INFO] [MCP_TOOL_1] get_player_complete_data(Dominik Szoboszlai) -> club=Liverpool FC, val=€100,000,000
+[2026-11-07 01:54:05] [INFO] [MCP_TOOL_1] get_player_complete_data(Florian Wirtz) -> club=Liverpool FC, val=€100,000,000
+[2026-11-07 01:54:06] [INFO] [MCP_TOOL_1] get_player_complete_data(Fermín López) -> club=FC Barcelona, val=€100,000,000
+[2026-11-07 01:54:08] [INFO] [MCP_TOOL_1] get_player_complete_data(Jamal Musiala) -> club=FC Bayern München, val=€100,000,000
+[2026-11-07 01:54:46] [INFO] [VERTEX_LIVE_PLAYER_SYNC] Live-synced Jamal Musiala via Google Search Grounding -> club=FC 바이에른 뮌헨 (분데스리가), val=€80,000,000, wage=€439,038
+[2026-11-07 01:54:46] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€200,000,000
+[2026-11-07 01:54:46] [INFO] [MCP_TOOL_1] get_player_complete_data(Jamal Musiala) -> club=FC 바이에른 뮌헨, val=€80,000,000
