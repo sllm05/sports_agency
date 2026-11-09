@@ -116,6 +116,11 @@
           class="nav-btn px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800/60 transition flex items-center gap-1.5">
           <span>이적·협상</span>
         </button>
+        <button id="nav-btn-tactics" onclick="showPage('page-tactics')"
+          class="nav-btn px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800/60 transition flex items-center gap-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+          <span>전술·하이라이트</span>
+        </button>
         <button id="nav-btn-documents" onclick="showPage('page-documents')"
           class="nav-btn px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800/60 transition flex items-center gap-1.5">
           <span>문서 센터</span>
@@ -297,6 +302,24 @@
             </div>
           </div>
 
+          <!-- Card 6: Tactical Desk & Highlights -->
+          <div onclick="showPage('page-tactics')"
+            class="ui-card ui-card-hover p-5 cursor-pointer flex flex-col justify-between">
+            <div class="space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-semibold text-white">2D 전술 엔진 & 하이라이트</span>
+                <span class="text-[11px] text-emerald-400 font-mono">StatsBomb x Opta</span>
+              </div>
+              <p class="text-xs text-zinc-400 leading-relaxed">
+                StatsBomb 120×80m 실측 좌표 기반 2D 피치 리플레이, 선수별 하이라이트 모먼트, 전술 시야각(FOV) 및 경기 영상 싱크.
+              </p>
+            </div>
+            <div class="mt-5 pt-3 border-t border-white/[0.06] flex items-center justify-between text-xs font-medium text-emerald-400">
+              <span>전술 하이라이트 실행</span>
+              <span>→</span>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
@@ -451,6 +474,10 @@
                   <button onclick="showPage('page-strategy')"
                     class="w-full py-2 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition flex items-center justify-center gap-1.5">
                     <span>이 선수로 협상 전략 수립하기 →</span>
+                  </button>
+                  <button onclick="openTacticsForSelectedPlayer()"
+                    class="w-full py-1.5 px-3 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-semibold transition flex items-center justify-center gap-1.5">
+                    <span>🎬 2D 전술 하이라이트 리플레이 보기</span>
                   </button>
                   <button id="btn-live-player-sync" onclick="syncSelectedPlayerLive()"
                     class="w-full py-1.5 px-3 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-[11px] text-zinc-300 transition flex items-center justify-center gap-1">
@@ -849,6 +876,343 @@
 
 
     <!-- ======================================================================= -->
+    <!-- PAGE 3: TACTICAL DESK & 2D MATCH ENGINE -->
+    <!-- ======================================================================= -->
+    <div id="page-tactics" class="page-view hidden space-y-5">
+
+      <!-- Breadcrumb Header -->
+      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.06] pb-3">
+        <div class="flex items-center gap-3">
+          <button onclick="showPage('page-home')"
+            class="px-2.5 py-1 rounded-lg bg-[#12151c] hover:bg-zinc-800 border border-white/[0.08] text-xs font-medium text-zinc-300 transition">
+            ← 대시보드
+          </button>
+          <div>
+            <div class="flex items-center gap-2">
+              <h2 class="text-base font-bold text-white">2D 전술 그리드 엔진 & 경기 하이라이트</h2>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-mono">StatsBomb 120×80m × Opta</span>
+            </div>
+            <p class="text-xs text-zinc-400 mt-0.5">실제 경기 공간 좌표 2D 피치 리플레이 · 시야각(FOV) 전술 분석 · 타임스탬프 영상 동기화</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button onclick="showPage('page-scouting')"
+            class="px-3 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs font-medium transition">
+            선수 스카우팅으로 이동 →
+          </button>
+        </div>
+      </div>
+
+      <!-- Mode Selector Bar -->
+      <div class="ui-card p-3 flex flex-wrap items-center justify-between gap-3">
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="text-xs text-zinc-400 font-medium mr-1">분석 모드:</span>
+          <button id="tactics-mode-match" onclick="switchTacticsMode('match')"
+            class="px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 text-white transition flex items-center gap-1.5 shadow-sm">
+            <span id="tactics-mode-match-title">🏆 공식 경기 하이라이트</span>
+            <span id="tactics-mode-match-sub" class="text-[10px] opacity-80">(대한민국 2:1 포르투갈)</span>
+          </button>
+          <button id="tactics-mode-player" onclick="switchTacticsMode('player')"
+            class="px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-300 hover:text-white bg-zinc-800 hover:bg-zinc-700 transition flex items-center gap-1.5">
+            <span id="tactics-mode-player-title">🎯 선수별 집중 모먼트</span>
+            <span id="tactics-mode-player-sub" class="text-[10px] text-zinc-400">(손흥민·이강인·황희찬·김민재)</span>
+          </button>
+          <button id="tactics-mode-sim" onclick="switchTacticsMode('sim')"
+            class="px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-300 hover:text-white bg-zinc-800 hover:bg-zinc-700 transition flex items-center gap-1.5">
+            <span>⚽ FM 2D 자율 시뮬레이션</span>
+            <span class="text-[10px] text-zinc-400">(AI 피치 전술 대전)</span>
+          </button>
+        </div>
+
+        <div class="flex items-center gap-2 text-xs">
+          <span class="text-zinc-500 font-mono">PITCH: 18×12 GRID</span>
+        </div>
+      </div>
+
+      <!-- Quick Chapter Playlist Buttons -->
+      <div id="tactics-chapter-bar" class="ui-card p-3 space-y-2">
+        <div class="flex items-center justify-between text-xs font-semibold text-zinc-300">
+          <span>🎬 타임라인 챕터 바로가기</span>
+          <span id="tactics-chapter-hint" class="text-[11px] text-zinc-500 font-normal">버튼 클릭 시 해당 좌표 2D 피치 이동 및 영상 싱크 재생</span>
+        </div>
+        <div class="flex flex-wrap items-center gap-2" id="tactics-chapter-buttons">
+          <button onclick="playMatchHighlight('goal_por_01')"
+            class="px-2.5 py-1.5 rounded-lg bg-[#0e1117] hover:bg-zinc-800 border border-white/[0.08] text-xs text-zinc-300 hover:text-white transition flex items-center gap-1.5">
+            <span class="text-rose-400 font-mono font-bold">04:53</span>
+            <span>⚽ 호르타 선제골 (xG 0.29)</span>
+          </button>
+          <button onclick="playMatchHighlight('goal_kor_01')"
+            class="px-2.5 py-1.5 rounded-lg bg-[#0e1117] hover:bg-zinc-800 border border-white/[0.08] text-xs text-zinc-300 hover:text-white transition flex items-center gap-1.5">
+            <span class="text-emerald-400 font-mono font-bold">26:43</span>
+            <span>⚽ 김영권 동점골 (이강인 코너킥 기점, xG 0.62)</span>
+          </button>
+          <button onclick="playMatchHighlight('goal_kor_02')"
+            class="px-2.5 py-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/40 text-xs text-emerald-300 hover:text-white transition flex items-center gap-1.5 font-semibold">
+            <span class="text-emerald-400 font-mono font-bold">90:28</span>
+            <span>⚽ 황희찬 극장 역전 결승골 (손흥민 70m 질주 어시스트, xG 0.42)</span>
+          </button>
+          <button onclick="playPlayerMoment('손흥민', 0)"
+            class="px-2.5 py-1.5 rounded-lg bg-[#0e1117] hover:bg-zinc-800 border border-white/[0.08] text-xs text-zinc-300 hover:text-white transition flex items-center gap-1.5">
+            <span class="text-amber-400 font-mono font-bold">15:21</span>
+            <span>🎯 손흥민 감아차기 슈팅</span>
+          </button>
+          <button onclick="playPlayerMoment('이강인', 1)"
+            class="px-2.5 py-1.5 rounded-lg bg-[#0e1117] hover:bg-zinc-800 border border-white/[0.08] text-xs text-zinc-300 hover:text-white transition flex items-center gap-1.5">
+            <span class="text-blue-400 font-mono font-bold">41:18</span>
+            <span>🎯 이강인 30m 킬스루패스</span>
+          </button>
+          <button onclick="playPlayerMoment('김민재', 1)"
+            class="px-2.5 py-1.5 rounded-lg bg-[#0e1117] hover:bg-zinc-800 border border-white/[0.08] text-xs text-zinc-300 hover:text-white transition flex items-center gap-1.5">
+            <span class="text-indigo-400 font-mono font-bold">34:20</span>
+            <span>🛡️ 김민재 호날두 1:1 차단 태클</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Controls & Overlay Toggles Toolbar -->
+      <div class="ui-card p-3 flex flex-wrap items-center justify-between gap-3">
+        <div class="flex flex-wrap items-center gap-2">
+          <!-- Play / Pause -->
+          <button id="btn-tactics-play" onclick="toggleTacticsPlay()"
+            class="px-3 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-white font-semibold text-xs transition flex items-center gap-1.5">
+            <span id="btn-tactics-play-icon">⏸️</span>
+            <span id="btn-tactics-play-text">일시정지</span>
+          </button>
+
+          <!-- Speed Controls -->
+          <div class="flex items-center bg-[#0a0c10] border border-white/[0.08] rounded-lg p-0.5 text-xs">
+            <button id="btn-speed-1" onclick="setTacticsSpeed(1)" class="px-2 py-1 rounded text-white bg-zinc-800 font-semibold">1x</button>
+            <button id="btn-speed-2" onclick="setTacticsSpeed(2)" class="px-2 py-1 rounded text-zinc-400 hover:text-white">2x</button>
+            <button id="btn-speed-4" onclick="setTacticsSpeed(4)" class="px-2 py-1 rounded text-zinc-400 hover:text-white">4x</button>
+          </div>
+
+          <!-- Overlays -->
+          <div class="flex items-center gap-1.5 text-xs text-zinc-300 pl-2 border-l border-white/[0.08]">
+            <label class="flex items-center gap-1 cursor-pointer select-none">
+              <input type="checkbox" id="chk-grid" checked onchange="toggleTacticsOverlay('grid')" class="rounded border-zinc-700 text-emerald-500" />
+              <span>바둑판(Grid)</span>
+            </label>
+            <label class="flex items-center gap-1 cursor-pointer select-none">
+              <input type="checkbox" id="chk-zones" onchange="toggleTacticsOverlay('zones')" class="rounded border-zinc-700 text-emerald-500" />
+              <span>하프스페이스(5존)</span>
+            </label>
+            <label class="flex items-center gap-1 cursor-pointer select-none">
+              <input type="checkbox" id="chk-fov" checked onchange="toggleTacticsOverlay('fov')" class="rounded border-zinc-700 text-emerald-500" />
+              <span>시야각(FOV)</span>
+            </label>
+            <label class="flex items-center gap-1 cursor-pointer select-none">
+              <input type="checkbox" id="chk-spotlight" checked onchange="toggleTacticsOverlay('spotlight')" class="rounded border-zinc-700 text-emerald-500" />
+              <span>스포트라이트</span>
+            </label>
+            <label class="flex items-center gap-1 cursor-pointer select-none">
+              <input type="checkbox" id="chk-actionMap" checked onchange="toggleTacticsOverlay('actionMap')" class="rounded border-zinc-700 text-amber-400" />
+              <span class="text-amber-400 font-semibold">📍 활약 구역(Action Map)</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button onclick="replayCurrentHighlight()"
+            class="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-bold transition flex items-center gap-1 shadow-sm">
+            <span>🔄</span>
+            <span>시퀀스 리플레이 다시보기</span>
+          </button>
+          <button onclick="resetTacticsMatch()"
+            class="px-2.5 py-1 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-[11px] text-zinc-300 transition">
+            초기화
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Dual-Screen Display: Pitch Canvas (Left) + Sync Video & Stats (Right) -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+
+        <!-- Left: 2D Pitch Canvas & Live Commentary (8 cols) -->
+        <div class="lg:col-span-8 space-y-3">
+
+          <!-- Scoreboard Header -->
+          <div class="ui-card p-3 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <span class="w-3 h-3 rounded-full bg-blue-500 shadow-sm shadow-blue-500/50"></span>
+              <span id="tactics-team-home" class="text-sm font-bold text-white">대한민국</span>
+              <span id="tactics-form-home" class="text-[11px] text-zinc-400 font-mono">(4-2-3-1)</span>
+            </div>
+
+            <div class="flex items-center gap-3 bg-[#0a0c10] px-4 py-1.5 rounded-lg border border-white/[0.08]">
+              <span id="tactics-score-home" class="text-xl font-extrabold text-white font-mono">2</span>
+              <span class="text-zinc-500 font-bold">:</span>
+              <span id="tactics-score-away" class="text-xl font-extrabold text-white font-mono">1</span>
+              <div class="pl-2 border-l border-white/[0.08] flex items-center gap-1.5">
+                <span id="tactics-clock" class="text-xs font-mono font-bold text-emerald-400">90:28</span>
+                <span id="tactics-status-badge" class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-semibold">FT 16강 진출</span>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <span id="tactics-form-away" class="text-[11px] text-zinc-400 font-mono">(4-3-3)</span>
+              <span id="tactics-team-away" class="text-sm font-bold text-white">포르투갈</span>
+              <span class="w-3 h-3 rounded-full bg-rose-500 shadow-sm shadow-rose-500/50"></span>
+            </div>
+          </div>
+
+          <!-- 2D Canvas Container -->
+          <div class="relative bg-[#070b12] rounded-xl border border-white/[0.08] shadow-2xl overflow-hidden p-1">
+            <canvas id="pitchCanvasTactics" width="1080" height="660" class="w-full h-auto block rounded-lg cursor-crosshair"></canvas>
+
+            <!-- Goal Overlay Banner -->
+            <div id="tactics-goal-banner" class="hidden absolute inset-0 bg-black/60 backdrop-blur-sm flex flex-col items-center justify-center pointer-events-none transition">
+              <div class="text-3xl font-black text-amber-300 tracking-wider animate-bounce">GOAL!</div>
+              <div id="tactics-goal-text" class="text-sm font-semibold text-white mt-1">황희찬 극장 역전 결승골</div>
+            </div>
+          </div>
+
+          <!-- Commentary Bar -->
+          <div class="ui-card p-3 flex items-center gap-3">
+            <span id="tactics-comm-badge" class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold text-[11px]">HIGHLIGHT</span>
+            <span id="tactics-comm-text" class="text-xs text-zinc-200 flex-1 leading-relaxed">
+              [90:28] 손흥민의 70m 단독 폭풍 질주 후 수비수 3명 사이 가랑이 킬스루패스! 쇄도하던 황희찬이 침착한 오른발 논스톱 슈팅으로 극적 2:1 역전 결승골!
+            </span>
+          </div>
+
+          <!-- Legend Bar -->
+          <div class="p-2.5 rounded-lg bg-[#0e1117] border border-white/[0.04] flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-zinc-400">
+            <span id="legend-home-team">🔵 <b class="text-zinc-200">대한민국</b>: 손흥민·황희찬·이강인·김민재 등</span>
+            <span id="legend-away-team">🔴 <b class="text-zinc-200">포르투갈</b>: 호날두·페페·달로트·호르타 등</span>
+            <span>🟡 <b class="text-amber-300">노란 점선/실선</b>: 패스 및 슈팅 궤적</span>
+            <span>🟢 <b class="text-emerald-400">외곽 원</b>: 실시간 체력 게이지</span>
+            <span>📐 <b class="text-zinc-200">18×12 바둑판</b>: 클릭 시 해당 선수 스포트라이트</span>
+          </div>
+
+        </div>
+
+        <!-- Right: Video Sync, Opta Match Stats & Timeline Log (4 cols) -->
+        <div class="lg:col-span-4 space-y-4">
+
+          <!-- Video Sync Panel -->
+          <div class="ui-card p-4 space-y-3">
+            <div class="flex items-center justify-between border-b border-white/[0.06] pb-2">
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-semibold text-white">🎥 공식 하이라이트 영상 싱크</span>
+                <span class="text-[10px] px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 font-mono">YouTube / Video</span>
+              </div>
+              <span class="text-[11px] text-zinc-400 font-mono" id="video-sync-status">SYNC ACTIVE</span>
+            </div>
+
+            <!-- YouTube Iframe -->
+            <div class="relative w-full rounded-lg overflow-hidden border border-white/[0.08] bg-black aspect-video">
+              <iframe id="tactics-yt-frame" class="w-full h-full"
+                src="https://www.youtube.com/embed/DVNwiAPuPTY?enablejsapi=1&rel=0&modestbranding=1"
+                title="FIFA Official Match Highlights"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+              </iframe>
+              <video id="tactics-local-video" class="hidden w-full h-full object-cover" controls></video>
+            </div>
+
+            <!-- YouTube Direct Watch Link & Fallback -->
+            <div class="flex flex-col gap-1.5 pt-1">
+              <a id="tactics-yt-external-btn" href="https://www.youtube.com/watch?v=DVNwiAPuPTY" target="_blank" rel="noopener noreferrer"
+                class="w-full py-2 px-3 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-semibold text-xs flex items-center justify-center gap-2 transition shadow-md">
+                <span>▶ YouTube 공식 1080p 고화질 하이라이트 새창 시청 ↗</span>
+              </a>
+              <span class="text-[10px] text-zinc-400 leading-tight">
+                ※ 방송사/구단 공식 저작권 보호로 브라우저 내 재생이 제한될 경우, 위 붉은색 버튼을 누르면 YouTube 공식 고화질 영상으로 즉시 연결됩니다.
+              </span>
+            </div>
+
+            <div class="flex items-center justify-between text-[11px] text-zinc-400 pt-1 border-t border-white/[0.06]">
+              <span>Wyscout/InStat 로컬 MP4 연동:</span>
+              <label class="cursor-pointer text-emerald-400 hover:text-emerald-300 font-medium">
+                <span>파일 불러오기</span>
+                <input type="file" id="tactics-video-upload" accept="video/mp4,video/webm" onchange="handleTacticsVideoUpload(event)" class="hidden" />
+              </label>
+            </div>
+          </div>
+
+          <!-- Opta Real-time Match Stats -->
+          <div class="ui-card p-4 space-y-3">
+            <div class="flex items-center justify-between border-b border-white/[0.06] pb-2">
+              <span class="text-xs font-semibold text-white">📊 Opta 실측 경기 스탯</span>
+              <span class="text-[10px] text-zinc-500 font-mono">StatsBomb Verified</span>
+            </div>
+
+            <div class="space-y-2.5 text-xs">
+              <!-- Possession -->
+              <div>
+                <div class="flex justify-between text-[11px] text-zinc-300 mb-1">
+                  <span id="stat-poss-home" class="font-bold text-blue-400">38%</span>
+                  <span class="text-zinc-500">볼 점유율</span>
+                  <span id="stat-poss-away" class="font-bold text-rose-400">62%</span>
+                </div>
+                <div class="h-1.5 w-full bg-zinc-800 rounded-full overflow-hidden flex">
+                  <div id="bar-poss-home" class="bg-blue-500 h-full" style="width: 38%;"></div>
+                  <div id="bar-poss-away" class="bg-rose-500 h-full" style="width: 62%;"></div>
+                </div>
+              </div>
+
+              <!-- Shots -->
+              <div>
+                <div class="flex justify-between text-[11px] text-zinc-300 mb-1">
+                  <span id="stat-shots-home" class="font-bold text-blue-400">13 (6)</span>
+                  <span class="text-zinc-500">슈팅 (유효)</span>
+                  <span id="stat-shots-away" class="font-bold text-rose-400">13 (6)</span>
+                </div>
+                <div class="h-1.5 w-full bg-zinc-800 rounded-full overflow-hidden flex">
+                  <div id="bar-shots-home" class="bg-blue-500 h-full" style="width: 50%;"></div>
+                  <div id="bar-shots-away" class="bg-rose-500 h-full" style="width: 50%;"></div>
+                </div>
+              </div>
+
+              <!-- Expected Goals (xG) -->
+              <div>
+                <div class="flex justify-between text-[11px] text-zinc-300 mb-1">
+                  <span id="stat-xg-home" class="font-bold text-emerald-400">1.34</span>
+                  <span class="text-zinc-500">기대 득점 (xG)</span>
+                  <span id="stat-xg-away" class="font-bold text-rose-400">1.18</span>
+                </div>
+                <div class="h-1.5 w-full bg-zinc-800 rounded-full overflow-hidden flex">
+                  <div id="bar-xg-home" class="bg-emerald-500 h-full" style="width: 53%;"></div>
+                  <div id="bar-xg-away" class="bg-rose-500 h-full" style="width: 47%;"></div>
+                </div>
+              </div>
+
+              <!-- Passes -->
+              <div>
+                <div class="flex justify-between text-[11px] text-zinc-300 mb-1">
+                  <span id="stat-pass-home" class="font-bold text-blue-400">420</span>
+                  <span class="text-zinc-500">패스 횟수</span>
+                  <span id="stat-pass-away" class="font-bold text-rose-400">688</span>
+                </div>
+                <div class="h-1.5 w-full bg-zinc-800 rounded-full overflow-hidden flex">
+                  <div id="bar-pass-home" class="bg-blue-500 h-full" style="width: 38%;"></div>
+                  <div id="bar-pass-away" class="bg-rose-500 h-full" style="width: 62%;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Timeline Event Log -->
+          <div class="ui-card p-4 space-y-2">
+            <div class="flex items-center justify-between border-b border-white/[0.06] pb-2">
+              <span class="text-xs font-semibold text-white">⏱️ 주요 장면 이벤트 로그</span>
+              <span class="text-[10px] text-zinc-500 font-mono">클릭 시 리플레이</span>
+            </div>
+
+            <div id="tactics-event-log" class="space-y-1.5 max-h-56 overflow-y-auto pr-1 text-xs">
+              <!-- Event items populated via JS -->
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ======================================================================= -->
     <!-- PAGE 4: DOCUMENTS CENTER -->
     <!-- ======================================================================= -->
     <div id="page-documents" class="page-view hidden space-y-5">
@@ -1107,6 +1471,8 @@
 
       if (pageId === 'page-scouting' && selectedPlayer) {
         updateRadarChart(selectedPlayer);
+      } else if (pageId === 'page-tactics') {
+        initTacticsDesk();
       } else if (pageId === 'page-documents' && currentWorkflowState) {
         switchDocTab(activeDocTab || 'career');
       } else if (pageId === 'page-finance') {
@@ -1122,6 +1488,7 @@
         { id: 'nav-btn-home', key: 'home' },
         { id: 'nav-btn-scouting', key: 'scouting' },
         { id: 'nav-btn-strategy', key: 'strategy' },
+        { id: 'nav-btn-tactics', key: 'tactics' },
         { id: 'nav-btn-documents', key: 'documents' },
         { id: 'nav-btn-finance', key: 'finance' },
         { id: 'nav-btn-regulations', key: 'regulations' },
@@ -2305,6 +2672,2675 @@
         btnEl.disabled = false;
         btnEl.innerHTML = `<span>등록</span>`;
       }
+    }
+
+    // =========================================================================
+    // 2D Tactical Grid Match Engine & Real Highlight Analytics Module
+    // (StatsBomb 120x80m Open Data, FM Autonomous Grid AI & Video Sync)
+    // =========================================================================
+    let tacticsCanvas = null;
+    let tacticsCtx = null;
+    let tacticsData = null;
+    let currentPlayerTacticsData = null;
+    let tacticsMode = 'match'; // 'match' | 'player' | 'sim'
+    let isTacticsRunning = true;
+    let tacticsSpeed = 1;
+    let tacticsAnimId = null;
+    let tacticsClockSeconds = 5428; // 90:28
+    let tacticsSelectedPlayerId = 'H11'; // 손흥민
+    let tacticsGoalBannerTimer = 0;
+
+    let tacticsOverlays = {
+      grid: true,
+      zones: false,
+      fov: true,
+      spotlight: true,
+      actionMap: true
+    };
+
+    let isReelPlaying = false;
+    let reelStep = 0;
+    let reelTransitionTimer = 0;
+    let hoveredActionPin = null;
+
+    const TACTICS_PITCH_MARGIN = 32;
+    let TACTICS_PITCH_W = 1016;
+    let TACTICS_PITCH_H = 596;
+    const TACTICS_GRID_COLS = 18;
+    const TACTICS_GRID_ROWS = 12;
+    let TACTICS_CELL_W = TACTICS_PITCH_W / TACTICS_GRID_COLS;
+    let TACTICS_CELL_H = TACTICS_PITCH_H / TACTICS_GRID_ROWS;
+
+    let tacticsTrajectories = [];
+    let tacticsPlayers = [];
+    let tacticsBall = {
+      x: 0, y: 0, vx: 0, vy: 0,
+      owner: null, inFlight: false,
+      lastTouchTeam: 'home',
+      tx: 0, ty: 0
+    };
+
+    let activeHighlightAnim = null; // Multi-step animation controller
+    let currentReplayContext = { mode: 'match', highlightId: 'goal_kor_02', momentIdx: 0, playerName: null };
+    let livingMatchTimer = 0;
+    let livingBallOwnerId = null;
+    let livingPassCooldown = 0;
+
+    // Team Templates for Simulation & Base Formation (2022 World Cup Kor vs Por)
+    const TACTICS_HOME_ROSTER = [
+      { id: 'H1',  num: 1,  name: '김승규', pos: 'GK', col: 0.8,  row: 5.5, spd: 68, pas: 72, def: 88 },
+      { id: 'H2',  num: 15, name: '김문환', pos: 'RB', col: 3.5,  row: 1.5, spd: 82, pas: 76, def: 78 },
+      { id: 'H3',  num: 4,  name: '김민재', pos: 'CB', col: 3.0,  row: 4.2, spd: 86, pas: 82, def: 93 },
+      { id: 'H4',  num: 19, name: '김영권', pos: 'CB', col: 3.0,  row: 6.8, spd: 74, pas: 80, def: 84 },
+      { id: 'H5',  num: 3,  name: '김진수', pos: 'LB', col: 3.5,  row: 9.5, spd: 80, pas: 78, def: 77 },
+      { id: 'H6',  num: 5,  name: '정우영', pos: 'DM', col: 6.2,  row: 4.3, spd: 72, pas: 83, def: 82 },
+      { id: 'H7',  num: 6,  name: '황인범', pos: 'DM', col: 6.5,  row: 6.7, spd: 78, pas: 88, def: 79 },
+      { id: 'H8',  num: 18, name: '이강인', pos: 'RW', col: 10.5, row: 2.2, spd: 82, pas: 94, def: 60 },
+      { id: 'H9',  num: 10, name: '이재성', pos: 'AM', col: 10.0, row: 5.5, spd: 78, pas: 85, def: 74 },
+      { id: 'H10', num: 11, name: '황희찬', pos: 'LW', col: 11.2, row: 8.8, spd: 92, pas: 78, def: 58 },
+      { id: 'H11', num: 7,  name: '손흥민', pos: 'ST', col: 13.5, row: 5.5, spd: 93, pas: 86, def: 52 }
+    ];
+
+    const TACTICS_AWAY_ROSTER = [
+      { id: 'A1',  num: 22, name: '디.코스타', pos: 'GK', col: 16.5, row: 5.5, spd: 68, pas: 76, def: 88 },
+      { id: 'A2',  num: 2,  name: '달로트',   pos: 'RB', col: 13.5, row: 9.2, spd: 88, pas: 82, def: 80 },
+      { id: 'A3',  num: 3,  name: '페페',     pos: 'CB', col: 14.5, row: 6.8, spd: 76, pas: 78, def: 91 },
+      { id: 'A4',  num: 24, name: '안.실바', pos: 'CB', col: 14.5, row: 4.2, spd: 80, pas: 80, def: 84 },
+      { id: 'A5',  num: 20, name: '칸셀루',   pos: 'LB', col: 13.5, row: 1.8, spd: 89, pas: 85, def: 79 },
+      { id: 'A6',  num: 18, name: '네베스',   pos: 'DM', col: 11.2, row: 5.5, spd: 74, pas: 89, def: 82 },
+      { id: 'A7',  num: 23, name: '누네스',   pos: 'CM', col: 9.2,  row: 7.2, spd: 84, pas: 83, def: 78 },
+      { id: 'A8',  num: 16, name: '비티냐',   pos: 'CM', col: 9.2,  row: 3.8, spd: 80, pas: 88, def: 76 },
+      { id: 'A9',  num: 17, name: '주앙 마리우', pos: 'RW', col: 7.0, row: 8.8, spd: 78, pas: 84, def: 65 },
+      { id: 'A10', num: 21, name: '호르타',   pos: 'LW', col: 7.0,  row: 2.2, spd: 84, pas: 80, def: 62 },
+      { id: 'A11', num: 7,  name: '호날두',   pos: 'ST', col: 4.5,  row: 5.5, spd: 82, pas: 78, def: 42 }
+    ];
+
+    function tacticsGridToPixel(col, row) {
+      return {
+        x: TACTICS_PITCH_MARGIN + (col + 0.5) * TACTICS_CELL_W,
+        y: TACTICS_PITCH_MARGIN + (row + 0.5) * TACTICS_CELL_H
+      };
+    }
+
+    function tacticsPixelToGrid(x, y) {
+      const col = Math.max(0, Math.min(TACTICS_GRID_COLS - 1, Math.floor((x - TACTICS_PITCH_MARGIN) / TACTICS_CELL_W)));
+      const row = Math.max(0, Math.min(TACTICS_GRID_ROWS - 1, Math.floor((y - TACTICS_PITCH_MARGIN) / TACTICS_CELL_H)));
+      return { col, row };
+    }
+
+    // Convert StatsBomb 120m x 80m coordinate to Canvas Pixel
+    function statsBombToPixel(sbX, sbY) {
+      const col = (sbX / 120.0) * TACTICS_GRID_COLS - 0.5;
+      const row = (sbY / 80.0) * TACTICS_GRID_ROWS - 0.5;
+      return tacticsGridToPixel(col, row);
+    }
+
+    async function initTacticsDesk() {
+      if (!tacticsCanvas) {
+        tacticsCanvas = document.getElementById('pitchCanvasTactics');
+        if (!tacticsCanvas) return;
+        tacticsCtx = tacticsCanvas.getContext('2d');
+
+        TACTICS_PITCH_W = tacticsCanvas.width - TACTICS_PITCH_MARGIN * 2;
+        TACTICS_PITCH_H = tacticsCanvas.height - TACTICS_PITCH_MARGIN * 2;
+        TACTICS_CELL_W = TACTICS_PITCH_W / TACTICS_GRID_COLS;
+        TACTICS_CELL_H = TACTICS_PITCH_H / TACTICS_GRID_ROWS;
+
+        // Canvas click handler for player selection & Action Pin interaction
+        tacticsCanvas.addEventListener('click', (e) => {
+          const rect = tacticsCanvas.getBoundingClientRect();
+          const scaleX = tacticsCanvas.width / rect.width;
+          const scaleY = tacticsCanvas.height / rect.height;
+          const clickX = (e.clientX - rect.left) * scaleX;
+          const clickY = (e.clientY - rect.top) * scaleY;
+
+          // 1. Check if Action Map pin was clicked
+          if (tacticsOverlays.actionMap && currentPlayerTacticsData && currentPlayerTacticsData.action_map) {
+            for (const act of currentPlayerTacticsData.action_map) {
+              const pt = statsBombToPixel(act.location[0], act.location[1]);
+              if (Math.hypot(pt.x - clickX, pt.y - clickY) < 22) {
+                if (act.highlight_idx !== undefined) {
+                  playTargetPlayerHighlight(act.highlight_idx);
+                  updateCommentary(act.type, `[📍 활약 구역 선택] ${act.time_str} ${act.title} (${act.zone}) 전술 리플레이 실행!`);
+                  return;
+                }
+              }
+            }
+          }
+
+          // 2. Find clicked player
+          let closestPlayer = null;
+          let minDist = 30;
+          tacticsPlayers.forEach(p => {
+            const dist = Math.hypot(p.x - clickX, p.y - clickY);
+            if (dist < minDist) {
+              minDist = dist;
+              closestPlayer = p;
+            }
+          });
+
+          if (closestPlayer) {
+            tacticsSelectedPlayerId = closestPlayer.id;
+            updateCommentary('TACTIC', `${closestPlayer.team === 'home' ? '대한민국' : '포르투갈'} #${closestPlayer.num} ${closestPlayer.name} (${closestPlayer.pos}) 선택됨. 그리드 [${closestPlayer.baseCol.toFixed(1)}, ${closestPlayer.baseRow.toFixed(1)}]`);
+          }
+        });
+
+        // Canvas hover handler for Action Map Pins & Interactive Cursor
+        tacticsCanvas.addEventListener('mousemove', (e) => {
+          const rect = tacticsCanvas.getBoundingClientRect();
+          const scaleX = tacticsCanvas.width / rect.width;
+          const scaleY = tacticsCanvas.height / rect.height;
+          const mouseX = (e.clientX - rect.left) * scaleX;
+          const mouseY = (e.clientY - rect.top) * scaleY;
+
+          hoveredActionPin = null;
+          if (tacticsOverlays.actionMap && currentPlayerTacticsData && currentPlayerTacticsData.action_map) {
+            for (const act of currentPlayerTacticsData.action_map) {
+              const pt = statsBombToPixel(act.location[0], act.location[1]);
+              if (Math.hypot(pt.x - mouseX, pt.y - mouseY) < 20) {
+                hoveredActionPin = act;
+                break;
+              }
+            }
+          }
+          tacticsCanvas.style.cursor = hoveredActionPin ? 'pointer' : 'default';
+        });
+
+        tacticsCanvas.addEventListener('mouseleave', () => {
+          hoveredActionPin = null;
+          tacticsCanvas.style.cursor = 'default';
+        });
+      }
+
+      // Fetch Real Highlights Data from Backend
+      if (!tacticsData) {
+        try {
+          const res = await fetch('/api/tactics/match-highlights');
+          if (res.ok) {
+            tacticsData = await res.json();
+            renderTacticsEventLog();
+          }
+        } catch (err) {
+          console.error('Tactics Data load error:', err);
+        }
+      }
+
+      // If a player is selected from Scouting Desk, load that player's club match & tactical analysis
+      if (selectedPlayer && (!currentPlayerTacticsData || (currentPlayerTacticsData.player_info && currentPlayerTacticsData.player_info.name !== selectedPlayer.name && currentPlayerTacticsData.player_info.name_ko !== selectedPlayer.name_ko))) {
+        await loadPlayerTacticsHighlights(selectedPlayer.name || selectedPlayer.name_ko);
+      } else if (!currentPlayerTacticsData) {
+        initTacticsPlayers();
+        // Start by loading the iconic winning goal moment (90:28 Hwang Hee-Chan & Son Heung-Min)
+        playMatchHighlight('goal_kor_02');
+      }
+
+      if (!tacticsAnimId) {
+        tacticsLoop();
+      }
+    }
+
+    function initTacticsPlayers() {
+      tacticsPlayers = [];
+      TACTICS_HOME_ROSTER.forEach(p => {
+        const pt = tacticsGridToPixel(p.col, p.row);
+        tacticsPlayers.push({
+          ...p,
+          team: 'home',
+          baseCol: p.col,
+          baseRow: p.row,
+          x: pt.x,
+          y: pt.y,
+          tx: pt.x,
+          ty: pt.y,
+          angle: 0,
+          stamina: 96
+        });
+      });
+
+      TACTICS_AWAY_ROSTER.forEach(p => {
+        const pt = tacticsGridToPixel(p.col, p.row);
+        tacticsPlayers.push({
+          ...p,
+          team: 'away',
+          baseCol: p.col,
+          baseRow: p.row,
+          x: pt.x,
+          y: pt.y,
+          tx: pt.x,
+          ty: pt.y,
+          angle: Math.PI,
+          stamina: 94
+        });
+      });
+
+      const ballPt = tacticsGridToPixel(9.0, 5.5);
+      tacticsBall.x = ballPt.x;
+      tacticsBall.y = ballPt.y;
+      tacticsBall.vx = 0;
+      tacticsBall.vy = 0;
+      tacticsBall.owner = null;
+      tacticsBall.inFlight = false;
+    }
+
+    function renderTacticsEventLog() {
+      const logEl = document.getElementById('tactics-event-log');
+      if (!logEl || !tacticsData) return;
+
+      let html = '';
+      if (tacticsData.key_match_highlights) {
+        tacticsData.key_match_highlights.forEach(h => {
+          const isKor = h.team === 'home';
+          html += `
+            <div onclick="playMatchHighlight('${h.id}')"
+              class="p-2 rounded-lg bg-[#0e1117] hover:bg-zinc-800 border border-white/[0.04] cursor-pointer transition flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2">
+                <span class="font-mono text-[11px] font-bold ${isKor ? 'text-emerald-400' : 'text-rose-400'}">${h.display_time}</span>
+                <span class="font-semibold text-white">${h.title}</span>
+              </div>
+              <span class="text-[10px] px-1.5 py-0.2 rounded bg-zinc-800 text-zinc-400 font-mono">xG ${h.xg.toFixed(2)}</span>
+            </div>
+          `;
+        });
+      }
+
+      if (tacticsData.player_moments) {
+        tacticsData.player_moments.forEach(pm => {
+          pm.moments.forEach((m, idx) => {
+            html += `
+              <div onclick="playPlayerMoment('${pm.player_name}', ${idx})"
+                class="p-2 rounded-lg bg-[#0a0c10] hover:bg-zinc-800 border border-white/[0.03] cursor-pointer transition flex items-center justify-between gap-2 text-[11px]">
+                <div class="flex items-center gap-2">
+                  <span class="font-mono text-zinc-400">${m.time}</span>
+                  <span class="text-zinc-300 font-medium">${pm.player_name}: ${m.title}</span>
+                </div>
+                <span class="text-[10px] text-zinc-500 font-mono">${m.type}</span>
+              </div>
+            `;
+          });
+        });
+      }
+
+      logEl.innerHTML = html;
+    }
+
+    // Play Match Highlight (100% Real StatsBomb Coordinates & Animation)
+    function playMatchHighlight(highlightId) {
+      if (!tacticsData || !tacticsData.key_match_highlights) return;
+      const h = tacticsData.key_match_highlights.find(item => item.id === highlightId);
+      if (!h) return;
+
+      isTacticsRunning = true;
+      const icon = document.getElementById('btn-tactics-play-icon');
+      const text = document.getElementById('btn-tactics-play-text');
+      if (icon && text) {
+        icon.textContent = '⏸️';
+        text.textContent = '일시정지';
+      }
+
+      currentReplayContext = { mode: 'match', highlightId: highlightId, momentIdx: 0, playerName: null };
+      tacticsTrajectories = [];
+      activeHighlightAnim = null;
+
+      // Update UI Clock, Commentary & Scores
+      document.getElementById('tactics-clock').textContent = h.display_time;
+      updateCommentary('HIGHLIGHT', `[${h.display_time}] ${h.title}: ${h.description}`);
+
+      if (h.id === 'goal_por_01') {
+        document.getElementById('tactics-score-home').textContent = '0';
+        document.getElementById('tactics-score-away').textContent = '1';
+        seekTacticsVideo(293); // 04:53 in official match
+        animateHortaGoal(h);
+      } else if (h.id === 'goal_kor_01') {
+        document.getElementById('tactics-score-home').textContent = '1';
+        document.getElementById('tactics-score-away').textContent = '1';
+        seekTacticsVideo(1603); // 26:43
+        animateKimYoungGwonGoal(h);
+      } else if (h.id === 'goal_kor_02') {
+        document.getElementById('tactics-score-home').textContent = '2';
+        document.getElementById('tactics-score-away').textContent = '1';
+        seekTacticsVideo(5428); // 90:28
+        animateHwangHeeChanWinner(h);
+      }
+    }
+
+    // Goal 1: Horta 04:53
+    function animateHortaGoal(h) {
+      const startPt = statsBombToPixel(h.start_location[0], h.start_location[1]);
+      const dalot = tacticsPlayers.find(p => p.num === 2 && p.team === 'away');
+      const horta = tacticsPlayers.find(p => p.num === 21 && p.team === 'away');
+      const crossStart = { x: startPt.x + 55, y: startPt.y + 70 };
+      const crossEnd = { x: startPt.x + 10, y: startPt.y + 15 };
+
+      if (dalot) {
+        dalot.x = crossStart.x;
+        dalot.y = crossStart.y;
+      }
+      if (horta) {
+        horta.x = startPt.x - 30;
+        horta.y = startPt.y - 12;
+        horta.angle = Math.PI;
+        tacticsSelectedPlayerId = horta.id;
+      }
+
+      tacticsBall.x = crossStart.x;
+      tacticsBall.y = crossStart.y;
+
+      activeHighlightAnim = {
+        type: 'WC_HORTA',
+        step: 0,
+        timer: 0,
+        targetPlayer: horta,
+        tacticalTag: '[🚀 달로트 우측면 돌파 & 컷백 크로스]',
+        tagColor: '#f59e0b',
+        dalot: dalot,
+        horta: horta,
+        crossPt: crossEnd,
+        finishPt: startPt,
+        h: h
+      };
+    }
+
+    // Goal 2: Kim Young-Gwon 26:43 Equalizer
+    function animateKimYoungGwonGoal(h) {
+      const cornerPt = statsBombToPixel(h.corner_location[0], h.corner_location[1]);
+      const finishPt = statsBombToPixel(h.start_location[0], h.start_location[1]);
+      const deflectPt = { x: finishPt.x - 18, y: finishPt.y - 12 };
+
+      const kangin = tacticsPlayers.find(p => p.num === 18 && p.team === 'home');
+      const kim = tacticsPlayers.find(p => p.num === 19 && p.team === 'home');
+      const ronaldo = tacticsPlayers.find(p => p.num === 7 && p.team === 'away');
+
+      if (kangin) { kangin.x = cornerPt.x; kangin.y = cornerPt.y; }
+      if (ronaldo) { ronaldo.x = deflectPt.x; ronaldo.y = deflectPt.y; }
+      if (kim) {
+        kim.x = finishPt.x - 20;
+        kim.y = finishPt.y + 15;
+        tacticsSelectedPlayerId = kim.id;
+      }
+
+      tacticsBall.x = cornerPt.x;
+      tacticsBall.y = cornerPt.y;
+
+      activeHighlightAnim = {
+        type: 'WC_KIM',
+        step: 0,
+        timer: 0,
+        targetPlayer: kim,
+        tacticalTag: '[🎯 이강인 택배 코너킥 & 문전 쇄도]',
+        tagColor: '#38bdf8',
+        kangin: kangin,
+        kim: kim,
+        ronaldo: ronaldo,
+        cornerPt: cornerPt,
+        deflectPt: deflectPt,
+        finishPt: finishPt,
+        h: h
+      };
+    }
+
+    // Goal 3: Hwang Hee-Chan 90:28 Winner (Son Heung-Min 70m Sprint & Nutmeg Pass)
+    function animateHwangHeeChanWinner(h) {
+      const son = tacticsPlayers.find(p => p.num === 7 && p.team === 'home');
+      const hwang = tacticsPlayers.find(p => p.num === 11 && p.team === 'home');
+      const dalot = tacticsPlayers.find(p => p.num === 2 && p.team === 'away');
+      const pepe = tacticsPlayers.find(p => p.num === 3 && p.team === 'away');
+      const keeper = tacticsPlayers.find(p => p.num === 22 && p.team === 'away');
+
+      const waypoints = h.son_carry_coords.map(pt => statsBombToPixel(pt.x, pt.y));
+      const shotPt = statsBombToPixel(h.shot_location[0], h.shot_location[1]);
+      const passStartPt = statsBombToPixel(h.pass_start[0], h.pass_start[1]);
+
+      // Place defenders in freeze frame
+      if (dalot) { const pt = tacticsGridToPixel(15.1, 7.9); dalot.x = pt.x; dalot.y = pt.y; }
+      if (pepe) { const pt = tacticsGridToPixel(16.5, 7.2); pepe.x = pt.x; pepe.y = pt.y; }
+      if (keeper) { const pt = tacticsGridToPixel(17.5, 6.0); keeper.x = pt.x; keeper.y = pt.y; }
+
+      // Setup multi-step sequence
+      activeHighlightAnim = {
+        type: 'WC_HWANG',
+        step: 0,
+        timer: 0,
+        targetPlayer: son,
+        tacticalTag: '[⚡ 손흥민 70m 단독 폭풍 드리블 질주]',
+        tagColor: '#fbbf24',
+        waypoints: waypoints,
+        passStart: passStartPt,
+        shotPt: shotPt,
+        son: son,
+        hwang: hwang,
+        goalText: '황희찬 극장 역전 결승골 (손흥민 70m 어시스트!)'
+      };
+
+      if (son) {
+        son.x = waypoints[0].x;
+        son.y = waypoints[0].y;
+        tacticsSelectedPlayerId = son.id;
+      }
+      if (hwang) {
+        const hwangStart = tacticsGridToPixel(12.0, 7.2);
+        hwang.x = hwangStart.x;
+        hwang.y = hwangStart.y;
+      }
+
+      tacticsBall.x = waypoints[0].x;
+      tacticsBall.y = waypoints[0].y;
+    }
+
+    // =========================================================================
+    // FM 2D Realistic Team Unit Movement Engine
+    // All 22 players shift compactness, press/drop deep, and micro-shuffle with the ball
+    // =========================================================================
+    function updateFMTeamUnitMovement(ballX, ballY, heroIds = []) {
+      if (!tacticsPlayers || tacticsPlayers.length === 0) return;
+      const pitchLeft = TACTICS_PITCH_MARGIN + 12;
+      const pitchRight = TACTICS_PITCH_MARGIN + TACTICS_PITCH_W - 12;
+      const pitchTop = TACTICS_PITCH_MARGIN + 14;
+      const pitchBottom = TACTICS_PITCH_MARGIN + TACTICS_PITCH_H - 14;
+
+      const pitchMidX = TACTICS_PITCH_MARGIN + TACTICS_PITCH_W * 0.5;
+      const pitchMidY = TACTICS_PITCH_MARGIN + TACTICS_PITCH_H * 0.5;
+
+      const ballProgX = (ballX - TACTICS_PITCH_MARGIN) / TACTICS_PITCH_W; // 0 (left goal) to 1 (right goal)
+      const ballOffsetY = (ballY - pitchMidY) / (TACTICS_PITCH_H * 0.5); // -1 (top) to +1 (bottom)
+
+      const t = Date.now() * 0.003;
+
+      tacticsPlayers.forEach(p => {
+        if (heroIds.includes(p.id)) return;
+
+        const basePt = tacticsGridToPixel(p.baseCol, p.baseRow);
+        let targetX = basePt.x;
+        let targetY = basePt.y;
+
+        const isHome = p.team === 'home';
+        const isGk = p.pos === 'GK';
+
+        if (isGk) {
+          // Goalkeeper positioning relative to ball
+          targetY = pitchMidY + ballOffsetY * 24;
+          targetX = isHome ? (TACTICS_PITCH_MARGIN + 24) : (pitchRight - 14);
+        } else {
+          // 1. Tactical Unit Compression & Line Shifting:
+          // Attacking team pushes up lines; Defending team drops back
+          if (isHome) {
+            const pushDist = (ballProgX - 0.5) * (p.pos.includes('B') ? 48 : 72);
+            targetX = basePt.x + pushDist;
+          } else {
+            const dropDist = (ballProgX - 0.5) * (p.pos.includes('B') ? 38 : 58);
+            targetX = basePt.x + dropDist;
+          }
+
+          // 2. Lateral Touchline Compactness (Team shifts toward ball side)
+          const lateralShift = ballOffsetY * 26 * (p.pos.includes('W') ? 0.65 : 1.0);
+          targetY = basePt.y + lateralShift;
+
+          // 3. FM Footwork & Shuffle Cadence (Living players never stand frozen)
+          const shufflePhase = p.num * 1.73;
+          const microX = Math.sin(t * 1.7 + shufflePhase) * 2.4;
+          const microY = Math.cos(t * 1.3 + shufflePhase) * 1.9;
+          targetX += microX;
+          targetY += microY;
+
+          // 4. Proximity Pressing & Covering Reactions
+          const distToBall = Math.hypot(ballX - p.x, ballY - p.y);
+          if (distToBall < 120) {
+            if (!isHome) {
+              // Defenders step out to jockey / pressure dribbler
+              const ang = Math.atan2(ballY - p.y, ballX - p.x);
+              targetX += Math.cos(ang) * 14;
+              targetY += Math.sin(ang) * 14;
+            } else {
+              // Teammates offer passing angle
+              const ang = Math.atan2(p.y - ballY, p.x - ballX);
+              targetX += Math.cos(ang) * 9;
+              targetY += Math.sin(ang) * 9;
+            }
+          }
+        }
+
+        targetX = Math.max(pitchLeft, Math.min(pitchRight, targetX));
+        targetY = Math.max(pitchTop, Math.min(pitchBottom, targetY));
+
+        const lerp = isGk ? 0.05 : 0.038;
+        p.x += (targetX - p.x) * lerp * tacticsSpeed;
+        p.y += (targetY - p.y) * lerp * tacticsSpeed;
+
+        // Player vision tracking ball
+        p.angle = Math.atan2(ballY - p.y, ballX - p.x);
+      });
+    }
+
+    // FM Reel Continuous Playback Engine
+    function playPlayerFullMatchReel() {
+      if (!currentPlayerTacticsData || !currentPlayerTacticsData.key_match_highlights) return;
+      isReelPlaying = true;
+      reelStep = 0;
+      updateCommentary('REEL', `[🎬 90분 종합 활약상 연속 재생] ${currentPlayerTacticsData.player_info.name_ko}의 90분 풀타임 핵심 시그니처 시퀀스(득점·킬패스·볼탈환)를 연속 재생합니다.`);
+      renderPlayerChapterButtons(currentPlayerTacticsData);
+      playTargetPlayerHighlight(0);
+    }
+
+    function advanceFMReel() {
+      if (!isReelPlaying || !currentPlayerTacticsData || !currentPlayerTacticsData.key_match_highlights) return;
+      reelStep++;
+      if (reelStep < currentPlayerTacticsData.key_match_highlights.length) {
+        const nextM = currentPlayerTacticsData.key_match_highlights[reelStep];
+        updateCommentary('REEL', `[🕒 MATCH CLOCK 전진...] ➔ ${nextM.display_time} [${nextM.title}] 로 전환합니다.`);
+        setTimeout(() => {
+          if (isReelPlaying) {
+            playTargetPlayerHighlight(reelStep);
+          }
+        }, 1400);
+      } else {
+        isReelPlaying = false;
+        renderPlayerChapterButtons(currentPlayerTacticsData);
+        const s = currentPlayerTacticsData.match_summary || {};
+        const pKo = currentPlayerTacticsData.player_info.name_ko || currentPlayerTacticsData.player_info.name;
+        updateCommentary('SUMMARY', `[⭐ 90분 전술 분석 완료] ${pKo} FM 평점: ${s.rating || '8.7'}${s.mom ? ' (MoM 선정)' : ''} | 볼터치 ${s.touches || 74}회, 키패스 ${s.key_passes || 4}회, 패스 성공률 ${s.pass_accuracy || 89}%, 리커버리 ${s.recoveries || 6}회, 활동량 ${s.distance_km || 11.4}km.`);
+      }
+    }
+
+    // Master step-by-step highlight animation engine (Authentic Multi-Phase Play Sequences)
+    function updateHighlightAnimation() {
+      if (!activeHighlightAnim) return;
+      const anim = activeHighlightAnim;
+      anim.timer += tacticsSpeed;
+
+      // 1. Organic FM Team Unit Movement for all other players
+      const heroIds = [];
+      if (anim.targetPlayer) heroIds.push(anim.targetPlayer.id);
+      if (anim.buildupPasser) heroIds.push(anim.buildupPasser.id);
+      if (anim.assister) heroIds.push(anim.assister.id);
+      if (anim.oppDefender) heroIds.push(anim.oppDefender.id);
+      if (anim.oppGk) heroIds.push(anim.oppGk.id);
+      if (anim.forwardRunner) heroIds.push(anim.forwardRunner.id);
+      if (anim.wingSupport) heroIds.push(anim.wingSupport.id);
+      if (anim.oppCarrier) heroIds.push(anim.oppCarrier.id);
+      if (anim.son) heroIds.push(anim.son.id);
+      if (anim.hwang) heroIds.push(anim.hwang.id);
+      if (anim.dalot) heroIds.push(anim.dalot.id);
+      if (anim.horta) heroIds.push(anim.horta.id);
+      if (anim.kangin) heroIds.push(anim.kangin.id);
+      if (anim.kim) heroIds.push(anim.kim.id);
+      if (anim.ronaldo) heroIds.push(anim.ronaldo.id);
+
+      updateFMTeamUnitMovement(tacticsBall.x, tacticsBall.y, heroIds);
+
+      // ----------------------------------------------------
+      // TYPE: TARGET_GOAL (Multi-Pass Buildup -> Assist Cross -> Box Sprint -> Volley Finish -> Net & Celebration)
+      // ----------------------------------------------------
+      if (anim.type === 'TARGET_GOAL') {
+        const pKo = (currentPlayerTacticsData && currentPlayerTacticsData.player_info)
+          ? (currentPlayerTacticsData.player_info.name_ko || currentPlayerTacticsData.player_info.name)
+          : anim.targetPlayer.name;
+
+        // Step 0: 후방/중원 1차 빌드업 전개 (80 frames ~ 1.33s)
+        if (anim.step === 0) {
+          anim.tacticalTag = '[📐 시야 & 1차 빌드업 전개]';
+          anim.tagColor = '#38bdf8';
+
+          if (anim.buildupPasser) {
+            tacticsSelectedPlayerId = anim.buildupPasser.id;
+            anim.buildupPasser.x += 0.25 * tacticsSpeed;
+            anim.buildupPasser.angle = Math.atan2(anim.assisterStartPt.y - anim.buildupPasser.y, anim.assisterStartPt.x - anim.buildupPasser.x);
+          }
+
+          const passProg = Math.min(1.0, anim.timer / 80);
+          tacticsBall.x = anim.buildupStartPt.x + (anim.assisterStartPt.x - anim.buildupStartPt.x) * passProg;
+          tacticsBall.y = anim.buildupStartPt.y + (anim.assisterStartPt.y - anim.buildupStartPt.y) * passProg;
+
+          if (anim.assister) {
+            anim.assister.x += (anim.assisterStartPt.x - anim.assister.x) * 0.04 * tacticsSpeed;
+            anim.assister.y += (anim.assisterStartPt.y - anim.assister.y) * 0.04 * tacticsSpeed;
+            anim.assister.angle = Math.atan2(anim.buildupStartPt.y - anim.assister.y, anim.buildupStartPt.x - anim.assister.x);
+          }
+
+          anim.targetPlayer.x += (anim.targetStartPt.x + 10 - anim.targetPlayer.x) * 0.02 * tacticsSpeed;
+
+          if (anim.timer >= 80) {
+            anim.step = 1;
+            anim.timer = 0;
+            tacticsTrajectories.push({
+              x1: anim.buildupStartPt.x, y1: anim.buildupStartPt.y,
+              x2: anim.assisterStartPt.x, y2: anim.assisterStartPt.y,
+              color: '#38bdf8', dashed: true, alpha: 1.0,
+              label: `[빌드업] #${anim.buildupPasser ? anim.buildupPasser.num : '6'} ➔ #${anim.assister ? anim.assister.num : '7'}`
+            });
+            updateCommentary('BUILDUP', `[1단계 빌드업 전개] #${anim.buildupPasser ? anim.buildupPasser.num : '6'} ${anim.buildupPasser ? anim.buildupPasser.name : '미드필더'} ➔ #${anim.assister ? anim.assister.num : '7'} ${anim.assister ? anim.assister.name : '윙어'} 파이널 서드 전진 연계 패스 성공!`);
+          }
+        }
+        // Step 1: 파이널 서드 연계 및 타겟 공격수 오프더볼 공간 침투 (110 frames ~ 1.83s)
+        else if (anim.step === 1) {
+          tacticsSelectedPlayerId = anim.targetPlayer.id;
+          anim.tacticalTag = '[🚀 폭발적 가속 오프더볼 공간 침투]';
+          anim.tagColor = '#fbbf24';
+
+          // Assister carries forward to crossing point with FM foot touch cadence
+          if (anim.assister) {
+            anim.assister.x += (anim.assisterCrossPt.x - anim.assister.x) * 0.045 * tacticsSpeed;
+            anim.assister.y += (anim.assisterCrossPt.y - anim.assister.y) * 0.045 * tacticsSpeed;
+            anim.assister.angle = Math.atan2(anim.actionPt.y - anim.assister.y, anim.actionPt.x - anim.assister.x);
+          }
+
+          // Target Player makes explosive off-the-ball sprint run into penalty box
+          anim.targetPlayer.x += (anim.actionPt.x - anim.targetPlayer.x) * 0.045 * tacticsSpeed;
+          anim.targetPlayer.y += (anim.actionPt.y - anim.targetPlayer.y) * 0.045 * tacticsSpeed;
+          anim.targetPlayer.angle = Math.atan2(anim.goalPt.y - anim.targetPlayer.y, anim.goalPt.x - anim.targetPlayer.x);
+
+          if (anim.oppDefender) {
+            anim.oppDefender.x += (anim.actionPt.x + 20 - anim.oppDefender.x) * 0.025 * tacticsSpeed;
+            anim.oppDefender.y += (anim.actionPt.y + 12 - anim.oppDefender.y) * 0.025 * tacticsSpeed;
+          }
+
+          // In first phase, ball is with assister dribbling with touch pulses. In second phase, cross whips into box.
+          if (anim.timer <= 45) {
+            if (anim.assister) {
+              const touchPhase = (anim.timer % 16) / 16;
+              const touchPush = Math.sin(touchPhase * Math.PI) * 4.5;
+              const swayY = Math.sin(anim.timer * 0.3) * 2.2;
+              tacticsBall.x = anim.assister.x + 7 + touchPush;
+              tacticsBall.y = anim.assister.y + swayY;
+            }
+          } else {
+            const crossProg = Math.min(1.0, (anim.timer - 45) / 65);
+            tacticsBall.x = anim.assisterCrossPt.x + (anim.actionPt.x - anim.assisterCrossPt.x) * crossProg;
+            tacticsBall.y = anim.assisterCrossPt.y + (anim.actionPt.y - anim.assisterCrossPt.y) * crossProg;
+          }
+
+          if (anim.timer >= 110) {
+            anim.step = 2;
+            anim.timer = 0;
+            tacticsTrajectories.push({
+              x1: anim.assisterCrossPt.x, y1: anim.assisterCrossPt.y,
+              x2: anim.actionPt.x, y2: anim.actionPt.y,
+              color: '#f59e0b', dashed: true, alpha: 1.0,
+              label: `[어시스트 컷백] #${anim.assister ? anim.assister.num : '7'} ➔ #${anim.targetPlayer.num} ${pKo}`
+            });
+            updateCommentary('ASSIST', `[2단계 어시스트] #${anim.assister ? anim.assister.num : '7'} ${anim.assister ? anim.assister.name : '윙어'}의 정밀 컷백 크로스! #${anim.targetPlayer.num} ${pKo} 수비 뒷공간 침투 쇄도!`);
+          }
+        }
+        // Step 2: 결정적 논스톱 다이렉트 슈팅 & 골키퍼 다이빙 (60 frames ~ 1.0s)
+        else if (anim.step === 2) {
+          anim.tacticalTag = '[⚡ 시그니처 원터치 다이렉트 피니시]';
+          anim.tagColor = '#10b981';
+
+          const shotProg = Math.min(1.0, anim.timer / 60);
+          tacticsBall.x = anim.actionPt.x + (anim.goalPt.x - anim.actionPt.x) * shotProg;
+          tacticsBall.y = anim.actionPt.y + (anim.goalPt.y - anim.actionPt.y) * shotProg;
+
+          if (anim.oppGk) {
+            anim.oppGk.x += (anim.goalPt.x - 14 - anim.oppGk.x) * 0.04 * tacticsSpeed;
+            anim.oppGk.y += (anim.goalPt.y - anim.oppGk.y) * 0.04 * tacticsSpeed;
+          }
+
+          if (anim.timer >= 60) {
+            anim.step = 3;
+            anim.timer = 0;
+            tacticsTrajectories.push({
+              x1: anim.actionPt.x, y1: anim.actionPt.y,
+              x2: anim.goalPt.x, y2: anim.goalPt.y,
+              color: '#10b981', dashed: false, alpha: 1.0,
+              label: `[GOAL!] 다이렉트 득점 (xG ${anim.m.xg})`
+            });
+            document.getElementById('tactics-score-home').textContent = '2';
+            document.getElementById('tactics-score-away').textContent = '1';
+            triggerGoalBanner(`${pKo} 시그니처 득점! (xG ${anim.m.xg})`);
+            updateCommentary('SHOT', `[3단계 슈팅] #${anim.targetPlayer.num} ${pKo} 박스 정면 오른발 논스톱 다이렉트 슈팅 골! (xG ${anim.m.xg})`);
+          }
+        }
+        // Step 3: 골망 출렁임 (60 frames ~ 1.0s)
+        else if (anim.step === 3) {
+          anim.tacticalTag = '[⚽ GOAL! 결정적 득점 성공]';
+          anim.tagColor = '#10b981';
+
+          tacticsBall.x = anim.goalPt.x + Math.sin(anim.timer * 0.4) * 2.0;
+          tacticsBall.y = anim.goalPt.y;
+
+          if (anim.timer >= 60) {
+            anim.step = 4;
+            anim.timer = 0;
+          }
+        }
+        // Step 4: 세리머니 질주 (90 frames ~ 1.5s)
+        else if (anim.step === 4) {
+          anim.tacticalTag = '[🎉 득점 세리머니]';
+          anim.tagColor = '#10b981';
+
+          anim.targetPlayer.x += 0.5 * tacticsSpeed;
+          anim.targetPlayer.y += 0.35 * tacticsSpeed;
+
+          if (anim.assister) {
+            anim.assister.x += (anim.targetPlayer.x - 22 - anim.assister.x) * 0.035 * tacticsSpeed;
+            anim.assister.y += (anim.targetPlayer.y - anim.assister.y) * 0.035 * tacticsSpeed;
+          }
+          if (anim.buildupPasser) {
+            anim.buildupPasser.x += (anim.targetPlayer.x - 45 - anim.buildupPasser.x) * 0.025 * tacticsSpeed;
+            anim.buildupPasser.y += (anim.targetPlayer.y - anim.buildupPasser.y) * 0.025 * tacticsSpeed;
+          }
+
+          if (anim.timer >= 90) {
+            anim.step = 5;
+            anim.timer = 0;
+            anim.finished = true;
+            updateCommentary('REVIEW', `[리플레이 완료] ⚽ #${anim.targetPlayer.num} ${pKo} 득점 시퀀스 분석 완료. [🔄 시퀀스 리플레이 다시보기] 버튼을 누르면 처음부터 다시 재생됩니다.`);
+            if (isReelPlaying) {
+              advanceFMReel();
+            }
+          }
+        }
+        // Step 5: 리플레이 완료 상태 유지
+        else if (anim.step === 5) {
+          anim.tacticalTag = '[📊 전술 분석 완료: 공간 침투 및 슈팅 궤적 보존]';
+          anim.tagColor = '#10b981';
+          anim.finished = true;
+          anim.targetPlayer.x += Math.sin(anim.timer * 0.03) * 0.12;
+        }
+      }
+
+      // ----------------------------------------------------
+      // TYPE: TARGET_KEY_PASS (Buildup -> 35m Killer Diagonal Through-Pass -> Forward Strike -> GK Save)
+      // ----------------------------------------------------
+      else if (anim.type === 'TARGET_KEY_PASS') {
+        const pKo = (currentPlayerTacticsData && currentPlayerTacticsData.player_info)
+          ? (currentPlayerTacticsData.player_info.name_ko || currentPlayerTacticsData.player_info.name)
+          : anim.targetPlayer.name;
+
+        // Step 0: 후방 빌드업 전개 (80 frames ~ 1.33s)
+        if (anim.step === 0) {
+          anim.tacticalTag = '[🔄 탈압박 볼 키핑 & 전방 시야 확보]';
+          anim.tagColor = '#38bdf8';
+
+          tacticsSelectedPlayerId = anim.buildupPasser ? anim.buildupPasser.id : anim.targetPlayer.id;
+          const passProg = Math.min(1.0, anim.timer / 80);
+          tacticsBall.x = anim.buildupStartPt.x + (anim.actionPt.x - anim.buildupStartPt.x) * passProg;
+          tacticsBall.y = anim.buildupStartPt.y + (anim.actionPt.y - anim.buildupStartPt.y) * passProg;
+
+          anim.targetPlayer.x += (anim.actionPt.x - anim.targetPlayer.x) * 0.04 * tacticsSpeed;
+          anim.targetPlayer.y += (anim.actionPt.y - anim.targetPlayer.y) * 0.04 * tacticsSpeed;
+
+          if (anim.forwardRunner) {
+            anim.forwardRunner.x += (anim.targetPt.x - 30 - anim.forwardRunner.x) * 0.02 * tacticsSpeed;
+            anim.forwardRunner.y += (anim.targetPt.y - anim.forwardRunner.y) * 0.02 * tacticsSpeed;
+          }
+
+          if (anim.timer >= 80) {
+            anim.step = 1;
+            anim.timer = 0;
+            tacticsTrajectories.push({
+              x1: anim.buildupStartPt.x, y1: anim.buildupStartPt.y,
+              x2: anim.actionPt.x, y2: anim.actionPt.y,
+              color: '#38bdf8', dashed: true, alpha: 1.0,
+              label: `[후방 빌드업] ➔ #${anim.targetPlayer.num} ${pKo}`
+            });
+            updateCommentary('PASS', `[1단계 빌드업] 후방에서 플레이메이커 #${anim.targetPlayer.num} ${pKo}에게 전진 패스 배달!`);
+          }
+        }
+        // Step 1: 35m 대각선 킬러 스루패스 & 스트라이커 뒷공간 침투 (110 frames ~ 1.83s)
+        else if (anim.step === 1) {
+          tacticsSelectedPlayerId = anim.targetPlayer.id;
+          anim.tacticalTag = '[🎯 35m 레이저 킬스루패스 (xA 찬스 창출)]';
+          anim.tagColor = '#38bdf8';
+
+          const passProg = Math.min(1.0, anim.timer / 110);
+          tacticsBall.x = anim.actionPt.x + (anim.targetPt.x - anim.actionPt.x) * passProg;
+          tacticsBall.y = anim.actionPt.y + (anim.targetPt.y - anim.actionPt.y) * passProg;
+
+          if (anim.forwardRunner) {
+            anim.forwardRunner.x += (anim.targetPt.x - anim.forwardRunner.x) * 0.045 * tacticsSpeed;
+            anim.forwardRunner.y += (anim.targetPt.y - anim.forwardRunner.y) * 0.045 * tacticsSpeed;
+            anim.forwardRunner.angle = Math.atan2(anim.goalPt.y - anim.forwardRunner.y, anim.goalPt.x - anim.forwardRunner.x);
+          }
+
+          if (anim.timer >= 110) {
+            anim.step = 2;
+            anim.timer = 0;
+            tacticsTrajectories.push({
+              x1: anim.actionPt.x, y1: anim.actionPt.y,
+              x2: anim.targetPt.x, y2: anim.targetPt.y,
+              color: '#38bdf8', dashed: true, alpha: 1.0,
+              label: `[35m 킬러 스루패스] #${anim.targetPlayer.num} ${pKo} (xA ${anim.m.xa})`
+            });
+            updateCommentary('CHANCE', `[2단계 킬패스] #${anim.targetPlayer.num} ${pKo} 상대 수비 라인을 단번에 무너뜨리는 35m 레이저 킬스루패스 배달!`);
+          }
+        }
+        // Step 2: 침투 공격수 유효 슈팅 & 상대 골키퍼 선방 (70 frames ~ 1.17s)
+        else if (anim.step === 2) {
+          anim.tacticalTag = '[💥 침투 공격수 유효 슈팅 & GK 선방]';
+          anim.tagColor = '#f59e0b';
+
+          if (anim.forwardRunner) tacticsSelectedPlayerId = anim.forwardRunner.id;
+          const shotProg = Math.min(1.0, anim.timer / 70);
+          tacticsBall.x = anim.targetPt.x + (anim.goalPt.x - anim.targetPt.x) * shotProg;
+          tacticsBall.y = anim.targetPt.y + (anim.goalPt.y - anim.targetPt.y) * shotProg;
+
+          if (anim.oppGk) {
+            anim.oppGk.x += (anim.goalPt.x - 12 - anim.oppGk.x) * 0.045 * tacticsSpeed;
+            anim.oppGk.y += (anim.goalPt.y - anim.oppGk.y) * 0.045 * tacticsSpeed;
+          }
+
+          if (anim.timer >= 70) {
+            anim.step = 3;
+            anim.timer = 0;
+            tacticsTrajectories.push({
+              x1: anim.targetPt.x, y1: anim.targetPt.y,
+              x2: anim.goalPt.x, y2: anim.goalPt.y,
+              color: '#f59e0b', dashed: false, alpha: 1.0,
+              label: '[유효 슈팅] 골키퍼 다이빙 선방!'
+            });
+            updateCommentary('SHOT', `[3단계 슈팅 & 선방] 침투 공격수의 강력한 유효 슈팅! 상대 골키퍼의 동물적 다이빙 세이브!`);
+          }
+        }
+        // Step 3: 리플레이 완료 대기 (80 frames ~ 1.33s)
+        else if (anim.step === 3) {
+          anim.tacticalTag = '[📊 전술 분석 완료: 35m 패스 시야 및 침투 궤적 보존]';
+          anim.tagColor = '#38bdf8';
+
+          if (anim.timer >= 80) {
+            anim.step = 4;
+            anim.finished = true;
+            updateCommentary('REVIEW', `[리플레이 완료] 🎯 #${anim.targetPlayer.num} ${pKo} 35m 킬패스 찬스 메이킹 시퀀스 완료. [🔄 시퀀스 리플레이 다시보기] 지원.`);
+            if (isReelPlaying) {
+              advanceFMReel();
+            }
+          }
+        }
+        else if (anim.step === 4) {
+          anim.tacticalTag = '[📊 전술 분석 완료: 35m 패스 시야 및 침투 궤적 보존]';
+          anim.tagColor = '#38bdf8';
+          anim.finished = true;
+        }
+      }
+
+      // ----------------------------------------------------
+      // TYPE: TARGET_RECOVERY (High-Intensity Press -> Slide Interception -> 40m Sprint Carry -> Final-Third Layoff)
+      // ----------------------------------------------------
+      else if (anim.type === 'TARGET_RECOVERY') {
+        const pKo = (currentPlayerTacticsData && currentPlayerTacticsData.player_info)
+          ? (currentPlayerTacticsData.player_info.name_ko || currentPlayerTacticsData.player_info.name)
+          : anim.targetPlayer.name;
+
+        // Step 0: 상대 빌드업 전개 & 타겟 선수 전방 압박 쇄도 (80 frames ~ 1.33s)
+        if (anim.step === 0) {
+          tacticsSelectedPlayerId = anim.targetPlayer.id;
+          anim.tacticalTag = '[🛡️ 상대 빌드업 경로 예측 고강도 압박]';
+          anim.tagColor = '#818cf8';
+
+          anim.targetPlayer.x += (anim.actionPt.x - anim.targetPlayer.x) * 0.045 * tacticsSpeed;
+          anim.targetPlayer.y += (anim.actionPt.y - anim.targetPlayer.y) * 0.045 * tacticsSpeed;
+          anim.targetPlayer.angle = Math.atan2(anim.actionPt.y - anim.targetPlayer.y, anim.actionPt.x - anim.targetPlayer.x);
+
+          if (anim.oppCarrier) {
+            anim.oppCarrier.x += (anim.actionPt.x - 8 - anim.oppCarrier.x) * 0.02 * tacticsSpeed;
+          }
+
+          if (anim.timer >= 80) {
+            anim.step = 1;
+            anim.timer = 0;
+            tacticsTrajectories.push({
+              x1: anim.actionPt.x - 45, y1: anim.actionPt.y - 20,
+              x2: anim.actionPt.x, y2: anim.actionPt.y,
+              color: '#818cf8', dashed: true, alpha: 1.0,
+              label: `[전방 압박 볼 탈환] #${anim.targetPlayer.num} ${pKo}`
+            });
+            updateCommentary('TACKLE', `[1단계 볼 탈환] #${anim.targetPlayer.num} ${pKo} 상대 빌드업 경로 완벽 예측 후 고강도 태클 인터셉트 성공!`);
+          }
+        }
+        // Step 1: 40m 폭풍 프로그레시브 캐리 질주 (130 frames ~ 2.17s)
+        else if (anim.step === 1) {
+          anim.tacticalTag = '[⚡ 40m 폭풍 전진 질주 파괴적 캐리]';
+          anim.tagColor = '#fbbf24';
+
+          const carryAngle = Math.atan2(anim.carryEnd.y - anim.targetPlayer.y, anim.carryEnd.x - anim.targetPlayer.x);
+          anim.targetPlayer.angle = carryAngle;
+          const strideSway = Math.sin(anim.timer * 0.28) * 3.0;
+          const perpAngle = carryAngle + Math.PI / 2;
+
+          anim.targetPlayer.x += (anim.carryEnd.x - anim.targetPlayer.x) * 0.035 * tacticsSpeed;
+          anim.targetPlayer.y += (anim.carryEnd.y - anim.targetPlayer.y) * 0.035 * tacticsSpeed;
+
+          // Realistic FM Dribble Mechanics: Cyclical foot touches push ball ahead, ball rolls & decelerates, player sprints
+          const dribblePhase = (anim.timer % 18) / 18;
+          const ballLeadDist = 8 + Math.sin(dribblePhase * Math.PI) * 9;
+          tacticsBall.x = anim.targetPlayer.x + Math.cos(carryAngle) * ballLeadDist + Math.cos(perpAngle) * (strideSway * 0.6);
+          tacticsBall.y = anim.targetPlayer.y + Math.sin(carryAngle) * ballLeadDist + Math.sin(perpAngle) * (strideSway * 0.6);
+
+          if (anim.oppCarrier) {
+            anim.oppCarrier.x += (anim.targetPlayer.x - 28 - anim.oppCarrier.x) * 0.028 * tacticsSpeed;
+            anim.oppCarrier.y += (anim.targetPlayer.y + 6 - anim.oppCarrier.y) * 0.028 * tacticsSpeed;
+            anim.oppCarrier.angle = Math.atan2(anim.targetPlayer.y - anim.oppCarrier.y, anim.targetPlayer.x - anim.oppCarrier.x);
+          }
+
+          if (anim.wingSupport) {
+            anim.wingSupport.x += (anim.carryEnd.x + 45 - anim.wingSupport.x) * 0.03 * tacticsSpeed;
+            anim.wingSupport.y += (anim.carryEnd.y + 25 - anim.wingSupport.y) * 0.03 * tacticsSpeed;
+            anim.wingSupport.angle = Math.atan2(anim.carryEnd.y - anim.wingSupport.y, anim.carryEnd.x - anim.wingSupport.x);
+          }
+
+          if (anim.timer >= 130) {
+            anim.step = 2;
+            anim.timer = 0;
+            tacticsTrajectories.push({
+              x1: anim.actionPt.x, y1: anim.actionPt.y,
+              x2: anim.carryEnd.x, y2: anim.carryEnd.y,
+              color: '#fbbf24', dashed: false, alpha: 1.0,
+              label: `[40m 전진 캐리] #${anim.targetPlayer.num} ${pKo}`
+            });
+            updateCommentary('CARRY', `[2단계 전진 캐리] #${anim.targetPlayer.num} ${pKo} 탈압박 후 가속도를 살려 40m를 단숨에 전진 질주!`);
+          }
+        }
+        // Step 2: 파이널 서드 찬스 연계 패스 (80 frames ~ 1.33s)
+        else if (anim.step === 2) {
+          anim.tacticalTag = '[🎯 박스 침투 동료 컷백 찬스 연계]';
+          anim.tagColor = '#38bdf8';
+
+          if (anim.wingSupport) {
+            const passProg = Math.min(1.0, anim.timer / 80);
+            tacticsBall.x = anim.carryEnd.x + (anim.wingSupport.x - anim.carryEnd.x) * passProg;
+            tacticsBall.y = anim.carryEnd.y + (anim.wingSupport.y - anim.carryEnd.y) * passProg;
+          }
+
+          if (anim.timer >= 80) {
+            anim.step = 3;
+            anim.timer = 0;
+            if (anim.wingSupport) {
+              tacticsTrajectories.push({
+                x1: anim.carryEnd.x, y1: anim.carryEnd.y,
+                x2: anim.wingSupport.x, y2: anim.wingSupport.y,
+                color: '#38bdf8', dashed: true, alpha: 1.0,
+                label: `[찬스 연계 컷백] ➔ #${anim.wingSupport.num} ${anim.wingSupport.name}`
+              });
+              updateCommentary('CHANCE', `[3단계 찬스 연계] 전방 침투 동료 #${anim.wingSupport.num} ${anim.wingSupport.name}에게 결정적 컷백 연결!`);
+            }
+          }
+        }
+        // Step 3: 리플레이 완료 대기 (80 frames ~ 1.33s)
+        else if (anim.step === 3) {
+          anim.tacticalTag = '[📊 전술 분석 완료: 프레싱 탈환 및 전진 캐리 궤적 보존]';
+          anim.tagColor = '#818cf8';
+
+          if (anim.timer >= 80) {
+            anim.step = 4;
+            anim.finished = true;
+            updateCommentary('REVIEW', `[리플레이 완료] 🛡️ #${anim.targetPlayer.num} ${pKo} 볼탈환 & 40m 전진 캐리 시퀀스 완료. [🔄 시퀀스 리플레이 다시보기] 지원.`);
+            if (isReelPlaying) {
+              advanceFMReel();
+            }
+          }
+        }
+        else if (anim.step === 4) {
+          anim.tacticalTag = '[📊 전술 분석 완료: 프레싱 탈환 및 전진 캐리 궤적 보존]';
+          anim.tagColor = '#818cf8';
+          anim.finished = true;
+        }
+      }
+
+      // ----------------------------------------------------
+      // TYPE: WC_HWANG (World Cup Hwang Hee-Chan Winner - 70m Sprint & Nutmeg Pass & Finish)
+      // ----------------------------------------------------
+      else if (anim.type === 'WC_HWANG') {
+        // Step 0: 손흥민 70m 폭풍 질주 (160 frames ~ 2.67s)
+        if (anim.step === 0) {
+          tacticsSelectedPlayerId = anim.son ? anim.son.id : 'H11';
+          anim.targetPlayer = anim.son;
+          anim.tacticalTag = '[⚡ 손흥민 70m 단독 드리블 폭풍 질주]';
+          anim.tagColor = '#fbbf24';
+
+          const wpIdx = Math.min(anim.waypoints.length - 1, Math.floor((anim.timer / 160) * anim.waypoints.length));
+          const targetPt = anim.waypoints[wpIdx];
+          if (anim.son) {
+            const runAngle = Math.atan2(targetPt.y - anim.son.y, targetPt.x - anim.son.x);
+            anim.son.angle = runAngle;
+            anim.son.x += (targetPt.x - anim.son.x) * 0.045 * tacticsSpeed;
+            anim.son.y += (targetPt.y - anim.son.y) * 0.045 * tacticsSpeed;
+
+            // FM Realistic Dribble Foot-Touch Mechanics for Son 70m sprint
+            const dribblePhase = (anim.timer % 16) / 16;
+            const touchPush = Math.sin(dribblePhase * Math.PI) * 8.5;
+            const strideSway = Math.sin(anim.timer * 0.32) * 2.8;
+            const perpAngle = runAngle + Math.PI / 2;
+            tacticsBall.x = anim.son.x + Math.cos(runAngle) * (8 + touchPush) + Math.cos(perpAngle) * strideSway;
+            tacticsBall.y = anim.son.y + Math.sin(runAngle) * (8 + touchPush) + Math.sin(perpAngle) * strideSway;
+          }
+
+          if (anim.hwang) {
+            anim.hwang.x += (anim.shotPt.x - 30 - anim.hwang.x) * 0.03 * tacticsSpeed;
+            anim.hwang.y += (anim.shotPt.y - anim.hwang.y) * 0.03 * tacticsSpeed;
+          }
+
+          if (anim.timer >= 160) {
+            anim.step = 1;
+            anim.timer = 0;
+            tacticsTrajectories.push({
+              x1: anim.passStart.x, y1: anim.passStart.y,
+              x2: anim.shotPt.x, y2: anim.shotPt.y,
+              color: '#fbbf24', dashed: true, alpha: 1.0, label: '손흥민 가랑이 사이 킬스루패스'
+            });
+            updateCommentary('ASSIST', '[2단계 어시스트] 손흥민, 포르투갈 수비수 3명 사이로 환상적인 가랑이 킬스루패스 배달!');
+          }
+        }
+        // Step 1: 황희찬 박스 침투 논스톱 오른발 슈팅 (70 frames ~ 1.17s)
+        else if (anim.step === 1) {
+          tacticsSelectedPlayerId = anim.hwang ? anim.hwang.id : 'H10';
+          anim.targetPlayer = anim.hwang;
+          anim.tacticalTag = '[🎯 가랑이 킬스루패스 & 황희찬 슈팅]';
+          anim.tagColor = '#10b981';
+
+          tacticsBall.x += (anim.shotPt.x - tacticsBall.x) * 0.06 * tacticsSpeed;
+          tacticsBall.y += (anim.shotPt.y - tacticsBall.y) * 0.06 * tacticsSpeed;
+
+          if (anim.hwang) {
+            anim.hwang.x += (anim.shotPt.x - anim.hwang.x) * 0.06 * tacticsSpeed;
+            anim.hwang.y += (anim.shotPt.y - anim.hwang.y) * 0.06 * tacticsSpeed;
+          }
+
+          if (anim.timer >= 70) {
+            anim.step = 2;
+            anim.timer = 0;
+            tacticsTrajectories.push({
+              x1: anim.shotPt.x, y1: anim.shotPt.y,
+              x2: TACTICS_PITCH_MARGIN + TACTICS_PITCH_W - 5, y2: TACTICS_PITCH_MARGIN + TACTICS_PITCH_H * 0.52,
+              color: '#10b981', dashed: false, alpha: 1.0, label: '황희찬 논스톱 슈팅 골! (xG 0.42)'
+            });
+            document.getElementById('tactics-score-home').textContent = '2';
+            document.getElementById('tactics-score-away').textContent = '1';
+            triggerGoalBanner(anim.goalText);
+            updateCommentary('SHOT', '[3단계 슈팅] 쇄도하던 황희찬의 침착한 오른발 논스톱 다이렉트 슈팅 골망 흔들림!');
+          }
+        }
+        // Step 2: 골 세리머니 (90 frames ~ 1.5s)
+        else if (anim.step === 2) {
+          anim.tacticalTag = '[🎉 90:28 극장 역전 결승골 세리머니]';
+          anim.tagColor = '#10b981';
+
+          if (anim.hwang) {
+            anim.hwang.x += 0.5 * tacticsSpeed;
+            anim.hwang.y += 0.3 * tacticsSpeed;
+          }
+          if (anim.son) {
+            anim.son.x += (anim.hwang.x - anim.son.x) * 0.035 * tacticsSpeed;
+            anim.son.y += (anim.hwang.y - anim.son.y) * 0.035 * tacticsSpeed;
+          }
+
+          if (anim.timer >= 90) {
+            anim.step = 3;
+            anim.timer = 0;
+            anim.finished = true;
+            updateCommentary('REVIEW', '[리플레이 완료] ⚽ 대한민국 2:1 포르투갈 90:28 역전 결승골 시퀀스 분석 완료. [🔄 시퀀스 리플레이 다시보기] 지원.');
+          }
+        }
+        // Step 3: 리플레이 완료 유지
+        else if (anim.step === 3) {
+          anim.tacticalTag = '[📊 전술 분석 완료: 70m 스프린트 & 킬패스 궤적 보존]';
+          anim.tagColor = '#10b981';
+          anim.finished = true;
+        }
+      }
+
+      // ----------------------------------------------------
+      // TYPE: WC_HORTA (Horta 04:53 Goal)
+      // ----------------------------------------------------
+      else if (anim.type === 'WC_HORTA') {
+        if (anim.step === 0) {
+          anim.targetPlayer = anim.horta;
+          anim.tacticalTag = '[🚀 달로트 우측면 돌파 & 컷백 크로스]';
+          anim.tagColor = '#f59e0b';
+
+          if (anim.dalot) {
+            anim.dalot.x += (anim.crossPt.x - anim.dalot.x) * 0.04 * tacticsSpeed;
+            anim.dalot.y += (anim.crossPt.y - anim.dalot.y) * 0.04 * tacticsSpeed;
+            tacticsBall.x = anim.dalot.x - 6;
+            tacticsBall.y = anim.dalot.y;
+          }
+          if (anim.horta) {
+            anim.horta.x += (anim.finishPt.x - anim.horta.x) * 0.035 * tacticsSpeed;
+            anim.horta.y += (anim.finishPt.y - anim.horta.y) * 0.035 * tacticsSpeed;
+          }
+          if (anim.timer >= 80) {
+            anim.step = 1;
+            anim.timer = 0;
+            tacticsTrajectories.push({
+              x1: anim.crossPt.x, y1: anim.crossPt.y,
+              x2: anim.finishPt.x, y2: anim.finishPt.y,
+              color: '#f59e0b', dashed: true, alpha: 1.0, label: '달로트 우측면 컷백 크로스'
+            });
+            updateCommentary('ASSIST', '[1단계 어시스트] 달로트의 우측면 폭풍 돌파 후 완벽한 박스 중앙 컷백 크로스!');
+          }
+        } else if (anim.step === 1) {
+          anim.tacticalTag = '[⚡ 호르타 니어포스트 다이렉트 선제골]';
+          anim.tagColor = '#ef4444';
+
+          tacticsBall.x += (anim.finishPt.x - tacticsBall.x) * 0.06 * tacticsSpeed;
+          tacticsBall.y += (anim.finishPt.y - tacticsBall.y) * 0.06 * tacticsSpeed;
+
+          if (anim.timer >= 60) {
+            anim.step = 2;
+            anim.timer = 0;
+            tacticsTrajectories.push({
+              x1: anim.finishPt.x, y1: anim.finishPt.y,
+              x2: TACTICS_PITCH_MARGIN + 8, y2: TACTICS_PITCH_MARGIN + TACTICS_PITCH_H * 0.5,
+              color: '#ef4444', dashed: false, alpha: 1.0, label: '호르타 선제골 (xG 0.29)'
+            });
+            document.getElementById('tactics-score-home').textContent = '0';
+            document.getElementById('tactics-score-away').textContent = '1';
+            triggerGoalBanner('포르투갈 리카르도 호르타 선제골 (xG 0.29)');
+            updateCommentary('SHOT', '[2단계 슈팅] 리카르도 호르타 니어포스트 쇄도 원터치 다이렉트 선제골!');
+          }
+        } else if (anim.step === 2) {
+          anim.tacticalTag = '[📊 전술 분석 완료: 측면 돌파 & 크로스 궤적 보존]';
+          anim.tagColor = '#ef4444';
+
+          if (anim.timer >= 80) {
+            anim.step = 3;
+            anim.timer = 0;
+            anim.finished = true;
+            updateCommentary('REVIEW', '[리플레이 완료] ⚽ 포르투갈 04:53 선제골 시퀀스 분석 완료. [🔄 시퀀스 리플레이 다시보기] 지원.');
+          }
+        } else if (anim.step === 3) {
+          anim.tacticalTag = '[📊 전술 분석 완료: 측면 돌파 & 크로스 궤적 보존]';
+          anim.tagColor = '#ef4444';
+          anim.finished = true;
+        }
+      }
+
+      // ----------------------------------------------------
+      // TYPE: WC_KIM (Kim Young-Gwon 26:43 Equalizer)
+      // ----------------------------------------------------
+      else if (anim.type === 'WC_KIM') {
+        if (anim.step === 0) {
+          anim.targetPlayer = anim.kim;
+          anim.tacticalTag = '[🎯 이강인 정밀 택배 인스윙 코너킥]';
+          anim.tagColor = '#38bdf8';
+
+          const cornerProg = Math.min(1.0, anim.timer / 90);
+          tacticsBall.x = anim.cornerPt.x + (anim.deflectPt.x - anim.cornerPt.x) * cornerProg;
+          tacticsBall.y = anim.cornerPt.y + (anim.deflectPt.y - anim.cornerPt.y) * cornerProg;
+
+          if (anim.kim) {
+            anim.kim.x += (anim.finishPt.x - anim.kim.x) * 0.03 * tacticsSpeed;
+            anim.kim.y += (anim.finishPt.y - anim.kim.y) * 0.03 * tacticsSpeed;
+          }
+
+          if (anim.timer >= 90) {
+            anim.step = 1;
+            anim.timer = 0;
+            tacticsTrajectories.push({
+              x1: anim.cornerPt.x, y1: anim.cornerPt.y,
+              x2: anim.deflectPt.x, y2: anim.deflectPt.y,
+              color: '#38bdf8', dashed: true, alpha: 1.0, label: '이강인 택배 코너킥'
+            });
+            updateCommentary('CORNER', '[1단계 코너킥] 이강인의 날카로운 왼발 인스윙 코너킥이 문전으로 배달!');
+          }
+        } else if (anim.step === 1) {
+          anim.tacticalTag = '[⚡ 호날두 등 굴절 & 김영권 발리 동점골]';
+          anim.tagColor = '#10b981';
+
+          tacticsBall.x += (anim.finishPt.x - tacticsBall.x) * 0.07 * tacticsSpeed;
+          tacticsBall.y += (anim.finishPt.y - tacticsBall.y) * 0.07 * tacticsSpeed;
+
+          if (anim.timer >= 60) {
+            anim.step = 2;
+            anim.timer = 0;
+            tacticsTrajectories.push({
+              x1: anim.deflectPt.x, y1: anim.deflectPt.y,
+              x2: anim.finishPt.x, y2: anim.finishPt.y,
+              color: '#fbbf24', dashed: true, alpha: 1.0, label: '호날두 등 굴절'
+            });
+            tacticsTrajectories.push({
+              x1: anim.finishPt.x, y1: anim.finishPt.y,
+              x2: TACTICS_PITCH_MARGIN + TACTICS_PITCH_W - 8, y2: TACTICS_PITCH_MARGIN + TACTICS_PITCH_H * 0.48,
+              color: '#10b981', dashed: false, alpha: 1.0, label: '김영권 왼발 발리 동점골! (xG 0.62)'
+            });
+            document.getElementById('tactics-score-home').textContent = '1';
+            document.getElementById('tactics-score-away').textContent = '1';
+            triggerGoalBanner('대한민국 김영권 동점골! (1:1)');
+            updateCommentary('SHOT', '[2단계 발리 득점] 호날두 등에 맞고 흐른 볼을 김영권이 침착한 왼발 발리슛으로 동점골 폭발!');
+          }
+        } else if (anim.step === 2) {
+          anim.tacticalTag = '[📊 전술 분석 완료: 세트피스 코너킥 및 발리 궤적 보존]';
+          anim.tagColor = '#10b981';
+
+          if (anim.timer >= 80) {
+            anim.step = 3;
+            anim.timer = 0;
+            anim.finished = true;
+            updateCommentary('REVIEW', '[리플레이 완료] ⚽ 대한민국 26:43 김영권 동점골 시퀀스 분석 완료. [🔄 시퀀스 리플레이 다시보기] 지원.');
+          }
+        } else if (anim.step === 3) {
+          anim.tacticalTag = '[📊 전술 분석 완료: 세트피스 코너킥 및 발리 궤적 보존]';
+          anim.tagColor = '#10b981';
+          anim.finished = true;
+        }
+      }
+
+      // ----------------------------------------------------
+      // TYPE: WC_MOMENT (Player Signature Individual Moment)
+      // ----------------------------------------------------
+      else if (anim.type === 'WC_MOMENT') {
+        if (anim.step === 0) {
+          tacticsSelectedPlayerId = anim.targetPlayer ? anim.targetPlayer.id : 'H11';
+          anim.tacticalTag = `[★ ${anim.pm.player_name}: ${anim.m.title}]`;
+          anim.tagColor = '#38bdf8';
+
+          if (anim.targetPlayer) {
+            anim.targetPlayer.x += (anim.actionPt.x - anim.targetPlayer.x) * 0.045 * tacticsSpeed;
+            anim.targetPlayer.y += (anim.actionPt.y - anim.targetPlayer.y) * 0.045 * tacticsSpeed;
+            tacticsBall.x = anim.targetPlayer.x + 8;
+            tacticsBall.y = anim.targetPlayer.y;
+          }
+          if (anim.timer >= 70) {
+            anim.step = 1;
+            anim.timer = 0;
+            if (anim.m.type === 'SHOT') {
+              tacticsTrajectories.push({
+                x1: anim.actionPt.x, y1: anim.actionPt.y,
+                x2: anim.goalPt.x, y2: anim.goalPt.y,
+                color: '#f59e0b', dashed: false, alpha: 1.0, label: `${anim.m.title} (xG ${anim.m.xg})`
+              });
+            } else if (anim.m.type === 'KEY_PASS' || anim.m.type === 'ASSIST') {
+              tacticsTrajectories.push({
+                x1: anim.actionPt.x, y1: anim.actionPt.y,
+                x2: anim.actionPt.x + 80, y2: anim.actionPt.y + 40,
+                color: '#38bdf8', dashed: true, alpha: 1.0, label: anim.m.title
+              });
+            } else if (anim.m.type === 'DEFENSE') {
+              tacticsTrajectories.push({
+                x1: anim.actionPt.x - 40, y1: anim.actionPt.y - 20,
+                x2: anim.actionPt.x, y2: anim.actionPt.y,
+                color: '#818cf8', dashed: true, alpha: 1.0, label: anim.m.title
+              });
+            }
+          }
+        } else if (anim.step === 1) {
+          anim.tacticalTag = `[🎯 ${anim.m.title} 분석 시퀀스]`;
+          anim.tagColor = '#10b981';
+
+          if (anim.m.type === 'SHOT') {
+            tacticsBall.x += (anim.goalPt.x - tacticsBall.x) * 0.06 * tacticsSpeed;
+            tacticsBall.y += (anim.goalPt.y - tacticsBall.y) * 0.06 * tacticsSpeed;
+          }
+          if (anim.timer >= 70) {
+            anim.step = 2;
+            anim.timer = 0;
+            anim.finished = true;
+            updateCommentary('REVIEW', `[리플레이 완료] 🎯 ${anim.pm.player_name}: ${anim.m.title} 분석 완료. [🔄 시퀀스 리플레이 다시보기] 지원.`);
+          }
+        } else if (anim.step === 2) {
+          anim.finished = true;
+        }
+      }
+    }
+
+    // Play Player Moment
+    function playPlayerMoment(playerName, momentIdx) {
+      if (!tacticsData || !tacticsData.player_moments) return;
+      const pm = tacticsData.player_moments.find(p => p.player_name === playerName || p.player_en.includes(playerName));
+      if (!pm || !pm.moments[momentIdx]) return;
+
+      const m = pm.moments[momentIdx];
+      isTacticsRunning = true;
+      const icon = document.getElementById('btn-tactics-play-icon');
+      const text = document.getElementById('btn-tactics-play-text');
+      if (icon && text) {
+        icon.textContent = '⏸️';
+        text.textContent = '일시정지';
+      }
+
+      currentReplayContext = { mode: 'match', highlightId: null, playerName: playerName, momentIdx: momentIdx };
+      tacticsTrajectories = [];
+      activeHighlightAnim = null;
+
+      document.getElementById('tactics-clock').textContent = m.time;
+      updateCommentary('MOMENT', `[${m.time}] ${pm.player_name} (${pm.role}): ${m.title} - ${m.desc}`);
+
+      const targetPlayer = tacticsPlayers.find(p => p.name === pm.player_name && p.team === 'home') || tacticsPlayers.find(p => p.team === 'home' && p.id === 'H11');
+      const actionPt = statsBombToPixel(m.location[0], m.location[1]);
+
+      if (targetPlayer) {
+        targetPlayer.x = actionPt.x - 20;
+        targetPlayer.y = actionPt.y;
+        tacticsSelectedPlayerId = targetPlayer.id;
+      }
+
+      tacticsBall.x = actionPt.x - 12;
+      tacticsBall.y = actionPt.y;
+
+      const goalPt = { x: TACTICS_PITCH_MARGIN + TACTICS_PITCH_W - 10, y: TACTICS_PITCH_MARGIN + TACTICS_PITCH_H * 0.45 };
+      const oppGk = tacticsPlayers.find(p => p.team === 'away' && p.pos === 'GK');
+
+      activeHighlightAnim = {
+        type: 'WC_MOMENT',
+        step: 0,
+        timer: 0,
+        m: m,
+        pm: pm,
+        targetPlayer: targetPlayer,
+        oppGk: oppGk,
+        actionPt: actionPt,
+        goalPt: goalPt
+      };
+    }
+
+    // Dynamic Player Tactical Highlights Loader
+    async function loadPlayerTacticsHighlights(playerName) {
+      if (!playerName) return;
+      try {
+        updateCommentary('TACTIC', `스카우팅 타겟 [${playerName}] 공식 전술 데이터 & 2D 매치 리플레이 분석 중...`);
+        const res = await fetch(`/api/tactics/player-highlights?player_name=${encodeURIComponent(playerName)}`);
+        if (!res.ok) {
+          console.warn('Player highlights not found, fallback to showcase');
+          return;
+        }
+        const data = await res.json();
+        currentPlayerTacticsData = data;
+        tacticsMode = 'player';
+
+        // Update Mode Button styling & dynamic titles
+        const btnMatch = document.getElementById('tactics-mode-match');
+        const btnPlayer = document.getElementById('tactics-mode-player');
+        const btnSim = document.getElementById('tactics-mode-sim');
+        const btnMatchTitle = document.getElementById('tactics-mode-match-title');
+        const btnMatchSub = document.getElementById('tactics-mode-match-sub');
+        const btnPlayerTitle = document.getElementById('tactics-mode-player-title');
+        const btnPlayerSub = document.getElementById('tactics-mode-player-sub');
+
+        if (btnMatch) btnMatch.className = 'px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-300 hover:text-white bg-zinc-800 hover:bg-zinc-700 transition flex items-center gap-1.5';
+        if (btnSim) btnSim.className = 'px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-300 hover:text-white bg-zinc-800 hover:bg-zinc-700 transition flex items-center gap-1.5';
+        if (btnPlayer) {
+          btnPlayer.className = 'px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 text-white transition flex items-center gap-1.5 shadow-sm';
+        }
+
+        if (btnMatchTitle) btnMatchTitle.textContent = `🏆 ${data.match_info.home_team} 공식 경기`;
+        if (btnMatchSub) btnMatchSub.textContent = `(${data.match_info.home_team} vs ${data.match_info.away_team})`;
+
+        if (btnPlayerTitle) btnPlayerTitle.textContent = `🎯 ${data.player_info.name_ko} 시그니처 3모먼트`;
+        if (btnPlayerSub) btnPlayerSub.textContent = `(${data.player_info.position} 득점·키패스·볼탈환)`;
+
+        // 1. Update Scoreboard
+        const homeEl = document.getElementById('tactics-team-home');
+        const awayEl = document.getElementById('tactics-team-away');
+        const formHomeEl = document.getElementById('tactics-form-home');
+        const formAwayEl = document.getElementById('tactics-form-away');
+        if (homeEl) homeEl.textContent = data.match_info.home_team;
+        if (awayEl) awayEl.textContent = data.match_info.away_team;
+        if (formHomeEl) formHomeEl.textContent = `(${data.match_info.home_formation})`;
+        if (formAwayEl) formAwayEl.textContent = `(${data.match_info.away_formation})`;
+        document.getElementById('tactics-score-home').textContent = '2';
+        document.getElementById('tactics-score-away').textContent = '1';
+        document.getElementById('tactics-status-badge').textContent = `${data.player_info.name_ko} (${data.match_info.home_team}) 전술 분석`;
+
+        // Update Pitch Legend with actual club names & stars
+        const legHome = document.getElementById('legend-home-team');
+        const legAway = document.getElementById('legend-away-team');
+        if (legHome) {
+          legHome.innerHTML = `🔵 <b class="text-zinc-200">${data.match_info.home_team}</b>: ${data.match_info.home_top_names || ''} 등`;
+        }
+        if (legAway) {
+          legAway.innerHTML = `🔴 <b class="text-zinc-200">${data.match_info.away_team}</b>: ${data.match_info.away_top_names || ''} 등`;
+        }
+
+        // Update Direct External Video Watch Link
+        const ytId = data.match_info.youtube_highlight_id || 'h2EwOys6evI';
+        const ytExtBtn = document.getElementById('tactics-yt-external-btn');
+        if (ytExtBtn) {
+          ytExtBtn.href = data.match_info.youtube_watch_url || `https://www.youtube.com/watch?v=${ytId}`;
+        }
+
+        // 2. Load Home & Away Rosters onto 2D Pitch
+        tacticsPlayers = [];
+        data.home_roster.forEach(p => {
+          const pt = tacticsGridToPixel(p.col, p.row);
+          tacticsPlayers.push({
+            ...p,
+            team: 'home',
+            baseCol: p.col,
+            baseRow: p.row,
+            x: pt.x,
+            y: pt.y,
+            tx: pt.x,
+            ty: pt.y,
+            angle: 0,
+            stamina: 96
+          });
+        });
+
+        data.away_roster.forEach(p => {
+          const pt = tacticsGridToPixel(p.col, p.row);
+          tacticsPlayers.push({
+            ...p,
+            team: 'away',
+            baseCol: p.col,
+            baseRow: p.row,
+            x: pt.x,
+            y: pt.y,
+            tx: pt.x,
+            ty: pt.y,
+            angle: Math.PI,
+            stamina: 94
+          });
+        });
+
+        // Focus spotlight on target player
+        tacticsSelectedPlayerId = data.player_info.target_slot_id;
+
+        // 3. Update Video Iframe with Verified Embed-Allowed Clip
+        const ytFrame = document.getElementById('tactics-yt-frame');
+        if (ytFrame) {
+          ytFrame.src = `https://www.youtube.com/embed/${ytId}?enablejsapi=1&rel=0&modestbranding=1`;
+          ytFrame.title = `${data.player_info.name} Official Highlights`;
+        }
+
+        // 4. Update Opta Stats Card with Player's Real Metrics
+        renderPlayerOptaStats(data);
+
+        // 5. Update Quick Chapter Buttons
+        renderPlayerChapterButtons(data);
+
+        // 6. Update Timeline Event Log
+        renderPlayerEventLog(data);
+
+        // 7. Auto-play Moment 1 (Signature Action)
+        playTargetPlayerHighlight(0);
+
+        if (!tacticsAnimId) {
+          tacticsLoop();
+        }
+      } catch (err) {
+        console.error('Error loading player tactics highlights:', err);
+      }
+    }
+
+    // Play Target Player's Custom Moment (0: Signature Goal/Finishing, 1: Key Pass/Assist, 2: Recovery/Carry)
+    function playTargetPlayerHighlight(momentIdx) {
+      if (!currentPlayerTacticsData || !currentPlayerTacticsData.key_match_highlights) return;
+      const m = currentPlayerTacticsData.key_match_highlights[momentIdx];
+      if (!m) return;
+
+      isTacticsRunning = true;
+      const icon = document.getElementById('btn-tactics-play-icon');
+      const text = document.getElementById('btn-tactics-play-text');
+      if (icon && text) {
+        icon.textContent = '⏸️';
+        text.textContent = '일시정지';
+      }
+
+      currentReplayContext = { mode: 'player', momentIdx: momentIdx, highlightId: null };
+      tacticsTrajectories = [];
+      activeHighlightAnim = null;
+
+      // Update UI Clock, Commentary & Scores
+      document.getElementById('tactics-clock').textContent = m.display_time;
+      updateCommentary(m.type, `[${m.display_time}] ${m.title}: ${m.description}`);
+
+      const targetPlayer = tacticsPlayers.find(p => p.is_target || p.id === m.target_player_id) || tacticsPlayers.find(p => p.team === 'home' && p.pos !== 'GK') || tacticsPlayers[10];
+      if (!targetPlayer) return;
+
+      tacticsSelectedPlayerId = targetPlayer.id;
+
+      const actionPt = statsBombToPixel(m.start_location[0], m.start_location[1]);
+      const goalCenterPt = { x: TACTICS_PITCH_MARGIN + TACTICS_PITCH_W - 8, y: TACTICS_PITCH_MARGIN + TACTICS_PITCH_H * 0.5 };
+      const oppGk = tacticsPlayers.find(p => p.team === 'away' && p.pos === 'GK') || tacticsPlayers[11];
+
+      const homeTeammates = tacticsPlayers.filter(p => p.team === 'home' && p.id !== targetPlayer.id && p.pos !== 'GK');
+      const oppDefender = tacticsPlayers.find(p => p.team === 'away' && (p.pos === 'CB' || p.pos === 'DM')) || tacticsPlayers[13];
+
+      if (m.type === 'GOAL') {
+        document.getElementById('tactics-score-home').textContent = '2';
+        document.getElementById('tactics-score-away').textContent = '1';
+
+        const buildupPasser = homeTeammates.find(p => p.pos === 'DM' || p.pos === 'CM' || p.pos === 'CB') || homeTeammates[0] || tacticsPlayers[0];
+        const assister = homeTeammates.find(p => p.id !== buildupPasser.id && (p.pos === 'LW' || p.pos === 'RW' || p.pos === 'AM' || p.pos === 'CF')) || homeTeammates[1] || homeTeammates[0];
+
+        const buildupStartPt = { x: Math.max(TACTICS_PITCH_MARGIN + 110, actionPt.x - 170), y: actionPt.y + (actionPt.y > TACTICS_PITCH_MARGIN + TACTICS_PITCH_H * 0.5 ? -35 : 35) };
+        const assisterStartPt = { x: actionPt.x - 85, y: actionPt.y - 65 };
+        const assisterCrossPt = { x: actionPt.x - 35, y: actionPt.y - 45 };
+        const targetStartPt = { x: actionPt.x - 80, y: actionPt.y + 25 };
+
+        if (buildupPasser) {
+          buildupPasser.x = buildupStartPt.x;
+          buildupPasser.y = buildupStartPt.y;
+          buildupPasser.angle = Math.atan2(assisterStartPt.y - buildupStartPt.y, assisterStartPt.x - buildupStartPt.x);
+        }
+
+        if (assister) {
+          assister.x = assisterStartPt.x - 20;
+          assister.y = assisterStartPt.y - 10;
+          assister.angle = Math.atan2(buildupStartPt.y - assister.y, buildupStartPt.x - assister.x);
+        }
+
+        targetPlayer.x = targetStartPt.x;
+        targetPlayer.y = targetStartPt.y;
+        targetPlayer.angle = Math.atan2(actionPt.y - targetStartPt.y, actionPt.x - targetStartPt.x);
+
+        if (oppDefender) {
+          oppDefender.x = actionPt.x + 25;
+          oppDefender.y = actionPt.y - 12;
+        }
+        if (oppGk) {
+          oppGk.x = TACTICS_PITCH_MARGIN + TACTICS_PITCH_W - 20;
+          oppGk.y = goalCenterPt.y;
+        }
+
+        tacticsBall.x = buildupStartPt.x;
+        tacticsBall.y = buildupStartPt.y;
+        tacticsBall.inFlight = true;
+
+        activeHighlightAnim = {
+          type: 'TARGET_GOAL',
+          step: 0,
+          timer: 0,
+          m: m,
+          targetPlayer: targetPlayer,
+          buildupPasser: buildupPasser,
+          assister: assister,
+          oppDefender: oppDefender,
+          oppGk: oppGk,
+          tacticalTag: '[📐 시야 & 1차 빌드업 전개]',
+          tagColor: '#38bdf8',
+          actionPt: actionPt,
+          buildupStartPt: buildupStartPt,
+          assisterStartPt: assisterStartPt,
+          assisterCrossPt: assisterCrossPt,
+          targetStartPt: targetStartPt,
+          goalPt: { x: TACTICS_PITCH_MARGIN + TACTICS_PITCH_W - 6, y: actionPt.y * 0.25 + goalCenterPt.y * 0.75 }
+        };
+      } else if (m.type === 'KEY_PASS') {
+        const targetPt = statsBombToPixel(m.target_location[0], m.target_location[1]);
+        const buildupPasser = homeTeammates.find(p => p.pos === 'DM' || p.pos === 'CB' || p.pos === 'LB' || p.pos === 'RB') || homeTeammates[0];
+        const forwardRunner = homeTeammates.find(p => p.id !== buildupPasser.id && (p.pos === 'CF' || p.pos === 'LW' || p.pos === 'RW')) || homeTeammates[1] || homeTeammates[0];
+
+        const buildupStartPt = { x: Math.max(TACTICS_PITCH_MARGIN + 100, actionPt.x - 140), y: actionPt.y + 30 };
+        const playmakerStartPt = { x: actionPt.x - 25, y: actionPt.y };
+
+        if (buildupPasser) {
+          buildupPasser.x = buildupStartPt.x;
+          buildupPasser.y = buildupStartPt.y;
+          buildupPasser.angle = Math.atan2(actionPt.y - buildupStartPt.y, actionPt.x - buildupStartPt.x);
+        }
+
+        targetPlayer.x = playmakerStartPt.x;
+        targetPlayer.y = playmakerStartPt.y;
+        targetPlayer.angle = Math.atan2(targetPt.y - playmakerStartPt.y, targetPt.x - playmakerStartPt.x);
+
+        if (forwardRunner) {
+          forwardRunner.x = actionPt.x + 20;
+          forwardRunner.y = actionPt.y + 15;
+          forwardRunner.angle = Math.atan2(targetPt.y - forwardRunner.y, targetPt.x - forwardRunner.x);
+        }
+
+        if (oppGk) {
+          oppGk.x = TACTICS_PITCH_MARGIN + TACTICS_PITCH_W - 20;
+          oppGk.y = goalCenterPt.y;
+        }
+
+        tacticsBall.x = buildupStartPt.x;
+        tacticsBall.y = buildupStartPt.y;
+        tacticsBall.inFlight = true;
+
+        activeHighlightAnim = {
+          type: 'TARGET_KEY_PASS',
+          step: 0,
+          timer: 0,
+          m: m,
+          targetPlayer: targetPlayer,
+          buildupPasser: buildupPasser,
+          forwardRunner: forwardRunner,
+          oppGk: oppGk,
+          tacticalTag: '[🔄 탈압박 볼 키핑 & 전방 시야 확보]',
+          tagColor: '#38bdf8',
+          buildupStartPt: buildupStartPt,
+          actionPt: actionPt,
+          targetPt: targetPt,
+          goalPt: { x: TACTICS_PITCH_MARGIN + TACTICS_PITCH_W - 8, y: TACTICS_PITCH_MARGIN + TACTICS_PITCH_H * 0.46 }
+        };
+      } else if (m.type === 'RECOVERY') {
+        const carryEnd = statsBombToPixel(m.carry_end[0], m.carry_end[1]);
+        const oppCarrier = tacticsPlayers.find(p => p.team === 'away' && p.pos !== 'GK') || tacticsPlayers[15];
+        const wingSupport = homeTeammates.find(p => p.id !== targetPlayer.id && (p.pos === 'CF' || p.pos === 'LW' || p.pos === 'RW' || p.pos === 'AM' || p.pos === 'CM')) || homeTeammates[0];
+
+        if (oppCarrier) {
+          oppCarrier.x = actionPt.x - 22;
+          oppCarrier.y = actionPt.y - 12;
+          oppCarrier.angle = 0;
+        }
+
+        if (wingSupport) {
+          wingSupport.x = carryEnd.x + 35;
+          wingSupport.y = carryEnd.y + 20;
+          wingSupport.angle = Math.atan2(carryEnd.y - wingSupport.y, carryEnd.x - wingSupport.x);
+        }
+
+        targetPlayer.x = actionPt.x - 55;
+        targetPlayer.y = actionPt.y + 22;
+        targetPlayer.angle = Math.atan2(actionPt.y - targetPlayer.y, actionPt.x - targetPlayer.x);
+
+        tacticsBall.x = actionPt.x - 22;
+        tacticsBall.y = actionPt.y - 12;
+        tacticsBall.inFlight = false;
+
+        activeHighlightAnim = {
+          type: 'TARGET_RECOVERY',
+          step: 0,
+          timer: 0,
+          m: m,
+          targetPlayer: targetPlayer,
+          oppCarrier: oppCarrier,
+          wingSupport: wingSupport,
+          tacticalTag: '[🛡️ 상대 빌드업 경로 예측 고강도 압박]',
+          tagColor: '#818cf8',
+          actionPt: actionPt,
+          carryEnd: carryEnd
+        };
+      }
+    }
+
+    function renderPlayerChapterButtons(data) {
+      const container = document.getElementById('tactics-chapter-buttons');
+      if (!container || !data || !data.key_match_highlights) return;
+
+      const pName = data.player_info.name_ko || data.player_info.name;
+      const hintEl = document.getElementById('tactics-chapter-hint');
+      if (hintEl) {
+        hintEl.textContent = `타겟: [${pName} (${data.player_info.position})] ${data.player_info.club} vs ${data.match_info.away_team} 전술 리플레이`;
+      }
+
+      let html = '';
+      const reelActive = isReelPlaying
+        ? 'bg-amber-500 text-black border-amber-400 font-extrabold shadow-lg animate-pulse'
+        : 'bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-300 border-amber-500/40 hover:bg-amber-500/30';
+      html += `
+        <button onclick="playPlayerFullMatchReel()"
+          class="px-3 py-1.5 rounded-lg border ${reelActive} text-xs font-bold transition flex items-center gap-1.5 shadow-md">
+          <span>${isReelPlaying ? '⏸️' : '▶️'} 90분 종합 활약상 연속 재생 (Full FM Reel)</span>
+        </button>
+      `;
+
+      data.key_match_highlights.forEach((m, idx) => {
+        const isGoal = m.type === 'GOAL';
+        const colorClass = isGoal ? 'text-emerald-400 border-emerald-500/40 bg-emerald-500/10' : (m.type === 'KEY_PASS' ? 'text-sky-400 border-sky-500/40 bg-sky-500/10' : 'text-indigo-400 border-indigo-500/40 bg-indigo-500/10');
+        const icon = isGoal ? '⚽' : (m.type === 'KEY_PASS' ? '🎯' : '🛡️');
+        html += `
+          <button onclick="playTargetPlayerHighlight(${idx})"
+            class="px-2.5 py-1.5 rounded-lg border ${colorClass} hover:opacity-90 text-xs font-semibold transition flex items-center gap-1.5 shadow-sm">
+            <span class="font-mono font-bold">${m.display_time}</span>
+            <span>${icon} ${m.title}</span>
+          </button>
+        `;
+      });
+
+      html += `
+        <button onclick="resetToWorldCupShowcase()"
+          class="px-2 py-1.5 rounded-lg bg-[#0e1117] hover:bg-zinc-800 border border-white/[0.08] text-xs text-zinc-400 hover:text-white transition flex items-center gap-1.5">
+          <span>🇰🇷 2022 카타르 월드컵 쇼케이스(대한민국 vs 포르투갈)로 변경</span>
+        </button>
+      `;
+
+      container.innerHTML = html;
+    }
+
+    function renderPlayerEventLog(data) {
+      const logEl = document.getElementById('tactics-event-log');
+      if (!logEl || !data || !data.key_match_highlights) return;
+
+      let html = '';
+      data.key_match_highlights.forEach((m, idx) => {
+        const isGoal = m.type === 'GOAL';
+        const badgeColor = isGoal ? 'text-emerald-400' : (m.type === 'KEY_PASS' ? 'text-sky-400' : 'text-indigo-400');
+        const metric = m.xg ? `xG ${m.xg}` : (m.xa ? `xA ${m.xa}` : m.type);
+        html += `
+          <div onclick="playTargetPlayerHighlight(${idx})"
+            class="p-2 rounded-lg bg-[#0e1117] hover:bg-zinc-800 border border-white/[0.04] cursor-pointer transition flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <span class="font-mono text-[11px] font-bold ${badgeColor}">${m.display_time}</span>
+              <span class="font-semibold text-white">${m.title}</span>
+            </div>
+            <span class="text-[10px] px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-400 font-mono">${metric}</span>
+          </div>
+        `;
+      });
+
+      logEl.innerHTML = html;
+    }
+
+    function renderPlayerOptaStats(data) {
+      const p = data.player_info;
+      const s = data.opta_stats || {};
+
+      const possHome = document.getElementById('stat-poss-home');
+      const possAway = document.getElementById('stat-poss-away');
+      const barPossHome = document.getElementById('bar-poss-home');
+      const barPossAway = document.getElementById('bar-poss-away');
+      if (possHome && possAway && barPossHome && barPossAway) {
+        possHome.textContent = '58%';
+        possAway.textContent = '42%';
+        barPossHome.style.width = '58%';
+        barPossAway.style.width = '42%';
+      }
+
+      const shotsHome = document.getElementById('stat-shots-home');
+      const shotsAway = document.getElementById('stat-shots-away');
+      if (shotsHome && shotsAway) {
+        const g90 = s.goals_per90 ? `${s.goals_per90}G/90` : '15 (7)';
+        shotsHome.textContent = `${g90} (${p.position})`;
+        shotsAway.textContent = '10 (4)';
+      }
+
+      const xgHome = document.getElementById('stat-xg-home');
+      const xgAway = document.getElementById('stat-xg-away');
+      const barXgHome = document.getElementById('bar-xg-home');
+      const barXgAway = document.getElementById('bar-xg-away');
+      if (xgHome && xgAway && barXgHome && barXgAway) {
+        const xgVal = s.xg_per90 ? s.xg_per90.toFixed(2) : '1.45';
+        xgHome.textContent = `${xgVal} xG/90`;
+        xgAway.textContent = '0.85';
+        barXgHome.style.width = '63%';
+        barXgAway.style.width = '37%';
+      }
+
+      const passHome = document.getElementById('stat-pass-home');
+      const passAway = document.getElementById('stat-pass-away');
+      if (passHome && passAway) {
+        const kp = s.key_passes_per90 ? `${s.key_passes_per90} KP/90` : '512';
+        passHome.textContent = kp;
+        passAway.textContent = '380';
+      }
+    }
+
+    function resetToWorldCupShowcase() {
+      currentPlayerTacticsData = null;
+      tacticsMode = 'match';
+
+      const btnMatch = document.getElementById('tactics-mode-match');
+      const btnPlayer = document.getElementById('tactics-mode-player');
+      const btnSim = document.getElementById('tactics-mode-sim');
+      if (btnMatch) btnMatch.className = 'px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 text-white transition flex items-center gap-1.5 shadow-sm';
+      if (btnPlayer) {
+        btnPlayer.className = 'px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-300 hover:text-white bg-zinc-800 hover:bg-zinc-700 transition flex items-center gap-1.5';
+      }
+      if (btnSim) btnSim.className = 'px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-300 hover:text-white bg-zinc-800 hover:bg-zinc-700 transition flex items-center gap-1.5';
+
+      const btnMatchTitle = document.getElementById('tactics-mode-match-title');
+      const btnMatchSub = document.getElementById('tactics-mode-match-sub');
+      if (btnMatchTitle) btnMatchTitle.textContent = '🏆 실제 경기 하이라이트';
+      if (btnMatchSub) btnMatchSub.textContent = '(대한민국 2:1 포르투갈)';
+
+      const btnPlayerTitle = document.getElementById('tactics-mode-player-title');
+      const btnPlayerSub = document.getElementById('tactics-mode-player-sub');
+      if (btnPlayerTitle) btnPlayerTitle.textContent = '👤 선수별 집중 모먼트';
+      if (btnPlayerSub) btnPlayerSub.textContent = '(손흥민·이강인·황희찬·김민재)';
+
+      const homeEl = document.getElementById('tactics-team-home');
+      const awayEl = document.getElementById('tactics-team-away');
+      const formHomeEl = document.getElementById('tactics-form-home');
+      const formAwayEl = document.getElementById('tactics-form-away');
+      if (homeEl) homeEl.textContent = '대한민국';
+      if (awayEl) awayEl.textContent = '포르투갈';
+      if (formHomeEl) formHomeEl.textContent = '(4-2-3-1)';
+      if (formAwayEl) formAwayEl.textContent = '(4-3-3)';
+      document.getElementById('tactics-score-home').textContent = '2';
+      document.getElementById('tactics-score-away').textContent = '1';
+      document.getElementById('tactics-status-badge').textContent = 'FT 16강 진출';
+
+      const legHome = document.getElementById('legend-home-team');
+      const legAway = document.getElementById('legend-away-team');
+      if (legHome) legHome.innerHTML = '🔵 <b class="text-zinc-200">대한민국</b>: 손흥민·황희찬·이강인·김민재 등';
+      if (legAway) legAway.innerHTML = '🔴 <b class="text-zinc-200">포르투갈</b>: 호날두·페페·달로트·호르타 등';
+
+      const ytExtBtn = document.getElementById('tactics-yt-external-btn');
+      if (ytExtBtn) ytExtBtn.href = 'https://www.youtube.com/watch?v=DVNwiAPuPTY';
+
+      initTacticsPlayers();
+      renderDefaultChapterButtons();
+      renderTacticsEventLog();
+
+      const ytFrame = document.getElementById('tactics-yt-frame');
+      if (ytFrame) {
+        ytFrame.src = 'https://www.youtube.com/embed/DVNwiAPuPTY?enablejsapi=1&rel=0&modestbranding=1';
+        ytFrame.title = '2022 World Cup South Korea vs Portugal Highlight';
+      }
+
+      playMatchHighlight('goal_kor_02');
+    }
+
+    function renderDefaultChapterButtons() {
+      const container = document.getElementById('tactics-chapter-buttons');
+      if (!container) return;
+      const hintEl = document.getElementById('tactics-chapter-hint');
+      if (hintEl) hintEl.textContent = '버튼 클릭 시 해당 좌표 2D 피치 이동 및 영상 싱크 재생';
+
+      container.innerHTML = `
+        <button onclick="playMatchHighlight('goal_por_01')"
+          class="px-2.5 py-1.5 rounded-lg bg-[#0e1117] hover:bg-zinc-800 border border-white/[0.08] text-xs text-zinc-300 hover:text-white transition flex items-center gap-1.5">
+          <span class="text-rose-400 font-mono font-bold">04:53</span>
+          <span>⚽ 호르타 선제골 (xG 0.29)</span>
+        </button>
+        <button onclick="playMatchHighlight('goal_kor_01')"
+          class="px-2.5 py-1.5 rounded-lg bg-[#0e1117] hover:bg-zinc-800 border border-white/[0.08] text-xs text-zinc-300 hover:text-white transition flex items-center gap-1.5">
+          <span class="text-emerald-400 font-mono font-bold">26:43</span>
+          <span>⚽ 김영권 동점골 (이강인 코너킥 기점, xG 0.62)</span>
+        </button>
+        <button onclick="playMatchHighlight('goal_kor_02')"
+          class="px-2.5 py-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/40 text-xs text-emerald-300 hover:text-white transition flex items-center gap-1.5 font-semibold">
+          <span class="text-emerald-400 font-mono font-bold">90:28</span>
+          <span>⚽ 황희찬 극장 역전 결승골 (손흥민 70m 질주 어시스트, xG 0.42)</span>
+        </button>
+        <button onclick="playPlayerMoment('손흥민', 0)"
+          class="px-2.5 py-1.5 rounded-lg bg-[#0e1117] hover:bg-zinc-800 border border-white/[0.08] text-xs text-zinc-300 hover:text-white transition flex items-center gap-1.5">
+          <span class="text-amber-400 font-mono font-bold">15:21</span>
+          <span>🎯 손흥민 감아차기 슈팅</span>
+        </button>
+        <button onclick="playPlayerMoment('이강인', 1)"
+          class="px-2.5 py-1.5 rounded-lg bg-[#0e1117] hover:bg-zinc-800 border border-white/[0.08] text-xs text-zinc-300 hover:text-white transition flex items-center gap-1.5">
+          <span class="text-blue-400 font-mono font-bold">41:18</span>
+          <span>🎯 이강인 30m 킬스루패스</span>
+        </button>
+        <button onclick="playPlayerMoment('김민재', 1)"
+          class="px-2.5 py-1.5 rounded-lg bg-[#0e1117] hover:bg-zinc-800 border border-white/[0.08] text-xs text-zinc-300 hover:text-white transition flex items-center gap-1.5">
+          <span class="text-indigo-400 font-mono font-bold">34:20</span>
+          <span>🛡️ 김민재 호날두 1:1 차단 태클</span>
+        </button>
+      `;
+    }
+
+    // Cross-link from Scouting Desk to Tactics Desk
+    async function openTacticsForSelectedPlayer() {
+      showPage('page-tactics');
+
+      const p = selectedPlayer;
+      if (!p) {
+        resetToWorldCupShowcase();
+        return;
+      }
+
+      const pName = p.name || p.name_ko || '';
+      await loadPlayerTacticsHighlights(pName);
+    }
+
+    // Switch between Match, Player Moments & Autonomous FM Sim
+    function switchTacticsMode(mode) {
+      tacticsMode = mode;
+      const btnMatch = document.getElementById('tactics-mode-match');
+      const btnPlayer = document.getElementById('tactics-mode-player');
+      const btnSim = document.getElementById('tactics-mode-sim');
+
+      [btnMatch, btnPlayer, btnSim].forEach(btn => {
+        if (!btn) return;
+        btn.className = 'px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-300 hover:text-white bg-zinc-800 hover:bg-zinc-700 transition flex items-center gap-1.5';
+      });
+
+      if (mode === 'match') {
+        if (btnMatch) btnMatch.className = 'px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 text-white transition flex items-center gap-1.5 shadow-sm';
+        if (currentPlayerTacticsData) {
+          // Stay in target player's club match context
+          playTargetPlayerHighlight(0);
+          updateCommentary('MATCH', `[공식 경기 전술] ${currentPlayerTacticsData.match_info.home_team} 2 : 1 ${currentPlayerTacticsData.match_info.away_team} 소속팀 공식 전술 대형 & 하이라이트`);
+        } else if (selectedPlayer) {
+          loadPlayerTacticsHighlights(selectedPlayer.name || selectedPlayer.name_ko);
+        } else {
+          resetToWorldCupShowcase();
+        }
+      } else if (mode === 'player') {
+        if (btnPlayer) btnPlayer.className = 'px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 text-white transition flex items-center gap-1.5 shadow-sm';
+        if (currentPlayerTacticsData) {
+          playTargetPlayerHighlight(0);
+        } else if (selectedPlayer) {
+          loadPlayerTacticsHighlights(selectedPlayer.name || selectedPlayer.name_ko);
+        } else {
+          loadPlayerTacticsHighlights('손흥민');
+        }
+      } else if (mode === 'sim') {
+        if (btnSim) btnSim.className = 'px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 text-white transition flex items-center gap-1.5 shadow-sm';
+        tacticsTrajectories = [];
+        activeHighlightAnim = null;
+        updateCommentary('SIM', 'FM 2D 자율 시뮬레이션 가동! 18×12 바둑판 그리드 상에서 22명 AI 선수가 자율적으로 전술 패스 및 압박을 수행합니다.');
+      }
+    }
+
+    function toggleTacticsPlay() {
+      isTacticsRunning = !isTacticsRunning;
+      const icon = document.getElementById('btn-tactics-play-icon');
+      const text = document.getElementById('btn-tactics-play-text');
+      if (icon && text) {
+        icon.textContent = isTacticsRunning ? '⏸️' : '▶️';
+        text.textContent = isTacticsRunning ? '일시정지' : '재생';
+      }
+    }
+
+    function setTacticsSpeed(s) {
+      tacticsSpeed = s;
+      ['btn-speed-1', 'btn-speed-2', 'btn-speed-4'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.className = 'px-2 py-1 rounded text-zinc-400 hover:text-white';
+      });
+      const activeEl = document.getElementById(`btn-speed-${s}`);
+      if (activeEl) activeEl.className = 'px-2 py-1 rounded text-white bg-zinc-800 font-semibold';
+    }
+
+    function toggleTacticsOverlay(key) {
+      const chk = document.getElementById(`chk-${key}`);
+      if (chk) tacticsOverlays[key] = chk.checked;
+    }
+
+    function resetTacticsMatch() {
+      isTacticsRunning = true;
+      const icon = document.getElementById('btn-tactics-play-icon');
+      const text = document.getElementById('btn-tactics-play-text');
+      if (icon && text) {
+        icon.textContent = '⏸️';
+        text.textContent = '일시정지';
+      }
+
+      tacticsTrajectories = [];
+      activeHighlightAnim = null;
+
+      if (currentReplayContext.mode === 'player' && currentPlayerTacticsData) {
+        playTargetPlayerHighlight(currentReplayContext.momentIdx || 0);
+      } else if (currentReplayContext.mode === 'match') {
+        if (currentReplayContext.highlightId) {
+          playMatchHighlight(currentReplayContext.highlightId);
+        } else if (currentReplayContext.playerName !== null) {
+          playPlayerMoment(currentReplayContext.playerName, currentReplayContext.momentIdx || 0);
+        } else {
+          playMatchHighlight('goal_kor_02');
+        }
+      } else if (currentPlayerTacticsData) {
+        playTargetPlayerHighlight(0);
+      } else {
+        initTacticsPlayers();
+        playMatchHighlight('goal_kor_02');
+      }
+    }
+
+    function replayCurrentHighlight() {
+      resetTacticsMatch();
+    }
+
+    function updateCommentary(badge, text) {
+      const badgeEl = document.getElementById('tactics-comm-badge');
+      const textEl = document.getElementById('tactics-comm-text');
+      if (badgeEl) badgeEl.textContent = badge;
+      if (textEl) textEl.textContent = text;
+    }
+
+    function triggerGoalBanner(text) {
+      const banner = document.getElementById('tactics-goal-banner');
+      const goalText = document.getElementById('tactics-goal-text');
+      if (banner && goalText) {
+        goalText.textContent = text;
+        banner.classList.remove('hidden');
+        tacticsGoalBannerTimer = 180;
+      }
+    }
+
+    // Video Sync Seek (YouTube iframe or local MP4 video)
+    function seekTacticsVideo(timeInSec) {
+      const ytFrame = document.getElementById('tactics-yt-frame');
+      const localVid = document.getElementById('tactics-local-video');
+      const statusEl = document.getElementById('video-sync-status');
+
+      if (localVid && !localVid.classList.contains('hidden')) {
+        localVid.currentTime = timeInSec;
+        localVid.play().catch(() => {});
+        if (statusEl) statusEl.textContent = `SYNC: ${Math.floor(timeInSec / 60)}:${('0' + (timeInSec % 60)).slice(-2)}`;
+      } else if (ytFrame) {
+        // Reload YouTube embed with new start parameter using active match's videoId
+        const videoId = (currentPlayerTacticsData && currentPlayerTacticsData.match_info && currentPlayerTacticsData.match_info.youtube_highlight_id)
+          ? currentPlayerTacticsData.match_info.youtube_highlight_id
+          : 'DVNwiAPuPTY';
+        ytFrame.src = `https://www.youtube.com/embed/${videoId}?enablejsapi=1&rel=0&modestbranding=1&start=${Math.floor(timeInSec)}&autoplay=1`;
+        if (statusEl) statusEl.textContent = `SYNC: ${Math.floor(timeInSec / 60)}:${('0' + (timeInSec % 60)).slice(-2)}`;
+      }
+    }
+
+    function handleTacticsVideoUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const ytFrame = document.getElementById('tactics-yt-frame');
+      const localVid = document.getElementById('tactics-local-video');
+      const statusEl = document.getElementById('video-sync-status');
+
+      if (ytFrame && localVid) {
+        ytFrame.classList.add('hidden');
+        localVid.classList.remove('hidden');
+        localVid.src = URL.createObjectURL(file);
+        localVid.play().catch(() => {});
+        if (statusEl) statusEl.textContent = `LOCAL MP4: ${file.name.slice(0, 15)}...`;
+      }
+    }
+
+    // =========================================================================
+    // Main 2D Tactical Pitch Canvas Render Engine
+    // =========================================================================
+    function drawTacticsPitch() {
+      if (!tacticsCtx || !tacticsCanvas) return;
+      const ctx = tacticsCtx;
+      const W = tacticsCanvas.width;
+      const H = tacticsCanvas.height;
+      const margin = TACTICS_PITCH_MARGIN;
+      const pw = TACTICS_PITCH_W;
+      const ph = TACTICS_PITCH_H;
+
+      ctx.clearRect(0, 0, W, H);
+
+      // Pitch Grass Background
+      ctx.fillStyle = '#061714';
+      ctx.fillRect(0, 0, W, H);
+
+      // Subtle Alternating Turf Stripes (18 vertical stripes)
+      for (let c = 0; c < TACTICS_GRID_COLS; c++) {
+        ctx.fillStyle = (c % 2 === 0) ? '#081c18' : '#0a211d';
+        ctx.fillRect(margin + c * TACTICS_CELL_W, margin, TACTICS_CELL_W, ph);
+      }
+
+      // 5 Half-Space Tactical Zones Overlay (Guardiola 5-Corridor Framework)
+      if (tacticsOverlays.zones) {
+        const zoneHeight = ph / 5;
+        const zoneNames = ['Left Wing', 'Left Half-Space', 'Central Corridor', 'Right Half-Space', 'Right Wing'];
+        const zoneColors = [
+          'rgba(59, 130, 246, 0.03)',
+          'rgba(16, 185, 129, 0.06)',
+          'rgba(245, 158, 11, 0.03)',
+          'rgba(16, 185, 129, 0.06)',
+          'rgba(59, 130, 246, 0.03)'
+        ];
+
+        for (let z = 0; z < 5; z++) {
+          ctx.fillStyle = zoneColors[z];
+          ctx.fillRect(margin, margin + z * zoneHeight, pw, zoneHeight);
+
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
+          ctx.lineWidth = 1;
+          ctx.setLineDash([4, 4]);
+          ctx.beginPath();
+          ctx.moveTo(margin, margin + z * zoneHeight);
+          ctx.lineTo(margin + pw, margin + z * zoneHeight);
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+          ctx.font = '9px monospace';
+          ctx.fillText(zoneNames[z], margin + 8, margin + z * zoneHeight + 14);
+        }
+      }
+
+      // 18x12 Tactical Grid Overlay
+      if (tacticsOverlays.grid) {
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
+        ctx.lineWidth = 1;
+
+        for (let c = 0; c <= TACTICS_GRID_COLS; c++) {
+          const x = margin + c * TACTICS_CELL_W;
+          ctx.beginPath();
+          ctx.moveTo(x, margin);
+          ctx.lineTo(x, margin + ph);
+          ctx.stroke();
+        }
+
+        for (let r = 0; r <= TACTICS_GRID_ROWS; r++) {
+          const y = margin + r * TACTICS_CELL_H;
+          ctx.beginPath();
+          ctx.moveTo(margin, y);
+          ctx.lineTo(margin + pw, y);
+          ctx.stroke();
+        }
+      }
+
+      // Official Pitch Markings (White)
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
+      ctx.lineWidth = 2;
+
+      // Touchlines & Goal lines
+      ctx.strokeRect(margin, margin, pw, ph);
+
+      // Halfway Line
+      const midX = margin + pw * 0.5;
+      ctx.beginPath();
+      ctx.moveTo(midX, margin);
+      ctx.lineTo(midX, margin + ph);
+      ctx.stroke();
+
+      // Center Circle & Spot
+      const midY = margin + ph * 0.5;
+      ctx.beginPath();
+      ctx.arc(midX, midY, 65, 0, Math.PI * 2);
+      ctx.stroke();
+
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(midX, midY, 3, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Penalty Boxes (18-yard box: approx 3.0 grid cols wide)
+      const penBoxW = TACTICS_CELL_W * 3.0;
+      const penBoxH = TACTICS_CELL_H * 6.0;
+      const penBoxY = margin + (ph - penBoxH) * 0.5;
+
+      // Home Penalty Box (Left)
+      ctx.strokeRect(margin, penBoxY, penBoxW, penBoxH);
+      // Away Penalty Box (Right)
+      ctx.strokeRect(margin + pw - penBoxW, penBoxY, penBoxW, penBoxH);
+
+      // 6-Yard Goal Areas
+      const goalAreaW = TACTICS_CELL_W * 1.0;
+      const goalAreaH = TACTICS_CELL_H * 3.0;
+      const goalAreaY = margin + (ph - goalAreaH) * 0.5;
+
+      ctx.strokeRect(margin, goalAreaY, goalAreaW, goalAreaH);
+      ctx.strokeRect(margin + pw - goalAreaW, goalAreaY, goalAreaW, goalAreaH);
+
+      // Penalty Spots
+      ctx.beginPath();
+      ctx.arc(margin + TACTICS_CELL_W * 2.0, midY, 2.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(margin + pw - TACTICS_CELL_W * 2.0, midY, 2.5, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Goals (Outside Touchline)
+      const goalNetH = TACTICS_CELL_H * 2.0;
+      const goalNetY = margin + (ph - goalNetH) * 0.5;
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+      ctx.strokeRect(margin - 12, goalNetY, 12, goalNetH);
+      ctx.strokeRect(margin + pw, goalNetY, 12, goalNetH);
+
+      // Draw Trajectories (Pass & Shot Lines)
+      tacticsTrajectories.forEach(tr => {
+        ctx.save();
+        if (tr.alpha !== undefined) ctx.globalAlpha = Math.max(0, Math.min(1, tr.alpha));
+        ctx.strokeStyle = tr.color;
+        ctx.lineWidth = tr.dashed ? 2 : 3;
+        if (tr.dashed) ctx.setLineDash([6, 4]);
+        else ctx.setLineDash([]);
+
+        ctx.beginPath();
+        ctx.moveTo(tr.x1, tr.y1);
+        ctx.lineTo(tr.x2, tr.y2);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Arrowhead
+        const angle = Math.atan2(tr.y2 - tr.y1, tr.x2 - tr.x1);
+        ctx.fillStyle = tr.color;
+        ctx.beginPath();
+        ctx.moveTo(tr.x2, tr.y2);
+        ctx.lineTo(tr.x2 - 10 * Math.cos(angle - Math.PI / 6), tr.y2 - 10 * Math.sin(angle - Math.PI / 6));
+        ctx.lineTo(tr.x2 - 10 * Math.cos(angle + Math.PI / 6), tr.y2 - 10 * Math.sin(angle + Math.PI / 6));
+        ctx.closePath();
+        ctx.fill();
+
+        // Trajectory Label
+        if (tr.label) {
+          ctx.fillStyle = '#ffffff';
+          ctx.font = 'bold 10px sans-serif';
+          ctx.shadowColor = 'rgba(0,0,0,0.8)';
+          ctx.shadowBlur = 4;
+          const labelX = (tr.x1 + tr.x2) * 0.5;
+          const labelY = (tr.y1 + tr.y2) * 0.5 - 6;
+          ctx.fillText(tr.label, labelX - 20, labelY);
+          ctx.shadowBlur = 0;
+        }
+        ctx.restore();
+      });
+
+      // Draw Action Map (90-Minute FM Player Spatial Touch & Decisive Action Pins)
+      if (tacticsOverlays.actionMap && currentPlayerTacticsData && currentPlayerTacticsData.action_map && currentPlayerTacticsData.action_map.length > 0) {
+        const acts = currentPlayerTacticsData.action_map;
+
+        // 1. Dotted Flow Line connecting sequential actions across the 90 minutes
+        ctx.save();
+        ctx.strokeStyle = 'rgba(251, 191, 36, 0.4)';
+        ctx.lineWidth = 1.8;
+        ctx.setLineDash([5, 4]);
+        ctx.beginPath();
+        acts.forEach((act, idx) => {
+          const pt = statsBombToPixel(act.location[0], act.location[1]);
+          if (idx === 0) ctx.moveTo(pt.x, pt.y);
+          else ctx.lineTo(pt.x, pt.y);
+        });
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.restore();
+
+        // 2. Action Pins
+        acts.forEach((act) => {
+          const pt = statsBombToPixel(act.location[0], act.location[1]);
+          const isHovered = hoveredActionPin && hoveredActionPin.minute === act.minute;
+          const pinColor = act.color || '#f59e0b';
+
+          ctx.save();
+
+          // Outer Glow
+          ctx.fillStyle = isHovered ? 'rgba(251, 191, 36, 0.45)' : 'rgba(251, 191, 36, 0.18)';
+          ctx.beginPath();
+          ctx.arc(pt.x, pt.y, isHovered ? 18 : 14, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Pin Circle Body
+          ctx.fillStyle = isHovered ? '#1e293b' : '#0f172a';
+          ctx.beginPath();
+          ctx.arc(pt.x, pt.y, isHovered ? 13 : 11, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Border Ring
+          ctx.strokeStyle = isHovered ? '#fbbf24' : pinColor;
+          ctx.lineWidth = isHovered ? 2.5 : 1.8;
+          ctx.stroke();
+
+          // Icon or minute inside pin
+          ctx.font = isHovered ? 'bold 11px sans-serif' : 'bold 9px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillStyle = '#ffffff';
+          ctx.fillText(act.icon || '📍', pt.x, pt.y);
+
+          // Minute Pill below pin
+          const minText = `${act.minute}'`;
+          ctx.font = 'bold 9px sans-serif';
+          const tw = ctx.measureText(minText).width;
+          const badgeW = tw + 8;
+          const badgeH = 14;
+          const badgeX = pt.x - badgeW / 2;
+          const badgeY = pt.y + (isHovered ? 16 : 14);
+
+          ctx.fillStyle = 'rgba(15, 23, 42, 0.92)';
+          ctx.beginPath();
+          if (ctx.roundRect) ctx.roundRect(badgeX, badgeY, badgeW, badgeH, 4);
+          else ctx.rect(badgeX, badgeY, badgeW, badgeH);
+          ctx.fill();
+
+          ctx.strokeStyle = isHovered ? '#fbbf24' : 'rgba(255,255,255,0.2)';
+          ctx.lineWidth = 1;
+          ctx.stroke();
+
+          ctx.fillStyle = isHovered ? '#fde047' : '#94a3b8';
+          ctx.fillText(minText, pt.x, badgeY + badgeH / 2);
+
+          ctx.restore();
+        });
+      }
+
+      // Draw Players
+      tacticsPlayers.forEach(p => {
+        const isSelected = p.id === tacticsSelectedPlayerId;
+        const isHome = p.team === 'home';
+
+        // 1. Vision Cone (FOV Overlay)
+        if (tacticsOverlays.fov) {
+          const fovAngle = Math.PI / 3; // 60 degrees
+          const fovDist = isSelected ? 85 : 55;
+          const startAngle = p.angle - fovAngle / 2;
+          const endAngle = p.angle + fovAngle / 2;
+
+          ctx.fillStyle = isSelected
+            ? 'rgba(251, 191, 36, 0.15)'
+            : (isHome ? 'rgba(59, 130, 246, 0.08)' : 'rgba(239, 68, 68, 0.08)');
+
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.arc(p.x, p.y, fovDist, startAngle, endAngle);
+          ctx.closePath();
+          ctx.fill();
+        }
+
+        // 2. Spotlight Ring (if selected or is_target)
+        const isTarget = p.is_target === true;
+        if ((isSelected || isTarget) && tacticsOverlays.spotlight) {
+          ctx.strokeStyle = isTarget ? '#f59e0b' : '#fbbf24';
+          ctx.lineWidth = isTarget ? 3.0 : 2.5;
+          ctx.setLineDash([4, 3]);
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, isTarget ? 24 : 22, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.setLineDash([]);
+        }
+
+        // 3. Stamina Ring
+        ctx.strokeStyle = p.stamina > 50 ? '#10b981' : '#ef4444';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        const staminaArc = (p.stamina / 100) * Math.PI * 2;
+        ctx.arc(p.x, p.y, 14, -Math.PI / 2, -Math.PI / 2 + staminaArc);
+        ctx.stroke();
+
+        // 4. Player Body Dot
+        ctx.fillStyle = isTarget ? '#f59e0b' : (isHome ? '#2563eb' : '#dc2626');
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, isTarget ? 13 : 11, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = isTarget ? 2.2 : 1.5;
+        ctx.stroke();
+
+        // 5. Jersey Number
+        ctx.fillStyle = '#ffffff';
+        ctx.font = isTarget ? 'bold 10px sans-serif' : 'bold 9px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(p.num.toString(), p.x, p.y);
+
+        // 6. Name Label
+        ctx.fillStyle = isTarget ? '#fde047' : (isSelected ? '#fef08a' : '#e2e8f0');
+        ctx.font = isTarget ? 'bold 12px sans-serif' : (isSelected ? 'bold 11px sans-serif' : '10px sans-serif');
+        ctx.fillText((isTarget ? '★ ' : '') + p.name, p.x, p.y + (isTarget ? 21 : 19));
+
+        ctx.textAlign = 'start';
+        ctx.textBaseline = 'alphabetic';
+      });
+
+      // Draw Ball
+      ctx.fillStyle = 'rgba(0,0,0,0.4)';
+      ctx.beginPath();
+      ctx.arc(tacticsBall.x + 2, tacticsBall.y + 3, 5, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(tacticsBall.x, tacticsBall.y, 5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#111827';
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+
+      // Floating Tactical Ability Pill Badge above target player
+      if (activeHighlightAnim && activeHighlightAnim.targetPlayer && activeHighlightAnim.tacticalTag) {
+        const tp = activeHighlightAnim.targetPlayer;
+        const tagText = activeHighlightAnim.tacticalTag;
+        const tagColor = activeHighlightAnim.tagColor || '#10b981';
+        ctx.save();
+        ctx.font = 'bold 11px sans-serif';
+        const textWidth = ctx.measureText(tagText).width;
+        const pillW = textWidth + 20;
+        const pillH = 22;
+        let pillX = tp.x - pillW / 2;
+        let pillY = tp.y - 34;
+
+        if (pillY < TACTICS_PITCH_MARGIN + 4) pillY = tp.y + 28;
+        if (pillX < TACTICS_PITCH_MARGIN + 4) pillX = TACTICS_PITCH_MARGIN + 4;
+        if (pillX + pillW > TACTICS_PITCH_MARGIN + TACTICS_PITCH_W - 4) {
+          pillX = TACTICS_PITCH_MARGIN + TACTICS_PITCH_W - 4 - pillW;
+        }
+
+        ctx.shadowColor = 'rgba(0,0,0,0.85)';
+        ctx.shadowBlur = 8;
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.94)';
+        ctx.beginPath();
+        if (ctx.roundRect) {
+          ctx.roundRect(pillX, pillY, pillW, pillH, 11);
+        } else {
+          ctx.rect(pillX, pillY, pillW, pillH);
+        }
+        ctx.fill();
+
+        ctx.strokeStyle = tagColor;
+        ctx.lineWidth = 1.6;
+        ctx.stroke();
+
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = '#ffffff';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(tagText, pillX + pillW / 2, pillY + pillH / 2);
+        ctx.restore();
+      }
+
+      // Interactive Tooltip for Hovered Action Map Pin
+      if (tacticsOverlays.actionMap && hoveredActionPin) {
+        const act = hoveredActionPin;
+        const pt = statsBombToPixel(act.location[0], act.location[1]);
+        ctx.save();
+
+        const cardW = 220;
+        const cardH = 76;
+        let cardX = pt.x + 16;
+        let cardY = pt.y - cardH / 2;
+
+        if (cardX + cardW > margin + pw - 8) cardX = pt.x - cardW - 16;
+        if (cardY < margin + 8) cardY = margin + 8;
+        if (cardY + cardH > margin + ph - 8) cardY = margin + ph - 8 - cardH;
+
+        // Card Shadow & Background Glassmorphism
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.85)';
+        ctx.shadowBlur = 12;
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.96)';
+        ctx.beginPath();
+        if (ctx.roundRect) ctx.roundRect(cardX, cardY, cardW, cardH, 8);
+        else ctx.rect(cardX, cardY, cardW, cardH);
+        ctx.fill();
+
+        ctx.strokeStyle = act.color || '#38bdf8';
+        ctx.lineWidth = 1.8;
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+
+        // Header: [icon] display_time | zone
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'top';
+        ctx.font = 'bold 11px sans-serif';
+        ctx.fillStyle = '#fde047';
+        ctx.fillText(`${act.icon} ${act.display_time} • ${act.zone}`, cardX + 10, cardY + 8);
+
+        // Title
+        ctx.font = 'bold 10px sans-serif';
+        ctx.fillStyle = '#ffffff';
+        let displayTitle = act.title;
+        if (displayTitle.length > 25) displayTitle = displayTitle.substring(0, 24) + '...';
+        ctx.fillText(displayTitle, cardX + 10, cardY + 26);
+
+        // Description
+        ctx.font = '9px sans-serif';
+        ctx.fillStyle = '#94a3b8';
+        let descText = act.desc;
+        if (descText.length > 32) descText = descText.substring(0, 31) + '...';
+        ctx.fillText(descText, cardX + 10, cardY + 43);
+
+        // Footer action hint
+        ctx.font = 'bold 9px sans-serif';
+        ctx.fillStyle = act.highlight_idx !== undefined && act.highlight_idx !== null ? '#10b981' : '#a855f7';
+        const hintText = act.highlight_idx !== undefined && act.highlight_idx !== null ? '▶️ 클릭 시 전술 하이라이트 리플레이' : '📍 90분 전술 히트맵 핵심 활약 구역';
+        ctx.fillText(hintText, cardX + 10, cardY + 59);
+
+        ctx.restore();
+      }
+
+      // FM Match Performance Rating & Tactical Summary Top Badge (when in player scouting mode)
+      if (currentPlayerTacticsData && currentPlayerTacticsData.match_summary) {
+        const ms = currentPlayerTacticsData.match_summary;
+        const pInfo = currentPlayerTacticsData.player_info;
+        const pName = pInfo.name_ko || pInfo.name;
+
+        ctx.save();
+        const badgeX = margin + 12;
+        const badgeY = margin + 12;
+        const badgeW = 290;
+        const badgeH = 42;
+
+        ctx.shadowColor = 'rgba(0,0,0,0.6)';
+        ctx.shadowBlur = 8;
+        ctx.fillStyle = 'rgba(10, 15, 29, 0.88)';
+        ctx.beginPath();
+        if (ctx.roundRect) ctx.roundRect(badgeX, badgeY, badgeW, badgeH, 8);
+        else ctx.rect(badgeX, badgeY, badgeW, badgeH);
+        ctx.fill();
+
+        ctx.strokeStyle = 'rgba(251, 191, 36, 0.4)';
+        ctx.lineWidth = 1.2;
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'top';
+
+        // Line 1: Star Rating & MoM
+        ctx.font = 'bold 11px sans-serif';
+        ctx.fillStyle = '#fbbf24';
+        const momBadge = ms.mom ? ' ★ MoM' : '';
+        ctx.fillText(`⭐ FM 평점 ${ms.rating || '8.7'}${momBadge} | #${pInfo.num || '10'} ${pName} (${pInfo.position})`, badgeX + 10, badgeY + 7);
+
+        // Line 2: Opta Metric Summary
+        ctx.font = '10px sans-serif';
+        ctx.fillStyle = '#cbd5e1';
+        ctx.fillText(`볼터치 ${ms.touches || 74}회 • 키패스 ${ms.key_passes || 4}회 • 패스 ${ms.pass_accuracy || '89%'} • ${ms.distance_km || 11.4}km`, badgeX + 10, badgeY + 23);
+
+        ctx.restore();
+      }
+
+      // Goal Banner Timer
+      if (tacticsGoalBannerTimer > 0) {
+        tacticsGoalBannerTimer -= tacticsSpeed;
+        if (tacticsGoalBannerTimer <= 0) {
+          const banner = document.getElementById('tactics-goal-banner');
+          if (banner) banner.classList.add('hidden');
+        }
+      }
+    }
+
+    // Autonomous FM Simulation Living Match Flow (Continuous Flow for All Modes)
+    function updateLivingMatchFlow() {
+      livingMatchTimer += tacticsSpeed;
+      if (!tacticsPlayers || tacticsPlayers.length === 0) return;
+
+      const pitchLeft = TACTICS_PITCH_MARGIN + 12;
+      const pitchRight = TACTICS_PITCH_MARGIN + TACTICS_PITCH_W - 12;
+      const pitchTop = TACTICS_PITCH_MARGIN + 12;
+      const pitchBottom = TACTICS_PITCH_MARGIN + TACTICS_PITCH_H - 12;
+
+      // 1. Resolve Ball Possession / Owner
+      let owner = tacticsPlayers.find(p => p.id === livingBallOwnerId);
+      if (!owner) {
+        const target = tacticsPlayers.find(p => p.is_target);
+        if (target) {
+          owner = target;
+          livingBallOwnerId = target.id;
+        } else {
+          owner = tacticsPlayers.find(p => p.pos !== 'GK' && p.team === 'home') || tacticsPlayers[8];
+          livingBallOwnerId = owner ? owner.id : null;
+        }
+      }
+
+      // 2. Ball Motion & Pass Circulation
+      if (tacticsBall.inFlight) {
+        const dx = (tacticsBall.tx || tacticsBall.x) - tacticsBall.x;
+        const dy = (tacticsBall.ty || tacticsBall.y) - tacticsBall.y;
+        const dist = Math.hypot(dx, dy);
+
+        if (dist < 8) {
+          tacticsBall.x = tacticsBall.tx;
+          tacticsBall.y = tacticsBall.ty;
+          tacticsBall.inFlight = false;
+          livingPassCooldown = 35 + Math.floor(Math.random() * 25);
+        } else {
+          const stepSpeed = Math.min(dist, 10 * tacticsSpeed);
+          tacticsBall.x += (dx / dist) * stepSpeed;
+          tacticsBall.y += (dy / dist) * stepSpeed;
+        }
+      } else if (owner) {
+        // Owner dribbles / carries ball
+        tacticsBall.x += (owner.x + Math.cos(owner.angle) * 8 - tacticsBall.x) * 0.25;
+        tacticsBall.y += (owner.y + Math.sin(owner.angle) * 8 - tacticsBall.y) * 0.25;
+
+        // Gentle forward movement for owner
+        owner.x += Math.cos(owner.angle) * 0.5 * tacticsSpeed;
+        owner.y += Math.sin(owner.angle) * 0.3 * tacticsSpeed;
+
+        // Decrement pass cooldown
+        livingPassCooldown -= tacticsSpeed;
+        if (livingPassCooldown <= 0) {
+          // Teammates eligible for pass
+          const teammates = tacticsPlayers.filter(p => p.team === owner.team && p.id !== owner.id && p.pos !== 'GK');
+          const targetPlayer = tacticsPlayers.find(p => p.is_target);
+
+          let receiver = null;
+          // In player scouting mode, pass to target star player ~65% of the time if owner is someone else
+          if (targetPlayer && owner.id !== targetPlayer.id && Math.random() < 0.65) {
+            receiver = targetPlayer;
+          } else if (teammates.length > 0) {
+            // Pick teammate with good forward position
+            const forwardTeammates = teammates.filter(p => (owner.team === 'home' ? p.x > owner.x - 20 : p.x < owner.x + 20));
+            const pool = forwardTeammates.length > 0 ? forwardTeammates : teammates;
+            receiver = pool[Math.floor(Math.random() * pool.length)];
+          }
+
+          if (receiver) {
+            tacticsBall.tx = receiver.x;
+            tacticsBall.ty = receiver.y;
+            tacticsBall.inFlight = true;
+            livingBallOwnerId = receiver.id;
+
+            tacticsTrajectories.push({
+              x1: owner.x,
+              y1: owner.y,
+              x2: receiver.x,
+              y2: receiver.y,
+              color: '#38bdf8',
+              dashed: true,
+              alpha: 0.85,
+              fade: true,
+              label: `${owner.name} ➔ ${receiver.name}`
+            });
+
+            updateCommentary('PASS', `[실시간 빌드업] #${owner.num} ${owner.name} ➔ #${receiver.num} ${receiver.name} 패스 연결 (${Math.round(Math.hypot(receiver.x - owner.x, receiver.y - owner.y) * 0.12)}m)`);
+          } else {
+            livingPassCooldown = 30;
+          }
+        }
+      }
+
+      // 3. Natural Tactical Shift & Breathing for All 22 Players
+      tacticsPlayers.forEach(p => {
+        const basePt = tacticsGridToPixel(p.baseCol, p.baseRow);
+
+        // Corridor shift toward ball
+        const ballShiftX = (tacticsBall.x - (TACTICS_PITCH_MARGIN + TACTICS_PITCH_W * 0.5)) * 0.08;
+        const ballShiftY = (tacticsBall.y - (TACTICS_PITCH_MARGIN + TACTICS_PITCH_H * 0.5)) * 0.05;
+
+        // Sinusoidal movement jitter
+        const jitterX = Math.sin(Date.now() * 0.0022 + p.num * 1.4) * 12;
+        const jitterY = Math.cos(Date.now() * 0.002 + p.num * 1.8) * 8;
+
+        const targetX = Math.max(pitchLeft, Math.min(pitchRight, basePt.x + ballShiftX + jitterX));
+        const targetY = Math.max(pitchTop, Math.min(pitchBottom, basePt.y + ballShiftY + jitterY));
+
+        p.x += (targetX - p.x) * 0.04 * tacticsSpeed;
+        p.y += (targetY - p.y) * 0.04 * tacticsSpeed;
+
+        // Orient toward ball
+        p.angle = Math.atan2(tacticsBall.y - p.y, tacticsBall.x - p.x);
+      });
+    }
+
+    // Master Tactics Simulation Physics Loop
+    function updateTacticsSimulation() {
+      if (!isTacticsRunning) return;
+
+      // 1. Decay fading trajectory trails
+      for (let i = tacticsTrajectories.length - 1; i >= 0; i--) {
+        const tr = tacticsTrajectories[i];
+        if (tr.fade) {
+          tr.alpha = (tr.alpha || 1.0) - 0.012 * tacticsSpeed;
+          if (tr.alpha <= 0) {
+            tacticsTrajectories.splice(i, 1);
+          }
+        }
+      }
+
+      // 2. Run Highlight Multi-Step Animation if active
+      if (activeHighlightAnim) {
+        updateHighlightAnimation();
+        return;
+      }
+
+      // 3. Fall through to Living Match Flow (Continuous FM 2D Simulation)
+      if (tacticsMode === 'sim') {
+        updateLivingMatchFlow();
+      }
+    }
+
+    // Main Animation Loop
+    function tacticsLoop() {
+      updateTacticsSimulation();
+      drawTacticsPitch();
+      tacticsAnimId = requestAnimationFrame(tacticsLoop);
     }
 
     // Hash change event listener

@@ -46,6 +46,9 @@ class AgencyConfig:
     football_data_api_key: str = os.getenv("FOOTBALL_DATA_API_KEY", "").strip()
     api_football_key: str = os.getenv("API_FOOTBALL_KEY", "").strip()
     api_football_daily_limit: int = int(os.getenv("API_FOOTBALL_DAILY_LIMIT", "100"))
+    tavily_api_key: str = os.getenv("TAVILY_API_KEY", "").strip()
+    ego_lite_enabled: bool = os.getenv("EGO_LITE_ENABLED", "false").lower() == "true"
+    ego_lite_host: str = os.getenv("EGO_LITE_HOST", "http://localhost:3000")
     db_path: Path = PROJECT_ROOT / "data" / "agency_desk.db"
     checkpoint_db_path: Path = PROJECT_ROOT / "data" / "agency_checkpoints.db"
     docs_path: Path = PROJECT_ROOT / "data" / "docs" / "regulations.md"
@@ -118,6 +121,9 @@ class GeminiVertexRouter:
             "location": self.config.gcp_location,
             "status_message": self.auth_status_message,
             "football_data_api_configured": bool(os.getenv("FOOTBALL_DATA_API_KEY", "").strip() or self.config.football_data_api_key),
+            "api_football_configured": bool(os.getenv("API_FOOTBALL_KEY", "").strip() or self.config.api_football_key),
+            "tavily_search_configured": bool(os.getenv("TAVILY_API_KEY", "").strip() or self.config.tavily_api_key),
+            "ego_lite_enabled": self.config.ego_lite_enabled,
             "models": {
                 "primary_llm": self.config.primary_llm_model,
                 "light_llm": self.config.light_llm_model,
@@ -498,6 +504,95 @@ class GeminiVertexRouter:
             "position": position,
             "headline": f"{club_name} Tactical Reinforcement Priority ({position})",
             "tactical_context": f"{club_name}은(는) 2026 시즌을 앞두고 {position} 포지션의 주전 노쇠화 및 스쿼드 뎁스 강화를 적극 추진 중이며, 감독 전술 시스템에 즉시 융화될 수 있는 검증된 자원을 최우선 타겟으로 평가하고 있습니다.",
+        }
+
+    def search_with_tavily(
+        self,
+        query: str,
+        include_domains: list[str] | None = None,
+        max_results: int = 5,
+    ) -> dict[str, Any]:
+        """
+        [Priority 2 Engine] Curated Football Intelligence Search via Tavily Search API.
+        Filters queries strictly to Tier-1 football authorities (BBC Sport, The Athletic, Transfermarkt, Sky Sports).
+        Includes automatic fallback to Vertex AI Google Search Grounding if Tavily key is absent or quota ends.
+        """
+        api_key = (self.config.tavily_api_key or os.getenv("TAVILY_API_KEY", "")).strip()
+        domains = include_domains or [
+            "bbc.com/sport",
+            "theathletic.com",
+            "transfermarkt.com",
+            "skysports.com",
+            "reuters.com",
+        ]
+
+        if api_key:
+            try:
+                import httpx
+
+                payload = {
+                    "api_key": api_key,
+                    "query": query,
+                    "search_depth": "advanced",
+                    "include_domains": domains,
+                    "max_results": max_results,
+                    "include_answer": True,
+                }
+                resp = httpx.post("https://api.tavily.com/search", json=payload, timeout=8.0)
+                if resp.status_code == 200:
+                    data = resp.json()
+                    answer = data.get("answer", "")
+                    results = data.get("results", [])
+                    log_work_event(
+                        "TAVILY_SEARCH_SUCCESS",
+                        f"Query='{query[:40]}' | DomainCount={len(domains)} | Results={len(results)}",
+                    )
+                    return {
+                        "source": "Tavily Curated Football Intelligence API (Tier-1 Outlets)",
+                        "query": query,
+                        "answer": answer or (results[0].get("content", "") if results else ""),
+                        "include_domains": domains,
+                        "results": [
+                            {
+                                "title": r.get("title", ""),
+                                "url": r.get("url", ""),
+                                "content": r.get("content", ""),
+                                "score": r.get("score", 0.0),
+                            }
+                            for r in results[:max_results]
+                        ],
+                        "status": "success",
+                        "fallback_used": False,
+                    }
+                else:
+                    log_work_event(
+                        "TAVILY_SEARCH_HTTP_WARN",
+                        f"Tavily returned HTTP {resp.status_code}: {resp.text[:100]}",
+                    )
+            except Exception as exc:
+                log_work_event("TAVILY_SEARCH_FAIL", f"Tavily connection error: {exc}")
+
+        # Fallback to Google Search Grounding or Squad Intelligence Database
+        grounded = self.search_with_grounding(
+            query=f"{query} official transfer injury tactical update",
+            club_name=query.split()[0] if query.split() else "Football Club",
+            position="General",
+        )
+        return {
+            "source": f"Tavily Fallback -> {grounded.get('source', 'Squad Intelligence DB')}",
+            "query": query,
+            "answer": grounded.get("tactical_context", ""),
+            "include_domains": domains,
+            "results": [
+                {
+                    "title": grounded.get("headline", f"{query} Intelligence Dossier"),
+                    "url": "https://vertexai.google.com/grounding",
+                    "content": grounded.get("tactical_context", ""),
+                    "score": 0.95,
+                }
+            ],
+            "status": "fallback_active",
+            "fallback_used": True,
         }
 
     def embed_texts(

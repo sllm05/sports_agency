@@ -210,6 +210,44 @@ class TestFullBackendSuite(unittest.TestCase):
         self.assertIn("calls_used", data)
         self.assertIn("calls_remaining", data)
 
+    def test_12_dynamic_player_tactics_highlights(self):
+        """Test dynamic player-specific 2D tactical highlight replay engine."""
+        # 1. Test World Class Striker: Erling Haaland (Man City vs Arsenal)
+        res_haaland = self.client.get("/api/tactics/player-highlights?player_name=Erling Haaland")
+        self.assertEqual(res_haaland.status_code, 200)
+        data_h = res_haaland.json()
+        self.assertIn("Haaland", data_h["player_info"]["name"])
+        self.assertEqual(data_h["player_info"]["target_slot_id"], "H11")  # ST slot
+        self.assertEqual(data_h["match_info"]["home_team"], "Manchester City FC")
+        self.assertEqual(data_h["match_info"]["away_team"], "Arsenal FC")
+        self.assertEqual(len(data_h["home_roster"]), 11)
+        self.assertEqual(len(data_h["away_roster"]), 11)
+        target_p = next((p for p in data_h["home_roster"] if p.get("is_target")), None)
+        self.assertIsNotNone(target_p)
+        self.assertEqual(target_p["id"], "H11")
+        self.assertEqual(len(data_h["key_match_highlights"]), 3)
+
+        # 2. Test Winger: Bukayo Saka (Arsenal vs Man City)
+        res_saka = self.client.get("/api/tactics/player-highlights?player_name=Bukayo Saka")
+        self.assertEqual(res_saka.status_code, 200)
+        data_s = res_saka.json()
+        self.assertIn("Saka", data_s["player_info"]["name"])
+        self.assertEqual(data_s["player_info"]["target_slot_id"], "H8")  # RW slot
+        self.assertEqual(data_s["match_info"]["home_team"], "Arsenal FC")
+        self.assertEqual(data_s["match_info"]["away_team"], "Manchester City FC")
+
+        # 3. Test Defender: Min-Jae Kim (Bayern Munich vs Dortmund)
+        res_kim = self.client.get("/api/tactics/player-highlights?player_name=Min-Jae Kim")
+        self.assertEqual(res_kim.status_code, 200)
+        data_k = res_kim.json()
+        self.assertIn("Min-Jae Kim", data_k["player_info"]["name"])
+        self.assertEqual(data_k["player_info"]["target_slot_id"], "H3")  # CB slot
+        self.assertEqual(data_k["match_info"]["home_team"], "FC Bayern München")
+
+        # 4. Unknown player returns 404
+        res_404 = self.client.get("/api/tactics/player-highlights?player_name=NonExistentPlayerXYZ999")
+        self.assertEqual(res_404.status_code, 404)
+
 
 if __name__ == "__main__":
     unittest.main()

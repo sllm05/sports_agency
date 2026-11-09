@@ -1048,3 +1048,829 @@
 [2026-11-09 21:23:20] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Tottenham Hotspur, val=€38,000,000
 [2026-11-09 21:23:20] [INFO] [MCP_TOOL_11] Discovered 3 undervalued prospects (pos=ALL, max_age=23)
 [2026-11-09 21:36:30] [TECH_AUDIT] Verified all 10 user-requested core technologies (LangGraph, Hermes Agent, FastMCP, SQLite Vector RAG, Dual Gemini LLM, Dual Gemini Embedding, Vertex Search Grounding, FastAPI/SPA, Pydantic, 3-tier API). Appended Q44 to qa.md evaluating Tavily Search, SerpAPI, and Ego Lite for sports agency domain.
+[2026-11-09 21:46:24] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€38,000,000, wage=€105,000/wk, 4yr) -> annual_psr=€16,877,130
+[2026-11-09 21:48:48] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-09 21:48:50] [INFO] [VERTEX_GROUNDING_AUTH_WARN] Live Search Grounding failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging squad intelligence fallback
+[2026-11-09 21:48:50] [INFO] [MCP_TOOL_14] search_tavily_curated_football_intelligence('Bayern Munich Harry Kane') -> Tavily Fallback -> Agency Intelligence Desk Squad Database (Bayern)
+[2026-11-09 21:49:22] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-09 21:49:24] [INFO] [VERTEX_GROUNDING_AUTH_WARN] Live Search Grounding failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging squad intelligence fallback
+[2026-11-09 21:49:24] [INFO] [MCP_TOOL_14] search_tavily_curated_football_intelligence('Bayern Munich Harry Kane') -> Tavily Fallback -> Agency Intelligence Desk Squad Database (Bayern)
+[2026-11-09 21:49:40] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-09 21:49:42] [INFO] [VERTEX_GROUNDING_AUTH_WARN] Live Search Grounding failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging squad intelligence fallback
+[2026-11-09 21:49:42] [INFO] [MCP_TOOL_14] search_tavily_curated_football_intelligence('Bayern Munich Harry Kane') -> Tavily Fallback -> Agency Intelligence Desk Squad Database (Bayern)
+[2026-11-09 21:49:42] [INFO] [MCP_TOOL_15] Ego Lite Capology-Verified query for 손흥민 (€240,000/wk)
+[2026-11-09 21:50:04] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-09 21:50:06] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Tottenham Hotspur, val=€38,000,000
+[2026-11-09 21:50:06] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-09 21:50:06] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€200,000,000
+[2026-11-09 21:50:06] [INFO] [MCP_TOOL_11] Discovered 5 undervalued prospects (pos=ALL, max_age=23)
+[2026-11-09 21:50:06] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Tottenham Hotspur, val=€38,000,000
+[2026-11-09 21:50:06] [INFO] [MCP_TOOL_8] scan_bosman_and_replacement_targets(pos=LW, league=Premier League) -> 5 club targets found
+[2026-11-09 21:50:06] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€40,000,000, wage=€120,000/wk, 4yr) -> annual_psr=€18,637,920
+[2026-11-09 21:50:07] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 21:50:08] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 21:50:08] [INFO] [MCP_TOOL_9] Registered custom external client 정상빈 (Jeong Sang-bin, Minnesota United) -> player_id=197986
+[2026-11-09 21:50:08] [INFO] [MCP_TOOL_1] get_player_complete_data(Jeong Sang-bin) -> club=Minnesota United, val=€2,500,000
+[2026-11-09 21:50:09] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-09 21:50:09] [INFO] [LANGGRAPH_NODE_1] Supervisor routed player=Min-Jae Kim to mode=TRACK_A_TRANSFER
+[2026-11-09 21:50:09] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-09 21:50:09] [INFO] [MCP_TOOL_3] get_peer_group_wage_band(pos=CB, age=30) -> Q25=€76,000, Median=€76,000, Q75=€91,000
+[2026-11-09 21:50:09] [INFO] [MCP_TOOL_2] find_matching_clubs_for_transfer(pos=CB, fee=20000000, wage=80400, league=ALL) -> 5 clubs matched
+[2026-11-09 21:50:09] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 21:50:10] [INFO] [VERTEX_GROUNDING_AUTH_WARN] Live Search Grounding failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging squad intelligence fallback
+[2026-11-09 21:50:10] [INFO] [MCP_TOOL_4] search_live_club_injury_and_rumors(club=Paris Saint-Germain FC, pos=CB) -> source=Agency Intelligence Desk Squad Database (Paris Saint-Germain FC)
+[2026-11-09 21:50:10] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Ligue 1, fee=€20,000,000, wage=€80,400/wk, 4yr) -> annual_psr=€10,421,904
+[2026-11-09 21:50:10] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-09 21:50:10] [INFO] [LANGGRAPH_NODE_2A] Completed Hermes Transfer Analysis for Min-Jae Kim
+[2026-11-09 21:50:10] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-09 21:50:11] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-09 21:50:11] [INFO] [LANGGRAPH_NODE_2C] Career Strategy resolved for Min-Jae Kim: 출전 보장 연계 1년 육성 임대 (Development Loan with 60% Starter Clause)
+[2026-11-09 21:50:11] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 21:50:12] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 21:50:12] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 21:50:13] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 21:50:13] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-09 21:50:13] [INFO] [LANGGRAPH_NODE_3] Completed SQLite Vector RAG & GBE calculation (15 pts) for Min-Jae Kim
+[2026-11-09 21:50:14] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-09 21:50:14] [INFO] [LANGGRAPH_NODE_4A] Sparring Round 1 completed vs Paris Saint-Germain FC (ask=€120,000, counter=€90,000)
+[2026-11-09 21:50:14] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-09 21:50:14] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Ligue 1, fee=€20,000,000, wage=€105,000/wk, 4yr) -> annual_psr=€11,987,500
+[2026-11-09 21:50:14] [INFO] [LANGGRAPH_NODE_4B] Sparring Round 2 resolved with strategy=OPTION_2_BONUS_AND_RELEASE_CLAUSE -> agreed_base=€105,000, bonus=€15,000, annual_psr=€11,987,500
+[2026-11-09 21:50:15] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-09 21:50:15] [INFO] [MCP_TOOL_12] Exported Triple Agency Documents for Min-Jae Kim -> C:\Users\DJ\Documents\ai_google\sports_agency\outputs\Min-Jae_Kim
+[2026-11-09 21:50:15] [INFO] [LANGGRAPH_NODE_5] Generated & saved Triple-Output Markdown documents for Min-Jae Kim
+[2026-11-09 21:51:28] [INFO] [TAVILY_INTEGRATION] Implemented search_with_tavily in config.py and MCP Tool 14 in football_mcp_server.py
+[2026-11-09 21:51:28] [INFO] [EGO_LITE_INTEGRATION] Implemented fetch_ego_lite_authenticated_scouting MCP Tool 15 with Capology-verified fallback in football_mcp_server.py
+[2026-11-09 21:51:28] [INFO] [FM_2D_HIGHLIGHT_ANALYSIS] Evaluated rea/fm_2d_grid_match.html for match/player highlight event sequencing and logged Q45 in qa.md
+[2026-11-09 21:57:25] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€38,000,000, wage=€105,000/wk, 4yr) -> annual_psr=€16,877,130
+[2026-11-09 21:57:25] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€200,000,000, wage=€585,000/wk, 4yr) -> annual_psr=€88,872,360
+[2026-11-09 21:57:25] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€200,000,000
+[2026-11-09 22:02:26] [INFO] [HIGHLIGHT_DATA_SOURCE_DISCLOSURE] Verified StatsBomb Open Data REST API (Match 3857262 Son assist / Hwang Hee-chan goal coords) and logged Q46 in qa.md
+[2026-11-09 22:04:37] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€38,000,000, wage=€105,000/wk, 4yr) -> annual_psr=€16,877,130
+[2026-11-09 22:04:37] [INFO] [MCP_TOOL_11] Discovered 6 undervalued prospects (pos=ALL, max_age=23)
+[2026-11-09 22:04:37] [INFO] [MCP_TOOL_8] scan_bosman_and_replacement_targets(pos=ALL, league=ALL) -> 25 club targets found
+[2026-11-09 22:04:37] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€200,000,000, wage=€585,000/wk, 4yr) -> annual_psr=€88,872,360
+[2026-11-09 22:04:37] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€200,000,000
+[2026-11-09 22:04:41] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€38,000,000, wage=€105,000/wk, 4yr) -> annual_psr=€16,877,130
+[2026-11-09 22:07:57] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-09 22:13:35] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-09 22:13:36] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Tottenham Hotspur, val=€38,000,000
+[2026-11-09 22:13:36] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-09 22:13:36] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€200,000,000
+[2026-11-09 22:13:37] [INFO] [MCP_TOOL_11] Discovered 5 undervalued prospects (pos=ALL, max_age=23)
+[2026-11-09 22:13:37] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Tottenham Hotspur, val=€38,000,000
+[2026-11-09 22:13:37] [INFO] [MCP_TOOL_8] scan_bosman_and_replacement_targets(pos=LW, league=Premier League) -> 5 club targets found
+[2026-11-09 22:13:37] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€40,000,000, wage=€120,000/wk, 4yr) -> annual_psr=€18,637,920
+[2026-11-09 22:13:38] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 22:13:39] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 22:13:39] [INFO] [MCP_TOOL_9] Registered custom external client 정상빈 (Jeong Sang-bin, Minnesota United) -> player_id=197986
+[2026-11-09 22:13:39] [INFO] [MCP_TOOL_1] get_player_complete_data(Jeong Sang-bin) -> club=Minnesota United, val=€2,500,000
+[2026-11-09 22:13:39] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-09 22:13:39] [INFO] [LANGGRAPH_NODE_1] Supervisor routed player=Min-Jae Kim to mode=TRACK_A_TRANSFER
+[2026-11-09 22:13:39] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-09 22:13:39] [INFO] [MCP_TOOL_3] get_peer_group_wage_band(pos=CB, age=30) -> Q25=€76,000, Median=€76,000, Q75=€91,000
+[2026-11-09 22:13:39] [INFO] [MCP_TOOL_2] find_matching_clubs_for_transfer(pos=CB, fee=20000000, wage=80400, league=ALL) -> 5 clubs matched
+[2026-11-09 22:13:40] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 22:13:40] [INFO] [VERTEX_GROUNDING_AUTH_WARN] Live Search Grounding failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging squad intelligence fallback
+[2026-11-09 22:13:40] [INFO] [MCP_TOOL_4] search_live_club_injury_and_rumors(club=Paris Saint-Germain FC, pos=CB) -> source=Agency Intelligence Desk Squad Database (Paris Saint-Germain FC)
+[2026-11-09 22:13:40] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Ligue 1, fee=€20,000,000, wage=€80,400/wk, 4yr) -> annual_psr=€10,421,904
+[2026-11-09 22:13:41] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-09 22:13:41] [INFO] [LANGGRAPH_NODE_2A] Completed Hermes Transfer Analysis for Min-Jae Kim
+[2026-11-09 22:13:41] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-09 22:13:41] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-09 22:13:41] [INFO] [LANGGRAPH_NODE_2C] Career Strategy resolved for Min-Jae Kim: 출전 보장 연계 1년 육성 임대 (Development Loan with 60% Starter Clause)
+[2026-11-09 22:13:41] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 22:13:42] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 22:13:43] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 22:13:43] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 22:13:44] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-09 22:13:44] [INFO] [LANGGRAPH_NODE_3] Completed SQLite Vector RAG & GBE calculation (15 pts) for Min-Jae Kim
+[2026-11-09 22:13:44] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-09 22:13:44] [INFO] [LANGGRAPH_NODE_4A] Sparring Round 1 completed vs Paris Saint-Germain FC (ask=€120,000, counter=€90,000)
+[2026-11-09 22:13:44] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-09 22:13:44] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Ligue 1, fee=€20,000,000, wage=€105,000/wk, 4yr) -> annual_psr=€11,987,500
+[2026-11-09 22:13:44] [INFO] [LANGGRAPH_NODE_4B] Sparring Round 2 resolved with strategy=OPTION_2_BONUS_AND_RELEASE_CLAUSE -> agreed_base=€105,000, bonus=€15,000, annual_psr=€11,987,500
+[2026-11-09 22:13:45] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-09 22:13:45] [INFO] [MCP_TOOL_12] Exported Triple Agency Documents for Min-Jae Kim -> C:\Users\DJ\Documents\ai_google\sports_agency\outputs\Min-Jae_Kim
+[2026-11-09 22:13:45] [INFO] [LANGGRAPH_NODE_5] Generated & saved Triple-Output Markdown documents for Min-Jae Kim
+[2026-11-09 22:13:54] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-09 22:14:40] [INFO] [TACTICS_DESK_FRONTEND_INTEGRATED] Integrated 2D Tactical Grid Match Engine into main platform (src/sports_agency/api/static/index.html) under Page 3/4 (#tactics) with dual-screen YouTube sync, local MP4 video drop zone, Opta verified stats, and player scouting cross-link.
+[2026-11-09 22:14:40] [INFO] [QA_LOG_UPDATED] Recorded Q47 in qa.md detailing Tactical Desk placement, 3 analysis modes, StatsBomb 120x80m coordinate mapping, and verified test suite.
+[2026-11-09 22:15:36] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€38,000,000, wage=€105,000/wk, 4yr) -> annual_psr=€16,877,130
+[2026-11-09 22:15:36] [INFO] [MCP_TOOL_11] Discovered 6 undervalued prospects (pos=ALL, max_age=23)
+[2026-11-09 22:15:36] [INFO] [MCP_TOOL_8] scan_bosman_and_replacement_targets(pos=ALL, league=ALL) -> 25 club targets found
+[2026-11-09 22:15:36] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€200,000,000
+[2026-11-09 22:15:36] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€200,000,000, wage=€585,000/wk, 4yr) -> annual_psr=€88,872,360
+[2026-11-09 22:15:37] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€38,000,000, wage=€105,000/wk, 4yr) -> annual_psr=€16,877,130
+[2026-11-09 22:15:37] [INFO] [MCP_TOOL_11] Discovered 6 undervalued prospects (pos=ALL, max_age=23)
+[2026-11-09 22:15:37] [INFO] [MCP_TOOL_8] scan_bosman_and_replacement_targets(pos=ALL, league=ALL) -> 25 club targets found
+[2026-11-09 22:15:37] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€38,000,000, wage=€105,000/wk, 4yr) -> annual_psr=€16,877,130
+[2026-11-09 22:15:37] [INFO] [MCP_TOOL_11] Discovered 6 undervalued prospects (pos=ALL, max_age=23)
+[2026-11-09 22:15:37] [INFO] [MCP_TOOL_8] scan_bosman_and_replacement_targets(pos=ALL, league=ALL) -> 25 club targets found
+[2026-11-09 22:15:37] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€200,000,000, wage=€585,000/wk, 4yr) -> annual_psr=€88,872,360
+[2026-11-09 22:15:37] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€200,000,000
+[2026-11-09 22:15:37] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€38,000,000, wage=€105,000/wk, 4yr) -> annual_psr=€16,877,130
+[2026-11-09 22:15:37] [INFO] [MCP_TOOL_11] Discovered 6 undervalued prospects (pos=ALL, max_age=23)
+[2026-11-09 22:15:37] [INFO] [MCP_TOOL_8] scan_bosman_and_replacement_targets(pos=ALL, league=ALL) -> 25 club targets found
+[2026-11-09 22:15:38] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€200,000,000
+[2026-11-09 22:15:38] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€200,000,000, wage=€585,000/wk, 4yr) -> annual_psr=€88,872,360
+[2026-11-09 22:18:03] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€24,500,000, wage=€175,240/wk, 4yr) -> annual_psr=€17,722,250
+[2026-11-09 22:18:03] [INFO] [MCP_TOOL_1] get_player_complete_data(Xabi Alonso (감독)) -> club=Chelsea FC, val=€24,500,000
+[2026-11-09 22:18:09] [INFO] [MCP_TOOL_1] get_player_complete_data(Kang-in Lee) -> club=Club Atlético de Madrid, val=€28,000,000
+[2026-11-09 22:18:09] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=La Liga, fee=€28,000,000, wage=€107,900/wk, 4yr) -> annual_psr=€13,988,258
+[2026-11-09 22:18:22] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€22,800,000, wage=€163,020/wk, 4yr) -> annual_psr=€16,514,765
+[2026-11-09 22:18:22] [INFO] [MCP_TOOL_1] get_player_complete_data(Michael Carrick (감독)) -> club=Manchester United FC, val=€22,800,000
+[2026-11-09 22:22:00] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-09 22:23:30] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-09 22:23:48] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-09 22:24:09] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-09 22:24:22] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-09 22:24:36] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-09 22:25:04] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-09 22:25:18] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-09 22:25:27] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-09 22:26:12] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-09 22:26:23] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-09 22:27:38] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-09 22:27:39] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Erling Haaland (Manchester City FC vs Arsenal FC)
+[2026-11-09 22:27:39] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Bukayo Saka (Arsenal FC vs Manchester City FC)
+[2026-11-09 22:27:39] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Min-Jae Kim (FC Bayern München vs Borussia Dortmund)
+[2026-11-09 22:34:56] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-09 22:34:57] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Tottenham Hotspur, val=€38,000,000
+[2026-11-09 22:34:57] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-09 22:34:57] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€200,000,000
+[2026-11-09 22:34:57] [INFO] [MCP_TOOL_11] Discovered 5 undervalued prospects (pos=ALL, max_age=23)
+[2026-11-09 22:34:57] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Tottenham Hotspur, val=€38,000,000
+[2026-11-09 22:34:57] [INFO] [MCP_TOOL_8] scan_bosman_and_replacement_targets(pos=LW, league=Premier League) -> 5 club targets found
+[2026-11-09 22:34:57] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€40,000,000, wage=€120,000/wk, 4yr) -> annual_psr=€18,637,920
+[2026-11-09 22:34:59] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 22:34:59] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 22:34:59] [INFO] [MCP_TOOL_9] Registered custom external client 정상빈 (Jeong Sang-bin, Minnesota United) -> player_id=197986
+[2026-11-09 22:34:59] [INFO] [MCP_TOOL_1] get_player_complete_data(Jeong Sang-bin) -> club=Minnesota United, val=€2,500,000
+[2026-11-09 22:35:00] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-09 22:35:00] [INFO] [LANGGRAPH_NODE_1] Supervisor routed player=Min-Jae Kim to mode=TRACK_A_TRANSFER
+[2026-11-09 22:35:00] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-09 22:35:00] [INFO] [MCP_TOOL_3] get_peer_group_wage_band(pos=CB, age=30) -> Q25=€76,000, Median=€76,000, Q75=€91,000
+[2026-11-09 22:35:00] [INFO] [MCP_TOOL_2] find_matching_clubs_for_transfer(pos=CB, fee=20000000, wage=80400, league=ALL) -> 5 clubs matched
+[2026-11-09 22:35:00] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 22:35:01] [INFO] [VERTEX_GROUNDING_AUTH_WARN] Live Search Grounding failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging squad intelligence fallback
+[2026-11-09 22:35:01] [INFO] [MCP_TOOL_4] search_live_club_injury_and_rumors(club=Paris Saint-Germain FC, pos=CB) -> source=Agency Intelligence Desk Squad Database (Paris Saint-Germain FC)
+[2026-11-09 22:35:01] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Ligue 1, fee=€20,000,000, wage=€80,400/wk, 4yr) -> annual_psr=€10,421,904
+[2026-11-09 22:35:01] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-09 22:35:01] [INFO] [LANGGRAPH_NODE_2A] Completed Hermes Transfer Analysis for Min-Jae Kim
+[2026-11-09 22:35:01] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-09 22:35:02] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-09 22:35:02] [INFO] [LANGGRAPH_NODE_2C] Career Strategy resolved for Min-Jae Kim: 출전 보장 연계 1년 육성 임대 (Development Loan with 60% Starter Clause)
+[2026-11-09 22:35:02] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 22:35:03] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 22:35:03] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 22:35:04] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 22:35:04] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-09 22:35:04] [INFO] [LANGGRAPH_NODE_3] Completed SQLite Vector RAG & GBE calculation (15 pts) for Min-Jae Kim
+[2026-11-09 22:35:05] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-09 22:35:05] [INFO] [LANGGRAPH_NODE_4A] Sparring Round 1 completed vs Paris Saint-Germain FC (ask=€120,000, counter=€90,000)
+[2026-11-09 22:35:05] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-09 22:35:05] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Ligue 1, fee=€20,000,000, wage=€105,000/wk, 4yr) -> annual_psr=€11,987,500
+[2026-11-09 22:35:05] [INFO] [LANGGRAPH_NODE_4B] Sparring Round 2 resolved with strategy=OPTION_2_BONUS_AND_RELEASE_CLAUSE -> agreed_base=€105,000, bonus=€15,000, annual_psr=€11,987,500
+[2026-11-09 22:35:06] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-09 22:35:06] [INFO] [MCP_TOOL_12] Exported Triple Agency Documents for Min-Jae Kim -> C:\Users\DJ\Documents\ai_google\sports_agency\outputs\Min-Jae_Kim
+[2026-11-09 22:35:06] [INFO] [LANGGRAPH_NODE_5] Generated & saved Triple-Output Markdown documents for Min-Jae Kim
+[2026-11-09 22:35:27] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-09 22:35:28] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Tottenham Hotspur, val=€38,000,000
+[2026-11-09 22:35:28] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-09 22:35:28] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€200,000,000
+[2026-11-09 22:35:28] [INFO] [MCP_TOOL_11] Discovered 5 undervalued prospects (pos=ALL, max_age=23)
+[2026-11-09 22:35:28] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Tottenham Hotspur, val=€38,000,000
+[2026-11-09 22:35:28] [INFO] [MCP_TOOL_8] scan_bosman_and_replacement_targets(pos=LW, league=Premier League) -> 5 club targets found
+[2026-11-09 22:35:28] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€40,000,000, wage=€120,000/wk, 4yr) -> annual_psr=€18,637,920
+[2026-11-09 22:35:30] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 22:35:31] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 22:35:31] [INFO] [MCP_TOOL_9] Registered custom external client 정상빈 (Jeong Sang-bin, Minnesota United) -> player_id=197986
+[2026-11-09 22:35:31] [INFO] [MCP_TOOL_1] get_player_complete_data(Jeong Sang-bin) -> club=Minnesota United, val=€2,500,000
+[2026-11-09 22:35:32] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-09 22:35:32] [INFO] [LANGGRAPH_NODE_1] Supervisor routed player=Min-Jae Kim to mode=TRACK_A_TRANSFER
+[2026-11-09 22:35:32] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-09 22:35:32] [INFO] [MCP_TOOL_3] get_peer_group_wage_band(pos=CB, age=30) -> Q25=€76,000, Median=€76,000, Q75=€91,000
+[2026-11-09 22:35:32] [INFO] [MCP_TOOL_2] find_matching_clubs_for_transfer(pos=CB, fee=20000000, wage=80400, league=ALL) -> 5 clubs matched
+[2026-11-09 22:35:32] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 22:35:33] [INFO] [VERTEX_GROUNDING_AUTH_WARN] Live Search Grounding failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging squad intelligence fallback
+[2026-11-09 22:35:33] [INFO] [MCP_TOOL_4] search_live_club_injury_and_rumors(club=Paris Saint-Germain FC, pos=CB) -> source=Agency Intelligence Desk Squad Database (Paris Saint-Germain FC)
+[2026-11-09 22:35:33] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Ligue 1, fee=€20,000,000, wage=€80,400/wk, 4yr) -> annual_psr=€10,421,904
+[2026-11-09 22:35:33] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-09 22:35:33] [INFO] [LANGGRAPH_NODE_2A] Completed Hermes Transfer Analysis for Min-Jae Kim
+[2026-11-09 22:35:33] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-09 22:35:34] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-09 22:35:34] [INFO] [LANGGRAPH_NODE_2C] Career Strategy resolved for Min-Jae Kim: 출전 보장 연계 1년 육성 임대 (Development Loan with 60% Starter Clause)
+[2026-11-09 22:35:34] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 22:35:35] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 22:35:35] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 22:35:36] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 22:35:36] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-09 22:35:36] [INFO] [LANGGRAPH_NODE_3] Completed SQLite Vector RAG & GBE calculation (15 pts) for Min-Jae Kim
+[2026-11-09 22:35:37] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-09 22:35:37] [INFO] [LANGGRAPH_NODE_4A] Sparring Round 1 completed vs Paris Saint-Germain FC (ask=€120,000, counter=€90,000)
+[2026-11-09 22:35:37] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-09 22:35:37] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Ligue 1, fee=€20,000,000, wage=€105,000/wk, 4yr) -> annual_psr=€11,987,500
+[2026-11-09 22:35:37] [INFO] [LANGGRAPH_NODE_4B] Sparring Round 2 resolved with strategy=OPTION_2_BONUS_AND_RELEASE_CLAUSE -> agreed_base=€105,000, bonus=€15,000, annual_psr=€11,987,500
+[2026-11-09 22:35:38] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-09 22:35:38] [INFO] [MCP_TOOL_12] Exported Triple Agency Documents for Min-Jae Kim -> C:\Users\DJ\Documents\ai_google\sports_agency\outputs\Min-Jae_Kim
+[2026-11-09 22:35:38] [INFO] [LANGGRAPH_NODE_5] Generated & saved Triple-Output Markdown documents for Min-Jae Kim
+[2026-11-09 22:35:38] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Erling Haaland (Manchester City FC vs Arsenal FC)
+[2026-11-09 22:35:38] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Bukayo Saka (Arsenal FC vs Manchester City FC)
+[2026-11-09 22:35:38] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Min-Jae Kim (FC Bayern München vs Borussia Dortmund)
+[2026-11-09 22:36:10] [INFO] [TACTICS_DESK_INTEGRATION] Completed dynamic player tactical highlights pipeline connecting Scouting Desk to 2D Tactics Desk. All 12 backend test suite items passed 100%. Q48 logged in qa.md.
+[2026-11-09 22:39:58] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€38,000,000, wage=€105,000/wk, 4yr) -> annual_psr=€16,877,130
+[2026-11-09 22:39:58] [INFO] [MCP_TOOL_11] Discovered 6 undervalued prospects (pos=ALL, max_age=23)
+[2026-11-09 22:39:58] [INFO] [MCP_TOOL_8] scan_bosman_and_replacement_targets(pos=ALL, league=ALL) -> 25 club targets found
+[2026-11-09 22:39:58] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€200,000,000, wage=€585,000/wk, 4yr) -> annual_psr=€88,872,360
+[2026-11-09 22:39:58] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€200,000,000
+[2026-11-09 22:40:10] [INFO] [MCP_TOOL_1] get_player_complete_data(Bruno Fernandes) -> club=Manchester United FC, val=€35,000,000
+[2026-11-09 22:40:10] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€35,000,000, wage=€206,700/wk, 4yr) -> annual_psr=€22,415,317
+[2026-11-09 22:41:47] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-09 22:41:47] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Bruno Fernandes (Manchester United FC vs Manchester City FC)
+[2026-11-09 22:42:18] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-09 22:42:20] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Bruno Fernandes (Manchester United FC vs Manchester City FC)
+[2026-11-09 22:42:32] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-09 22:42:32] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Bruno Fernandes (Manchester United FC vs Manchester City FC)
+[2026-11-09 22:44:38] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-09 22:44:40] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Bruno Fernandes (Manchester United FC vs Manchester City FC)
+[2026-11-09 22:46:18] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-09 22:46:34] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-09 22:46:55] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-09 22:51:22] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-09 22:51:52] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-09 22:56:17] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-09 22:56:18] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Tottenham Hotspur, val=€38,000,000
+[2026-11-09 22:56:18] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-09 22:56:18] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€200,000,000
+[2026-11-09 22:56:18] [INFO] [MCP_TOOL_11] Discovered 5 undervalued prospects (pos=ALL, max_age=23)
+[2026-11-09 22:56:18] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Tottenham Hotspur, val=€38,000,000
+[2026-11-09 22:56:18] [INFO] [MCP_TOOL_8] scan_bosman_and_replacement_targets(pos=LW, league=Premier League) -> 5 club targets found
+[2026-11-09 22:56:18] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€40,000,000, wage=€120,000/wk, 4yr) -> annual_psr=€18,637,920
+[2026-11-09 22:56:20] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 22:56:21] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 22:56:21] [INFO] [MCP_TOOL_9] Registered custom external client 정상빈 (Jeong Sang-bin, Minnesota United) -> player_id=197986
+[2026-11-09 22:56:21] [INFO] [MCP_TOOL_1] get_player_complete_data(Jeong Sang-bin) -> club=Minnesota United, val=€2,500,000
+[2026-11-09 22:56:21] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-09 22:56:21] [INFO] [LANGGRAPH_NODE_1] Supervisor routed player=Min-Jae Kim to mode=TRACK_A_TRANSFER
+[2026-11-09 22:56:21] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-09 22:56:21] [INFO] [MCP_TOOL_3] get_peer_group_wage_band(pos=CB, age=30) -> Q25=€76,000, Median=€76,000, Q75=€91,000
+[2026-11-09 22:56:21] [INFO] [MCP_TOOL_2] find_matching_clubs_for_transfer(pos=CB, fee=20000000, wage=80400, league=ALL) -> 5 clubs matched
+[2026-11-09 22:56:22] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 22:56:22] [INFO] [VERTEX_GROUNDING_AUTH_WARN] Live Search Grounding failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging squad intelligence fallback
+[2026-11-09 22:56:22] [INFO] [MCP_TOOL_4] search_live_club_injury_and_rumors(club=Paris Saint-Germain FC, pos=CB) -> source=Agency Intelligence Desk Squad Database (Paris Saint-Germain FC)
+[2026-11-09 22:56:22] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Ligue 1, fee=€20,000,000, wage=€80,400/wk, 4yr) -> annual_psr=€10,421,904
+[2026-11-09 22:56:23] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-09 22:56:23] [INFO] [LANGGRAPH_NODE_2A] Completed Hermes Transfer Analysis for Min-Jae Kim
+[2026-11-09 22:56:23] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-09 22:56:23] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-09 22:56:23] [INFO] [LANGGRAPH_NODE_2C] Career Strategy resolved for Min-Jae Kim: 출전 보장 연계 1년 육성 임대 (Development Loan with 60% Starter Clause)
+[2026-11-09 22:56:23] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 22:56:24] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 22:56:24] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 22:56:25] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 22:56:25] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-09 22:56:25] [INFO] [LANGGRAPH_NODE_3] Completed SQLite Vector RAG & GBE calculation (15 pts) for Min-Jae Kim
+[2026-11-09 22:56:26] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-09 22:56:26] [INFO] [LANGGRAPH_NODE_4A] Sparring Round 1 completed vs Paris Saint-Germain FC (ask=€120,000, counter=€90,000)
+[2026-11-09 22:56:26] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-09 22:56:26] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Ligue 1, fee=€20,000,000, wage=€105,000/wk, 4yr) -> annual_psr=€11,987,500
+[2026-11-09 22:56:26] [INFO] [LANGGRAPH_NODE_4B] Sparring Round 2 resolved with strategy=OPTION_2_BONUS_AND_RELEASE_CLAUSE -> agreed_base=€105,000, bonus=€15,000, annual_psr=€11,987,500
+[2026-11-09 22:56:27] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-09 22:56:27] [INFO] [MCP_TOOL_12] Exported Triple Agency Documents for Min-Jae Kim -> C:\Users\DJ\Documents\ai_google\sports_agency\outputs\Min-Jae_Kim
+[2026-11-09 22:56:27] [INFO] [LANGGRAPH_NODE_5] Generated & saved Triple-Output Markdown documents for Min-Jae Kim
+[2026-11-09 22:56:27] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Erling Haaland (Manchester City FC vs Arsenal FC)
+[2026-11-09 22:56:27] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Bukayo Saka (Arsenal FC vs Manchester City FC)
+[2026-11-09 22:56:27] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Min-Jae Kim (FC Bayern München vs Borussia Dortmund)
+[2026-11-09 22:56:57] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-09 22:56:57] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Bruno Fernandes (Manchester United FC vs Manchester City FC)
+[2026-11-09 22:57:15] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-09 22:57:23] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Bruno Fernandes (Manchester United FC vs Manchester City FC)
+[2026-11-09 22:57:34] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Erling Haaland (Manchester City FC vs Arsenal FC)
+[2026-11-09 22:58:50] [INFO] [Q49_RESOLUTION] Completed Bruno Fernandes tactical highlight overhaul: position-aware squad matching, YouTube direct sync, pitch legend updates, and test suite verification (12/12 passed).
+[2026-11-09 23:03:25] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€38,000,000, wage=€105,000/wk, 4yr) -> annual_psr=€16,877,130
+[2026-11-09 23:03:25] [INFO] [MCP_TOOL_11] Discovered 6 undervalued prospects (pos=ALL, max_age=23)
+[2026-11-09 23:03:25] [INFO] [MCP_TOOL_8] scan_bosman_and_replacement_targets(pos=ALL, league=ALL) -> 25 club targets found
+[2026-11-09 23:03:56] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-09 23:04:04] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€38,000,000, wage=€105,000/wk, 4yr) -> annual_psr=€16,877,130
+[2026-11-09 23:04:04] [INFO] [MCP_TOOL_11] Discovered 6 undervalued prospects (pos=ALL, max_age=23)
+[2026-11-09 23:04:04] [INFO] [MCP_TOOL_8] scan_bosman_and_replacement_targets(pos=ALL, league=ALL) -> 25 club targets found
+[2026-11-09 23:04:04] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€200,000,000
+[2026-11-09 23:04:04] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€200,000,000, wage=€585,000/wk, 4yr) -> annual_psr=€88,872,360
+[2026-11-09 23:04:18] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=La Liga, fee=€200,000,000, wage=€585,000/wk, 4yr) -> annual_psr=€86,651,700
+[2026-11-09 23:04:18] [INFO] [MCP_TOOL_1] get_player_complete_data(Lamine Yamal) -> club=FC Barcelona, val=€200,000,000
+[2026-11-09 23:04:20] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Lamine Yamal (FC Barcelona vs Real Madrid CF)
+[2026-11-09 23:04:40] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Lamine Yamal (FC Barcelona vs Real Madrid CF)
+[2026-11-09 23:04:51] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Lamine Yamal (FC Barcelona vs Real Madrid CF)
+[2026-11-09 23:04:53] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Lamine Yamal (FC Barcelona vs Real Madrid CF)
+[2026-11-09 23:05:01] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Lamine Yamal (FC Barcelona vs Real Madrid CF)
+[2026-11-09 23:05:24] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Lamine Yamal (FC Barcelona vs Real Madrid CF)
+[2026-11-09 23:05:26] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Lamine Yamal (FC Barcelona vs Real Madrid CF)
+[2026-11-09 23:05:27] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Lamine Yamal (FC Barcelona vs Real Madrid CF)
+[2026-11-09 23:06:56] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Bruno Fernandes (Manchester United FC vs Manchester City FC)
+[2026-11-09 23:07:28] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-09 23:15:16] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Bruno Fernandes (Manchester United FC vs Manchester City FC)
+[2026-11-09 23:18:19] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-09 23:18:21] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Tottenham Hotspur, val=€38,000,000
+[2026-11-09 23:18:21] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-09 23:18:21] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€200,000,000
+[2026-11-09 23:18:21] [INFO] [MCP_TOOL_11] Discovered 5 undervalued prospects (pos=ALL, max_age=23)
+[2026-11-09 23:18:21] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Tottenham Hotspur, val=€38,000,000
+[2026-11-09 23:18:21] [INFO] [MCP_TOOL_8] scan_bosman_and_replacement_targets(pos=LW, league=Premier League) -> 5 club targets found
+[2026-11-09 23:18:21] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€40,000,000, wage=€120,000/wk, 4yr) -> annual_psr=€18,637,920
+[2026-11-09 23:18:23] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 23:18:24] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 23:18:24] [INFO] [MCP_TOOL_9] Registered custom external client 정상빈 (Jeong Sang-bin, Minnesota United) -> player_id=197986
+[2026-11-09 23:18:24] [INFO] [MCP_TOOL_1] get_player_complete_data(Jeong Sang-bin) -> club=Minnesota United, val=€2,500,000
+[2026-11-09 23:18:25] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-09 23:18:25] [INFO] [LANGGRAPH_NODE_1] Supervisor routed player=Min-Jae Kim to mode=TRACK_A_TRANSFER
+[2026-11-09 23:18:25] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-09 23:18:25] [INFO] [MCP_TOOL_3] get_peer_group_wage_band(pos=CB, age=30) -> Q25=€76,000, Median=€76,000, Q75=€91,000
+[2026-11-09 23:18:25] [INFO] [MCP_TOOL_2] find_matching_clubs_for_transfer(pos=CB, fee=20000000, wage=80400, league=ALL) -> 5 clubs matched
+[2026-11-09 23:18:25] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 23:18:26] [INFO] [VERTEX_GROUNDING_AUTH_WARN] Live Search Grounding failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging squad intelligence fallback
+[2026-11-09 23:18:26] [INFO] [MCP_TOOL_4] search_live_club_injury_and_rumors(club=Paris Saint-Germain FC, pos=CB) -> source=Agency Intelligence Desk Squad Database (Paris Saint-Germain FC)
+[2026-11-09 23:18:26] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Ligue 1, fee=€20,000,000, wage=€80,400/wk, 4yr) -> annual_psr=€10,421,904
+[2026-11-09 23:18:26] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-09 23:18:26] [INFO] [LANGGRAPH_NODE_2A] Completed Hermes Transfer Analysis for Min-Jae Kim
+[2026-11-09 23:18:26] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-09 23:18:27] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-09 23:18:27] [INFO] [LANGGRAPH_NODE_2C] Career Strategy resolved for Min-Jae Kim: 출전 보장 연계 1년 육성 임대 (Development Loan with 60% Starter Clause)
+[2026-11-09 23:18:27] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 23:18:28] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 23:18:28] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 23:18:29] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 23:18:29] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-09 23:18:29] [INFO] [LANGGRAPH_NODE_3] Completed SQLite Vector RAG & GBE calculation (15 pts) for Min-Jae Kim
+[2026-11-09 23:18:30] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-09 23:18:30] [INFO] [LANGGRAPH_NODE_4A] Sparring Round 1 completed vs Paris Saint-Germain FC (ask=€120,000, counter=€90,000)
+[2026-11-09 23:18:30] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-09 23:18:30] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Ligue 1, fee=€20,000,000, wage=€105,000/wk, 4yr) -> annual_psr=€11,987,500
+[2026-11-09 23:18:30] [INFO] [LANGGRAPH_NODE_4B] Sparring Round 2 resolved with strategy=OPTION_2_BONUS_AND_RELEASE_CLAUSE -> agreed_base=€105,000, bonus=€15,000, annual_psr=€11,987,500
+[2026-11-09 23:18:31] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-09 23:18:31] [INFO] [MCP_TOOL_12] Exported Triple Agency Documents for Min-Jae Kim -> C:\Users\DJ\Documents\ai_google\sports_agency\outputs\Min-Jae_Kim
+[2026-11-09 23:18:31] [INFO] [LANGGRAPH_NODE_5] Generated & saved Triple-Output Markdown documents for Min-Jae Kim
+[2026-11-09 23:18:31] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Erling Haaland (Manchester City FC vs Arsenal FC)
+[2026-11-09 23:18:31] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Bukayo Saka (Arsenal FC vs Manchester City FC)
+[2026-11-09 23:18:31] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Min-Jae Kim (FC Bayern München vs Borussia Dortmund)
+[2026-11-09 23:19:11] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-09 23:19:25] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-09 23:23:11] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Bruno Fernandes (Manchester United FC vs Manchester City FC)
+[2026-11-09 23:23:30] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-09 23:23:43] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-09 23:23:44] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Tottenham Hotspur, val=€38,000,000
+[2026-11-09 23:23:44] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-09 23:23:44] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€200,000,000
+[2026-11-09 23:23:44] [INFO] [MCP_TOOL_11] Discovered 5 undervalued prospects (pos=ALL, max_age=23)
+[2026-11-09 23:23:44] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Tottenham Hotspur, val=€38,000,000
+[2026-11-09 23:23:44] [INFO] [MCP_TOOL_8] scan_bosman_and_replacement_targets(pos=LW, league=Premier League) -> 5 club targets found
+[2026-11-09 23:23:44] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€40,000,000, wage=€120,000/wk, 4yr) -> annual_psr=€18,637,920
+[2026-11-09 23:23:46] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 23:23:46] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 23:23:46] [INFO] [MCP_TOOL_9] Registered custom external client 정상빈 (Jeong Sang-bin, Minnesota United) -> player_id=197986
+[2026-11-09 23:23:46] [INFO] [MCP_TOOL_1] get_player_complete_data(Jeong Sang-bin) -> club=Minnesota United, val=€2,500,000
+[2026-11-09 23:23:47] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-09 23:23:47] [INFO] [LANGGRAPH_NODE_1] Supervisor routed player=Min-Jae Kim to mode=TRACK_A_TRANSFER
+[2026-11-09 23:23:47] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-09 23:23:47] [INFO] [MCP_TOOL_3] get_peer_group_wage_band(pos=CB, age=30) -> Q25=€76,000, Median=€76,000, Q75=€91,000
+[2026-11-09 23:23:47] [INFO] [MCP_TOOL_2] find_matching_clubs_for_transfer(pos=CB, fee=20000000, wage=80400, league=ALL) -> 5 clubs matched
+[2026-11-09 23:23:47] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 23:23:48] [INFO] [VERTEX_GROUNDING_AUTH_WARN] Live Search Grounding failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging squad intelligence fallback
+[2026-11-09 23:23:48] [INFO] [MCP_TOOL_4] search_live_club_injury_and_rumors(club=Paris Saint-Germain FC, pos=CB) -> source=Agency Intelligence Desk Squad Database (Paris Saint-Germain FC)
+[2026-11-09 23:23:48] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Ligue 1, fee=€20,000,000, wage=€80,400/wk, 4yr) -> annual_psr=€10,421,904
+[2026-11-09 23:23:48] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-09 23:23:48] [INFO] [LANGGRAPH_NODE_2A] Completed Hermes Transfer Analysis for Min-Jae Kim
+[2026-11-09 23:23:48] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-09 23:23:49] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-09 23:23:49] [INFO] [LANGGRAPH_NODE_2C] Career Strategy resolved for Min-Jae Kim: 출전 보장 연계 1년 육성 임대 (Development Loan with 60% Starter Clause)
+[2026-11-09 23:23:49] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 23:23:50] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 23:23:50] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 23:23:51] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 23:23:51] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-09 23:23:51] [INFO] [LANGGRAPH_NODE_3] Completed SQLite Vector RAG & GBE calculation (15 pts) for Min-Jae Kim
+[2026-11-09 23:23:52] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-09 23:23:52] [INFO] [LANGGRAPH_NODE_4A] Sparring Round 1 completed vs Paris Saint-Germain FC (ask=€120,000, counter=€90,000)
+[2026-11-09 23:23:52] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-09 23:23:52] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Ligue 1, fee=€20,000,000, wage=€105,000/wk, 4yr) -> annual_psr=€11,987,500
+[2026-11-09 23:23:52] [INFO] [LANGGRAPH_NODE_4B] Sparring Round 2 resolved with strategy=OPTION_2_BONUS_AND_RELEASE_CLAUSE -> agreed_base=€105,000, bonus=€15,000, annual_psr=€11,987,500
+[2026-11-09 23:23:53] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-09 23:23:53] [INFO] [MCP_TOOL_12] Exported Triple Agency Documents for Min-Jae Kim -> C:\Users\DJ\Documents\ai_google\sports_agency\outputs\Min-Jae_Kim
+[2026-11-09 23:23:53] [INFO] [LANGGRAPH_NODE_5] Generated & saved Triple-Output Markdown documents for Min-Jae Kim
+[2026-11-09 23:23:53] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Erling Haaland (Manchester City FC vs Arsenal FC)
+[2026-11-09 23:23:53] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Bukayo Saka (Arsenal FC vs Manchester City FC)
+[2026-11-09 23:23:53] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Min-Jae Kim (FC Bayern München vs Borussia Dortmund)
+[2026-11-09 23:24:30] [INFO] [TACTICS_ENGINE_YOUTUBE_VERIFIED] Verified and updated embed-playable YouTube IDs for Bruno Fernandes (h2EwOys6evI), FIFA World Cup (DVNwiAPuPTY), and 15+ world-class players.
+[2026-11-09 23:24:31] [INFO] [FRONTEND_TACTICS_ROUTING_FIXED] Fixed navbar #tactics navigation and mode-1 match switch to preserve selected player club match (Manchester United vs Manchester City) instead of reverting to South Korea vs Portugal.
+[2026-11-09 23:24:32] [INFO] [TEST_SUITE_VERIFIED] tests/test_full_backend_suite.py passed all 12 tests in 8.88s.
+[2026-11-09 23:27:54] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-09 23:28:23] [INFO] [MCP_TOOL_11] Discovered 6 undervalued prospects (pos=ALL, max_age=23)
+[2026-11-09 23:28:23] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€38,000,000, wage=€105,000/wk, 4yr) -> annual_psr=€16,877,130
+[2026-11-09 23:28:23] [INFO] [MCP_TOOL_8] scan_bosman_and_replacement_targets(pos=ALL, league=ALL) -> 25 club targets found
+[2026-11-09 23:28:23] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€200,000,000, wage=€585,000/wk, 4yr) -> annual_psr=€88,872,360
+[2026-11-09 23:28:23] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€200,000,000
+[2026-11-09 23:28:23] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Erling Haaland (Manchester City FC vs Arsenal FC)
+[2026-11-09 23:28:24] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€38,000,000, wage=€105,000/wk, 4yr) -> annual_psr=€16,877,130
+[2026-11-09 23:28:24] [INFO] [MCP_TOOL_11] Discovered 6 undervalued prospects (pos=ALL, max_age=23)
+[2026-11-09 23:28:24] [INFO] [MCP_TOOL_8] scan_bosman_and_replacement_targets(pos=ALL, league=ALL) -> 25 club targets found
+[2026-11-09 23:28:24] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€200,000,000, wage=€585,000/wk, 4yr) -> annual_psr=€88,872,360
+[2026-11-09 23:28:24] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€200,000,000
+[2026-11-09 23:28:24] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Erling Haaland (Manchester City FC vs Arsenal FC)
+[2026-11-09 23:28:57] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€30,000,000, wage=€176,800/wk, 4yr) -> annual_psr=€19,243,369
+[2026-11-09 23:28:57] [INFO] [MCP_TOOL_1] get_player_complete_data(Youri Tielemans) -> club=Manchester United FC, val=€30,000,000
+[2026-11-09 23:28:58] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Youri Tielemans (Manchester United FC vs Manchester City FC)
+[2026-11-09 23:28:58] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Youri Tielemans (Manchester United FC vs Manchester City FC)
+[2026-11-09 23:47:25] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-09 23:47:27] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Tottenham Hotspur, val=€38,000,000
+[2026-11-09 23:47:27] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-09 23:47:27] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€200,000,000
+[2026-11-09 23:47:27] [INFO] [MCP_TOOL_11] Discovered 5 undervalued prospects (pos=ALL, max_age=23)
+[2026-11-09 23:47:27] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Tottenham Hotspur, val=€38,000,000
+[2026-11-09 23:47:27] [INFO] [MCP_TOOL_8] scan_bosman_and_replacement_targets(pos=LW, league=Premier League) -> 5 club targets found
+[2026-11-09 23:47:27] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€40,000,000, wage=€120,000/wk, 4yr) -> annual_psr=€18,637,920
+[2026-11-09 23:47:29] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 23:47:30] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 23:47:30] [INFO] [MCP_TOOL_9] Registered custom external client 정상빈 (Jeong Sang-bin, Minnesota United) -> player_id=197986
+[2026-11-09 23:47:30] [INFO] [MCP_TOOL_1] get_player_complete_data(Jeong Sang-bin) -> club=Minnesota United, val=€2,500,000
+[2026-11-09 23:47:30] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-09 23:47:30] [INFO] [LANGGRAPH_NODE_1] Supervisor routed player=Min-Jae Kim to mode=TRACK_A_TRANSFER
+[2026-11-09 23:47:30] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-09 23:47:30] [INFO] [MCP_TOOL_3] get_peer_group_wage_band(pos=CB, age=30) -> Q25=€76,000, Median=€76,000, Q75=€91,000
+[2026-11-09 23:47:30] [INFO] [MCP_TOOL_2] find_matching_clubs_for_transfer(pos=CB, fee=20000000, wage=80400, league=ALL) -> 5 clubs matched
+[2026-11-09 23:47:31] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 23:47:31] [INFO] [VERTEX_GROUNDING_AUTH_WARN] Live Search Grounding failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging squad intelligence fallback
+[2026-11-09 23:47:31] [INFO] [MCP_TOOL_4] search_live_club_injury_and_rumors(club=Paris Saint-Germain FC, pos=CB) -> source=Agency Intelligence Desk Squad Database (Paris Saint-Germain FC)
+[2026-11-09 23:47:31] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Ligue 1, fee=€20,000,000, wage=€80,400/wk, 4yr) -> annual_psr=€10,421,904
+[2026-11-09 23:47:32] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-09 23:47:32] [INFO] [LANGGRAPH_NODE_2A] Completed Hermes Transfer Analysis for Min-Jae Kim
+[2026-11-09 23:47:32] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-09 23:47:32] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-09 23:47:32] [INFO] [LANGGRAPH_NODE_2C] Career Strategy resolved for Min-Jae Kim: 출전 보장 연계 1년 육성 임대 (Development Loan with 60% Starter Clause)
+[2026-11-09 23:47:33] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 23:47:33] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 23:47:34] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 23:47:34] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-09 23:47:35] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-09 23:47:35] [INFO] [LANGGRAPH_NODE_3] Completed SQLite Vector RAG & GBE calculation (15 pts) for Min-Jae Kim
+[2026-11-09 23:47:35] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-09 23:47:35] [INFO] [LANGGRAPH_NODE_4A] Sparring Round 1 completed vs Paris Saint-Germain FC (ask=€120,000, counter=€90,000)
+[2026-11-09 23:47:36] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-09 23:47:36] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Ligue 1, fee=€20,000,000, wage=€105,000/wk, 4yr) -> annual_psr=€11,987,500
+[2026-11-09 23:47:36] [INFO] [LANGGRAPH_NODE_4B] Sparring Round 2 resolved with strategy=OPTION_2_BONUS_AND_RELEASE_CLAUSE -> agreed_base=€105,000, bonus=€15,000, annual_psr=€11,987,500
+[2026-11-09 23:47:36] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-09 23:47:36] [INFO] [MCP_TOOL_12] Exported Triple Agency Documents for Min-Jae Kim -> C:\Users\DJ\Documents\ai_google\sports_agency\outputs\Min-Jae_Kim
+[2026-11-09 23:47:36] [INFO] [LANGGRAPH_NODE_5] Generated & saved Triple-Output Markdown documents for Min-Jae Kim
+[2026-11-09 23:47:36] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Erling Haaland (Manchester City FC vs Arsenal FC)
+[2026-11-09 23:47:36] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Bukayo Saka (Arsenal FC vs Manchester City FC)
+[2026-11-09 23:47:36] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Min-Jae Kim (FC Bayern München vs Borussia Dortmund)
+[2026-11-09 23:48:30] [FIX] [TACTICS_2D_DYNAMIC_REPLAY_ENGINE] Implemented multi-phase frame animations (TARGET_GOAL, TARGET_KEY_PASS, TARGET_RECOVERY, WC_HWANG, WC_HORTA, WC_KIM, WC_MOMENT), continuous living match flow (`updateLivingMatchFlow`), automatic trajectory fading (`fade: true`), and responsive playback/reset controls in `src/sports_agency/api/static/index.html`. Verified 12/12 tests in `tests/test_full_backend_suite.py` passed (9.51s).
+[2026-11-09 23:48:24] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Bruno Fernandes (Manchester United FC vs Manchester City FC)
+[2026-11-09 23:49:00] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€38,000,000, wage=€105,000/wk, 4yr) -> annual_psr=€16,877,130
+[2026-11-09 23:49:00] [INFO] [MCP_TOOL_11] Discovered 6 undervalued prospects (pos=ALL, max_age=23)
+[2026-11-09 23:49:00] [INFO] [MCP_TOOL_8] scan_bosman_and_replacement_targets(pos=ALL, league=ALL) -> 25 club targets found
+[2026-11-09 23:49:00] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€200,000,000, wage=€585,000/wk, 4yr) -> annual_psr=€88,872,360
+[2026-11-09 23:49:00] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€200,000,000
+[2026-11-09 23:49:00] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Erling Haaland (Manchester City FC vs Arsenal FC)
+[2026-11-10 00:01:17] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 00:01:18] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Tottenham Hotspur, val=€38,000,000
+[2026-11-10 00:01:18] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-10 00:01:18] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€200,000,000
+[2026-11-10 00:01:18] [INFO] [MCP_TOOL_11] Discovered 5 undervalued prospects (pos=ALL, max_age=23)
+[2026-11-10 00:01:18] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Tottenham Hotspur, val=€38,000,000
+[2026-11-10 00:01:18] [INFO] [MCP_TOOL_8] scan_bosman_and_replacement_targets(pos=LW, league=Premier League) -> 5 club targets found
+[2026-11-10 00:01:18] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€40,000,000, wage=€120,000/wk, 4yr) -> annual_psr=€18,637,920
+[2026-11-10 00:01:20] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-10 00:01:21] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-10 00:01:21] [INFO] [MCP_TOOL_9] Registered custom external client 정상빈 (Jeong Sang-bin, Minnesota United) -> player_id=197986
+[2026-11-10 00:01:21] [INFO] [MCP_TOOL_1] get_player_complete_data(Jeong Sang-bin) -> club=Minnesota United, val=€2,500,000
+[2026-11-10 00:01:21] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-10 00:01:21] [INFO] [LANGGRAPH_NODE_1] Supervisor routed player=Min-Jae Kim to mode=TRACK_A_TRANSFER
+[2026-11-10 00:01:21] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-10 00:01:21] [INFO] [MCP_TOOL_3] get_peer_group_wage_band(pos=CB, age=30) -> Q25=€76,000, Median=€76,000, Q75=€91,000
+[2026-11-10 00:01:21] [INFO] [MCP_TOOL_2] find_matching_clubs_for_transfer(pos=CB, fee=20000000, wage=80400, league=ALL) -> 5 clubs matched
+[2026-11-10 00:01:22] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-10 00:01:22] [INFO] [VERTEX_GROUNDING_AUTH_WARN] Live Search Grounding failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging squad intelligence fallback
+[2026-11-10 00:01:22] [INFO] [MCP_TOOL_4] search_live_club_injury_and_rumors(club=Paris Saint-Germain FC, pos=CB) -> source=Agency Intelligence Desk Squad Database (Paris Saint-Germain FC)
+[2026-11-10 00:01:22] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Ligue 1, fee=€20,000,000, wage=€80,400/wk, 4yr) -> annual_psr=€10,421,904
+[2026-11-10 00:01:23] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-10 00:01:23] [INFO] [LANGGRAPH_NODE_2A] Completed Hermes Transfer Analysis for Min-Jae Kim
+[2026-11-10 00:01:23] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-10 00:01:23] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-10 00:01:23] [INFO] [LANGGRAPH_NODE_2C] Career Strategy resolved for Min-Jae Kim: 출전 보장 연계 1년 육성 임대 (Development Loan with 60% Starter Clause)
+[2026-11-10 00:01:24] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-10 00:01:25] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-10 00:01:25] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-10 00:01:25] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-10 00:01:26] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-10 00:01:26] [INFO] [LANGGRAPH_NODE_3] Completed SQLite Vector RAG & GBE calculation (15 pts) for Min-Jae Kim
+[2026-11-10 00:01:26] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-10 00:01:26] [INFO] [LANGGRAPH_NODE_4A] Sparring Round 1 completed vs Paris Saint-Germain FC (ask=€120,000, counter=€90,000)
+[2026-11-10 00:01:27] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-10 00:01:27] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Ligue 1, fee=€20,000,000, wage=€105,000/wk, 4yr) -> annual_psr=€11,987,500
+[2026-11-10 00:01:27] [INFO] [LANGGRAPH_NODE_4B] Sparring Round 2 resolved with strategy=OPTION_2_BONUS_AND_RELEASE_CLAUSE -> agreed_base=€105,000, bonus=€15,000, annual_psr=€11,987,500
+[2026-11-10 00:01:27] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-10 00:01:27] [INFO] [MCP_TOOL_12] Exported Triple Agency Documents for Min-Jae Kim -> C:\Users\DJ\Documents\ai_google\sports_agency\outputs\Min-Jae_Kim
+[2026-11-10 00:01:27] [INFO] [LANGGRAPH_NODE_5] Generated & saved Triple-Output Markdown documents for Min-Jae Kim
+[2026-11-10 00:01:27] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Erling Haaland (Manchester City FC vs Arsenal FC)
+[2026-11-10 00:01:27] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Bukayo Saka (Arsenal FC vs Manchester City FC)
+[2026-11-10 00:01:27] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Min-Jae Kim (FC Bayern München vs Borussia Dortmund)
+[2026-11-10 00:02:40] [FIX] [AUTHENTIC_SEQUENTIAL_REPLAY_ENGINE] Implemented 5-phase sequential football play replay engine (Buildup pass -> Assist cross -> Box off-the-ball sprint -> Direct finish shot -> Goal net ripple -> Corner flag celebration -> Review state hold) and dedicated [🔄 시퀀스 리플레이 다시보기] button in `src/sports_agency/api/static/index.html`. Isolated generic ball circulation (`updateLivingMatchFlow`) strictly to `tacticsMode === 'sim'`. Documented Q52 in `qa.md`. All 12 backend tests passed (9.309s).
+[2026-11-10 00:02:36] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Bruno Fernandes (Manchester United FC vs Manchester City FC)
+[2026-11-10 00:04:59] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€38,000,000, wage=€105,000/wk, 4yr) -> annual_psr=€16,877,130
+[2026-11-10 00:04:59] [INFO] [MCP_TOOL_11] Discovered 6 undervalued prospects (pos=ALL, max_age=23)
+[2026-11-10 00:04:59] [INFO] [MCP_TOOL_8] scan_bosman_and_replacement_targets(pos=ALL, league=ALL) -> 25 club targets found
+[2026-11-10 00:04:59] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€200,000,000
+[2026-11-10 00:04:59] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€200,000,000, wage=€585,000/wk, 4yr) -> annual_psr=€88,872,360
+[2026-11-10 00:04:59] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Erling Haaland (Manchester City FC vs Arsenal FC)
+[2026-11-10 00:05:03] [INFO] [MCP_TOOL_8] scan_bosman_and_replacement_targets(pos=ALL, league=ALL) -> 25 club targets found
+[2026-11-10 00:05:03] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€38,000,000, wage=€105,000/wk, 4yr) -> annual_psr=€16,877,130
+[2026-11-10 00:05:03] [INFO] [MCP_TOOL_11] Discovered 6 undervalued prospects (pos=ALL, max_age=23)
+[2026-11-10 00:05:03] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€200,000,000, wage=€585,000/wk, 4yr) -> annual_psr=€88,872,360
+[2026-11-10 00:05:04] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€200,000,000
+[2026-11-10 00:05:04] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Erling Haaland (Manchester City FC vs Arsenal FC)
+[2026-11-10 00:05:07] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€38,000,000, wage=€105,000/wk, 4yr) -> annual_psr=€16,877,130
+[2026-11-10 00:05:07] [INFO] [MCP_TOOL_11] Discovered 6 undervalued prospects (pos=ALL, max_age=23)
+[2026-11-10 00:05:07] [INFO] [MCP_TOOL_8] scan_bosman_and_replacement_targets(pos=ALL, league=ALL) -> 25 club targets found
+[2026-11-10 00:05:07] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€200,000,000, wage=€585,000/wk, 4yr) -> annual_psr=€88,872,360
+[2026-11-10 00:05:07] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€200,000,000
+[2026-11-10 00:05:07] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Erling Haaland (Manchester City FC vs Arsenal FC)
+[2026-11-10 00:10:24] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Erling Haaland (Manchester City FC vs Arsenal FC)
+[2026-11-10 00:19:08] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 00:19:10] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Tottenham Hotspur, val=€38,000,000
+[2026-11-10 00:19:10] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-10 00:19:10] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€200,000,000
+[2026-11-10 00:19:10] [INFO] [MCP_TOOL_11] Discovered 5 undervalued prospects (pos=ALL, max_age=23)
+[2026-11-10 00:19:10] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Tottenham Hotspur, val=€38,000,000
+[2026-11-10 00:19:10] [INFO] [MCP_TOOL_8] scan_bosman_and_replacement_targets(pos=LW, league=Premier League) -> 5 club targets found
+[2026-11-10 00:19:10] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€40,000,000, wage=€120,000/wk, 4yr) -> annual_psr=€18,637,920
+[2026-11-10 00:19:11] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-10 00:19:12] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-10 00:19:12] [INFO] [MCP_TOOL_9] Registered custom external client 정상빈 (Jeong Sang-bin, Minnesota United) -> player_id=197986
+[2026-11-10 00:19:12] [INFO] [MCP_TOOL_1] get_player_complete_data(Jeong Sang-bin) -> club=Minnesota United, val=€2,500,000
+[2026-11-10 00:19:12] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-10 00:19:12] [INFO] [LANGGRAPH_NODE_1] Supervisor routed player=Min-Jae Kim to mode=TRACK_A_TRANSFER
+[2026-11-10 00:19:12] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-10 00:19:12] [INFO] [MCP_TOOL_3] get_peer_group_wage_band(pos=CB, age=30) -> Q25=€76,000, Median=€76,000, Q75=€91,000
+[2026-11-10 00:19:12] [INFO] [MCP_TOOL_2] find_matching_clubs_for_transfer(pos=CB, fee=20000000, wage=80400, league=ALL) -> 5 clubs matched
+[2026-11-10 00:19:13] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-10 00:19:13] [INFO] [VERTEX_GROUNDING_AUTH_WARN] Live Search Grounding failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging squad intelligence fallback
+[2026-11-10 00:19:13] [INFO] [MCP_TOOL_4] search_live_club_injury_and_rumors(club=Paris Saint-Germain FC, pos=CB) -> source=Agency Intelligence Desk Squad Database (Paris Saint-Germain FC)
+[2026-11-10 00:19:13] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Ligue 1, fee=€20,000,000, wage=€80,400/wk, 4yr) -> annual_psr=€10,421,904
+[2026-11-10 00:19:14] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-10 00:19:14] [INFO] [LANGGRAPH_NODE_2A] Completed Hermes Transfer Analysis for Min-Jae Kim
+[2026-11-10 00:19:14] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-10 00:19:14] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-10 00:19:14] [INFO] [LANGGRAPH_NODE_2C] Career Strategy resolved for Min-Jae Kim: 출전 보장 연계 1년 육성 임대 (Development Loan with 60% Starter Clause)
+[2026-11-10 00:19:15] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-10 00:19:15] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-10 00:19:16] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-10 00:19:16] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-10 00:19:17] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-10 00:19:17] [INFO] [LANGGRAPH_NODE_3] Completed SQLite Vector RAG & GBE calculation (15 pts) for Min-Jae Kim
+[2026-11-10 00:19:17] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-10 00:19:17] [INFO] [LANGGRAPH_NODE_4A] Sparring Round 1 completed vs Paris Saint-Germain FC (ask=€120,000, counter=€90,000)
+[2026-11-10 00:19:18] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-10 00:19:18] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Ligue 1, fee=€20,000,000, wage=€105,000/wk, 4yr) -> annual_psr=€11,987,500
+[2026-11-10 00:19:18] [INFO] [LANGGRAPH_NODE_4B] Sparring Round 2 resolved with strategy=OPTION_2_BONUS_AND_RELEASE_CLAUSE -> agreed_base=€105,000, bonus=€15,000, annual_psr=€11,987,500
+[2026-11-10 00:19:18] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-10 00:19:18] [INFO] [MCP_TOOL_12] Exported Triple Agency Documents for Min-Jae Kim -> C:\Users\DJ\Documents\ai_google\sports_agency\outputs\Min-Jae_Kim
+[2026-11-10 00:19:18] [INFO] [LANGGRAPH_NODE_5] Generated & saved Triple-Output Markdown documents for Min-Jae Kim
+[2026-11-10 00:19:18] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Erling Haaland (Manchester City FC vs Arsenal FC)
+[2026-11-10 00:19:18] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Bukayo Saka (Arsenal FC vs Manchester City FC)
+[2026-11-10 00:19:18] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Min-Jae Kim (FC Bayern München vs Borussia Dortmund)
+[2026-11-10 00:20:10] [QA_UPDATE] Updated qa.md with Q53: Fixed ReferenceError on 3rd moment button, calibrated playback pacing (lerp 0.035-0.05, 7-12s duration), implemented dynamic on-pitch tactical ability badges, and set 5-zone corridors unchecked by default.
+[2026-11-10 00:23:09] [INFO] [MCP_TOOL_11] Discovered 6 undervalued prospects (pos=ALL, max_age=23)
+[2026-11-10 00:23:09] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€38,000,000, wage=€105,000/wk, 4yr) -> annual_psr=€16,877,130
+[2026-11-10 00:23:10] [INFO] [MCP_TOOL_8] scan_bosman_and_replacement_targets(pos=ALL, league=ALL) -> 25 club targets found
+[2026-11-10 00:23:10] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€200,000,000, wage=€585,000/wk, 4yr) -> annual_psr=€88,872,360
+[2026-11-10 00:23:10] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€200,000,000
+[2026-11-10 00:23:10] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Erling Haaland (Manchester City FC vs Arsenal FC)
+[2026-11-10 00:29:22] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 00:29:35] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 00:29:35] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Bruno Fernandes (Manchester United FC vs Manchester City FC)
+[2026-11-10 00:29:36] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 00:41:18] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 00:41:20] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Tottenham Hotspur, val=€38,000,000
+[2026-11-10 00:41:20] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-10 00:41:20] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€200,000,000
+[2026-11-10 00:41:20] [INFO] [MCP_TOOL_11] Discovered 5 undervalued prospects (pos=ALL, max_age=23)
+[2026-11-10 00:41:20] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Tottenham Hotspur, val=€38,000,000
+[2026-11-10 00:41:20] [INFO] [MCP_TOOL_8] scan_bosman_and_replacement_targets(pos=LW, league=Premier League) -> 5 club targets found
+[2026-11-10 00:41:20] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€40,000,000, wage=€120,000/wk, 4yr) -> annual_psr=€18,637,920
+[2026-11-10 00:41:22] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-10 00:41:23] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-10 00:41:23] [INFO] [MCP_TOOL_9] Registered custom external client 정상빈 (Jeong Sang-bin, Minnesota United) -> player_id=197986
+[2026-11-10 00:41:23] [INFO] [MCP_TOOL_1] get_player_complete_data(Jeong Sang-bin) -> club=Minnesota United, val=€2,500,000
+[2026-11-10 00:41:23] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-10 00:41:23] [INFO] [LANGGRAPH_NODE_1] Supervisor routed player=Min-Jae Kim to mode=TRACK_A_TRANSFER
+[2026-11-10 00:41:23] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-10 00:41:23] [INFO] [MCP_TOOL_3] get_peer_group_wage_band(pos=CB, age=30) -> Q25=€76,000, Median=€76,000, Q75=€91,000
+[2026-11-10 00:41:23] [INFO] [MCP_TOOL_2] find_matching_clubs_for_transfer(pos=CB, fee=20000000, wage=80400, league=ALL) -> 5 clubs matched
+[2026-11-10 00:41:24] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-10 00:41:24] [INFO] [VERTEX_GROUNDING_AUTH_WARN] Live Search Grounding failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging squad intelligence fallback
+[2026-11-10 00:41:24] [INFO] [MCP_TOOL_4] search_live_club_injury_and_rumors(club=Paris Saint-Germain FC, pos=CB) -> source=Agency Intelligence Desk Squad Database (Paris Saint-Germain FC)
+[2026-11-10 00:41:24] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Ligue 1, fee=€20,000,000, wage=€80,400/wk, 4yr) -> annual_psr=€10,421,904
+[2026-11-10 00:41:25] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-10 00:41:25] [INFO] [LANGGRAPH_NODE_2A] Completed Hermes Transfer Analysis for Min-Jae Kim
+[2026-11-10 00:41:25] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-10 00:41:25] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-10 00:41:25] [INFO] [LANGGRAPH_NODE_2C] Career Strategy resolved for Min-Jae Kim: 출전 보장 연계 1년 육성 임대 (Development Loan with 60% Starter Clause)
+[2026-11-10 00:41:25] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-10 00:41:26] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-10 00:41:26] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-10 00:41:27] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-10 00:41:27] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-10 00:41:27] [INFO] [LANGGRAPH_NODE_3] Completed SQLite Vector RAG & GBE calculation (15 pts) for Min-Jae Kim
+[2026-11-10 00:41:28] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-10 00:41:28] [INFO] [LANGGRAPH_NODE_4A] Sparring Round 1 completed vs Paris Saint-Germain FC (ask=€120,000, counter=€90,000)
+[2026-11-10 00:41:28] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-10 00:41:28] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Ligue 1, fee=€20,000,000, wage=€105,000/wk, 4yr) -> annual_psr=€11,987,500
+[2026-11-10 00:41:28] [INFO] [LANGGRAPH_NODE_4B] Sparring Round 2 resolved with strategy=OPTION_2_BONUS_AND_RELEASE_CLAUSE -> agreed_base=€105,000, bonus=€15,000, annual_psr=€11,987,500
+[2026-11-10 00:41:29] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-10 00:41:29] [INFO] [MCP_TOOL_12] Exported Triple Agency Documents for Min-Jae Kim -> C:\Users\DJ\Documents\ai_google\sports_agency\outputs\Min-Jae_Kim
+[2026-11-10 00:41:29] [INFO] [LANGGRAPH_NODE_5] Generated & saved Triple-Output Markdown documents for Min-Jae Kim
+[2026-11-10 00:41:29] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Erling Haaland (Manchester City FC vs Arsenal FC)
+[2026-11-10 00:41:29] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Bukayo Saka (Arsenal FC vs Manchester City FC)
+[2026-11-10 00:41:29] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Min-Jae Kim (FC Bayern München vs Borussia Dortmund)
+[2026-11-10 00:42:30] [INFO] [FM_TACTICS_UNIT_PHYSICS_UPGRADE] Implemented Football Manager 22-player team unit movement physics (`updateFMTeamUnitMovement`), realistic cyclical foot-touch dribble mechanics with deceleration and stride sway, 90-minute Action Map spatial flow pins on 2D pitch with hover cards, and [Full FM Reel] continuous sequence playback mode. Tests 100% passed.
+[2026-11-10 00:42:51] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€38,000,000, wage=€105,000/wk, 4yr) -> annual_psr=€16,877,130
+[2026-11-10 00:42:51] [INFO] [MCP_TOOL_11] Discovered 6 undervalued prospects (pos=ALL, max_age=23)
+[2026-11-10 00:42:51] [INFO] [MCP_TOOL_8] scan_bosman_and_replacement_targets(pos=ALL, league=ALL) -> 25 club targets found
+[2026-11-10 00:42:51] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€200,000,000, wage=€585,000/wk, 4yr) -> annual_psr=€88,872,360
+[2026-11-10 00:42:51] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€200,000,000
+[2026-11-10 00:42:51] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Erling Haaland (Manchester City FC vs Arsenal FC)
+[2026-11-10 00:48:46] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 00:48:48] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Tottenham Hotspur, val=€38,000,000
+[2026-11-10 00:48:48] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-10 00:48:48] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€200,000,000
+[2026-11-10 00:48:48] [INFO] [MCP_TOOL_11] Discovered 5 undervalued prospects (pos=ALL, max_age=23)
+[2026-11-10 00:48:48] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Tottenham Hotspur, val=€38,000,000
+[2026-11-10 00:48:48] [INFO] [MCP_TOOL_8] scan_bosman_and_replacement_targets(pos=LW, league=Premier League) -> 5 club targets found
+[2026-11-10 00:48:48] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€40,000,000, wage=€120,000/wk, 4yr) -> annual_psr=€18,637,920
+[2026-11-10 00:48:49] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-10 00:48:50] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-10 00:48:50] [INFO] [MCP_TOOL_9] Registered custom external client 정상빈 (Jeong Sang-bin, Minnesota United) -> player_id=197986
+[2026-11-10 00:48:50] [INFO] [MCP_TOOL_1] get_player_complete_data(Jeong Sang-bin) -> club=Minnesota United, val=€2,500,000
+[2026-11-10 00:48:51] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-10 00:48:51] [INFO] [LANGGRAPH_NODE_1] Supervisor routed player=Min-Jae Kim to mode=TRACK_A_TRANSFER
+[2026-11-10 00:48:51] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-10 00:48:51] [INFO] [MCP_TOOL_3] get_peer_group_wage_band(pos=CB, age=30) -> Q25=€76,000, Median=€76,000, Q75=€91,000
+[2026-11-10 00:48:51] [INFO] [MCP_TOOL_2] find_matching_clubs_for_transfer(pos=CB, fee=20000000, wage=80400, league=ALL) -> 5 clubs matched
+[2026-11-10 00:48:51] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-10 00:48:51] [INFO] [VERTEX_GROUNDING_AUTH_WARN] Live Search Grounding failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging squad intelligence fallback
+[2026-11-10 00:48:51] [INFO] [MCP_TOOL_4] search_live_club_injury_and_rumors(club=Paris Saint-Germain FC, pos=CB) -> source=Agency Intelligence Desk Squad Database (Paris Saint-Germain FC)
+[2026-11-10 00:48:51] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Ligue 1, fee=€20,000,000, wage=€80,400/wk, 4yr) -> annual_psr=€10,421,904
+[2026-11-10 00:48:52] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-10 00:48:52] [INFO] [LANGGRAPH_NODE_2A] Completed Hermes Transfer Analysis for Min-Jae Kim
+[2026-11-10 00:48:52] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-10 00:48:52] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-10 00:48:52] [INFO] [LANGGRAPH_NODE_2C] Career Strategy resolved for Min-Jae Kim: 출전 보장 연계 1년 육성 임대 (Development Loan with 60% Starter Clause)
+[2026-11-10 00:48:53] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-10 00:48:53] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-10 00:48:54] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-10 00:48:54] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-10 00:48:55] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-10 00:48:55] [INFO] [LANGGRAPH_NODE_3] Completed SQLite Vector RAG & GBE calculation (15 pts) for Min-Jae Kim
+[2026-11-10 00:48:55] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-10 00:48:55] [INFO] [LANGGRAPH_NODE_4A] Sparring Round 1 completed vs Paris Saint-Germain FC (ask=€120,000, counter=€90,000)
+[2026-11-10 00:48:56] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-10 00:48:56] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Ligue 1, fee=€20,000,000, wage=€105,000/wk, 4yr) -> annual_psr=€11,987,500
+[2026-11-10 00:48:56] [INFO] [LANGGRAPH_NODE_4B] Sparring Round 2 resolved with strategy=OPTION_2_BONUS_AND_RELEASE_CLAUSE -> agreed_base=€105,000, bonus=€15,000, annual_psr=€11,987,500
+[2026-11-10 00:48:56] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-10 00:48:56] [INFO] [MCP_TOOL_12] Exported Triple Agency Documents for Min-Jae Kim -> C:\Users\DJ\Documents\ai_google\sports_agency\outputs\Min-Jae_Kim
+[2026-11-10 00:48:56] [INFO] [LANGGRAPH_NODE_5] Generated & saved Triple-Output Markdown documents for Min-Jae Kim
+[2026-11-10 00:48:56] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Erling Haaland (Manchester City FC vs Arsenal FC)
+[2026-11-10 00:48:56] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Bukayo Saka (Arsenal FC vs Manchester City FC)
+[2026-11-10 00:48:56] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Min-Jae Kim (FC Bayern München vs Borussia Dortmund)
+[2026-11-10 00:49:05] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 00:49:07] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Tottenham Hotspur, val=€38,000,000
+[2026-11-10 00:49:07] [INFO] [MCP_TOOL_11] Discovered 5 undervalued prospects (pos=ALL, max_age=23)
+[2026-11-10 00:49:07] [INFO] [MCP_TOOL_12] Exported Triple Agency Documents for Heung-min Son -> C:\Users\DJ\Documents\ai_google\sports_agency\outputs\Heung-min_Son
+[2026-11-10 00:49:08] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-10 00:49:08] [INFO] [LANGGRAPH_NODE_1] Supervisor routed player=Heung-min Son to mode=TRACK_A_TRANSFER
+[2026-11-10 00:49:08] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Tottenham Hotspur, val=€38,000,000
+[2026-11-10 00:49:08] [INFO] [MCP_TOOL_3] get_peer_group_wage_band(pos=LW, age=33) -> Q25=€100,000, Median=€141,000, Q75=€145,000
+[2026-11-10 00:49:08] [INFO] [MCP_TOOL_2] find_matching_clubs_for_transfer(pos=LW, fee=38000000, wage=300000, league=ALL) -> 4 clubs matched
+[2026-11-10 00:49:09] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-10 00:49:09] [INFO] [VERTEX_GROUNDING_AUTH_WARN] Live Search Grounding failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging squad intelligence fallback
+[2026-11-10 00:49:09] [INFO] [MCP_TOOL_4] search_live_club_injury_and_rumors(club=Chelsea FC, pos=LW) -> source=Agency Intelligence Desk Squad Database (Chelsea FC)
+[2026-11-10 00:49:09] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€38,000,000, wage=€300,000/wk, 4yr) -> annual_psr=€28,677,300
+[2026-11-10 00:49:10] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-10 00:49:10] [INFO] [LANGGRAPH_NODE_2A] Completed Hermes Transfer Analysis for Heung-min Son
+[2026-11-10 00:49:10] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Tottenham Hotspur, val=€38,000,000
+[2026-11-10 00:49:10] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-10 00:49:10] [INFO] [LANGGRAPH_NODE_2C] Career Strategy resolved for Heung-min Son: 보스만 윈도우 잔류 후 자유계약 (Zero-Fee Mega Signing)
+[2026-11-10 00:49:11] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-10 00:49:11] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-10 00:49:12] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-10 00:49:12] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-10 00:49:12] [INFO] [LANGGRAPH_NODE_3] Completed SQLite Vector RAG & GBE calculation (15 pts) for Heung-min Son
+[2026-11-10 00:49:13] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-10 00:49:13] [INFO] [LANGGRAPH_NODE_4A] Sparring Round 1 completed vs Chelsea FC (ask=€120,000, counter=€90,000)
+[2026-11-10 00:49:13] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-10 00:49:13] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€38,000,000, wage=€105,000/wk, 4yr) -> annual_psr=€16,377,130
+[2026-11-10 00:49:13] [INFO] [LANGGRAPH_NODE_4B] Sparring Round 2 resolved with strategy=OPTION_2_BONUS_AND_RELEASE_CLAUSE -> agreed_base=€105,000, bonus=€15,000, annual_psr=€16,377,130
+[2026-11-10 00:49:14] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-10 00:49:14] [INFO] [MCP_TOOL_12] Exported Triple Agency Documents for Heung-min Son -> C:\Users\DJ\Documents\ai_google\sports_agency\outputs\Heung-min_Son
+[2026-11-10 00:49:14] [INFO] [LANGGRAPH_NODE_5] Generated & saved Triple-Output Markdown documents for Heung-min Son
+[2026-11-10 00:49:14] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Tottenham Hotspur, val=€38,000,000
+[2026-11-10 00:49:14] [INFO] [MCP_TOOL_11] Discovered 3 undervalued prospects (pos=ALL, max_age=23)
+[2026-11-10 00:51:37] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 00:52:02] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 00:52:04] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 00:52:15] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 00:52:16] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Tottenham Hotspur, val=€38,000,000
+[2026-11-10 00:52:16] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-10 00:52:16] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€200,000,000
+[2026-11-10 00:52:16] [INFO] [MCP_TOOL_11] Discovered 5 undervalued prospects (pos=ALL, max_age=23)
+[2026-11-10 00:52:16] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Tottenham Hotspur, val=€38,000,000
+[2026-11-10 00:52:16] [INFO] [MCP_TOOL_8] scan_bosman_and_replacement_targets(pos=LW, league=Premier League) -> 5 club targets found
+[2026-11-10 00:52:16] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€40,000,000, wage=€120,000/wk, 4yr) -> annual_psr=€18,637,920
+[2026-11-10 00:52:18] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-10 00:52:19] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-10 00:52:19] [INFO] [MCP_TOOL_9] Registered custom external client 정상빈 (Jeong Sang-bin, Minnesota United) -> player_id=197986
+[2026-11-10 00:52:19] [INFO] [MCP_TOOL_1] get_player_complete_data(Jeong Sang-bin) -> club=Minnesota United, val=€2,500,000
+[2026-11-10 00:52:20] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-10 00:52:20] [INFO] [LANGGRAPH_NODE_1] Supervisor routed player=Min-Jae Kim to mode=TRACK_A_TRANSFER
+[2026-11-10 00:52:20] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-10 00:52:20] [INFO] [MCP_TOOL_3] get_peer_group_wage_band(pos=CB, age=30) -> Q25=€76,000, Median=€76,000, Q75=€91,000
+[2026-11-10 00:52:20] [INFO] [MCP_TOOL_2] find_matching_clubs_for_transfer(pos=CB, fee=20000000, wage=80400, league=ALL) -> 5 clubs matched
+[2026-11-10 00:52:20] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-10 00:52:20] [INFO] [VERTEX_GROUNDING_AUTH_WARN] Live Search Grounding failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging squad intelligence fallback
+[2026-11-10 00:52:20] [INFO] [MCP_TOOL_4] search_live_club_injury_and_rumors(club=Paris Saint-Germain FC, pos=CB) -> source=Agency Intelligence Desk Squad Database (Paris Saint-Germain FC)
+[2026-11-10 00:52:20] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Ligue 1, fee=€20,000,000, wage=€80,400/wk, 4yr) -> annual_psr=€10,421,904
+[2026-11-10 00:52:21] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-10 00:52:21] [INFO] [LANGGRAPH_NODE_2A] Completed Hermes Transfer Analysis for Min-Jae Kim
+[2026-11-10 00:52:21] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-10 00:52:21] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-10 00:52:21] [INFO] [LANGGRAPH_NODE_2C] Career Strategy resolved for Min-Jae Kim: 출전 보장 연계 1년 육성 임대 (Development Loan with 60% Starter Clause)
+[2026-11-10 00:52:22] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-10 00:52:22] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-10 00:52:23] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-10 00:52:23] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-10 00:52:24] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-10 00:52:24] [INFO] [LANGGRAPH_NODE_3] Completed SQLite Vector RAG & GBE calculation (15 pts) for Min-Jae Kim
+[2026-11-10 00:52:24] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-10 00:52:24] [INFO] [LANGGRAPH_NODE_4A] Sparring Round 1 completed vs Paris Saint-Germain FC (ask=€120,000, counter=€90,000)
+[2026-11-10 00:52:25] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-10 00:52:25] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Ligue 1, fee=€20,000,000, wage=€105,000/wk, 4yr) -> annual_psr=€11,987,500
+[2026-11-10 00:52:25] [INFO] [LANGGRAPH_NODE_4B] Sparring Round 2 resolved with strategy=OPTION_2_BONUS_AND_RELEASE_CLAUSE -> agreed_base=€105,000, bonus=€15,000, annual_psr=€11,987,500
+[2026-11-10 00:52:25] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-10 00:52:25] [INFO] [MCP_TOOL_12] Exported Triple Agency Documents for Min-Jae Kim -> C:\Users\DJ\Documents\ai_google\sports_agency\outputs\Min-Jae_Kim
+[2026-11-10 00:52:25] [INFO] [LANGGRAPH_NODE_5] Generated & saved Triple-Output Markdown documents for Min-Jae Kim
+[2026-11-10 00:52:25] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Erling Haaland (Manchester City FC vs Arsenal FC)
+[2026-11-10 00:52:25] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Bukayo Saka (Arsenal FC vs Manchester City FC)
+[2026-11-10 00:52:25] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Min-Jae Kim (FC Bayern München vs Borussia Dortmund)
+[2026-11-10 00:52:33] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 00:52:34] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Tottenham Hotspur, val=€38,000,000
+[2026-11-10 00:52:34] [INFO] [MCP_TOOL_11] Discovered 5 undervalued prospects (pos=ALL, max_age=23)
+[2026-11-10 00:52:34] [INFO] [MCP_TOOL_12] Exported Triple Agency Documents for Heung-min Son -> C:\Users\DJ\Documents\ai_google\sports_agency\outputs\Heung-min_Son
+[2026-11-10 00:52:36] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-10 00:52:36] [INFO] [LANGGRAPH_NODE_1] Supervisor routed player=Heung-min Son to mode=TRACK_A_TRANSFER
+[2026-11-10 00:52:36] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Tottenham Hotspur, val=€38,000,000
+[2026-11-10 00:52:36] [INFO] [MCP_TOOL_3] get_peer_group_wage_band(pos=LW, age=33) -> Q25=€100,000, Median=€141,000, Q75=€145,000
+[2026-11-10 00:52:36] [INFO] [MCP_TOOL_2] find_matching_clubs_for_transfer(pos=LW, fee=38000000, wage=300000, league=ALL) -> 4 clubs matched
+[2026-11-10 00:52:36] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-10 00:52:37] [INFO] [VERTEX_GROUNDING_AUTH_WARN] Live Search Grounding failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging squad intelligence fallback
+[2026-11-10 00:52:37] [INFO] [MCP_TOOL_4] search_live_club_injury_and_rumors(club=Chelsea FC, pos=LW) -> source=Agency Intelligence Desk Squad Database (Chelsea FC)
+[2026-11-10 00:52:37] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€38,000,000, wage=€300,000/wk, 4yr) -> annual_psr=€28,677,300
+[2026-11-10 00:52:37] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-10 00:52:37] [INFO] [LANGGRAPH_NODE_2A] Completed Hermes Transfer Analysis for Heung-min Son
+[2026-11-10 00:52:37] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Tottenham Hotspur, val=€38,000,000
+[2026-11-10 00:52:38] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-10 00:52:38] [INFO] [LANGGRAPH_NODE_2C] Career Strategy resolved for Heung-min Son: 보스만 윈도우 잔류 후 자유계약 (Zero-Fee Mega Signing)
+[2026-11-10 00:52:38] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-10 00:52:39] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-10 00:52:39] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-10 00:52:40] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-10 00:52:40] [INFO] [LANGGRAPH_NODE_3] Completed SQLite Vector RAG & GBE calculation (15 pts) for Heung-min Son
+[2026-11-10 00:52:40] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-10 00:52:40] [INFO] [LANGGRAPH_NODE_4A] Sparring Round 1 completed vs Chelsea FC (ask=€120,000, counter=€90,000)
+[2026-11-10 00:52:41] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-10 00:52:41] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€38,000,000, wage=€105,000/wk, 4yr) -> annual_psr=€16,377,130
+[2026-11-10 00:52:41] [INFO] [LANGGRAPH_NODE_4B] Sparring Round 2 resolved with strategy=OPTION_2_BONUS_AND_RELEASE_CLAUSE -> agreed_base=€105,000, bonus=€15,000, annual_psr=€16,377,130
+[2026-11-10 00:52:41] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging schema fallback
+[2026-11-10 00:52:41] [INFO] [MCP_TOOL_12] Exported Triple Agency Documents for Heung-min Son -> C:\Users\DJ\Documents\ai_google\sports_agency\outputs\Heung-min_Son
+[2026-11-10 00:52:41] [INFO] [LANGGRAPH_NODE_5] Generated & saved Triple-Output Markdown documents for Heung-min Son
+[2026-11-10 00:52:41] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Tottenham Hotspur, val=€38,000,000
+[2026-11-10 00:52:41] [INFO] [MCP_TOOL_11] Discovered 3 undervalued prospects (pos=ALL, max_age=23)
+[2026-11-10 00:53:02] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 00:53:03] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-10 00:53:03] [INFO] [MCP_TOOL_3] get_peer_group_wage_band(pos=CB, age=30) -> Q25=€76,000, Median=€76,000, Q75=€91,000
+[2026-11-10 00:53:04] [INFO] [VERTEX_GROUNDING_AUTH_WARN] Live Search Grounding failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging squad intelligence fallback
+[2026-11-10 00:53:04] [INFO] [MCP_TOOL_4] search_live_club_injury_and_rumors(club=FC Bayern München, pos=CB) -> source=Agency Intelligence Desk Squad Database (FC Bayern München)
+[2026-11-10 00:53:04] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Bundesliga, fee=€0, wage=€73,700/wk, 4yr) -> annual_psr=€4,407,260
+[2026-11-10 00:53:05] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-10 00:53:05] [INFO] [LANGGRAPH_NODE_2B] Completed Hermes Renewal Analysis for Min-Jae Kim
+[2026-11-10 00:53:05] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Tottenham Hotspur, val=€38,000,000
+[2026-11-10 00:53:05] [INFO] [MCP_TOOL_3] get_peer_group_wage_band(pos=LW, age=33) -> Q25=€100,000, Median=€141,000, Q75=€145,000
+[2026-11-10 00:53:05] [INFO] [MCP_TOOL_2] find_matching_clubs_for_transfer(pos=LW, fee=38000000, wage=300000, league=Premier League) -> 5 clubs matched
+[2026-11-10 00:53:05] [INFO] [VERTEX_EMBEDDING_AUTH_WARN] Live Embedding call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic vector fallback
+[2026-11-10 00:53:06] [INFO] [VERTEX_GROUNDING_AUTH_WARN] Live Search Grounding failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging squad intelligence fallback
+[2026-11-10 00:53:06] [INFO] [MCP_TOOL_4] search_live_club_injury_and_rumors(club=Chelsea FC, pos=LW) -> source=Agency Intelligence Desk Squad Database (Chelsea FC)
+[2026-11-10 00:53:06] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€38,000,000, wage=€300,000/wk, 4yr) -> annual_psr=€28,677,300
+[2026-11-10 00:53:06] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-10 00:53:06] [INFO] [LANGGRAPH_NODE_2A] Completed Hermes Transfer Analysis for Heung-min Son
+[2026-11-10 00:53:07] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.); engaging deterministic domain fallback
+[2026-11-10 00:53:07] [INFO] [LANGGRAPH_NODE_1] Supervisor routed player=Heung-min Son to mode=TRACK_A_TRANSFER
+[2026-11-10 00:54:15] [INFO] [MODULAR_AGENT_REFAC] Completed full multi-agent modularization: created sports_agency.schemas.agent_schemas and 7 independent agent modules under sports_agency.agents (BaseAgent, SupervisorAgent, ScoutingAnalystAgent, RenewalAnalystAgent, CareerStrategistAgent, LegalComplianceAgent, NegotiationSparringAgent, DocumentWriterAgent). Streamlined agency_workflow.py from 1044 lines to 215 lines. All 3 test suites passed 100%.
