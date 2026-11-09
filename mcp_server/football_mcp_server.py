@@ -875,6 +875,298 @@ def register_custom_external_client(
     return get_player_complete_data(name.strip())
 
 
+@mcp.tool()
+def analyze_career_timing_and_path(
+    player_name: str,
+    target_league_preference: str = "ALL",
+    min_starter_guarantee_pct: float = 60.0,
+) -> dict[str, Any]:
+    """
+    [MCP Tool 10 - Career Agent] Analyzes career timing, contract expiration leverage,
+    starter availability, and determines the optimal path among:
+    1) IMMEDIATE_TRANSFER (Peak value jump to Big 5 tier-1/2 club)
+    2) BOSMAN_WINDOW_HOLD (Under 1.0 yr contract, maximum signing bonus & zero transfer fee)
+    3) DEVELOPMENT_LOAN (Age <= 22 or low minutes, mandatory 60% starter clause with recall)
+    Returns complete 3-year strategic career roadmap.
+    """
+    data = get_player_complete_data(player_name)
+    if "error" in data:
+        return data
+
+    age = int(data.get("age", 25))
+    pos = data.get("position", "CM")
+    val_eur = int(data.get("market_value_eur", 0))
+    contract_exp = str(data.get("contract_expires", "2027-06-30"))
+    pos_pct = int(data.get("pos_percentile", 70))
+    minutes_played = int(data.get("minutes_played", 1800))
+    avail_pct = round(min(100.0, (minutes_played / 3060.0) * 100.0), 1)
+
+    # Estimate remaining contract years (reference season 2025-2026)
+    try:
+        exp_year = int(contract_exp.split("-")[0])
+        exp_month = int(contract_exp.split("-")[1])
+        remaining_years = max(0.2, (exp_year - 2026) + (exp_month - 6) / 12.0)
+    except Exception:
+        remaining_years = 2.0
+
+    # Decision Matrix
+    if remaining_years <= 1.0:
+        path_type = "BOSMAN_WINDOW_HOLD"
+        path_label = "보스만 윈도우 잔류 후 자유계약 (Zero-Fee Mega Signing)"
+        timing_decision = "BOSMAN_RULE_WINDOW (FIFA RSTP Art. 18.3)"
+        contract_leverage = (
+            f"계약 잔여 {remaining_years:.1f}년 (만료일: {contract_exp}). "
+            f"FIFA RSTP 제18조 3항에 따라 계약 만료 6개월 전(2027년 1월)부터 타 구단과 이적료 없이 공식 사전 계약 체결 가능. "
+            f"구단 이적료 지출(€{val_eur:,})을 전액 선수 사이닝 보너스 및 주급 인상분으로 전환 협상할 최상위 레버리지 보유."
+        )
+        rationale = (
+            f"선수의 잔여 계약이 1년 이하로 진입하여 현 소속팀의 이적료 요구 압박에서 완전히 해방된 상태입니다. "
+            f"자유계약(FA) 신분을 적극 활용하여 사이닝 보너스(Signing-on Fee)를 극대화하고 4~5년 장기 메가 딜을 성사시키는 전략이 가장 유리합니다."
+        )
+    elif age <= 22 or avail_pct < 50.0:
+        path_type = "DEVELOPMENT_LOAN"
+        path_label = "출전 보장 연계 1년 육성 임대 (Development Loan with 60% Starter Clause)"
+        timing_decision = "DEVELOPMENT_LOAN_WINDOW"
+        contract_leverage = (
+            f"계약 잔여 {remaining_years:.1f}년. 선수의 나이가 {age}세로 유망주 성장 임계점에 위치해 있으나 "
+            f"현재 가용률({avail_pct}%) 및 출전시간({minutes_played:,}분)이 주전 입지 기준선에 미달. "
+            f"출전 의무 조항(공식전 최소 {min_starter_guarantee_pct}% 선발 출장 보장) 미충족 시 위약금 부과 및 겨울 윈도우 즉시 리콜(Recall) 조건 필수."
+        )
+        rationale = (
+            f"선수의 경기 감각과 Opta 스탯 볼륨을 폭발적으로 끌어올리기 위한 전략적 임대 단계입니다. "
+            f"벤치 잔류로 인한 시장 가치 감가상각을 원천 차단하고 주전 보장 구단에서 주간 풀타임 출전을 완수해야 합니다."
+        )
+    else:
+        path_type = "IMMEDIATE_TRANSFER"
+        path_label = "최고 가치 도달 시기 즉시 이적 (Immediate Transfer to Tier-1/2 Club)"
+        timing_decision = "IMMEDIATE_TRANSFER_WINDOW"
+        contract_leverage = (
+            f"계약 잔여 {remaining_years:.1f}년, 현재 시장 가치 €{val_eur:,}, 동 포지션 상위 {100 - pos_pct + 1}%, 가용률 {avail_pct}%. "
+            f"소속팀 입장에서도 최고 이적료를 회수할 수 있는 골든 타임이며, 선수에게도 유럽 빅리그 핵심 주전 및 대륙대항전 출전을 확보할 최적기."
+        )
+        rationale = (
+            f"선수의 기량 백분위와 내구성이 전성기 정점에 도달해 있습니다. "
+            f"현 소속팀과의 재계약 지연 시 구단의 재정 압박이 커지므로, 이번 여름 이적시장에서 상위 리그 진출을 결행하여 커리어 점프를 완성해야 합니다."
+        )
+
+    # 3-Year Strategic Roadmap
+    three_year_roadmap = [
+        {
+            "year": "1년차 (2026-2027)",
+            "phase": "Soft Landing & Core Starter Guarantee",
+            "milestone": f"새 리그 전술 적응, 90분당 키 액션 유지, 공식전 {min_starter_guarantee_pct}% 이상 선발 출전 확보",
+            "action_items": [
+                "타겟 구단 감독 전술 롤 숙지 및 피지컬 템포 연착륙",
+                "출전시간 2,400분 이상 소화로 시장 가치 +20% 상승 견인",
+                "팀 내 주전 경쟁자 대비 수비/전진 경합 우위 수치화",
+            ],
+        },
+        {
+            "year": "2년차 (2027-2028)",
+            "phase": "Continental Showcase & Valuation Rebalancing",
+            "milestone": "UCL/UEL 대륙 클럽대항전 토너먼트 진출 및 팀 내 핵심 공격/수비 리더 도약",
+            "action_items": [
+                "주요 경기 MOM 및 리그 베스트 11 선정 가시화",
+                "선수 시장 가치 커리어 하이 경신 (최소 €{int(val_eur*1.3):,})",
+                "바이아웃(Release Clause) 상향 또는 재계약/상위 메가클럽 이적 조항 리밸런싱",
+            ],
+        },
+        {
+            "year": "3년차 (2028-2029)",
+            "phase": "Elite Tier Jump or Mega Contract Extension",
+            "milestone": "유럽 Top 5 엘리트 메가클럽 점프 또는 구단 최고 대우(Tier-1 Wage Band) 장기 재계약 체결",
+            "action_items": [
+                "에이전시 글로벌 네트워크 가동하여 유럽 Top 4 클럽 이적 성사",
+                "유니폼 마케팅 및 상업적 초상권(Image Rights) 글로벌 스폰서십 확장",
+                "장기적 선수 복지 및 은퇴 후 지도자/글로벌 앰버서더 패스웨이 설계",
+            ],
+        },
+    ]
+
+    leagues_rec = ["Premier League", "La Liga", "Bundesliga", "Serie A"]
+    if target_league_preference != "ALL" and target_league_preference in leagues_rec:
+        recommended_leagues = [target_league_preference] + [l for l in leagues_rec if l != target_league_preference]
+    else:
+        recommended_leagues = leagues_rec
+
+    return {
+        "player_name": data.get("name"),
+        "player_name_ko": data.get("name_ko"),
+        "age": age,
+        "position": pos,
+        "market_value_eur": val_eur,
+        "contract_expires": contract_exp,
+        "remaining_contract_years": round(remaining_years, 1),
+        "minutes_availability_pct": avail_pct,
+        "pos_percentile": pos_pct,
+        "path_type": path_type,
+        "path_label": path_label,
+        "timing_decision": timing_decision,
+        "contract_leverage": contract_leverage,
+        "rationale": rationale,
+        "min_starter_guarantee_pct": min_starter_guarantee_pct,
+        "recommended_leagues": recommended_leagues,
+        "three_year_roadmap": three_year_roadmap,
+    }
+
+
+@mcp.tool()
+def discover_undervalued_prospects(
+    target_position: str = "ALL",
+    max_age: int = 23,
+    min_percentile: float = 75.0,
+    max_market_value_eur: int = 15000000,
+    limit: int = 10,
+) -> list[dict[str, Any]]:
+    """
+    [MCP Tool 11 - Scouting Agent] Scans the 2,662 player database for undervalued young talents:
+    Age <= max_age, pos_percentile >= min_percentile, market_value <= max_market_value_eur.
+    Ranks them by efficiency ratio (Percentile / Market Value).
+    """
+    conn = _get_conn()
+    cur = conn.cursor()
+
+    query = """
+        SELECT p.player_id, p.name, p.name_ko, p.current_club, p.league,
+               p.position, p.age, p.nationality, p.market_value_eur, p.weekly_wage_eur,
+               p.contract_expires, p.strengths_summary,
+               s.season, s.minutes_played, s.appearances,
+               s.goals_per90, s.assists_per90, s.xg_per90, s.xa_per90,
+               s.key_passes_per90, s.progressive_actions_per90,
+               s.defensive_duels_won_pct, s.pos_percentile
+        FROM players p
+        JOIN player_stats s ON p.player_id = s.player_id
+        WHERE p.age <= ?
+          AND s.pos_percentile >= ?
+          AND p.market_value_eur <= ?
+          AND p.market_value_eur >= 100000
+    """
+    params: list[Any] = [max_age, min_percentile, max_market_value_eur]
+
+    if target_position != "ALL":
+        query += " AND p.position = ? "
+        params.append(target_position.upper().strip())
+
+    query += " ORDER BY (s.pos_percentile * 1000000.0 / MAX(p.market_value_eur, 500000)) DESC, p.market_value_eur ASC LIMIT ?"
+    params.append(limit)
+
+    cur.execute(query, tuple(params))
+    rows = [dict(r) for r in cur.fetchall()]
+    conn.close()
+
+    results: list[dict[str, Any]] = []
+    for r in rows:
+        val = int(r["market_value_eur"])
+        pct = int(r["pos_percentile"])
+        ratio = round((pct * 100000.0) / max(val, 1), 2)
+        results.append({
+            "player_id": r["player_id"],
+            "name": r["name"],
+            "name_ko": r["name_ko"],
+            "current_club": r["current_club"],
+            "league": r["league"],
+            "position": r["position"],
+            "age": r["age"],
+            "nationality": r["nationality"],
+            "market_value_eur": val,
+            "weekly_wage_eur": int(r["weekly_wage_eur"]),
+            "contract_expires": r["contract_expires"],
+            "pos_percentile": pct,
+            "goals_per90": r["goals_per90"],
+            "assists_per90": r["assists_per90"],
+            "progressive_actions_per90": r["progressive_actions_per90"],
+            "key_passes_per90": r["key_passes_per90"],
+            "minutes_played": r["minutes_played"],
+            "undervaluation_index": ratio,
+            "scouting_summary": (
+                f"{r['name_ko']} ({r['age']}세, {r['position']}): 동 포지션 상위 {100 - pct + 1}% 퍼포먼스 대비 "
+                f"시세 €{val:,}로 가성비 지수 {ratio}p. 계약 만료 {r['contract_expires']}로 선제적 영입 타겟."
+            ),
+        })
+
+    log_work_event("MCP_TOOL_11", f"Discovered {len(results)} undervalued prospects (pos={target_position}, max_age={max_age})")
+    return results
+
+
+@mcp.tool()
+def export_triple_agency_documents(
+    player_name: str,
+    career_report_md: str,
+    deal_prep_md: str,
+    pitch_deck_md: str,
+) -> dict[str, str]:
+    """
+    [MCP Tool 12 - Triple Documentation] Exports the 3 standardized agency documents:
+    1) 1_career_valuation_report.md (Client/Player & Family Presentation)
+    2) 2_dual_track_deal_prep.md (Internal Confidential Negotiation Cheat Sheet)
+    3) 3_club_pitch_deck.md (Target Club Sporting Director 1-Page Value Dossier)
+    """
+    safe_player = "".join(c if c.isalnum() or c in (" ", "_", "-") else "_" for c in player_name).strip().replace(" ", "_")
+    player_dir = OUTPUT_DIR / safe_player
+    player_dir.mkdir(parents=True, exist_ok=True)
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
+    # Subfolder exports (V3 Standard)
+    path_career = player_dir / "1_career_valuation_report.md"
+    path_deal = player_dir / "2_dual_track_deal_prep.md"
+    path_pitch = player_dir / "3_club_pitch_deck.md"
+
+    path_career.write_text(career_report_md, encoding="utf-8")
+    path_deal.write_text(deal_prep_md, encoding="utf-8")
+    path_pitch.write_text(pitch_deck_md, encoding="utf-8")
+
+    # Root outputs exports for backward compatibility
+    root_career = OUTPUT_DIR / f"{safe_player}_career_report.md"
+    root_deal = OUTPUT_DIR / f"{safe_player}_deal_prep.md"
+    root_pitch = OUTPUT_DIR / f"{safe_player}_pitch_deck.md"
+    root_career.write_text(career_report_md, encoding="utf-8")
+    root_deal.write_text(deal_prep_md, encoding="utf-8")
+    root_pitch.write_text(pitch_deck_md, encoding="utf-8")
+
+    saved_files = {
+        "career_report_file": str(path_career),
+        "deal_prep_file": str(path_deal),
+        "pitch_deck_file": str(path_pitch),
+        "root_career_file": str(root_career),
+        "root_deal_file": str(root_deal),
+        "root_pitch_file": str(root_pitch),
+    }
+
+    log_work_event("MCP_TOOL_12", f"Exported Triple Agency Documents for {player_name} -> {player_dir}")
+    return saved_files
+
+
+@mcp.tool()
+def query_api_football_precision_data(
+    player_name: str,
+    team_name: str = "",
+) -> dict[str, Any]:
+    """
+    [MCP Tool 13 - Precision Strike] Queries API-Football official endpoints (/injuries, /transfers)
+    within the daily 100-request quota limit. If quota is exhausted or key is unconfigured,
+    automatically falls back to Football-Data.org / Vertex AI Google Search Grounding seamlessly.
+    """
+    from sports_agency.api_football_client import (
+        fetch_live_injury_data,
+        fetch_live_transfer_history,
+        get_quota_status,
+    )
+    injuries = fetch_live_injury_data(player_name=player_name, team_name=team_name)
+    transfers = fetch_live_transfer_history(player_name=player_name)
+    quota = get_quota_status()
+    log_work_event(
+        "MCP_TOOL_13",
+        f"query_api_football_precision_data({player_name}) -> fallback={injuries.get('fallback_used')}, quota_status={quota['status']}",
+    )
+    return {
+        "player_name": player_name,
+        "team_name": team_name,
+        "injuries": injuries,
+        "transfers": transfers,
+        "quota": quota,
+    }
+
+
 HERMES_MCP_TOOLS = {
     "get_player_complete_data": get_player_complete_data,
     "find_matching_clubs_for_transfer": find_matching_clubs_for_transfer,
@@ -885,6 +1177,10 @@ HERMES_MCP_TOOLS = {
     "calculate_psr_and_tax_breakdown": calculate_psr_and_tax_breakdown,
     "scan_bosman_and_replacement_targets": scan_bosman_and_replacement_targets,
     "register_custom_external_client": register_custom_external_client,
+    "analyze_career_timing_and_path": analyze_career_timing_and_path,
+    "discover_undervalued_prospects": discover_undervalued_prospects,
+    "export_triple_agency_documents": export_triple_agency_documents,
+    "query_api_football_precision_data": query_api_football_precision_data,
 }
 
 if __name__ == "__main__":

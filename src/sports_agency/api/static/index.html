@@ -3,32 +3,65 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>⚽ AI Football Agency Strategy Desk v2.0</title>
+  <title>Agency OS - Sports Management Platform</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+    :root {
+      --bg-base: #0a0c10;
+      --bg-surface: #11141a;
+      --bg-surface-elevated: #161a22;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-hover: rgba(255, 255, 255, 0.16);
+      --accent: #10b981;
+    }
+
     body {
       font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-      background-color: #0b0f17;
+      background-color: var(--bg-base);
       color: #e2e8f0;
+      letter-spacing: -0.01em;
     }
-    .glass-card {
-      background: rgba(17, 24, 39, 0.85);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(51, 65, 85, 0.6);
+
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
     }
-    .markdown-body h1 { font-size: 1.45rem; font-weight: 800; color: #34d399; margin-bottom: 0.75rem; border-bottom: 1px solid #334155; padding-bottom: 0.5rem; }
-    .markdown-body h2 { font-size: 1.15rem; font-weight: 700; color: #38bdf8; margin-top: 1.25rem; margin-bottom: 0.5rem; }
-    .markdown-body p, .markdown-body li { font-size: 0.92rem; line-height: 1.65; color: #cbd5e1; }
+
+    .ui-card {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+    }
+
+    .ui-card-hover {
+      transition: border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .ui-card-hover:hover {
+      border-color: var(--border-hover);
+      background-color: var(--bg-surface-elevated);
+      transform: translateY(-2px);
+    }
+
+    /* Custom Clean Scrollbar */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.12); border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.22); }
+
+    /* Markdown Document Styles */
+    .markdown-body h1 { font-size: 1.35rem; font-weight: 700; color: #f8fafc; margin-bottom: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 0.5rem; }
+    .markdown-body h2 { font-size: 1.1rem; font-weight: 600; color: #e2e8f0; margin-top: 1.25rem; margin-bottom: 0.5rem; }
+    .markdown-body p, .markdown-body li { font-size: 0.88rem; line-height: 1.65; color: #94a3b8; }
     .markdown-body ul, .markdown-body ol { padding-left: 1.25rem; margin-bottom: 0.75rem; list-style-type: disc; }
-    .markdown-body blockquote { border-left: 4px solid #10b981; background: rgba(16, 185, 129, 0.08); padding: 0.6rem 1rem; margin: 0.75rem 0; border-radius: 0.375rem; }
-    .markdown-body table { width: 100%; border-collapse: collapse; margin: 0.85rem 0; font-size: 0.85rem; }
-    .markdown-body th { background: #1e293b; color: #94a3b8; font-weight: 700; padding: 0.55rem; border: 1px solid #334155; text-align: left; }
-    .markdown-body td { padding: 0.55rem; border: 1px solid #334155; color: #e2e8f0; }
-    .markdown-body hr { border-color: #334155; margin: 1rem 0; }
-    .markdown-body strong { color: #f8fafc; font-weight: 700; }
+    .markdown-body blockquote { border-left: 3px solid #10b981; background: rgba(16, 185, 129, 0.05); padding: 0.6rem 1rem; margin: 0.75rem 0; border-radius: 0.25rem; }
+    .markdown-body table { width: 100%; border-collapse: collapse; margin: 0.85rem 0; font-size: 0.82rem; }
+    .markdown-body th { background: #161a22; color: #cbd5e1; font-weight: 600; padding: 0.55rem; border: 1px solid rgba(255,255,255,0.08); text-align: left; }
+    .markdown-body td { padding: 0.55rem; border: 1px solid rgba(255,255,255,0.08); color: #cbd5e1; }
+    .markdown-body hr { border-color: rgba(255,255,255,0.08); margin: 1rem 0; }
+    .markdown-body strong { color: #f8fafc; font-weight: 600; }
 
     @media print {
       body { background: #ffffff !important; color: #0f172a !important; }
@@ -41,658 +74,1087 @@
         padding: 0 !important;
         box-shadow: none !important;
       }
-      .markdown-body h1 { color: #047857 !important; border-bottom: 2px solid #047857 !important; }
-      .markdown-body h2 { color: #0369a1 !important; }
+      .markdown-body h1 { color: #0f172a !important; border-bottom: 2px solid #0f172a !important; }
+      .markdown-body h2 { color: #1e293b !important; }
       .markdown-body p, .markdown-body li, .markdown-body td, .markdown-body strong { color: #0f172a !important; }
-      .markdown-body th { background: #f1f5f9 !important; color: #0f172a !important; border: 1px solid #94a3b8 !important; }
-      .markdown-body td { border: 1px solid #cbd5e1 !important; }
-      .markdown-body blockquote { background: #f0fdf4 !important; border-left: 4px solid #059669 !important; }
+      .markdown-body th { background: #f8fafc !important; color: #0f172a !important; border: 1px solid #cbd5e1 !important; }
+      .markdown-body td { border: 1px solid #e2e8f0 !important; }
+      .markdown-body blockquote { background: #f8fafc !important; border-left: 4px solid #0f172a !important; }
     }
   </style>
 </head>
 <body class="min-h-screen pb-16">
 
-  <!-- Top Navigation & GCP ADC Status Bar -->
-  <header class="no-print sticky top-0 z-30 border-b border-slate-800 bg-slate-950/90 backdrop-blur-md">
-    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-xl">⚽</div>
-        <div>
-          <h1 class="text-lg font-extrabold tracking-tight text-white flex items-center gap-2">
-            AI Football Agency Strategy Desk
-            <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Hybrid v2.0</span>
-          </h1>
-          <p class="text-xs text-slate-400">
-            LangGraph (SqliteSaver + HITL) · Hermes Tool-Calling · SQLite Vector DB · Vertex AI (Gemini 3.8/3.5 Flash & Embedding 2/001)
-          </p>
+  <!-- ========================================================================= -->
+  <!-- Top Global Navigation Bar (Sticky, Minimal, Modern) -->
+  <!-- ========================================================================= -->
+  <header class="no-print sticky top-0 z-40 border-b border-white/[0.07] bg-[#0a0c10]/90 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 py-2.5 flex flex-wrap items-center justify-between gap-3">
+
+      <!-- Logo & App Brand -->
+      <div class="flex items-center gap-2.5 cursor-pointer" onclick="showPage('page-home')">
+        <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold text-xs">
+          FC
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-sm font-bold tracking-tight text-white">AgencyOS</span>
+          <span class="text-[10px] text-zinc-500 font-mono hidden sm:inline">PRO</span>
         </div>
       </div>
 
-      <!-- GCP ADC Status & Quick Config -->
-      <div class="flex flex-wrap items-center gap-2">
-        <div id="adc-badge" class="text-xs px-3 py-1.5 rounded-lg border border-amber-500/40 bg-amber-500/10 text-amber-300 flex items-center gap-1.5">
-          <span id="adc-dot" class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-          <span id="adc-text">GCP ADC 상태 확인 중...</span>
-        </div>
-        <div class="flex items-center gap-1 bg-slate-900 border border-slate-700 rounded-lg px-2 py-1">
-          <input id="gcp-project-input" type="text" placeholder="GCP Project ID 입력"
-            class="bg-transparent text-xs text-white placeholder-slate-500 focus:outline-none w-36" />
-          <button onclick="saveGcpProject()" class="text-xs bg-sky-600 hover:bg-sky-500 text-white font-semibold px-2.5 py-1 rounded transition">
-            ADC 적용
-          </button>
-          <button onclick="refreshAuthStatus()" title="gcloud auth application-default login 후 상태 새로고침"
-            class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded transition">
-            🔄
-          </button>
-        </div>
-        <button id="btn-sync-fd" onclick="syncFootballDataOrg()"
-          class="text-xs bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/40 text-emerald-300 font-bold px-3 py-1.5 rounded-lg transition flex items-center gap-1">
-          <span>⚽ Football-Data.org 공식 96구단 로스터 동기화</span>
+      <!-- Navigation Tabs -->
+      <nav class="flex items-center gap-1 bg-[#12151c] border border-white/[0.06] p-1 rounded-xl">
+        <button id="nav-btn-home" onclick="showPage('page-home')"
+          class="nav-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-zinc-800 transition flex items-center gap-1.5 shadow-sm">
+          <span>대시보드</span>
         </button>
-      </div>
-    </div>
+        <button id="nav-btn-scouting" onclick="showPage('page-scouting')"
+          class="nav-btn px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800/60 transition flex items-center gap-1.5">
+          <span>스카우팅</span>
+        </button>
+        <button id="nav-btn-strategy" onclick="showPage('page-strategy')"
+          class="nav-btn px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800/60 transition flex items-center gap-1.5">
+          <span>이적·협상</span>
+        </button>
+        <button id="nav-btn-documents" onclick="showPage('page-documents')"
+          class="nav-btn px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800/60 transition flex items-center gap-1.5">
+          <span>문서 센터</span>
+        </button>
+        <button id="nav-btn-finance" onclick="showPage('page-finance')"
+          class="nav-btn px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800/60 transition flex items-center gap-1.5">
+          <span>재무 계산기</span>
+        </button>
+        <button id="nav-btn-regulations" onclick="showPage('page-regulations')"
+          class="nav-btn px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800/60 transition flex items-center gap-1.5">
+          <span>규정 검색</span>
+        </button>
+      </nav>
 
-    <!-- Model Routing Sub-bar -->
-    <div class="bg-slate-900/80 border-t border-slate-800/80 px-4 py-1.5 text-[11px] text-slate-400">
-      <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
-        <div class="flex flex-wrap items-center gap-3">
-          <span>🧠 <b>고성능 추론/협상/문서:</b> <code class="text-emerald-400">gemini-3.8-flash</code></span>
-          <span>⚡ <b>경량 라우팅/요약:</b> <code class="text-sky-400">gemini-3.5-flash</code></span>
-          <span>📚 <b>규정집 RAG 임베딩:</b> <code class="text-purple-400">gemini-embedding-2</code></span>
-          <span>🎯 <b>전술/스카우팅 임베딩:</b> <code class="text-amber-400">gemini-embedding-001</code></span>
+      <!-- Active Client & Status -->
+      <div class="flex items-center gap-2">
+        <div id="nav-active-player" onclick="showPage('page-scouting')" title="클릭하여 선수 상세 정보로 이동"
+          class="cursor-pointer text-xs px-2.5 py-1 rounded-lg border border-white/[0.08] bg-[#12151c] text-zinc-300 hover:border-zinc-600 transition flex items-center gap-1.5">
+          <span class="text-zinc-500 text-[11px]">선택:</span>
+          <span id="nav-player-name" class="font-medium text-white truncate max-w-[110px]">손흥민</span>
         </div>
-        <div id="vecdb-summary" class="text-slate-400">SQLite Vector DB: 인덱싱 확인 중...</div>
+        <!-- API-Football 100-Quota Realtime Tracker & Auto-Fallback Badge -->
+        <div id="api-quota-badge" onclick="loadQuotaStatus()" title="API-Football 무료 100회 한도 추적 (소진 시 Football-Data.org 자동 백업)"
+          class="cursor-pointer text-xs px-2.5 py-1 rounded-lg border border-white/[0.08] bg-[#12151c] text-zinc-400 hover:border-zinc-600 transition flex items-center gap-1.5">
+          <span id="api-quota-dot" class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+          <span class="text-zinc-500 text-[11px]">API-FB:</span>
+          <span id="api-quota-text" class="font-mono text-zinc-300">0/100</span>
+        </div>
+        <div id="adc-badge" class="text-xs px-2.5 py-1 rounded-lg border border-white/[0.08] bg-[#12151c] text-zinc-400 flex items-center gap-1.5">
+          <span id="adc-dot" class="w-1.5 h-1.5 rounded-full bg-zinc-500"></span>
+          <span id="adc-text" class="text-[11px]">시스템 준비</span>
+        </div>
       </div>
     </div>
   </header>
 
-  <main class="max-w-7xl mx-auto px-4 pt-6 space-y-6">
+  <main class="max-w-7xl mx-auto px-4 pt-6">
 
-    <!-- STEP 1 & STEP 2: Player Roster Selection + Radar Chart + Strategy Controls -->
-    <section class="no-print grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <!-- ======================================================================= -->
+    <!-- PAGE 1: EXECUTIVE DASHBOARD (깔끔한 메인 홈 화면) -->
+    <!-- ======================================================================= -->
+    <div id="page-home" class="page-view space-y-6">
 
-      <!-- Left 5 Cols: Step 1 Roster Cards -->
-      <div class="lg:col-span-5 glass-card rounded-2xl p-5 flex flex-col justify-between">
-        <div>
-          <div class="flex items-center justify-between mb-2">
-            <h2 class="text-sm font-bold text-emerald-400 uppercase tracking-wider">Step 1 · 5대 리그 공식 선수 + 감독 로스터 (96개 구단 · 2,758명)</h2>
-            <span id="roster-count" class="text-xs font-semibold text-emerald-300">로딩 중...</span>
-          </div>
-
-          <!-- League, Club, Position & Search Filters -->
-          <div class="grid grid-cols-3 gap-1.5 mb-2">
-            <select id="league-filter-select" onchange="onLeagueFilterChange()"
-              class="bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-[11px] text-white focus:outline-none focus:border-emerald-500">
-              <option value="ALL">🌍 전체 5대 리그 (2,758명)</option>
-              <option value="Premier League">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League</option>
-              <option value="La Liga">🇪🇸 La Liga</option>
-              <option value="Serie A">🇮🇹 Serie A</option>
-              <option value="Bundesliga">🇩🇪 Bundesliga</option>
-              <option value="Ligue 1">🇫🇷 Ligue 1</option>
-            </select>
-            <select id="club-filter-select" onchange="applyRosterFilters()"
-              class="bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-[11px] text-white focus:outline-none focus:border-emerald-500">
-              <option value="ALL">🏟️ 전체 96개 구단</option>
-            </select>
-            <select id="pos-filter-select" onchange="applyRosterFilters()"
-              class="bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-[11px] text-white focus:outline-none focus:border-emerald-500">
-              <option value="ALL">🏃 전체 포지션 + 감독</option>
-              <option value="MGR">👔 MGR (감독 / Head Coach · 96명)</option>
-              <option value="ST">ST (스트라이커)</option>
-              <option value="LW">LW (좌측 윙어)</option>
-              <option value="RW">RW (우측 윙어)</option>
-              <option value="AM">AM (공격형 미드필더)</option>
-              <option value="CM">CM (중앙 미드필더)</option>
-              <option value="DM">DM (수비형 미드필더)</option>
-              <option value="CB">CB (센터백)</option>
-              <option value="RB">RB (우측 풀백)</option>
-              <option value="LB">LB (좌측 풀백)</option>
-              <option value="GK">GK (골키퍼)</option>
-            </select>
-          </div>
-
-          <div class="flex gap-1.5 mb-2.5">
-            <input id="player-search-input" type="text" oninput="applyRosterFilters()"
-              placeholder="🔍 선수 2,662명 + 감독 96명 검색 (예: Arteta, Guardiola, Flick, Haaland, 김민재, 이강인)"
-              class="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500" />
-            <button onclick="filterManagersOnly()" class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-[11px] text-amber-300 font-bold whitespace-nowrap">
-              👔 감독 96인
-            </button>
-            <button onclick="filterKoreanBig5()" class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-[11px] text-emerald-300 font-bold whitespace-nowrap">
-              🇰🇷 코리안리거
-            </button>
-            <button onclick="resetPlayerFilter()" class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-[11px] text-slate-300 font-bold whitespace-nowrap">
-              초기화
-            </button>
-          </div>
-
-          <div id="player-roster-grid" class="grid grid-cols-2 gap-2.5 max-h-[290px] overflow-y-auto pr-1">
-            <!-- Populated by JS -->
-          </div>
-          <div id="load-more-container" class="mt-2 hidden">
-            <button id="btn-load-more" onclick="loadMorePlayers()"
-              class="w-full py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-[11px] font-bold text-sky-300 transition">
-              + 선수 더 보기
-            </button>
-          </div>
-        </div>
-
-        <!-- Selected Player Quick Summary Box -->
-        <div id="selected-player-card" class="mt-4 pt-4 border-t border-slate-800 hidden">
-          <div class="flex items-center justify-between">
-            <div>
-              <span id="sp-pos" class="text-xs font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"></span>
-              <h3 id="sp-name" class="text-base font-extrabold text-white mt-1"></h3>
-              <p id="sp-club" class="text-xs text-slate-400"></p>
-            </div>
-            <div class="text-right">
-              <div class="text-xs text-slate-400">Transfermarkt 시세</div>
-              <div id="sp-val" class="text-sm font-extrabold text-emerald-400"></div>
-              <div id="sp-wage" class="text-xs text-sky-400 font-semibold"></div>
-            </div>
-          </div>
-          <p id="sp-strengths" class="mt-2 text-xs text-slate-300 bg-slate-900/90 p-2.5 rounded-lg border border-slate-800"></p>
-          <div id="sp-deep-profile" class="mt-2 text-[11px] text-slate-300 bg-slate-950/80 p-2.5 rounded-lg border border-slate-800/80 space-y-1">
-            <!-- Populated dynamically via /api/players/{name} -->
-          </div>
-          <div class="mt-2 flex justify-end">
-            <button id="btn-live-player-sync" onclick="syncSelectedPlayerLive()"
-              class="px-3 py-1.5 rounded-lg bg-sky-600/20 hover:bg-sky-600/30 border border-sky-500/40 text-[11px] font-bold text-sky-300 transition flex items-center gap-1">
-              <span>⚡ 현시점 소속팀·시세·주급 실시간 검색 패치 (Vertex AI Grounding)</span>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Center 3 Cols: FBref Stat Percentile Radar Chart -->
-      <div class="lg:col-span-3 glass-card rounded-2xl p-5 flex flex-col items-center justify-between">
-        <div class="w-full flex items-center justify-between mb-1">
-          <h2 class="text-sm font-bold text-sky-400 uppercase tracking-wider">시즌 퍼포먼스 레이더</h2>
-          <span id="sp-percentile-badge" class="text-xs font-bold px-2 py-0.5 rounded bg-sky-500/20 text-sky-300">상위 -%</span>
-        </div>
-        <div class="w-full h-56 flex items-center justify-center">
-          <canvas id="playerRadarChart"></canvas>
-        </div>
-        <div id="sp-gbe-mini" class="w-full text-[11px] text-slate-300 bg-slate-900/90 p-2.5 rounded-lg border border-slate-800 text-center">
-          선수를 선택하면 영국 GBE A매치 출전율 및 계약 만료일이 표시됩니다.
-        </div>
-      </div>
-
-      <!-- Right 4 Cols: Step 2 Zero-Prompt Strategy Controls -->
-      <div class="lg:col-span-4 glass-card rounded-2xl p-5 flex flex-col justify-between">
-        <div class="space-y-4">
-          <h2 class="text-sm font-bold text-purple-400 uppercase tracking-wider">Step 2 · 업무 트랙 & 협상 조건 설정</h2>
-
-          <!-- Track Toggle -->
-          <div class="space-y-2">
-            <label class="text-xs font-semibold text-slate-300">에이전시 실무 트랙 선택 (LangGraph Supervisor 분기)</label>
-            <div class="grid grid-cols-1 gap-2">
-              <button id="btn-track-a" onclick="selectTrack('TRACK_A_TRANSFER')"
-                class="text-left p-3 rounded-xl border border-emerald-500 bg-emerald-500/15 transition">
-                <div class="text-xs font-bold text-emerald-300">🛫 Track A: 타 구단 이적 역제의 (Pitching & 스카우팅)</div>
-                <div class="text-[11px] text-slate-300 mt-0.5">주전 노쇠화·계약만료 구단 발굴 + 실시간 부상/전술 검색 + GBE 검증</div>
-              </button>
-              <button id="btn-track-b" onclick="selectTrack('TRACK_B_RENEWAL')"
-                class="text-left p-3 rounded-xl border border-slate-700 bg-slate-900/60 hover:border-slate-600 transition">
-                <div class="text-xs font-bold text-sky-300">📝 Track B: 현 소속팀 재계약 연봉 협상 (Wage Benchmarking)</div>
-                <div class="text-[11px] text-slate-400 mt-0.5">동급 비교군(Peer 5인) 주급 사분위수 밴드 산출 + 단장 압박 방어 논리</div>
-              </button>
-            </div>
-          </div>
-
-          <!-- Wage Increase Slider -->
+      <!-- Executive Header & Metrics Bar -->
+      <div class="ui-card p-6 border-white/[0.08] space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <div class="flex justify-between text-xs font-semibold mb-1">
-              <span class="text-slate-300">목표 주급 인상률 (Anchor Target)</span>
-              <span id="wage-slider-label" class="text-emerald-400 font-bold">+30%</span>
+            <h2 class="text-xl font-bold text-white tracking-tight">
+              에이전시 워크스페이스
+            </h2>
+            <p class="text-xs text-zinc-400 mt-1">
+              선수 발굴부터 계약 전략, 2라운드 모의 협상 및 현업 실무 문서 발급을 지원합니다.
+            </p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="showPage('page-scouting')"
+              class="px-3.5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition">
+              선수 스카우팅 바로가기 →
+            </button>
+          </div>
+        </div>
+
+        <!-- 4 Minimal Stat Tiles -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3 border-t border-white/[0.06]">
+          <div class="p-3 rounded-lg bg-[#0e1117] border border-white/[0.04]">
+            <div class="text-[11px] text-zinc-400">등록 선수 및 감독</div>
+            <div class="text-sm font-bold text-white mt-0.5">2,758명 (96개 구단)</div>
+          </div>
+          <div class="p-3 rounded-lg bg-[#0e1117] border border-white/[0.04]">
+            <div class="text-[11px] text-zinc-400">규정 및 전술 DB</div>
+            <div id="home-vecdb-stat" class="text-sm font-bold text-zinc-200 mt-0.5">687 규정 + 3,268 전술</div>
+          </div>
+          <div class="p-3 rounded-lg bg-[#0e1117] border border-white/[0.04]">
+            <div class="text-[11px] text-zinc-400">현재 작업 대상</div>
+            <div id="home-active-player-stat" class="text-sm font-bold text-emerald-400 mt-0.5">손흥민 (33세, LW)</div>
+          </div>
+          <div class="p-3 rounded-lg bg-[#0e1117] border border-white/[0.04]">
+            <div class="text-[11px] text-zinc-400">실무 문서 체계</div>
+            <div class="text-sm font-bold text-zinc-200 mt-0.5">커리어·협상·피칭 3종</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5 Function Modules (Clean, Minimal Action Cards) -->
+      <div class="space-y-3">
+        <div class="text-xs font-semibold text-zinc-400 uppercase tracking-wider">
+          주요 업무 모듈
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+          <!-- Card 1: Scouting -->
+          <div onclick="showPage('page-scouting')"
+            class="ui-card ui-card-hover p-5 cursor-pointer flex flex-col justify-between">
+            <div class="space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-semibold text-white">선수 스카우팅 및 분석</span>
+                <span class="text-[11px] text-zinc-500 font-mono">2,758명 DB</span>
+              </div>
+              <p class="text-xs text-zinc-400 leading-relaxed">
+                5대 리그 공식 로스터 검색, 퍼포먼스 5각 레이더 차트, AI 저평가 유망주 발굴 및 보스만 룰 만료 타겟 분석.
+              </p>
+            </div>
+            <div class="mt-5 pt-3 border-t border-white/[0.06] flex items-center justify-between text-xs font-medium text-emerald-400">
+              <span>스카우팅 열기</span>
+              <span>→</span>
+            </div>
+          </div>
+
+          <!-- Card 2: Strategy -->
+          <div onclick="showPage('page-strategy')"
+            class="ui-card ui-card-hover p-5 cursor-pointer flex flex-col justify-between">
+            <div class="space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-semibold text-white">이적·재계약 협상 전략</span>
+                <span class="text-[11px] text-zinc-500 font-mono">2-Round Sparring</span>
+              </div>
+              <p class="text-xs text-zinc-400 leading-relaxed">
+                이적 역제의 및 재계약 목표 주급 설정, 동급 비교군 밴드 분석, 상대 구단 단장과의 AI 모의 협상 및 전략 개입.
+              </p>
+            </div>
+            <div class="mt-5 pt-3 border-t border-white/[0.06] flex items-center justify-between text-xs font-medium text-emerald-400">
+              <span>협상 전략 수립</span>
+              <span>→</span>
+            </div>
+          </div>
+
+          <!-- Card 3: Documents -->
+          <div onclick="showPage('page-documents')"
+            class="ui-card ui-card-hover p-5 cursor-pointer flex flex-col justify-between">
+            <div class="space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-semibold text-white">3종 실무 문서 센터</span>
+                <span class="text-[11px] text-zinc-500 font-mono">Triple Docs</span>
+              </div>
+              <p class="text-xs text-zinc-400 leading-relaxed">
+                선수·가족 설명용 커리어 평가서, 에이전트 대외비 협상 치트시트, 구단 디렉터 제출용 1-Page 피칭 덱 원클릭 출력.
+              </p>
+            </div>
+            <div class="mt-5 pt-3 border-t border-white/[0.06] flex items-center justify-between text-xs font-medium text-emerald-400">
+              <span>문서 열람 및 인쇄</span>
+              <span>→</span>
+            </div>
+          </div>
+
+          <!-- Card 4: Finance -->
+          <div onclick="showPage('page-finance')"
+            class="ui-card ui-card-hover p-5 cursor-pointer flex flex-col justify-between">
+            <div class="space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-semibold text-white">재무 · 세무 시뮬레이터</span>
+                <span class="text-[11px] text-zinc-500 font-mono">PSR & Tax</span>
+              </div>
+              <p class="text-xs text-zinc-400 leading-relaxed">
+                유럽 5대 리그 국가별 세후 실수령액 환산 및 이적료 상각을 반영한 구단 연간 PSR 장부상 총비용 산출.
+              </p>
+            </div>
+            <div class="mt-5 pt-3 border-t border-white/[0.06] flex items-center justify-between text-xs font-medium text-emerald-400">
+              <span>재무 계산기 실행</span>
+              <span>→</span>
+            </div>
+          </div>
+
+          <!-- Card 5: Regulations -->
+          <div onclick="showPage('page-regulations')"
+            class="ui-card ui-card-hover p-5 cursor-pointer flex flex-col justify-between">
+            <div class="space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-semibold text-white">규정 검색 및 시스템 설정</span>
+                <span class="text-[11px] text-zinc-500 font-mono">RAG & Sync</span>
+              </div>
+              <p class="text-xs text-zinc-400 leading-relaxed">
+                FIFA 에이전트 규정(FFAR), 영국 GBE 워크퍼밋 및 Non-EU 쿼터 벡터 검색, GCP 연동 및 96구단 데이터 동기화.
+              </p>
+            </div>
+            <div class="mt-5 pt-3 border-t border-white/[0.06] flex items-center justify-between text-xs font-medium text-emerald-400">
+              <span>규정 검색 및 설정</span>
+              <span>→</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ======================================================================= -->
+    <!-- PAGE 2: SCOUTING & PROSPECT DESK -->
+    <!-- ======================================================================= -->
+    <div id="page-scouting" class="page-view hidden space-y-5">
+
+      <!-- Breadcrumb Header -->
+      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.06] pb-3">
+        <div class="flex items-center gap-3">
+          <button onclick="showPage('page-home')"
+            class="px-2.5 py-1 rounded-lg bg-[#12151c] hover:bg-zinc-800 border border-white/[0.08] text-xs font-medium text-zinc-300 transition">
+            ← 대시보드
+          </button>
+          <div>
+            <h2 class="text-base font-bold text-white">선수 스카우팅 및 분석</h2>
+            <p class="text-xs text-zinc-400">2,758명 선수·감독 로스터 검색 및 데이터 분석</p>
+          </div>
+        </div>
+
+        <button onclick="showPage('page-strategy')"
+          class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition">
+          선택한 선수로 협상 전략 수립 →
+        </button>
+      </div>
+
+      <!-- Main Scouting Workspace Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+
+        <!-- Left 5 Cols: Roster Filter & List -->
+        <div class="lg:col-span-5 ui-card p-4 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-semibold text-zinc-300">선수 검색</span>
+              <span id="roster-count" class="text-xs text-zinc-500">로딩 중...</span>
+            </div>
+
+            <!-- Filters -->
+            <div class="grid grid-cols-3 gap-1.5 mb-2">
+              <select id="league-filter-select" onchange="onLeagueFilterChange()"
+                class="bg-[#0e1117] border border-white/[0.08] rounded-lg px-2 py-1.5 text-[11px] text-white focus:outline-none focus:border-zinc-500">
+                <option value="ALL">전체 5대 리그</option>
+                <option value="Premier League">Premier League</option>
+                <option value="La Liga">La Liga</option>
+                <option value="Serie A">Serie A</option>
+                <option value="Bundesliga">Bundesliga</option>
+                <option value="Ligue 1">Ligue 1</option>
+              </select>
+              <select id="club-filter-select" onchange="applyRosterFilters()"
+                class="bg-[#0e1117] border border-white/[0.08] rounded-lg px-2 py-1.5 text-[11px] text-white focus:outline-none focus:border-zinc-500">
+                <option value="ALL">전체 96개 구단</option>
+              </select>
+              <select id="pos-filter-select" onchange="applyRosterFilters()"
+                class="bg-[#0e1117] border border-white/[0.08] rounded-lg px-2 py-1.5 text-[11px] text-white focus:outline-none focus:border-zinc-500">
+                <option value="ALL">전체 포지션</option>
+                <option value="MGR">감독 (96인)</option>
+                <option value="ST">ST (스트라이커)</option>
+                <option value="LW">LW (좌측 윙)</option>
+                <option value="RW">RW (우측 윙)</option>
+                <option value="AM">AM (공격형 미드필더)</option>
+                <option value="CM">CM (중앙 미드필더)</option>
+                <option value="DM">DM (수비형 미드필더)</option>
+                <option value="CB">CB (센터백)</option>
+                <option value="RB">RB (우측 풀백)</option>
+                <option value="LB">LB (좌측 풀백)</option>
+                <option value="GK">GK (골키퍼)</option>
+              </select>
+            </div>
+
+            <div class="flex gap-1.5 mb-2.5">
+              <input id="player-search-input" type="text" oninput="applyRosterFilters()"
+                placeholder="선수/감독 이름 (예: 손흥민, 김민재, Haaland)"
+                class="flex-1 bg-[#0e1117] border border-white/[0.08] rounded-lg px-2.5 py-1.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-500" />
+              <button onclick="filterManagersOnly()" class="px-2.5 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-[11px] text-zinc-300 font-medium whitespace-nowrap">
+                감독 96인
+              </button>
+              <button onclick="filterKoreanBig5()" class="px-2.5 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-[11px] text-emerald-400 font-medium whitespace-nowrap">
+                한국 선수
+              </button>
+              <button onclick="resetPlayerFilter()" class="px-2.5 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-[11px] text-zinc-400 whitespace-nowrap">
+                초기화
+              </button>
+            </div>
+
+            <!-- Roster Scroll Grid -->
+            <div id="player-roster-grid" class="grid grid-cols-2 gap-2 max-h-[380px] overflow-y-auto pr-1"></div>
+
+            <div id="load-more-container" class="mt-2 hidden">
+              <button id="btn-load-more" onclick="loadMorePlayers()"
+                class="w-full py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 border border-white/[0.06] text-[11px] font-medium text-zinc-300 transition">
+                + 선수 더 보기
+              </button>
+            </div>
+
+            <!-- External Prospect Onboarding Widget (API-Football 1,100+ Leagues) -->
+            <div class="mt-3 pt-3 border-t border-white/[0.08]">
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="text-xs font-semibold text-emerald-400 flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                  5대 리그 외 유망주 등록 (API-Football)
+                </span>
+                <span class="text-[10px] text-zinc-500">K리그·J리그·남미</span>
+              </div>
+              <div class="flex gap-1.5">
+                <input id="external-prospect-input" type="text"
+                  placeholder="유망주 영문/한글 이름 (예: Seol, Yang Min-Hyeok)"
+                  class="flex-1 bg-[#0e1117] border border-white/[0.08] rounded-lg px-2.5 py-1 text-[11px] text-white placeholder-zinc-500 focus:outline-none focus:border-emerald-500" />
+                <button id="btn-onboard-prospect" onclick="onboardExternalProspectUI()"
+                  class="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-semibold whitespace-nowrap transition">
+                  등록
+                </button>
+              </div>
+              <div id="onboard-result-box" class="hidden mt-2 p-2 rounded-lg border border-emerald-500/30 bg-emerald-950/20 text-xs text-zinc-200"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right 7 Cols: Selected Player Detailed Dossier & Radar Chart -->
+        <div class="lg:col-span-7 space-y-4">
+
+          <div id="selected-player-card" class="ui-card p-5 space-y-4">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <span id="sp-pos" class="text-xs font-semibold px-2 py-0.5 rounded bg-zinc-800 text-emerald-400 border border-white/[0.06]"></span>
+                <h3 id="sp-name" class="text-lg font-bold text-white mt-1"></h3>
+                <p id="sp-club" class="text-xs text-zinc-400"></p>
+              </div>
+              <div class="text-right">
+                <div class="text-[11px] text-zinc-400">시장 가치</div>
+                <div id="sp-val" class="text-lg font-bold text-emerald-400"></div>
+                <div id="sp-wage" class="text-xs text-zinc-300"></div>
+              </div>
+            </div>
+
+            <p id="sp-strengths" class="text-xs text-zinc-300 bg-[#0e1117] p-3 rounded-lg border border-white/[0.04]"></p>
+
+            <!-- Dual Grid: Radar Chart + GBE / Action Box -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+              <div class="h-56 flex items-center justify-center bg-[#0a0c10] rounded-xl p-2 border border-white/[0.04]">
+                <canvas id="playerRadarChart"></canvas>
+              </div>
+              <div class="space-y-3">
+                <div class="flex items-center justify-between text-xs">
+                  <span class="text-zinc-400">포지션 백분위:</span>
+                  <span id="sp-percentile-badge" class="font-semibold text-zinc-200"></span>
+                </div>
+                <div id="sp-gbe-mini" class="text-xs text-zinc-300 bg-[#0e1117] p-2.5 rounded-lg border border-white/[0.04] leading-relaxed"></div>
+                <div class="space-y-1.5 pt-1">
+                  <button onclick="showPage('page-strategy')"
+                    class="w-full py-2 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition flex items-center justify-center gap-1.5">
+                    <span>이 선수로 협상 전략 수립하기 →</span>
+                  </button>
+                  <button id="btn-live-player-sync" onclick="syncSelectedPlayerLive()"
+                    class="w-full py-1.5 px-3 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-[11px] text-zinc-300 transition flex items-center justify-center gap-1">
+                    <span>소속팀·시세 실시간 검색 동기화</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Deep Analytics Dossier -->
+            <div id="sp-deep-profile" class="text-xs text-zinc-300 bg-[#0e1117] p-3 rounded-lg border border-white/[0.04] space-y-1"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sub-Tabs: Prospects, Bosman, Custom -->
+      <div class="ui-card p-4 space-y-3">
+        <div class="flex flex-wrap items-center gap-1.5 border-b border-white/[0.06] pb-2.5">
+          <button id="wb-tab-prospects" onclick="switchScoutingSubTab('prospects')"
+            class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 text-white transition">
+            저평가 유망주 발굴
+          </button>
+          <button id="wb-tab-bosman" onclick="switchScoutingSubTab('bosman')"
+            class="px-3 py-1.5 rounded-lg text-xs font-medium bg-zinc-800 text-zinc-300 hover:bg-zinc-700 transition">
+            보스만 룰 타겟 구단
+          </button>
+          <button id="wb-tab-custom" onclick="switchScoutingSubTab('custom')"
+            class="px-3 py-1.5 rounded-lg text-xs font-medium bg-zinc-800 text-zinc-300 hover:bg-zinc-700 transition">
+            외부 선수 신규 등록
+          </button>
+        </div>
+
+        <!-- Sub-Tab 1: Prospects -->
+        <div id="scout-panel-prospects" class="space-y-3 pt-1">
+          <div class="flex items-center justify-between text-xs text-zinc-400">
+            <span>기준: 나이 ≤ 23세, 포지션 상위 25% 이상, 시세 ≤ €15M</span>
+            <button onclick="loadUndervaluedProspects()"
+              class="px-2.5 py-1 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 transition text-[11px]">
+              재스캔
+            </button>
+          </div>
+          <div id="prospects-grid" class="grid grid-cols-1 md:grid-cols-3 gap-2.5 max-h-56 overflow-y-auto pr-1"></div>
+        </div>
+
+        <!-- Sub-Tab 2: Bosman Radar -->
+        <div id="scout-panel-bosman" class="hidden space-y-3 pt-1">
+          <div class="flex flex-wrap items-center gap-2">
+            <select id="bosman-pos-select" onchange="loadBosmanRadar()"
+              class="bg-[#0e1117] border border-white/[0.08] rounded-lg px-2.5 py-1.5 text-xs text-white">
+              <option value="ALL">전체 포지션</option>
+              <option value="ST">ST</option><option value="LW">LW</option><option value="RW">RW</option>
+              <option value="AM">AM</option><option value="CM">CM</option><option value="DM">DM</option>
+              <option value="CB">CB</option><option value="RB">RB</option><option value="LB">LB</option>
+            </select>
+            <select id="bosman-league-select" onchange="loadBosmanRadar()"
+              class="bg-[#0e1117] border border-white/[0.08] rounded-lg px-2.5 py-1.5 text-xs text-white">
+              <option value="ALL">5대 리그 전체</option>
+              <option value="Premier League">Premier League</option>
+              <option value="La Liga">La Liga</option>
+              <option value="Serie A">Serie A</option>
+              <option value="Bundesliga">Bundesliga</option>
+              <option value="Ligue 1">Ligue 1</option>
+            </select>
+            <span id="bosman-count-badge" class="text-xs text-zinc-400 ml-auto">스캔 중...</span>
+          </div>
+          <div id="bosman-radar-grid" class="grid grid-cols-1 md:grid-cols-3 gap-2.5 max-h-56 overflow-y-auto pr-1"></div>
+        </div>
+
+        <!-- Sub-Tab 3: Custom Player -->
+        <div id="scout-panel-custom" class="hidden space-y-3 pt-1">
+          <div class="grid grid-cols-2 md:grid-cols-6 gap-2 text-xs">
+            <div>
+              <label class="text-[10px] text-zinc-400 block mb-0.5">한글 이름</label>
+              <input id="cust-name-ko" type="text" value="양민혁" class="w-full bg-[#0e1117] border border-white/[0.08] rounded px-2 py-1 text-xs text-white" />
+            </div>
+            <div>
+              <label class="text-[10px] text-zinc-400 block mb-0.5">영문 이름</label>
+              <input id="cust-name-en" type="text" value="Yang Min-hyeok" class="w-full bg-[#0e1117] border border-white/[0.08] rounded px-2 py-1 text-xs text-white" />
+            </div>
+            <div>
+              <label class="text-[10px] text-zinc-400 block mb-0.5">포지션</label>
+              <div class="flex gap-1">
+                <select id="cust-pos" class="w-1/2 bg-[#0e1117] border border-white/[0.08] rounded px-1.5 py-1 text-xs text-white">
+                  <option value="RW">RW</option><option value="LW">LW</option><option value="ST">ST</option>
+                  <option value="AM">AM</option><option value="CM">CM</option><option value="DM">DM</option>
+                  <option value="CB">CB</option><option value="RB">RB</option><option value="LB">LB</option>
+                </select>
+                <input id="cust-sec-pos" type="text" value="LW, AM" class="w-1/2 bg-[#0e1117] border border-white/[0.08] rounded px-1.5 py-1 text-xs text-white" />
+              </div>
+            </div>
+            <div>
+              <label class="text-[10px] text-zinc-400 block mb-0.5">소속팀 & 리그</label>
+              <div class="flex gap-1">
+                <input id="cust-club" type="text" value="Gangwon / QPR" class="w-1/2 bg-[#0e1117] border border-white/[0.08] rounded px-1.5 py-1 text-xs text-white" />
+                <input id="cust-league" type="text" value="K League 1" class="w-1/2 bg-[#0e1117] border border-white/[0.08] rounded px-1.5 py-1 text-xs text-white" />
+              </div>
+            </div>
+            <div>
+              <label class="text-[10px] text-zinc-400 block mb-0.5">나이 / GBE 밴드(1~6)</label>
+              <div class="flex gap-1">
+                <input id="cust-age" type="number" value="20" class="w-1/2 bg-[#0e1117] border border-white/[0.08] rounded px-1.5 py-1 text-xs text-white" />
+                <input id="cust-band" type="number" value="2" min="1" max="6" class="w-1/2 bg-[#0e1117] border border-white/[0.08] rounded px-1.5 py-1 text-xs text-white" />
+              </div>
+            </div>
+            <div>
+              <label class="text-[10px] text-zinc-400 block mb-0.5">시세(€) / 주급(€)</label>
+              <div class="flex gap-1">
+                <input id="cust-val" type="number" value="4500000" step="500000" class="w-1/2 bg-[#0e1117] border border-white/[0.08] rounded px-1.5 py-1 text-xs text-white" />
+                <input id="cust-wage" type="number" value="15000" step="1000" class="w-1/2 bg-[#0e1117] border border-white/[0.08] rounded px-1.5 py-1 text-xs text-white" />
+              </div>
+            </div>
+          </div>
+          <div class="flex justify-end pt-1">
+            <button onclick="registerCustomClient()"
+              class="py-1.5 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition">
+              선수 등록 및 선택
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+    <!-- ======================================================================= -->
+    <!-- PAGE 3: STRATEGY & SPARRING DESK -->
+    <!-- ======================================================================= -->
+    <div id="page-strategy" class="page-view hidden space-y-5">
+
+      <!-- Breadcrumb Header -->
+      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.06] pb-3">
+        <div class="flex items-center gap-3">
+          <button onclick="showPage('page-home')"
+            class="px-2.5 py-1 rounded-lg bg-[#12151c] hover:bg-zinc-800 border border-white/[0.08] text-xs font-medium text-zinc-300 transition">
+            ← 대시보드
+          </button>
+          <div>
+            <h2 class="text-base font-bold text-white">이적 및 계약 협상 전략</h2>
+            <p class="text-xs text-zinc-400">조건 설정 및 구단 디렉터와의 모의 협상 시뮬레이션</p>
+          </div>
+        </div>
+
+        <button onclick="showPage('page-documents')"
+          class="px-3 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-white font-medium text-xs transition">
+          생성된 실무 문서 확인 →
+        </button>
+      </div>
+
+      <!-- Current Target Player Banner -->
+      <div class="ui-card p-4 flex flex-wrap items-center justify-between gap-3 bg-[#11141a]">
+        <div>
+          <span class="text-[11px] text-zinc-400">현재 대상 선수</span>
+          <div class="text-sm font-bold text-white flex items-center gap-2 mt-0.5">
+            <span id="strat-target-name">손흥민 (Heung-min Son)</span>
+            <span id="strat-target-badge" class="text-xs font-normal text-zinc-400">Tottenham Hotspur · LW · €38.0M</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="runPrecisionMedicalCheck()"
+            class="px-2.5 py-1 rounded-lg bg-red-950/40 hover:bg-red-900/50 border border-red-500/30 text-xs text-red-300 transition flex items-center gap-1.5"
+            title="API-Football 의무팀 공식 부상/결장 기록 검증">
+            <span class="w-1.5 h-1.5 rounded-full bg-red-400"></span>
+            <span>공식 부상 검증 (API-FB)</span>
+          </button>
+          <button onclick="showPage('page-scouting')"
+            class="px-2.5 py-1 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-xs text-zinc-300 transition">
+            선수 변경
+          </button>
+        </div>
+      </div>
+
+      <!-- Precision Medical Check Result Box -->
+      <div id="precision-medical-result" class="hidden ui-card p-3.5 border-red-500/30 bg-red-950/10 space-y-2"></div>
+
+      <!-- Strategy Parameters Setting Panel -->
+      <div class="ui-card p-5 space-y-4">
+        <span class="text-xs font-semibold text-zinc-300">협상 조건 설정</span>
+
+        <!-- Track Toggle -->
+        <div class="space-y-1.5">
+          <label class="text-xs text-zinc-400">업무 유형</label>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+            <button id="btn-track-a" onclick="selectTrack('TRACK_A_TRANSFER')"
+              class="text-left p-3 rounded-xl border border-emerald-500 bg-emerald-500/10 transition">
+              <div class="text-xs font-semibold text-emerald-400">타 구단 이적 제안 (Transfer Pitch)</div>
+              <div class="text-[11px] text-zinc-400 mt-0.5">포지션 공백 구단 매칭, 부상 이슈 검색 및 워크퍼밋 검증</div>
+            </button>
+            <button id="btn-track-b" onclick="selectTrack('TRACK_B_RENEWAL')"
+              class="text-left p-3 rounded-xl border border-white/[0.08] bg-[#0e1117] hover:border-zinc-600 transition">
+              <div class="text-xs font-semibold text-zinc-300">현 소속팀 재계약 협상 (Contract Renewal)</div>
+              <div class="text-[11px] text-zinc-400 mt-0.5">동급 비교군 주급 밴드 산출 및 연봉 인상 방어 논리</div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Sliders & Goals -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 items-end pt-1">
+          <div>
+            <div class="flex justify-between text-xs mb-1">
+              <span class="text-zinc-400">목표 주급 인상률</span>
+              <span id="wage-slider-label" class="font-bold text-emerald-400">+30%</span>
             </div>
             <input id="wage-slider" type="range" min="10" max="150" step="5" value="30"
               oninput="updateSliderLabel(this.value)"
               class="w-full accent-emerald-500 cursor-pointer" />
-            <div class="flex justify-between text-[10px] text-slate-500 mt-0.5">
+            <div class="flex justify-between text-[10px] text-zinc-500 mt-0.5">
               <span>보수적 (+10%)</span>
               <span>표준 (+30~50%)</span>
-              <span>빅리그 도약 (+100~150%)</span>
+              <span>최대 (+150%)</span>
             </div>
           </div>
 
-          <!-- Priority Goal & Preferred League Select -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-            <div>
-              <label class="text-xs font-semibold text-slate-300 block mb-1">협상 최우선 가치 (Priority Goal)</label>
-              <select id="priority-select"
-                class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
-                <option value="유럽 5대 리그 즉시 주전 도약 + 적정 주급 확보">유럽 5대 리그 즉시 주전 도약 + 적정 주급 확보</option>
-                <option value="고정 기본급 극대화 + 다년 계약 안정성 확보">고정 기본급 극대화 + 다년 계약 안정성 확보</option>
-                <option value="출전/공격포인트 인센티브 극대화 + 바이아웃 하향">출전/공격포인트 인센티브 극대화 + 바이아웃 하향</option>
-                <option value="UCL/UEL 유럽 대항전 출전 구단 진입 최우선">UCL/UEL 유럽 대항전 출전 구단 진입 최우선</option>
-              </select>
-            </div>
-            <div>
-              <label class="text-xs font-semibold text-slate-300 block mb-1">희망 이적 리그 (Track A 타겟 리그)</label>
-              <select id="preferred-league-select"
-                class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
-                <option value="ALL">🌍 유럽 5대 리그 전체 자동 탐색</option>
-                <option value="Premier League">🏴󠁧󠁢󠁥󠁮󠁧󠁿 잉글랜드 Premier League</option>
-                <option value="La Liga">🇪🇸 스페인 La Liga</option>
-                <option value="Serie A">🇮🇹 이탈리아 Serie A</option>
-                <option value="Bundesliga">🇩🇪 독일 Bundesliga</option>
-                <option value="Ligue 1">🇫🇷 프랑스 Ligue 1</option>
-              </select>
-            </div>
-          </div>
-
-          <!-- Confidential Contract Override (Optional Accordion for Real Agents) -->
-          <details class="bg-slate-900/80 border border-slate-700/80 rounded-xl p-2.5 text-xs">
-            <summary class="font-bold text-amber-300 cursor-pointer flex items-center justify-between">
-              <span>🔐 에이전트 기밀 계약서 수치 직접 입력 (Contract Override)</span>
-              <span class="text-[10px] text-slate-400">선택사항</span>
-            </summary>
-            <div class="grid grid-cols-2 gap-2 mt-2.5 pt-2 border-t border-slate-800">
-              <div>
-                <label class="text-[10px] text-slate-400 block">실제 현재 주급 (€/주, 0=자동)</label>
-                <input id="ov-actual-wage" type="number" value="0" step="1000" oninput="previewPsrLive()"
-                  class="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1 text-xs text-emerald-300 font-bold" />
-              </div>
-              <div>
-                <label class="text-[10px] text-slate-400 block">목표 이적료/시세 (€, 0=자동)</label>
-                <input id="ov-market-val" type="number" value="0" step="1000000" oninput="previewPsrLive()"
-                  class="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1 text-xs text-sky-300 font-bold" />
-              </div>
-              <div>
-                <label class="text-[10px] text-slate-400 block">계약 기간 (년, 감가상각 5년 상한)</label>
-                <input id="ov-contract-years" type="number" value="4" min="1" max="8" oninput="previewPsrLive()"
-                  class="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1 text-xs text-white" />
-              </div>
-              <div>
-                <label class="text-[10px] text-slate-400 block">사이닝 보너스 (€) & 수수료 (%)</label>
-                <div class="flex gap-1">
-                  <input id="ov-signing-bonus" type="number" value="1500000" step="250000" oninput="previewPsrLive()"
-                    class="w-2/3 bg-slate-950 border border-slate-700 rounded px-1.5 py-1 text-[11px] text-white" />
-                  <input id="ov-agent-fee" type="number" value="7.0" step="0.5" min="1" max="15" oninput="previewPsrLive()"
-                    class="w-1/3 bg-slate-950 border border-slate-700 rounded px-1.5 py-1 text-[11px] text-amber-300 font-bold" />
-                </div>
-              </div>
-            </div>
-            <div id="live-psr-mini-preview" class="mt-2 p-2 rounded bg-slate-950 border border-slate-800 text-[10px] text-slate-300">
-              선수를 선택하거나 수치를 변경하면 구단 연간 PSR 장부 비용과 세후 실수령액이 즉시 계산됩니다.
-            </div>
-          </details>
-        </div>
-
-        <button id="btn-start-workflow" onclick="startWorkflow()"
-          class="mt-4 w-full py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-extrabold text-sm shadow-lg shadow-emerald-900/40 transition flex items-center justify-center gap-2">
-          <span>🚀 전략 생성 & 1차 모의 협상 시작</span>
-        </button>
-      </div>
-    </section>
-
-    <!-- PRACTITIONER WORKBENCH: 1) PSR/Net-Gross Tax Calculator, 2) Bosman & Aging Starter Radar, 3) Custom Prospect Onboarding -->
-    <section class="no-print glass-card rounded-2xl p-5 space-y-4 border border-emerald-500/25">
-      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
-        <div>
-          <h2 class="text-sm font-extrabold text-white flex items-center gap-2">
-            <span>🧰 현업 에이전트 실무 워크벤치 (Practitioner Pro Suite)</span>
-            <span class="text-[10px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold">Real Agency Tools</span>
-          </h2>
-          <p class="text-[11px] text-slate-400">
-            구단 CFO 설득용 PSR 연간 감가상각·세후 연봉 계산기, 계약만료(보스만 룰)·노쇠화 주전 타겟 레이더, 5대 리그 외부 유망주(K리그 등) 직접 등록 및 역제의 도구
-          </p>
-        </div>
-        <div class="flex flex-wrap gap-1.5">
-          <button id="wb-tab-bosman" onclick="switchWorkbenchTab('bosman')"
-            class="px-3 py-1.5 rounded-lg text-xs font-extrabold bg-emerald-600 text-white transition">
-            🎯 보스만 룰(계약만료) & 세대교체 타겟 구단 레이더
-          </button>
-          <button id="wb-tab-psr" onclick="switchWorkbenchTab('psr')"
-            class="px-3 py-1.5 rounded-lg text-xs font-extrabold bg-slate-800 text-slate-300 hover:bg-slate-700 transition">
-            💶 구단 PSR 연간 장부비용 & 5대리그 세전/세후(Net-Gross) 계산기
-          </button>
-          <button id="wb-tab-custom" onclick="switchWorkbenchTab('custom')"
-            class="px-3 py-1.5 rounded-lg text-xs font-extrabold bg-slate-800 text-sky-300 hover:bg-slate-700 transition">
-            🌟 외부 리그 선수(K리그/유망주) 신규 등록 & 빅리그 역제의
-          </button>
-        </div>
-      </div>
-
-      <!-- Tab 1: Bosman & Replacement Radar -->
-      <div id="wb-panel-bosman" class="space-y-3">
-        <div class="flex flex-wrap items-center gap-2">
-          <select id="bosman-pos-select" onchange="loadBosmanRadar()"
-            class="bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white">
-            <option value="ALL">🏃 전체 포지션 스캔</option>
-            <option value="ST">ST (스트라이커)</option>
-            <option value="LW">LW (좌측 윙어)</option>
-            <option value="RW">RW (우측 윙어)</option>
-            <option value="AM">AM (공격형 미드필더)</option>
-            <option value="CM">CM (중앙 미드필더)</option>
-            <option value="DM">DM (수비형 미드필더)</option>
-            <option value="CB">CB (센터백)</option>
-            <option value="RB">RB (우측 풀백)</option>
-            <option value="LB">LB (좌측 풀백)</option>
-          </select>
-          <select id="bosman-league-select" onchange="loadBosmanRadar()"
-            class="bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white">
-            <option value="ALL">🌍 유럽 5대 리그 전체</option>
-            <option value="Premier League">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League</option>
-            <option value="La Liga">🇪🇸 La Liga</option>
-            <option value="Serie A">🇮🇹 Serie A</option>
-            <option value="Bundesliga">🇩🇪 Bundesliga</option>
-            <option value="Ligue 1">🇫🇷 Ligue 1</option>
-          </select>
-          <span id="bosman-count-badge" class="text-xs font-bold text-emerald-400 ml-auto">스캔 중...</span>
-        </div>
-        <div id="bosman-radar-grid" class="grid grid-cols-1 md:grid-cols-3 gap-2.5 max-h-56 overflow-y-auto pr-1"></div>
-      </div>
-
-      <!-- Tab 2: PSR & Net-Gross Tax Simulator -->
-      <div id="wb-panel-psr" class="hidden space-y-3">
-        <div class="grid grid-cols-2 md:grid-cols-6 gap-2.5">
           <div>
-            <label class="text-[11px] text-slate-400 block mb-1">대상 리그 (세법 기준)</label>
-            <select id="calc-league" onchange="runStandalonePsrCalc()"
-              class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white">
-              <option value="Premier League">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League (세전 주급)</option>
-              <option value="La Liga">🇪🇸 La Liga (세후 연봉 + 의무 바이아웃)</option>
-              <option value="Serie A">🇮🇹 Serie A (세후 연봉 협상)</option>
-              <option value="Bundesliga">🇩🇪 Bundesliga (세전 연봉)</option>
-              <option value="Ligue 1">🇫🇷 Ligue 1 (세전 월급 + 패트리아트)</option>
+            <label class="text-xs text-zinc-400 block mb-1">협상 최우선 목표</label>
+            <select id="priority-select"
+              class="w-full bg-[#0e1117] border border-white/[0.08] rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-zinc-500">
+              <option value="유럽 5대 리그 즉시 주전 도약 + 적정 주급 확보">5대 리그 즉시 주전 도약 + 적정 주급</option>
+              <option value="고정 기본급 극대화 + 다년 계약 안정성 확보">고정 기본급 극대화 + 다년 계약</option>
+              <option value="출전/공격포인트 인센티브 극대화 + 바이아웃 하향">인센티브 극대화 + 바이아웃 하향</option>
+              <option value="UCL/UEL 유럽 대항전 출전 구단 진입 최우선">유럽 대항전(UCL/UEL) 구단 진입 최우선</option>
             </select>
           </div>
+
           <div>
-            <label class="text-[11px] text-slate-400 block mb-1">예상 이적료 (€)</label>
-            <input id="calc-fee" type="number" value="30000000" step="1000000" oninput="runStandalonePsrCalc()"
-              class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-emerald-300 font-bold" />
-          </div>
-          <div>
-            <label class="text-[11px] text-slate-400 block mb-1">세전 주급 (€/주)</label>
-            <input id="calc-wage" type="number" value="95000" step="5000" oninput="runStandalonePsrCalc()"
-              class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-sky-300 font-bold" />
-          </div>
-          <div>
-            <label class="text-[11px] text-slate-400 block mb-1">계약 연수 (년)</label>
-            <input id="calc-years" type="number" value="5" min="1" max="8" oninput="runStandalonePsrCalc()"
-              class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white" />
-          </div>
-          <div>
-            <label class="text-[11px] text-slate-400 block mb-1">사이닝 보너스 (€)</label>
-            <input id="calc-bonus" type="number" value="2000000" step="500000" oninput="runStandalonePsrCalc()"
-              class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white" />
-          </div>
-          <div>
-            <label class="text-[11px] text-slate-400 block mb-1">에이전트 수수료 (%)</label>
-            <input id="calc-agent-pct" type="number" value="7.0" step="0.5" oninput="runStandalonePsrCalc()"
-              class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-amber-300 font-bold" />
+            <label class="text-xs text-zinc-400 block mb-1">희망 타겟 리그</label>
+            <select id="preferred-league-select"
+              class="w-full bg-[#0e1117] border border-white/[0.08] rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-zinc-500">
+              <option value="ALL">유럽 5대 리그 전체 탐색</option>
+              <option value="Premier League">Premier League</option>
+              <option value="La Liga">La Liga</option>
+              <option value="Serie A">Serie A</option>
+              <option value="Bundesliga">Bundesliga</option>
+              <option value="Ligue 1">Ligue 1</option>
+            </select>
           </div>
         </div>
-        <div id="standalone-psr-result" class="bg-slate-950/90 border border-slate-800 rounded-xl p-3.5 text-xs"></div>
+
+        <!-- Optional Contract Override -->
+        <details class="bg-[#0e1117] border border-white/[0.06] rounded-xl p-3 text-xs">
+          <summary class="font-medium text-zinc-300 cursor-pointer flex items-center justify-between">
+            <span>계약 세부 수치 직접 지정 (선택사항)</span>
+            <span class="text-[10px] text-zinc-500">펼치기</span>
+          </summary>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5 mt-2.5 pt-2.5 border-t border-white/[0.06]">
+            <div>
+              <label class="text-[10px] text-zinc-400 block">현재 주급 (€/주, 0=자동)</label>
+              <input id="ov-actual-wage" type="number" value="0" step="1000" oninput="previewPsrLive()"
+                class="w-full bg-[#12151c] border border-white/[0.08] rounded px-2 py-1 text-xs text-white" />
+            </div>
+            <div>
+              <label class="text-[10px] text-zinc-400 block">목표 이적료 (€, 0=자동)</label>
+              <input id="ov-market-val" type="number" value="0" step="1000000" oninput="previewPsrLive()"
+                class="w-full bg-[#12151c] border border-white/[0.08] rounded px-2 py-1 text-xs text-white" />
+            </div>
+            <div>
+              <label class="text-[10px] text-zinc-400 block">계약 기간 (년)</label>
+              <input id="ov-contract-years" type="number" value="4" min="1" max="8" oninput="previewPsrLive()"
+                class="w-full bg-[#12151c] border border-white/[0.08] rounded px-2 py-1 text-xs text-white" />
+            </div>
+            <div>
+              <label class="text-[10px] text-zinc-400 block">사이닝 보너스 (€) & 수수료 (%)</label>
+              <div class="flex gap-1">
+                <input id="ov-signing-bonus" type="number" value="1500000" step="250000" oninput="previewPsrLive()"
+                  class="w-2/3 bg-[#12151c] border border-white/[0.08] rounded px-1.5 py-1 text-xs text-white" />
+                <input id="ov-agent-fee" type="number" value="7.0" step="0.5" min="1" max="15" oninput="previewPsrLive()"
+                  class="w-1/3 bg-[#12151c] border border-white/[0.08] rounded px-1.5 py-1 text-xs text-white" />
+              </div>
+            </div>
+          </div>
+          <div id="live-psr-mini-preview" class="mt-2 p-2 rounded bg-[#12151c] text-[11px] text-zinc-300"></div>
+        </details>
+
+        <!-- Big Launch Button -->
+        <button id="btn-start-workflow" onclick="startWorkflow()"
+          class="w-full py-2.5 px-4 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition flex items-center justify-center gap-2">
+          <span>전략 수립 및 1차 모의 협상 시작 →</span>
+        </button>
       </div>
 
-      <!-- Tab 3: Custom External Prospect Registration (K League / Eredivisie / Championship etc.) -->
-      <div id="wb-panel-custom" class="hidden space-y-3">
-        <div class="grid grid-cols-2 md:grid-cols-6 gap-2.5">
-          <div>
-            <label class="text-[10px] text-slate-400 block">한글 이름</label>
-            <input id="cust-name-ko" type="text" value="양민혁" class="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1.5 text-xs text-white" />
-          </div>
-          <div>
-            <label class="text-[10px] text-slate-400 block">영문 이름 (고유 식별)</label>
-            <input id="cust-name-en" type="text" value="Yang Min-hyeok" class="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1.5 text-xs text-white" />
-          </div>
-          <div>
-            <label class="text-[10px] text-slate-400 block">주 포지션 / 부 포지션</label>
-            <div class="flex gap-1">
-              <select id="cust-pos" class="w-1/2 bg-slate-900 border border-slate-700 rounded px-1.5 py-1.5 text-xs text-emerald-300 font-bold">
-                <option value="RW">RW</option><option value="LW">LW</option><option value="ST">ST</option>
-                <option value="AM">AM</option><option value="CM">CM</option><option value="DM">DM</option>
-                <option value="CB">CB</option><option value="RB">RB</option><option value="LB">LB</option>
-              </select>
-              <input id="cust-sec-pos" type="text" value="LW, AM" class="w-1/2 bg-slate-900 border border-slate-700 rounded px-1.5 py-1.5 text-xs text-white" />
-            </div>
-          </div>
-          <div>
-            <label class="text-[10px] text-slate-400 block">현 소속 구단 & 리그</label>
-            <div class="flex gap-1">
-              <input id="cust-club" type="text" value="Gangwon / QPR" class="w-1/2 bg-slate-900 border border-slate-700 rounded px-1.5 py-1.5 text-xs text-white" />
-              <input id="cust-league" type="text" value="K League 1 / Championship" class="w-1/2 bg-slate-900 border border-slate-700 rounded px-1.5 py-1.5 text-xs text-white" />
-            </div>
-          </div>
-          <div>
-            <label class="text-[10px] text-slate-400 block">나이 / GBE 리그 밴드(1~6)</label>
-            <div class="flex gap-1">
-              <input id="cust-age" type="number" value="20" class="w-1/2 bg-slate-900 border border-slate-700 rounded px-1.5 py-1.5 text-xs text-white" />
-              <input id="cust-band" type="number" value="2" min="1" max="6" class="w-1/2 bg-slate-900 border border-slate-700 rounded px-1.5 py-1.5 text-xs text-amber-300 font-bold" />
-            </div>
-          </div>
-          <div>
-            <label class="text-[10px] text-slate-400 block">시세(€) / 현재 주급(€/주)</label>
-            <div class="flex gap-1">
-              <input id="cust-val" type="number" value="4500000" step="500000" class="w-1/2 bg-slate-900 border border-slate-700 rounded px-1.5 py-1.5 text-xs text-emerald-300 font-bold" />
-              <input id="cust-wage" type="number" value="15000" step="1000" class="w-1/2 bg-slate-900 border border-slate-700 rounded px-1.5 py-1.5 text-xs text-sky-300 font-bold" />
-            </div>
-          </div>
-        </div>
-        <div class="grid grid-cols-2 md:grid-cols-6 gap-2.5">
-          <div>
-            <label class="text-[10px] text-slate-400 block">90분당 득점 / 도움</label>
-            <div class="flex gap-1">
-              <input id="cust-g90" type="number" value="0.35" step="0.05" class="w-1/2 bg-slate-900 border border-slate-700 rounded px-1.5 py-1 text-xs text-white" />
-              <input id="cust-a90" type="number" value="0.22" step="0.05" class="w-1/2 bg-slate-900 border border-slate-700 rounded px-1.5 py-1 text-xs text-white" />
-            </div>
-          </div>
-          <div>
-            <label class="text-[10px] text-slate-400 block">90분당 전진액션 / 키패스</label>
-            <div class="flex gap-1">
-              <input id="cust-prog90" type="number" value="6.8" step="0.2" class="w-1/2 bg-slate-900 border border-slate-700 rounded px-1.5 py-1 text-xs text-white" />
-              <input id="cust-kp90" type="number" value="1.75" step="0.1" class="w-1/2 bg-slate-900 border border-slate-700 rounded px-1.5 py-1 text-xs text-white" />
-            </div>
-          </div>
-          <div>
-            <label class="text-[10px] text-slate-400 block">A매치 출전율(%) / 대륙컵(%)</label>
-            <div class="flex gap-1">
-              <input id="cust-intl" type="number" value="45" class="w-1/2 bg-slate-900 border border-slate-700 rounded px-1.5 py-1 text-xs text-white" />
-              <input id="cust-cont" type="number" value="60" class="w-1/2 bg-slate-900 border border-slate-700 rounded px-1.5 py-1 text-xs text-white" />
-            </div>
-          </div>
-          <div class="md:col-span-2">
-            <label class="text-[10px] text-slate-400 block">핵심 스카우팅 강점 요약 (유럽 5대 리그 감독 전술 벡터 매칭용)</label>
-            <input id="cust-strengths" type="text" value="폭발적인 터치라인 1대1 드리블 돌파, 빠른 공수 전환 스피드, 박스 근처 양발 슈팅 결정력"
-              class="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs text-white" />
-          </div>
-          <div class="flex items-end">
-            <button onclick="registerCustomClient()"
-              class="w-full py-1.5 px-3 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-extrabold text-xs transition">
-              ➕ 외부 선수 DB 즉시 등록 & 선택
-            </button>
-          </div>
-        </div>
-      </div>
-    </section>
+      <!-- Realtime Execution & Sparring Results Panel -->
+      <div id="analysis-section" class="hidden space-y-4">
 
-    <!-- LIVE EXECUTION PANEL: Hermes Tool Trace, Peer Band, Club Matches & Legal RAG -->
-    <section id="analysis-section" class="no-print hidden space-y-6">
-
-      <!-- Node Execution & Model Trace Bar -->
-      <div class="glass-card rounded-2xl p-4">
-        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
-          <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
-            <span>🔗 LangGraph 실행 파이프라인 & 모델 라우팅 로그</span>
-            <span id="thread-badge" class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-sky-300 font-mono"></span>
-          </h3>
-          <span id="workflow-status-badge" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40"></span>
-        </div>
-        <p id="supervisor-note-box" class="text-xs text-emerald-300 bg-emerald-950/30 border border-emerald-800/50 rounded-lg p-2.5 mb-3"></p>
-        <div id="model-usage-pills" class="flex flex-wrap gap-2"></div>
-      </div>
-
-      <!-- 3-Column Quantitative, Scouting & Legal RAG Cards -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-        <!-- Card 1: Hermes Tool-Calling & Peer Wage Band -->
-        <div class="glass-card rounded-2xl p-5 space-y-3">
-          <div class="flex items-center justify-between">
-            <h3 class="text-sm font-bold text-emerald-400">🧠 Node 2 · Hermes 정량 밸류에이션</h3>
-            <span class="text-[11px] px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300">gemini-3.8-flash</span>
+        <!-- Status & Node Trace Bar -->
+        <div class="ui-card p-4 space-y-2">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <span class="text-xs font-semibold text-zinc-300">분석 및 협상 진행 상태</span>
+            <span id="workflow-status-badge" class="text-xs font-medium px-2 py-0.5 rounded bg-zinc-800 text-zinc-200"></span>
           </div>
-          <p id="hermes-ai-summary" class="text-xs text-slate-200 leading-relaxed bg-slate-900/80 p-3 rounded-xl border border-slate-800"></p>
-          <div id="wage-band-bars" class="space-y-1.5 text-xs"></div>
-          <div>
-            <div class="text-[11px] font-bold text-slate-400 mb-1">Hermes XML &lt;tool_call&gt; 연쇄 호출 로그</div>
-            <div id="hermes-tool-trace" class="space-y-1 max-h-36 overflow-y-auto font-mono text-[10px] bg-slate-950 p-2.5 rounded-lg border border-slate-800 text-slate-300"></div>
+          <p id="supervisor-note-box" class="text-xs text-zinc-300 bg-[#0e1117] border border-white/[0.04] rounded-lg p-2.5"></p>
+          <div class="flex items-center justify-between pt-1">
+            <div id="model-usage-pills" class="flex flex-wrap gap-1.5 text-[11px]"></div>
+            <span id="thread-badge" class="text-[10px] text-zinc-500 font-mono"></span>
           </div>
         </div>
 
-        <!-- Card 2: Matched Target Clubs / Live Search Grounding & Tactical Vector Match -->
-        <div class="glass-card rounded-2xl p-5 space-y-3">
-          <div class="flex items-center justify-between">
-            <h3 class="text-sm font-bold text-sky-400">🎯 구단 매칭 & 실시간 스카우팅 동향</h3>
-            <span class="text-[11px] px-2 py-0.5 rounded bg-amber-500/15 text-amber-300">gemini-embedding-001</span>
+        <!-- 4 Multi-Agent Analysis Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+
+          <!-- Card 1: Player Analyst -->
+          <div class="ui-card p-3.5 space-y-2">
+            <span class="text-xs font-semibold text-zinc-300">선수 가치 분석</span>
+            <p id="hermes-ai-summary" class="text-xs text-zinc-300 bg-[#0e1117] p-2 rounded-lg border border-white/[0.04]"></p>
+            <div id="wage-band-bars" class="space-y-1 text-xs"></div>
+            <details class="text-[10px] text-zinc-500">
+              <summary class="cursor-pointer">도구 호출 로그</summary>
+              <div id="hermes-tool-trace" class="mt-1 space-y-0.5 max-h-24 overflow-y-auto font-mono text-[9px] bg-[#0a0c10] p-1.5 rounded text-zinc-400"></div>
+            </details>
           </div>
-          <div id="live-news-box" class="bg-sky-950/30 border border-sky-800/50 rounded-xl p-3 space-y-1"></div>
-          <div id="matched-clubs-list" class="space-y-2 max-h-56 overflow-y-auto"></div>
+
+          <!-- Card 2: Club Scout -->
+          <div class="ui-card p-3.5 space-y-2">
+            <span class="text-xs font-semibold text-zinc-300">구단 매칭 및 정보</span>
+            <div id="live-news-box" class="bg-[#0e1117] border border-white/[0.04] rounded-lg p-2 space-y-0.5 text-xs"></div>
+            <div id="matched-clubs-list" class="space-y-1.5 max-h-48 overflow-y-auto text-xs"></div>
+          </div>
+
+          <!-- Card 3: Career Agent -->
+          <div class="ui-card p-3.5 space-y-2">
+            <span class="text-xs font-semibold text-zinc-300">커리어 로드맵</span>
+            <div id="career-timing-box" class="bg-[#0e1117] border border-white/[0.04] rounded-lg p-2 space-y-0.5 text-xs">
+              <div id="career-path-badge" class="font-semibold text-zinc-200"></div>
+              <div id="career-leverage-note" class="text-[11px] text-zinc-400"></div>
+            </div>
+            <div id="career-roadmap-box" class="space-y-1 max-h-40 overflow-y-auto text-[11px]"></div>
+          </div>
+
+          <!-- Card 4: Transfer Agent -->
+          <div class="ui-card p-3.5 space-y-2">
+            <span class="text-xs font-semibold text-zinc-300">규정 및 워크퍼밋</span>
+            <div id="legal-review-box" class="space-y-1.5 text-xs"></div>
+            <details class="text-[10px] text-zinc-500">
+              <summary class="cursor-pointer">참조 규정 청크</summary>
+              <div id="rag-chunks-list" class="mt-1 space-y-1 max-h-24 overflow-y-auto text-[10px]"></div>
+            </details>
+          </div>
         </div>
 
-        <!-- Card 3: Node 3 SQLite Vector DB Regulation RAG -->
-        <div class="glass-card rounded-2xl p-5 space-y-3">
-          <div class="flex items-center justify-between">
-            <h3 class="text-sm font-bold text-purple-400">⚖️ Node 3 · 규정 & 워크퍼밋 Vector RAG</h3>
-            <span class="text-[11px] px-2 py-0.5 rounded bg-purple-500/15 text-purple-300">gemini-embedding-2</span>
-          </div>
-          <div id="legal-review-box" class="space-y-2 text-xs"></div>
+        <!-- 2-Round Sparring & Human-in-the-Loop Action Panel -->
+        <div class="ui-card p-5 space-y-4">
           <div>
-            <div class="text-[11px] font-bold text-slate-400 mb-1">SQLite `rag_regulations_vec` 검색 상위 청크</div>
-            <div id="rag-chunks-list" class="space-y-1.5 max-h-40 overflow-y-auto"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- STEP 3: Node 4 Sparring Simulator & Human-in-the-Loop (HITL) 1-Click Action Buttons -->
-      <div class="glass-card rounded-2xl p-6 border-2 border-emerald-500/30">
-        <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
-          <div>
-            <h2 class="text-base font-extrabold text-white flex items-center gap-2">
-              🥊 Step 3 · 모의 협상 시뮬레이터 (LangGraph Sparring Loop) & 에이전트 전략 개입
-            </h2>
-            <p class="text-xs text-slate-400">
-              선수 에이전트 AI와 상대 구단 스포츠 디렉터 AI가 1차 공방을 마쳤습니다. 아래 원클릭 버튼으로 2라운드 최종 타결 전략을 지시하세요.
+            <h3 class="text-sm font-bold text-white">
+              모의 협상 시뮬레이션
+            </h3>
+            <p class="text-xs text-zinc-400 mt-0.5">
+              에이전트 제안과 상대 구단 디렉터 간의 공방 내역입니다.
             </p>
           </div>
-          <span class="text-xs px-2.5 py-1 rounded bg-emerald-500/15 text-emerald-300 font-semibold">
-            SqliteSaver 체크포인트 연동됨
-          </span>
+
+          <div id="sparring-chat-box" class="space-y-2.5 bg-[#0a0c10] p-4 rounded-xl border border-white/[0.04]"></div>
+
+          <!-- HITL 1-Click Action Buttons -->
+          <div id="hitl-action-panel" class="bg-[#12151c] border border-white/[0.08] rounded-xl p-4 space-y-2.5">
+            <div class="text-xs font-semibold text-emerald-400">
+              2라운드 최종 카운터 전략을 선택하세요:
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5">
+              <button onclick="resumeWorkflow('OPTION_1_HOLD_BASE_WAGE')"
+                class="text-left p-3 rounded-lg bg-[#0e1117] hover:bg-zinc-800 border border-white/[0.06] transition">
+                <div class="text-xs font-semibold text-white">전략 1: 기본급 원안 유지</div>
+                <div class="text-[11px] text-zinc-400 mt-0.5">상위 스탯 및 대체 불가성을 근거로 최초 요구 기본급 관철</div>
+              </button>
+
+              <button onclick="resumeWorkflow('OPTION_2_BONUS_AND_RELEASE_CLAUSE')"
+                class="text-left p-3 rounded-lg bg-emerald-950/40 hover:bg-emerald-900/40 border border-emerald-500/60 transition">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-semibold text-emerald-300">전략 2: 보너스 전환 (추천)</span>
+                  <span class="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500 text-black font-bold">추천</span>
+                </div>
+                <div class="text-[11px] text-zinc-300 mt-0.5">기본급 절충으로 구단 PSR 부담 완화 + 20경기 출전 보너스 신설</div>
+              </button>
+
+              <button onclick="resumeWorkflow('OPTION_3_LOWER_RELEASE_FOR_CLUB_OFFER')"
+                class="text-left p-3 rounded-lg bg-[#0e1117] hover:bg-zinc-800 border border-white/[0.06] transition">
+                <div class="text-xs font-semibold text-white">전략 3: 구단안 수용 & 바이아웃 인하</div>
+                <div class="text-[11px] text-zinc-400 mt-0.5">구단 기본급 제안 수용 및 차기 이적을 위한 바이아웃 하향</div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Post-Completion Notice & Quick Navigation to Docs -->
+          <div id="workflow-complete-banner" class="hidden p-3.5 rounded-xl bg-emerald-950/30 border border-emerald-500/40 flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <div class="text-xs font-semibold text-emerald-300">협상 타결 및 현업 3종 실무 문서 생성 완료</div>
+              <div class="text-[11px] text-zinc-400 mt-0.5">커리어 가치 평가서, 대외비 치트시트, 피칭 덱이 생성되었습니다.</div>
+            </div>
+            <button onclick="showPage('page-documents')"
+              class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition">
+              실무 문서 확인하기 →
+            </button>
+          </div>
         </div>
 
-        <!-- Chat Transcript Area -->
-        <div id="sparring-chat-box" class="space-y-3 mb-5 bg-slate-950/80 p-4 rounded-xl border border-slate-800"></div>
-
-        <!-- Human-in-the-Loop 1-Click Intervention Buttons -->
-        <div id="hitl-action-panel" class="bg-amber-500/10 border border-amber-500/40 rounded-xl p-4">
-          <div class="text-xs font-extrabold text-amber-300 mb-2.5 flex items-center gap-2">
-            <span>⏸️ [Human-in-the-Loop 개입 대기 중] 수석 에이전트로서 2라운드 카운터 전략을 원클릭으로 선택하세요:</span>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-            <button onclick="resumeWorkflow('OPTION_1_HOLD_BASE_WAGE')"
-              class="text-left p-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-emerald-400 transition group">
-              <div class="text-xs font-bold text-white group-hover:text-emerald-300">🔥 전략 1: 기본급 원안 강행</div>
-              <div class="text-[11px] text-slate-400 mt-1">구단 양보 거절. 상위 백분위 스탯과 대체자 영입 비용을 근거로 1차 요구 기본급을 끝까지 관철</div>
-            </button>
-
-            <button onclick="resumeWorkflow('OPTION_2_BONUS_AND_RELEASE_CLAUSE')"
-              class="text-left p-3.5 rounded-xl bg-emerald-950/60 hover:bg-emerald-900/60 border-2 border-emerald-500 transition group">
-              <div class="flex items-center justify-between">
-                <span class="text-xs font-extrabold text-emerald-300">⚖️ 전략 2: 보너스 전환 & 수수료 방어</span>
-                <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500 text-slate-950 font-extrabold">추천</span>
-              </div>
-              <div class="text-[11px] text-slate-200 mt-1">고정 기본급을 절충하여 구단 PSR 부담을 덜어주는 대신, 20경기 출전 보너스 신설 + FIFA Circular 1873으로 수수료 6% 방어</div>
-            </button>
-
-            <button onclick="resumeWorkflow('OPTION_3_LOWER_RELEASE_FOR_CLUB_OFFER')"
-              class="text-left p-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-sky-400 transition group">
-              <div class="text-xs font-bold text-white group-hover:text-sky-300">🛡️ 전략 3: 구단안 수용 + 바이아웃 하향</div>
-              <div class="text-[11px] text-slate-400 mt-1">구단의 기본급 역제안을 수용하여 빠른 합의를 이끌어내되, 차기 빅클럽 이적을 위한 바이아웃(Release Clause) 금액 대폭 하향</div>
-            </button>
-          </div>
-        </div>
       </div>
-    </section>
 
-    <!-- STEP 4: Dual-Output Practical Documents & SQLite Vector DB Lab -->
-    <section id="documents-section" class="hidden space-y-4">
-      <div class="no-print glass-card rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3">
-        <div class="flex flex-wrap items-center gap-2">
+    </div>
+
+
+    <!-- ======================================================================= -->
+    <!-- PAGE 4: DOCUMENTS CENTER -->
+    <!-- ======================================================================= -->
+    <div id="page-documents" class="page-view hidden space-y-5">
+
+      <!-- Breadcrumb Header -->
+      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.06] pb-3">
+        <div class="flex items-center gap-3">
+          <button onclick="showPage('page-home')"
+            class="px-2.5 py-1 rounded-lg bg-[#12151c] hover:bg-zinc-800 border border-white/[0.08] text-xs font-medium text-zinc-300 transition">
+            ← 대시보드
+          </button>
+          <div>
+            <h2 class="text-base font-bold text-white">3종 실무 문서 센터</h2>
+            <p class="text-xs text-zinc-400">선수·가족 설명용, 대외비 내부용, 구단 제출용 문서 열람 및 발급</p>
+          </div>
+        </div>
+
+        <button onclick="showPage('page-strategy')"
+          class="px-3 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs font-medium transition">
+          전략 협상으로 이동 →
+        </button>
+      </div>
+
+      <!-- Document Tab Buttons & Action Toolbar -->
+      <div class="ui-card p-3 flex flex-wrap items-center justify-between gap-3">
+        <div class="flex flex-wrap items-center gap-1.5">
+          <button id="tab-btn-career" onclick="switchDocTab('career')"
+            class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 text-white transition">
+            문서 1: 커리어 성장 및 가치 평가서
+          </button>
           <button id="tab-btn-prep" onclick="switchDocTab('prep')"
-            class="px-4 py-2 rounded-xl text-xs font-extrabold bg-emerald-600 text-white transition">
-            🔒 문서 1 (대외비 내부용): 협상 전략 치트시트 (Deal Prep Sheet)
+            class="px-3 py-1.5 rounded-lg text-xs font-medium bg-zinc-800 text-zinc-300 hover:bg-zinc-700 transition">
+            문서 2: 대외비 협상 전략 치트시트
           </button>
           <button id="tab-btn-pitch" onclick="switchDocTab('pitch')"
-            class="px-4 py-2 rounded-xl text-xs font-extrabold bg-slate-800 text-slate-300 hover:bg-slate-700 transition">
-            📨 문서 2 (구단 발송용): 맞춤형 선수 역제의서 (Club Pitch Deck)
-          </button>
-          <button id="tab-btn-raglab" onclick="switchDocTab('raglab')"
-            class="px-4 py-2 rounded-xl text-xs font-extrabold bg-slate-800 text-purple-300 hover:bg-slate-700 transition">
-            🗄️ SQLite Vector DB 실시간 검색 테스트기
+            class="px-3 py-1.5 rounded-lg text-xs font-medium bg-zinc-800 text-zinc-300 hover:bg-zinc-700 transition">
+            문서 3: 구단 디렉터 제출용 1-Page 피칭 덱
           </button>
         </div>
 
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-1.5">
           <button onclick="copyActiveMarkdown()"
-            class="px-3 py-2 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">
-            📋 마크다운 복사
+            class="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-zinc-800 hover:bg-zinc-700 text-zinc-300 transition">
+            마크다운 복사
           </button>
           <button onclick="downloadActiveMarkdown()"
-            class="px-3 py-2 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-sky-300 border border-slate-700 transition">
-            💾 .md 파일 다운로드
+            class="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-zinc-800 hover:bg-zinc-700 text-zinc-300 transition">
+            .md 다운로드
           </button>
           <button onclick="window.print()"
-            class="px-3.5 py-2 rounded-xl text-xs font-extrabold bg-emerald-600 hover:bg-emerald-500 text-white shadow transition">
-            🖨️ 원클릭 PDF 인쇄 / 저장
+            class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white transition">
+            PDF 인쇄 / 저장
           </button>
         </div>
       </div>
 
       <!-- Printable Document Render Container -->
-      <div id="printable-area" class="glass-card rounded-2xl p-8 markdown-body"></div>
+      <div id="printable-area" class="ui-card p-8 markdown-body min-h-[400px]">
+        <div class="text-center py-16 text-zinc-500 space-y-2">
+          <div class="text-sm font-semibold text-zinc-300">생성된 실무 문서가 없습니다.</div>
+          <p class="text-xs text-zinc-500 max-w-sm mx-auto">
+            [이적·재계약 협상]에서 모의 협상 워크플로우를 완료하면 3종 문서가 이곳에 자동으로 발행됩니다.
+          </p>
+          <button onclick="showPage('page-strategy')"
+            class="mt-2 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition">
+            협상 전략 수립하러 가기 →
+          </button>
+        </div>
+      </div>
 
-      <!-- Interactive SQLite Vector DB Search Lab -->
-      <div id="raglab-area" class="no-print hidden glass-card rounded-2xl p-6 space-y-4">
-        <div class="flex flex-wrap items-center justify-between gap-2">
+    </div>
+
+
+    <!-- ======================================================================= -->
+    <!-- PAGE 5: FINANCIAL PSR & TAX CALCULATOR -->
+    <!-- ======================================================================= -->
+    <div id="page-finance" class="page-view hidden space-y-5">
+
+      <!-- Breadcrumb Header -->
+      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.06] pb-3">
+        <div class="flex items-center gap-3">
+          <button onclick="showPage('page-home')"
+            class="px-2.5 py-1 rounded-lg bg-[#12151c] hover:bg-zinc-800 border border-white/[0.08] text-xs font-medium text-zinc-300 transition">
+            ← 대시보드
+          </button>
           <div>
-            <h3 class="text-sm font-extrabold text-purple-300">🗄️ SQLite 통합 Vector DB (`agency_desk.db`) 이원화 임베딩 검색 실험실</h3>
-            <p class="text-xs text-slate-400">
-              공식 규정집 테이블(`rag_regulations_vec` · <code class="text-purple-300">gemini-embedding-2</code>)과 전술 노트 테이블(`scouting_notes_vec` · <code class="text-amber-300">gemini-embedding-001</code>)을 직접 검색해 볼 수 있습니다.
-            </p>
+            <h2 class="text-base font-bold text-white">재무 · 세무 시뮬레이터</h2>
+            <p class="text-xs text-zinc-400">구단 PSR 장부 감가상각 비용 및 5대 리그 세후 실수령액 계산</p>
           </div>
         </div>
-        <div class="flex flex-wrap gap-2">
-          <select id="rag-search-type" class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
-            <option value="REGULATIONS">법률·규정집 검색 (gemini-embedding-2)</option>
-            <option value="TACTICAL">구단 전술 노트 검색 (gemini-embedding-001)</option>
+      </div>
+
+      <!-- Financial Calculator Inputs & Outputs -->
+      <div class="ui-card p-5 space-y-5">
+        <div>
+          <span class="text-xs font-semibold text-zinc-300">시뮬레이션 조건 입력</span>
+          <div class="grid grid-cols-2 md:grid-cols-6 gap-2.5 mt-2">
+            <div>
+              <label class="text-[11px] text-zinc-400 block mb-1">대상 리그</label>
+              <select id="calc-league" onchange="runStandalonePsrCalc()"
+                class="w-full bg-[#0e1117] border border-white/[0.08] rounded-lg px-2 py-1.5 text-xs text-white">
+                <option value="Premier League">Premier League</option>
+                <option value="La Liga">La Liga</option>
+                <option value="Serie A">Serie A</option>
+                <option value="Bundesliga">Bundesliga</option>
+                <option value="Ligue 1">Ligue 1</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-[11px] text-zinc-400 block mb-1">예상 이적료 (€)</label>
+              <input id="calc-fee" type="number" value="38000000" step="1000000" oninput="runStandalonePsrCalc()"
+                class="w-full bg-[#0e1117] border border-white/[0.08] rounded-lg px-2 py-1.5 text-xs text-white" />
+            </div>
+            <div>
+              <label class="text-[11px] text-zinc-400 block mb-1">세전 주급 (€/주)</label>
+              <input id="calc-wage" type="number" value="105000" step="5000" oninput="runStandalonePsrCalc()"
+                class="w-full bg-[#0e1117] border border-white/[0.08] rounded-lg px-2 py-1.5 text-xs text-white" />
+            </div>
+            <div>
+              <label class="text-[11px] text-zinc-400 block mb-1">계약 기간 (년)</label>
+              <input id="calc-years" type="number" value="4" min="1" max="8" oninput="runStandalonePsrCalc()"
+                class="w-full bg-[#0e1117] border border-white/[0.08] rounded-lg px-2 py-1.5 text-xs text-white" />
+            </div>
+            <div>
+              <label class="text-[11px] text-zinc-400 block mb-1">사이닝 보너스 (€)</label>
+              <input id="calc-bonus" type="number" value="2000000" step="500000" oninput="runStandalonePsrCalc()"
+                class="w-full bg-[#0e1117] border border-white/[0.08] rounded-lg px-2 py-1.5 text-xs text-white" />
+            </div>
+            <div>
+              <label class="text-[11px] text-zinc-400 block mb-1">에이전트 수수료 (%)</label>
+              <input id="calc-agent-pct" type="number" value="6.5" step="0.5" oninput="runStandalonePsrCalc()"
+                class="w-full bg-[#0e1117] border border-white/[0.08] rounded-lg px-2 py-1.5 text-xs text-white" />
+            </div>
+          </div>
+        </div>
+
+        <div id="standalone-psr-result" class="bg-[#0e1117] border border-white/[0.04] rounded-xl p-4 text-xs"></div>
+      </div>
+
+    </div>
+
+
+    <!-- ======================================================================= -->
+    <!-- PAGE 6: REGULATIONS & ADMIN -->
+    <!-- ======================================================================= -->
+    <div id="page-regulations" class="page-view hidden space-y-5">
+
+      <!-- Breadcrumb Header -->
+      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.06] pb-3">
+        <div class="flex items-center gap-3">
+          <button onclick="showPage('page-home')"
+            class="px-2.5 py-1 rounded-lg bg-[#12151c] hover:bg-zinc-800 border border-white/[0.08] text-xs font-medium text-zinc-300 transition">
+            ← 대시보드
+          </button>
+          <div>
+            <h2 class="text-base font-bold text-white">규정 검색 및 시스템 설정</h2>
+            <p class="text-xs text-zinc-400">FIFA 규정, 워크퍼밋 벡터 검색 및 외부 연동 설정</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vector Search Lab -->
+      <div class="ui-card p-5 space-y-3">
+        <div>
+          <span class="text-xs font-semibold text-zinc-300">규정 및 전술 벡터 검색</span>
+          <p class="text-xs text-zinc-400 mt-0.5">
+            FIFA 이적 규정, 에이전트 수수료 규정집 및 구단별 전술 노트를 시맨틱 검색합니다.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap gap-2 pt-1">
+          <select id="rag-search-type" class="bg-[#0e1117] border border-white/[0.08] rounded-lg px-2.5 py-1.5 text-xs text-white">
+            <option value="REGULATIONS">법률·이적 규정집 검색</option>
+            <option value="TACTICAL">구단 전술 노트 검색</option>
           </select>
           <input id="rag-search-input" type="text"
             value="FIFA 에이전트 수수료 3% 상한 유예 Circular 1873 및 영국 GBE 워크퍼밋 자동 통과 기준"
-            class="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-purple-500" />
+            class="flex-1 bg-[#0e1117] border border-white/[0.08] rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-zinc-500" />
           <button onclick="runInteractiveRagSearch()"
-            class="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-extrabold transition">
-            🔍 벡터 검색 실행
+            class="px-3.5 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-white text-xs font-semibold transition">
+            검색 실행
           </button>
         </div>
-        <div id="rag-lab-results" class="space-y-2.5"></div>
+
+        <div id="rag-lab-results" class="space-y-2 pt-1"></div>
       </div>
-    </section>
+
+      <!-- GCP ADC & Database Sync Admin Card -->
+      <div class="ui-card p-5 space-y-3">
+        <span class="text-xs font-semibold text-zinc-300">데이터 및 클라우드 연동</span>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+          <div class="p-3.5 rounded-lg bg-[#0e1117] border border-white/[0.04] space-y-1.5">
+            <div class="text-xs font-semibold text-zinc-300">GCP Vertex AI 프로젝트 설정</div>
+            <p class="text-[11px] text-zinc-400">
+              라이브 Vertex AI 모델 연결을 위한 Google Cloud Project ID를 설정합니다.
+            </p>
+            <div class="flex items-center gap-1.5 pt-1">
+              <input id="gcp-project-input" type="text" placeholder="GCP Project ID"
+                class="flex-1 bg-[#12151c] border border-white/[0.08] rounded px-2.5 py-1 text-xs text-white" />
+              <button onclick="saveGcpProject()" class="text-xs bg-emerald-600 hover:bg-emerald-500 text-white font-medium px-2.5 py-1 rounded transition">
+                적용
+              </button>
+              <button onclick="refreshAuthStatus()" class="text-xs bg-zinc-800 hover:bg-zinc-700 text-zinc-300 px-2 py-1 rounded transition" title="새로고침">
+                새로고침
+              </button>
+            </div>
+          </div>
+
+          <div class="p-3.5 rounded-lg bg-[#0e1117] border border-white/[0.04] space-y-1.5">
+            <div class="text-xs font-semibold text-zinc-300">Football-Data.org 로스터 동기화</div>
+            <p class="text-[11px] text-zinc-400">
+              유럽 5대 리그 공식 96개 구단 및 선수 데이터를 최신 상태로 동기화합니다.
+            </p>
+            <div class="pt-1">
+              <button id="btn-sync-fd" onclick="syncFootballDataOrg()"
+                class="w-full text-xs bg-zinc-800 hover:bg-zinc-700 text-zinc-300 font-medium px-3 py-1.5 rounded transition">
+                96구단 공식 로스터 동기화 실행
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
 
   </main>
 
+  <!-- ========================================================================= -->
+  <!-- JavaScript Business Logic & Routing Controller -->
+  <!-- ========================================================================= -->
   <script>
     let allPlayers = [];
     let selectedPlayer = null;
     let selectedTrack = 'TRACK_A_TRANSFER';
     let currentThreadId = null;
     let currentWorkflowState = null;
-    let activeDocTab = 'prep';
+    let activeDocTab = 'career';
     let radarChartInstance = null;
+    let activePageId = 'page-home';
 
+    // -------------------------------------------------------------------------
+    // Single-Page View Routing Controller
+    // -------------------------------------------------------------------------
+    function showPage(pageId) {
+      activePageId = pageId;
+      document.querySelectorAll('.page-view').forEach(p => p.classList.add('hidden'));
+
+      const target = document.getElementById(pageId);
+      if (target) {
+        target.classList.remove('hidden');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      updateNavState(pageId);
+
+      if (pageId === 'page-scouting' && selectedPlayer) {
+        updateRadarChart(selectedPlayer);
+      } else if (pageId === 'page-documents' && currentWorkflowState) {
+        switchDocTab(activeDocTab || 'career');
+      } else if (pageId === 'page-finance') {
+        runStandalonePsrCalc();
+      }
+
+      window.location.hash = pageId.replace('page-', '');
+    }
+
+    function updateNavState(pageId) {
+      const navKey = pageId.replace('page-', '');
+      const buttons = [
+        { id: 'nav-btn-home', key: 'home' },
+        { id: 'nav-btn-scouting', key: 'scouting' },
+        { id: 'nav-btn-strategy', key: 'strategy' },
+        { id: 'nav-btn-documents', key: 'documents' },
+        { id: 'nav-btn-finance', key: 'finance' },
+        { id: 'nav-btn-regulations', key: 'regulations' },
+      ];
+
+      buttons.forEach(b => {
+        const el = document.getElementById(b.id);
+        if (!el) return;
+        if (b.key === navKey) {
+          el.className = 'nav-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-zinc-800 transition flex items-center gap-1.5 shadow-sm';
+        } else {
+          el.className = 'nav-btn px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800/60 transition flex items-center gap-1.5';
+        }
+      });
+    }
+
+    // -------------------------------------------------------------------------
+    // Dashboard Initialization
+    // -------------------------------------------------------------------------
     async function initDashboard() {
-      await Promise.all([loadSystemStatus(), loadPlayers(), loadBosmanRadar(), runStandalonePsrCalc()]);
+      const hash = window.location.hash.replace('#', '');
+      const initialPage = hash ? `page-${hash}` : 'page-home';
+
+      await Promise.all([
+        loadSystemStatus(),
+        loadQuotaStatus(),
+        loadPlayers(),
+        loadBosmanRadar(),
+        loadUndervaluedProspects(),
+        runStandalonePsrCalc()
+      ]);
+
+      showPage(initialPage);
     }
 
     async function loadSystemStatus() {
@@ -705,6 +1167,35 @@
       }
     }
 
+    async function loadQuotaStatus() {
+      try {
+        const res = await fetch('/api/quota/status');
+        if (!res.ok) return;
+        const data = await res.json();
+        const textEl = document.getElementById('api-quota-text');
+        const badgeEl = document.getElementById('api-quota-badge');
+        const dotEl = document.getElementById('api-quota-dot');
+        if (textEl && dotEl && badgeEl) {
+          textEl.innerText = `${data.calls_used}/${data.daily_limit}`;
+          if (data.status === 'ACTIVE') {
+            dotEl.className = 'w-1.5 h-1.5 rounded-full bg-emerald-400';
+            textEl.className = 'font-mono text-emerald-400 font-semibold';
+            badgeEl.title = `API-Football 정상 가동 중 (잔여: ${data.calls_remaining}/${data.daily_limit}회)`;
+          } else if (data.status === 'LIMIT_EXHAUSTED') {
+            dotEl.className = 'w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse';
+            textEl.className = 'font-mono text-amber-400 font-semibold';
+            badgeEl.title = `API-Football 무료 100회 한도 소진 -> Football-Data.org 및 Google Grounding 자동 백업 가동 중`;
+          } else {
+            dotEl.className = 'w-1.5 h-1.5 rounded-full bg-zinc-500';
+            textEl.className = 'font-mono text-zinc-400';
+            badgeEl.title = `API-Football 키 미설정 -> Football-Data.org 백업 모드로 정상 작동 중 (클릭 시 갱신)`;
+          }
+        }
+      } catch (e) {
+        console.error('Quota fetch error', e);
+      }
+    }
+
     function renderAuthStatus(data) {
       const auth = data.gcp_auth || {};
       const vec = data.vector_db || {};
@@ -713,24 +1204,24 @@
       const text = document.getElementById('adc-text');
       const projInput = document.getElementById('gcp-project-input');
 
-      if (auth.project_id && auth.project_id !== 'your-gcp-project-id') {
+      if (auth.project_id && auth.project_id !== 'your-gcp-project-id' && projInput) {
         projInput.value = auth.project_id;
       }
 
       if (auth.adc_authenticated) {
-        badge.className = 'text-xs px-3 py-1.5 rounded-lg border border-emerald-500/40 bg-emerald-500/10 text-emerald-300 flex items-center gap-1.5';
-        dot.className = 'w-2 h-2 rounded-full bg-emerald-400';
-        text.textContent = `GCP ADC 연결됨 (${auth.project_id})`;
+        badge.className = 'text-xs px-2.5 py-1 rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-300 flex items-center gap-1.5';
+        dot.className = 'w-1.5 h-1.5 rounded-full bg-emerald-400';
+        text.textContent = `Vertex AI 연동`;
       } else {
-        badge.className = 'text-xs px-3 py-1.5 rounded-lg border border-amber-500/40 bg-amber-500/10 text-amber-300 flex items-center gap-1.5';
-        dot.className = 'w-2 h-2 rounded-full bg-amber-400 animate-pulse';
-        text.textContent = auth.project_id
-          ? `ADC 대기 중 (${auth.project_id}) — 하이브리드 모드`
-          : 'GCP ADC 미설정 (하이브리드 로컬 추론 활성)';
+        badge.className = 'text-xs px-2.5 py-1 rounded-lg border border-white/[0.08] bg-[#12151c] text-zinc-400 flex items-center gap-1.5';
+        dot.className = 'w-1.5 h-1.5 rounded-full bg-zinc-500';
+        text.textContent = auth.project_id ? `ADC 대기` : '로컬 모드';
       }
 
-      document.getElementById('vecdb-summary').innerHTML =
-        `🗄️ <b>SQLite Vector DB:</b> 규정 청크 <b>${vec.rag_regulations_chunks || 0}개</b> · 스카우팅 노트 <b>${vec.scouting_notes_chunks || 0}개</b> 인덱싱 완료`;
+      const homeStat = document.getElementById('home-vecdb-stat');
+      if (homeStat) {
+        homeStat.textContent = `${vec.rag_regulations_chunks || 687} 규정 + ${vec.scouting_notes_chunks || 3268} 전술`;
+      }
     }
 
     async function saveGcpProject() {
@@ -757,7 +1248,7 @@
     async function syncFootballDataOrg() {
       const btn = document.getElementById('btn-sync-fd');
       btn.disabled = true;
-      btn.innerHTML = '<span>⏳ Football-Data.org 공식 96구단 로스터 동기화 중...</span>';
+      btn.textContent = '동기화 진행 중...';
       try {
         const res = await fetch('/api/sync/football-data-org', {
           method: 'POST',
@@ -767,12 +1258,12 @@
         const data = await res.json();
         if (!res.ok) throw new Error(data.detail || '동기화 실패');
         await loadPlayers();
-        alert(`✅ Football-Data.org v4 공식 96구단 로스터 동기화 완료!\n- 공식 5대 리그 구단: ${data.summary.official_big5_clubs}개\n- 실시간 등록 선수: ${data.summary.live_registered_players}명\n- 구단 스쿼드 니즈: ${data.summary.club_squad_needs_generated}건`);
+        alert(`공식 96구단 로스터 동기화 완료: ${data.summary.live_registered_players}명 등록됨`);
       } catch (e) {
         alert('Football-Data.org 동기화 오류: ' + e);
       } finally {
         btn.disabled = false;
-        btn.innerHTML = '<span>⚽ Football-Data.org 공식 96구단 로스터 동기화</span>';
+        btn.textContent = '96구단 공식 로스터 동기화 실행';
       }
     }
 
@@ -780,7 +1271,7 @@
       if (!selectedPlayer) return;
       const btn = document.getElementById('btn-live-player-sync');
       btn.disabled = true;
-      btn.innerHTML = '<span>⏳ Vertex AI 실시간 구글 검색으로 최신 이적/시세 검증 중...</span>';
+      btn.textContent = '실시간 검색 중...';
       try {
         const res = await fetch('/api/sync/live-player', {
           method: 'POST',
@@ -791,15 +1282,18 @@
         if (!res.ok) throw new Error(data.detail || '실시간 패치 실패');
         await loadPlayers();
         selectPlayer(data.player);
-        alert(`⚡ [${data.player.name}] 실시간 DB 패치 완료!\n- 현 소속 구단: ${data.player.current_club} (${data.player.league})\n- 시세: €${data.player.market_value_eur.toLocaleString()} | 주급: €${data.player.weekly_wage_eur.toLocaleString()}\n- 메모: ${data.transfer_status_note || '최신 상태 확인됨'}`);
+        alert(`[${data.player.name}] 실시간 정보 동기화 완료`);
       } catch (e) {
-        alert('실시간 선수 동기화 오류: ' + e);
+        alert('선수 동기화 오류: ' + e);
       } finally {
         btn.disabled = false;
-        btn.innerHTML = '<span>⚡ 현시점 소속팀·시세·주급 실시간 검색 패치 (Vertex AI Grounding)</span>';
+        btn.textContent = '소속팀·시세 실시간 검색 동기화';
       }
     }
 
+    // -------------------------------------------------------------------------
+    // Player Roster Filtering & Selection Logic
+    // -------------------------------------------------------------------------
     let koreanRosterList = [];
     let filteredPlayersList = [];
     let currentDisplayLimit = 80;
@@ -819,15 +1313,18 @@
 
     function updateRosterCountText(filteredLen) {
       const total = allPlayers.length;
+      const el = document.getElementById('roster-count');
+      if (!el) return;
       if (filteredLen === total) {
-        document.getElementById('roster-count').textContent = `전체 ${total.toLocaleString()}명 (96개 구단)`;
+        el.textContent = `${total.toLocaleString()}명 (96개 구단)`;
       } else {
-        document.getElementById('roster-count').textContent = `필터됨 ${filteredLen.toLocaleString()}명 / 전체 ${total.toLocaleString()}명`;
+        el.textContent = `${filteredLen.toLocaleString()}명 / 전체 ${total.toLocaleString()}명`;
       }
     }
 
     function populateClubDropdown(leagueFilter) {
       const clubSelect = document.getElementById('club-filter-select');
+      if (!clubSelect) return;
       const clubsSet = new Set();
       allPlayers.forEach(p => {
         if (leagueFilter === 'ALL' || p.league === leagueFilter) {
@@ -835,7 +1332,7 @@
         }
       });
       const clubs = Array.from(clubsSet).sort();
-      clubSelect.innerHTML = `<option value="ALL">🏟️ 전체 구단 (${clubs.length}개)</option>` +
+      clubSelect.innerHTML = `<option value="ALL">전체 구단 (${clubs.length}개)</option>` +
         clubs.map(c => `<option value="${c}">${c}</option>`).join('');
     }
 
@@ -910,6 +1407,7 @@
 
     function renderPlayerGrid(list, selectFirst = false) {
       const grid = document.getElementById('player-roster-grid');
+      if (!grid) return;
       grid.innerHTML = '';
 
       const slice = list.slice(0, currentDisplayLimit);
@@ -919,21 +1417,21 @@
         card.onclick = () => selectPlayer(p);
         const isSelected = selectedPlayer && selectedPlayer.player_id === p.player_id;
         card.className = isSelected
-          ? 'player-card text-left p-3 rounded-xl border-2 border-emerald-500 bg-emerald-950/30 transition flex flex-col justify-between'
-          : 'player-card text-left p-3 rounded-xl border border-slate-800 bg-slate-900/70 hover:border-emerald-500/60 transition flex flex-col justify-between';
+          ? 'player-card text-left p-2.5 rounded-lg border border-emerald-500 bg-emerald-950/20 transition flex flex-col justify-between'
+          : 'player-card text-left p-2.5 rounded-lg border border-white/[0.06] bg-[#0e1117] hover:border-zinc-600 transition flex flex-col justify-between';
         const displayName = p.name_ko !== p.name ? `${p.name_ko} (${p.name})` : p.name;
         card.innerHTML = `
           <div class="flex items-center justify-between w-full">
-            <span class="text-[10px] font-extrabold px-1.5 py-0.5 rounded bg-slate-800 text-emerald-400">${p.position}</span>
-            <span class="text-[10px] text-slate-400">${p.age}세 · 만료 ${p.contract_expires.slice(0,4)}</span>
+            <span class="text-[10px] font-semibold px-1.5 py-0.2 rounded bg-zinc-800 text-zinc-300">${p.position}</span>
+            <span class="text-[10px] text-zinc-500">${p.age}세 · ${p.contract_expires.slice(0,4)}만료</span>
           </div>
-          <div class="mt-1.5">
-            <div class="text-xs font-extrabold text-white truncate">${displayName}</div>
-            <div class="text-[10px] text-slate-400 truncate">${p.current_club} (${p.league})</div>
+          <div class="mt-1">
+            <div class="text-xs font-semibold text-white truncate">${displayName}</div>
+            <div class="text-[10px] text-zinc-400 truncate">${p.current_club}</div>
           </div>
-          <div class="mt-2 pt-1.5 border-t border-slate-800/80 flex items-center justify-between text-[10px]">
-            <span class="text-emerald-400 font-bold">€${(p.market_value_eur / 1000000).toFixed(1)}M</span>
-            <span class="text-sky-300">€${(p.weekly_wage_eur / 1000).toFixed(0)}k/주</span>
+          <div class="mt-1.5 pt-1 border-t border-white/[0.04] flex items-center justify-between text-[10px]">
+            <span class="text-emerald-400 font-semibold">€${(p.market_value_eur / 1000000).toFixed(1)}M</span>
+            <span class="text-zinc-400">€${(p.weekly_wage_eur / 1000).toFixed(0)}k/주</span>
           </div>
         `;
         grid.appendChild(card);
@@ -944,7 +1442,7 @@
       const btnLoadMore = document.getElementById('btn-load-more');
       if (list.length > currentDisplayLimit) {
         loadMoreContainer.classList.remove('hidden');
-        btnLoadMore.textContent = `+ 선수 더 보기 (${currentDisplayLimit.toLocaleString()} / ${list.length.toLocaleString()}명 표시 중)`;
+        btnLoadMore.textContent = `+ 더 보기 (${currentDisplayLimit.toLocaleString()} / ${list.length.toLocaleString()}명)`;
       } else {
         loadMoreContainer.classList.add('hidden');
       }
@@ -953,26 +1451,37 @@
     function selectPlayer(p) {
       selectedPlayer = p;
       document.querySelectorAll('.player-card').forEach(el => {
-        el.className = 'player-card text-left p-3 rounded-xl border border-slate-800 bg-slate-900/70 hover:border-emerald-500/60 transition flex flex-col justify-between';
+        el.className = 'player-card text-left p-2.5 rounded-lg border border-white/[0.06] bg-[#0e1117] hover:border-zinc-600 transition flex flex-col justify-between';
       });
       const activeEl = document.getElementById(`player-card-${p.player_id}`);
       if (activeEl) {
-        activeEl.className = 'player-card text-left p-3 rounded-xl border-2 border-emerald-500 bg-emerald-950/30 transition flex flex-col justify-between';
+        activeEl.className = 'player-card text-left p-2.5 rounded-lg border border-emerald-500 bg-emerald-950/20 transition flex flex-col justify-between';
       }
 
-      document.getElementById('selected-player-card').classList.remove('hidden');
+      const navName = document.getElementById('nav-player-name');
+      if (navName) navName.textContent = p.name_ko || p.name;
+      const homePlayerStat = document.getElementById('home-active-player-stat');
+      if (homePlayerStat) homePlayerStat.textContent = `${p.name_ko} (${p.age}세, ${p.position})`;
+
+      const stratName = document.getElementById('strat-target-name');
+      const stratBadge = document.getElementById('strat-target-badge');
+      if (stratName) stratName.textContent = `${p.name_ko} (${p.name})`;
+      if (stratBadge) stratBadge.textContent = `${p.current_club} · ${p.position} · €${(p.market_value_eur/1000000).toFixed(1)}M`;
+
+      const spCard = document.getElementById('selected-player-card');
+      if (spCard) spCard.classList.remove('hidden');
       document.getElementById('sp-pos').textContent = `${p.position} (${p.secondary_positions})`;
       document.getElementById('sp-name').textContent = `${p.name_ko} (${p.name})`;
       document.getElementById('sp-club').textContent = `${p.current_club} · ${p.league} · 계약만료 ${p.contract_expires}`;
       document.getElementById('sp-val').textContent = `€${p.market_value_eur.toLocaleString()}`;
-      document.getElementById('sp-wage').textContent = `주급 €${p.weekly_wage_eur.toLocaleString()} (추정)`;
-      document.getElementById('sp-strengths').textContent = `💡 전술 강점: ${p.strengths_summary}`;
-      document.getElementById('sp-percentile-badge').textContent = `유럽 상위 ${100 - p.pos_percentile + 1}%`;
+      document.getElementById('sp-wage').textContent = `주급 €${p.weekly_wage_eur.toLocaleString()}`;
+      document.getElementById('sp-strengths').textContent = `전술 특성: ${p.strengths_summary}`;
+      document.getElementById('sp-percentile-badge').textContent = `상위 ${100 - p.pos_percentile + 1}%`;
 
       const gbeAuto = p.intl_match_pct >= 70
-        ? `<span class="text-emerald-400 font-bold">✅ 영국 GBE Auto-Pass (A매치 ${p.intl_match_pct}%)</span>`
-        : `<span class="text-amber-300 font-bold">⚡ A매치 ${p.intl_match_pct}% (GBE 합산/ESC 검토 대상)</span>`;
-      document.getElementById('sp-gbe-mini').innerHTML = `${gbeAuto}<br/>90분당 전진액션 <b>${p.progressive_actions_per90}회</b> · 키패스 <b>${p.key_passes_per90}회</b>`;
+        ? `<span class="text-emerald-400 font-semibold">GBE Auto-Pass (A매치 ${p.intl_match_pct}%)</span>`
+        : `<span class="text-zinc-300 font-medium">A매치 ${p.intl_match_pct}% (GBE 점수 검토)</span>`;
+      document.getElementById('sp-gbe-mini').innerHTML = `${gbeAuto}<br/>전진 액션 <b>${p.progressive_actions_per90}회/90분</b> · 키패스 <b>${p.key_passes_per90}회/90분</b>`;
 
       updateRadarChart(p);
       loadPlayerDeepAnalytics(p.name);
@@ -982,42 +1491,32 @@
     async function loadPlayerDeepAnalytics(playerName) {
       const box = document.getElementById('sp-deep-profile');
       if (!box) return;
-      box.innerHTML = '<div class="text-slate-500">⏳ 커리어/이적기록/현 소속팀 감독 전술 프로파일 로딩 중...</div>';
+      box.innerHTML = '<div class="text-zinc-500">프로파일 분석 중...</div>';
       try {
         const res = await fetch('/api/players/' + encodeURIComponent(playerName));
         if (!res.ok) return;
         const d = await res.json();
         const vp = d.valuation_and_profile || {};
-        const cu = d.career_and_ucl || {};
         const pt = d.playstyle_and_tendencies || {};
         const mgr = d.club_manager_profile || {};
         const trs = d.transfer_history || [];
         const st = d.club_standing_and_finance || {};
 
-        const trText = trs.length > 0
-          ? trs.slice(0, 2).map(t => `${t.transfer_season || t.transfer_date.slice(0,4)}: ${t.from_club} → ${t.to_club} (€${(t.transfer_fee_eur/1000000).toFixed(1)}M)`).join(' | ')
-          : '유스 승격 또는 장기 근속 (최근 타구단 유상 이적 없음)';
-
         const mgrScores = mgr.name
-          ? `전술유연성 <b>${mgr.tactical_flexibility_score}</b> · 공격코칭 <b>${mgr.attacking_coaching_score}</b> · 수비조직 <b>${mgr.defensive_coaching_score}</b> · 유망주신뢰 <b>${mgr.youth_trust_score}</b> · 인게임 <b>${mgr.in_game_management_score}</b>`
+          ? `전술유연성 <b>${mgr.tactical_flexibility_score}</b> · 공격코칭 <b>${mgr.attacking_coaching_score}</b> · 유망주신뢰 <b>${mgr.youth_trust_score}</b>`
           : '-';
 
-        const posReq = (mgr.preferred_player_profiles && mgr.preferred_player_profiles[d.position]) || '전술 멀티 소화력 및 공수 전환 가담';
+        const posReq = (mgr.preferred_player_profiles && mgr.preferred_player_profiles[d.position]) || '전술 수행 및 공수 전환';
 
         box.innerHTML = `
-          <div class="text-emerald-300 font-bold">📊 에이전시 심층 프로파일 · 축구 스타일(장·단점) & 팩트 성향 분석</div>
-          <div>• <b>신체/A매치/에이전시:</b> ${vp.height_cm || 180}cm (${vp.preferred_foot || 'right'}발) | A매치 ${vp.international_caps || 0}경기 ${vp.international_goals || 0}골 | 최고 몸값 <b class="text-emerald-400">€${((vp.highest_market_value_eur || d.market_value_eur)/1000000).toFixed(1)}M</b> (${vp.peak_date || '2026'}) | 에이전시: <span class="text-sky-300">${vp.agency_name || '독립'}</span></div>
-          <div>• <b>축구 스타일 (전술 아키타입):</b> <b class="text-amber-300">${pt.tactical_archetype || '-'}</b></div>
-          <div>• <b>🔥 핵심 장점 (Strengths):</b> <span class="text-emerald-300">${pt.strengths_tags || '-'}</span></div>
-          <div>• <b>⚠️ 보완점/단점 (Weaknesses):</b> <span class="text-rose-300">${pt.weaknesses_tags || '-'}</span></div>
-          <div>• <b>🛡️ 내구성·가용률 (Availability Risk):</b> <span class="text-amber-200">${pt.durability_and_availability_note || '-'}</span></div>
-          <div>• <b>📌 객관적 온볼/마무리 성향 (Fact):</b> ${pt.progression_tendency || '-'} | ${pt.finishing_clinicality || '-'}</div>
-          <div>• <b>📌 객관적 경합·징계·이적·빅게임 지표 (Fact):</b> ${pt.temperament_and_discipline || '-'} | ${pt.loyalty_and_mobility || '-'} | ${pt.big_game_and_leadership || '-'} | ${trText}</div>
-          <div class="pt-1 mt-1 border-t border-slate-800">
-            <div>👔 <b>현 소속팀 감독 (${mgr.name || '-'} · ${d.current_club} ${st.rank_position || '-'}위):</b> 주포메이션 <b class="text-amber-300">${mgr.preferred_formation || '-'}</b> (보조 ${mgr.secondary_formation || '-'}) | 승률 ${mgr.win_rate_pct || 0}% (PPG ${mgr.points_per_game || 0})</div>
-            <div>🧠 <b>감독 코칭 능력치:</b> ${mgrScores}</div>
-            <div>📈 <b>감독 전술/선수단 운용 지표 (Fact):</b> <span class="text-slate-200">${mgr.leadership_personality || '-'}</span></div>
-            <div>🎯 <b>감독의 ${d.position} 포지션 요구사항:</b> <span class="text-sky-300">${posReq}</span></div>
+          <div class="text-zinc-300 font-semibold">선수 심층 분석</div>
+          <div>신체/A매치: ${vp.height_cm || 180}cm | A매치 ${vp.international_caps || 0}경기 ${vp.international_goals || 0}골 | 최고 시세 <span class="text-emerald-400">€${((vp.highest_market_value_eur || d.market_value_eur)/1000000).toFixed(1)}M</span></div>
+          <div>플레이 아키타입: <span class="text-zinc-200 font-medium">${pt.tactical_archetype || '-'}</span></div>
+          <div>핵심 강점: <span class="text-emerald-400">${pt.strengths_tags || '-'}</span></div>
+          <div>보완점: <span class="text-zinc-400">${pt.weaknesses_tags || '-'}</span></div>
+          <div class="pt-1 mt-1 border-t border-white/[0.04]">
+            <div>소속팀 감독 (${mgr.name || '-'}): ${mgr.preferred_formation || '-'} | 승률 ${mgr.win_rate_pct || 0}%</div>
+            <div>감독 요구사항: <span class="text-zinc-400">${posReq}</span></div>
           </div>
         `;
       } catch (e) {
@@ -1026,7 +1525,9 @@
     }
 
     function updateRadarChart(p) {
-      const ctx = document.getElementById('playerRadarChart').getContext('2d');
+      const canvas = document.getElementById('playerRadarChart');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
       const progScore = Math.min(99, Math.round((p.progressive_actions_per90 / 9.5) * 100));
       const keyPassScore = Math.min(99, Math.round((p.key_passes_per90 / 2.8) * 100));
       const gaScore = Math.min(99, Math.round(((p.goals_per90 + p.assists_per90) / 0.9) * 100));
@@ -1037,14 +1538,14 @@
       radarChartInstance = new Chart(ctx, {
         type: 'radar',
         data: {
-          labels: ['포지션 백분위', '전진 패스/드리블', '기회 창출(키패스)', '공격포인트(G+A)', '경합 성공률'],
+          labels: ['포지션 백분위', '전진 액션', '기회 창출', '공격포인트', '경합 성공률'],
           datasets: [{
             label: p.name_ko,
             data: [pctScore, progScore, keyPassScore, Math.max(35, gaScore), duelScore],
-            backgroundColor: 'rgba(16, 185, 129, 0.25)',
+            backgroundColor: 'rgba(16, 185, 129, 0.2)',
             borderColor: '#10b981',
-            pointBackgroundColor: '#34d399',
-            borderWidth: 2
+            pointBackgroundColor: '#10b981',
+            borderWidth: 1.5
           }]
         },
         options: {
@@ -1055,9 +1556,9 @@
               min: 0,
               max: 100,
               ticks: { display: false },
-              grid: { color: 'rgba(148, 163, 184, 0.15)' },
-              angleLines: { color: 'rgba(148, 163, 184, 0.15)' },
-              pointLabels: { color: '#cbd5e1', font: { size: 10, weight: '600' } }
+              grid: { color: 'rgba(255, 255, 255, 0.08)' },
+              angleLines: { color: 'rgba(255, 255, 255, 0.08)' },
+              pointLabels: { color: '#94a3b8', font: { size: 10, weight: '500' } }
             }
           },
           plugins: { legend: { display: false } }
@@ -1065,16 +1566,19 @@
       });
     }
 
+    // -------------------------------------------------------------------------
+    // Strategy & Workflow Execution
+    // -------------------------------------------------------------------------
     function selectTrack(mode) {
       selectedTrack = mode;
       const btnA = document.getElementById('btn-track-a');
       const btnB = document.getElementById('btn-track-b');
       if (mode === 'TRACK_A_TRANSFER') {
-        btnA.className = 'text-left p-3 rounded-xl border-2 border-emerald-500 bg-emerald-500/15 transition';
-        btnB.className = 'text-left p-3 rounded-xl border border-slate-700 bg-slate-900/60 hover:border-slate-600 transition';
+        btnA.className = 'text-left p-3 rounded-xl border border-emerald-500 bg-emerald-500/10 transition';
+        btnB.className = 'text-left p-3 rounded-xl border border-white/[0.08] bg-[#0e1117] hover:border-zinc-600 transition';
       } else {
-        btnB.className = 'text-left p-3 rounded-xl border-2 border-sky-500 bg-sky-500/15 transition';
-        btnA.className = 'text-left p-3 rounded-xl border border-slate-700 bg-slate-900/60 hover:border-slate-600 transition';
+        btnB.className = 'text-left p-3 rounded-xl border border-emerald-500 bg-emerald-500/10 transition';
+        btnA.className = 'text-left p-3 rounded-xl border border-white/[0.08] bg-[#0e1117] hover:border-zinc-600 transition';
       }
     }
 
@@ -1083,10 +1587,14 @@
     }
 
     async function startWorkflow() {
-      if (!selectedPlayer) return;
+      if (!selectedPlayer) {
+        alert('먼저 선수를 선택해 주세요.');
+        showPage('page-scouting');
+        return;
+      }
       const btn = document.getElementById('btn-start-workflow');
       btn.disabled = true;
-      btn.innerHTML = '<span>⏳ LangGraph 에이전트 파이프라인 실행 중...</span>';
+      btn.textContent = '협상 시뮬레이션 실행 중...';
 
       try {
         const contractOverride = {
@@ -1117,149 +1625,145 @@
 
         renderAnalysisAndSparring(data);
       } catch (e) {
-        alert('워크플로우 실행 중 오류가 발생했습니다: ' + e);
+        alert('워크플로우 실행 중 오류: ' + e);
       } finally {
         btn.disabled = false;
-        btn.innerHTML = '<span>🚀 전략 생성 & 1차 모의 협상 시작</span>';
+        btn.textContent = '전략 수립 및 1차 모의 협상 시작 →';
       }
     }
 
     function renderAnalysisAndSparring(data) {
       const st = data.state;
       document.getElementById('analysis-section').classList.remove('hidden');
-      document.getElementById('thread-badge').textContent = `Thread: ${data.thread_id}`;
+      document.getElementById('thread-badge').textContent = `ID: ${data.thread_id.slice(0, 8)}`;
 
       const statusBadge = document.getElementById('workflow-status-badge');
+      const completeBanner = document.getElementById('workflow-complete-banner');
+
       if (data.status === 'WAITING_FOR_HUMAN_STRATEGY') {
-        statusBadge.textContent = '⏸️ Human-in-the-Loop 전략 선택 대기 중';
-        statusBadge.className = 'text-xs font-bold px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40';
+        statusBadge.textContent = '2라운드 전략 선택 대기';
+        statusBadge.className = 'text-xs font-semibold px-2 py-0.5 rounded bg-amber-500/20 text-amber-300';
         document.getElementById('hitl-action-panel').classList.remove('hidden');
-        document.getElementById('documents-section').classList.add('hidden');
+        if (completeBanner) completeBanner.classList.add('hidden');
       } else {
-        statusBadge.textContent = '✅ 최종 합의 및 투트랙 문서 생성 완료';
-        statusBadge.className = 'text-xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40';
+        statusBadge.textContent = '최종 합의 및 문서 생성 완료';
+        statusBadge.className = 'text-xs font-semibold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300';
         document.getElementById('hitl-action-panel').classList.add('hidden');
+        if (completeBanner) completeBanner.classList.remove('hidden');
       }
 
       document.getElementById('supervisor-note-box').textContent = st.supervisor_note || '';
 
-      // Model usage pills
       const pills = document.getElementById('model-usage-pills');
       pills.innerHTML = (st.model_usage_log || []).map(item => `
-        <span class="text-[11px] px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-700 text-slate-300">
-          <b>${item.node}:</b> <code class="text-emerald-400">${item.model}</code>
+        <span class="px-2 py-0.5 rounded bg-[#0e1117] border border-white/[0.04] text-zinc-400">
+          ${item.node}: <span class="text-zinc-200">${item.model}</span>
         </span>
       `).join('');
 
-      // Card 1: Hermes & Peer Wage Band + PSR Annual Book Cost
       document.getElementById('hermes-ai-summary').textContent = st.hermes_ai_summary || '';
       const band = (st.peer_wage_band || {}).wage_band_eur || {};
       const psr = st.psr_and_tax_breakdown || {};
       const psrHtml = psr.annual_psr_book_cost_eur ? `
-        <div class="p-2.5 rounded-xl bg-amber-950/30 border border-amber-700/50 space-y-1 mt-1">
-          <div class="flex justify-between font-bold text-amber-300">
-            <span>💶 구단 연간 PSR 장부 총비용 (${psr.league})</span>
-            <span>€${(psr.annual_psr_book_cost_eur || 0).toLocaleString()} / 년</span>
+        <div class="p-2 rounded bg-[#0e1117] border border-white/[0.04] space-y-0.5 mt-1">
+          <div class="flex justify-between font-semibold text-zinc-200">
+            <span>구단 연간 PSR 비용</span>
+            <span>€${(psr.annual_psr_book_cost_eur || 0).toLocaleString()}/년</span>
           </div>
-          <div class="text-[10px] text-slate-300">
-            이적료 감가상각(${psr.amortization_years_applied}년): €${(psr.annual_transfer_amortization_eur || 0).toLocaleString()}/년 · 세후 실수령 주급: <b class="text-emerald-300">€${(psr.weekly_net_wage_eur || 0).toLocaleString()}/주</b> (소득세율 ${psr.top_income_tax_rate_pct}%)
+          <div class="text-[10px] text-zinc-400">
+            세후 실수령: €${(psr.weekly_net_wage_eur || 0).toLocaleString()}/주 (세율 ${psr.top_income_tax_rate_pct}%)
           </div>
         </div>
       ` : '';
       document.getElementById('wage-band-bars').innerHTML = `
-        <div class="flex justify-between p-2 rounded bg-slate-900 border border-slate-800">
-          <span class="text-slate-400">보수적 하한 (Q25)</span>
-          <span class="font-bold text-slate-200">€${(band.q25_conservative || 0).toLocaleString()} / 주</span>
+        <div class="flex justify-between p-1.5 rounded bg-[#0e1117]">
+          <span class="text-zinc-400">보수적 (Q25)</span>
+          <span class="font-medium text-zinc-300">€${(band.q25_conservative || 0).toLocaleString()}/주</span>
         </div>
-        <div class="flex justify-between p-2 rounded bg-emerald-950/40 border border-emerald-800/50">
-          <span class="text-emerald-300 font-semibold">비교군 중앙값 (Median Fair)</span>
-          <span class="font-extrabold text-emerald-400">€${(band.median_fair || 0).toLocaleString()} / 주</span>
+        <div class="flex justify-between p-1.5 rounded bg-emerald-950/20 border border-emerald-500/30">
+          <span class="text-emerald-400 font-medium">중앙값 (Median)</span>
+          <span class="font-bold text-emerald-400">€${(band.median_fair || 0).toLocaleString()}/주</span>
         </div>
-        <div class="flex justify-between p-2 rounded bg-slate-900 border border-slate-800">
-          <span class="text-sky-300">공격적 상한 (Q75)</span>
-          <span class="font-bold text-sky-400">€${(band.q75_ambitious || 0).toLocaleString()} / 주</span>
+        <div class="flex justify-between p-1.5 rounded bg-[#0e1117]">
+          <span class="text-zinc-400">상한 (Q75)</span>
+          <span class="font-medium text-zinc-300">€${(band.q75_ambitious || 0).toLocaleString()}/주</span>
         </div>
         ${psrHtml}
       `;
 
       document.getElementById('hermes-tool-trace').innerHTML = (st.hermes_tool_trace || []).map(t =>
-        `<div class="truncate">🤖 ${t.xml_protocol.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>`
+        `<div class="truncate">${t.xml_protocol.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>`
       ).join('');
 
-      // Card 2: Live News & Matched Clubs
       const news = st.live_club_news || {};
       document.getElementById('live-news-box').innerHTML = `
-        <div class="text-[10px] font-bold text-sky-400 uppercase">${news.source || 'Scouting Feed'}</div>
-        <div class="text-xs font-bold text-white">${news.headline || ''}</div>
-        <div class="text-[11px] text-slate-300">${news.tactical_context || ''}</div>
+        <div class="text-[10px] text-zinc-500 uppercase">${news.source || 'Scouting Desk'}</div>
+        <div class="text-xs font-semibold text-white">${news.headline || ''}</div>
+        <div class="text-[11px] text-zinc-400">${news.tactical_context || ''}</div>
       `;
 
       const clubs = st.matched_clubs || [];
       const clubsEl = document.getElementById('matched-clubs-list');
       if (clubs.length > 0) {
-        clubsEl.innerHTML = clubs.slice(0, 3).map((c, idx) => {
-          const ms = c.manager_coaching_scores || {};
-          const stInfo = c.club_live_standing || {};
-          return `
-          <div class="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 text-xs space-y-1">
-            <div class="flex justify-between font-bold text-white">
-              <span>${idx + 1}순위 · ${c.club_name} (${c.league} ${stInfo.rank_position ? stInfo.rank_position + '위' : ''})</span>
-              <span class="text-emerald-400">가용 €${c.max_weekly_wage_offer_eur.toLocaleString()}/주</span>
+        clubsEl.innerHTML = clubs.slice(0, 3).map((c, idx) => `
+          <div class="p-2 rounded-lg bg-[#0e1117] border border-white/[0.04] text-xs space-y-0.5">
+            <div class="flex justify-between font-semibold text-white">
+              <span>${idx + 1}. ${c.club_name} (${c.league})</span>
+              <span class="text-emerald-400">€${c.max_weekly_wage_offer_eur.toLocaleString()}/주</span>
             </div>
-            <div class="text-[11px] text-slate-400">
-              현 주전: ${c.current_starter} (${c.starter_age}세, 만료 ${c.starter_contract_expires}) · 주급 €${c.starter_weekly_wage_eur.toLocaleString()}
-            </div>
-            <div class="text-[11px] text-amber-300 font-semibold">
-              👔 감독: ${c.manager_name || '-'} (${c.manager_preferred_formation || '-'} / 보조 ${c.manager_secondary_formation || '-'}) · 승률 ${c.manager_win_rate_pct || '-'}% (PPG ${c.manager_ppg || '-'})
-            </div>
-            <div class="text-[10px] text-slate-300">
-              🧠 코칭역량: 전술유연성 <b>${ms.tactical_flexibility || '-'}</b> · 공격 <b>${ms.attacking_coaching || '-'}</b> · 수비 <b>${ms.defensive_coaching || '-'}</b> · 유망주신뢰 <b>${ms.youth_trust || '-'}</b>
-            </div>
-            <div class="text-[10px] text-sky-300">
-              🎯 감독 요구사항: ${c.manager_position_requirement || c.tactical_style || ''}
-            </div>
-            <div class="text-[11px] text-slate-300">${c.recruitment_note}</div>
+            <div class="text-[11px] text-zinc-400">현 주전: ${c.current_starter} (${c.starter_age}세)</div>
+            <div class="text-[11px] text-zinc-400">감독: ${c.manager_name || '-'} (${c.manager_preferred_formation || '-'})</div>
           </div>
-        `}).join('');
+        `).join('');
       } else {
         clubsEl.innerHTML = `
-          <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 text-xs text-slate-300">
-            📌 <b>Track B (현 소속팀 재계약 모드):</b> 타 구단 이적 매칭 대신 현 소속 구단(<b>${st.player_profile.current_club}</b>) 내 대체 불가 가치 및 동급 비교군 주급 벤치마킹에 집중합니다.
+          <div class="p-2 rounded-lg bg-[#0e1117] text-xs text-zinc-400">
+            Track B (재계약 모드): 현 소속팀 협상에 집중합니다.
           </div>
         `;
       }
 
-      // Card 3: Legal & GBE RAG
+      const career = st.career_strategy || {};
+      const badgeEl = document.getElementById('career-path-badge');
+      const noteEl = document.getElementById('career-leverage-note');
+      const roadEl = document.getElementById('career-roadmap-box');
+      if (badgeEl) badgeEl.textContent = career.path_label || '전략 수립됨';
+      if (noteEl) noteEl.textContent = career.contract_leverage || career.rationale || '';
+      if (roadEl && career.three_year_roadmap) {
+        roadEl.innerHTML = career.three_year_roadmap.map(y => `
+          <div class="p-1 rounded bg-[#0e1117] text-[11px]">
+            <span class="text-zinc-300 font-medium">${y.year}:</span>
+            <span class="text-zinc-400">${y.phase}</span>
+          </div>
+        `).join('');
+      }
+
       const legal = st.rag_legal_review || {};
       document.getElementById('legal-review-box').innerHTML = `
-        <div class="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800">
-          <div class="font-bold text-emerald-300">${legal.gbe_work_permit_result || ''}</div>
-          <div class="text-[10px] text-slate-400 mt-0.5">${legal.gbe_source || ''}</div>
+        <div class="p-2 rounded bg-[#0e1117]">
+          <div class="font-medium text-emerald-400">${legal.gbe_work_permit_result || ''}</div>
+          <div class="text-[10px] text-zinc-500">${legal.gbe_source || ''}</div>
         </div>
-        <div class="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800">
-          <div class="font-bold text-sky-300">${legal.non_eu_quota_result || ''}</div>
-          <div class="text-[10px] text-slate-400 mt-0.5">${legal.non_eu_source || ''}</div>
+        <div class="p-2 rounded bg-[#0e1117]">
+          <div class="font-medium text-zinc-300">${legal.non_eu_quota_result || ''}</div>
+          <div class="text-[10px] text-zinc-500">${legal.non_eu_source || ''}</div>
         </div>
-        <div class="p-2.5 rounded-xl bg-purple-950/30 border border-purple-800/50">
-          <div class="text-[11px] text-slate-200">${legal.ffar_fee_guidance || ''}</div>
-          <div class="text-[10px] text-purple-300 mt-0.5">${legal.ffar_source || ''}</div>
+        <div class="p-2 rounded bg-[#0e1117]">
+          <div class="text-[11px] text-zinc-400">${legal.ffar_fee_guidance || ''}</div>
+          <div class="text-[10px] text-zinc-500">${legal.ffar_source || ''}</div>
         </div>
       `;
 
       document.getElementById('rag-chunks-list').innerHTML = (st.rag_retrieved_chunks || []).map(c => `
-        <div class="p-2 rounded bg-slate-950 border border-slate-800 text-[11px]">
-          <div class="flex justify-between text-purple-300 font-semibold">
+        <div class="p-1.5 rounded bg-[#0a0c10] text-[10px]">
+          <div class="flex justify-between text-zinc-300">
             <span class="truncate">${c.title}</span>
             <span>유사도 ${c.similarity_score}</span>
           </div>
-          <div class="text-[10px] text-slate-500">${c.source_citation} (${c.effective_date})</div>
         </div>
       `).join('');
 
-      // Sparring transcript
       renderSparringTranscript(st.sparring_transcript || []);
-
-      // Scroll smoothly to sparring section
       document.getElementById('analysis-section').scrollIntoView({ behavior: 'smooth' });
     }
 
@@ -1269,13 +1773,13 @@
         const isAgent = item.speaker.includes('에이전트');
         return `
           <div class="flex flex-col ${isAgent ? 'items-start' : 'items-end'}">
-            <div class="text-[11px] font-bold mb-1 ${isAgent ? 'text-emerald-400' : 'text-sky-400'}">
-              ${isAgent ? '🗣️' : '🛡️'} [${item.round}] ${item.speaker}
+            <div class="text-[11px] font-semibold mb-1 ${isAgent ? 'text-emerald-400' : 'text-zinc-400'}">
+              [${item.round}] ${item.speaker}
             </div>
-            <div class="max-w-3xl p-3.5 rounded-2xl text-xs leading-relaxed ${
+            <div class="max-w-2xl p-3 rounded-xl text-xs leading-relaxed ${
               isAgent
-                ? 'bg-emerald-950/50 border border-emerald-700/50 text-slate-100 rounded-tl-none'
-                : 'bg-sky-950/50 border border-sky-700/50 text-slate-100 rounded-tr-none'
+                ? 'bg-[#12151c] border border-emerald-500/30 text-zinc-200'
+                : 'bg-[#12151c] border border-white/[0.06] text-zinc-300'
             }">
               ${item.message}
             </div>
@@ -1287,7 +1791,7 @@
     async function resumeWorkflow(choice) {
       if (!currentThreadId) return;
       const panel = document.getElementById('hitl-action-panel');
-      panel.innerHTML = '<div class="text-xs font-bold text-emerald-300 py-2">⏳ 선택한 전략을 반영하여 2라운드 협상 타결 및 투트랙 실무 문서를 생성하고 있습니다...</div>';
+      panel.innerHTML = '<div class="text-xs font-semibold text-emerald-400 py-3 text-center">선택한 전략으로 2라운드 협상 타결 및 문서를 생성하고 있습니다...</div>';
 
       try {
         const res = await fetch('/api/workflow/resume', {
@@ -1302,117 +1806,217 @@
         currentWorkflowState = data.state;
 
         renderAnalysisAndSparring(data);
-
-        // Show Dual-Output Document Viewer
-        document.getElementById('documents-section').classList.remove('hidden');
-        switchDocTab('prep');
-        document.getElementById('documents-section').scrollIntoView({ behavior: 'smooth' });
       } catch (e) {
-        alert('협상 재개 중 오류 발생: ' + e);
+        alert('협상 재개 오류: ' + e);
       }
     }
 
+    // -------------------------------------------------------------------------
+    // Documents Viewer Logic
+    // -------------------------------------------------------------------------
     function switchDocTab(tab) {
       activeDocTab = tab;
+      const btnCareer = document.getElementById('tab-btn-career');
       const btnPrep = document.getElementById('tab-btn-prep');
       const btnPitch = document.getElementById('tab-btn-pitch');
-      const btnRag = document.getElementById('tab-btn-raglab');
       const printArea = document.getElementById('printable-area');
-      const ragArea = document.getElementById('raglab-area');
 
-      btnPrep.className = 'px-4 py-2 rounded-xl text-xs font-extrabold bg-slate-800 text-slate-300 hover:bg-slate-700 transition';
-      btnPitch.className = 'px-4 py-2 rounded-xl text-xs font-extrabold bg-slate-800 text-slate-300 hover:bg-slate-700 transition';
-      btnRag.className = 'px-4 py-2 rounded-xl text-xs font-extrabold bg-slate-800 text-purple-300 hover:bg-slate-700 transition';
+      const idleBtn = 'px-3 py-1.5 rounded-lg text-xs font-medium bg-zinc-800 text-zinc-300 hover:bg-zinc-700 transition';
+      if (btnCareer) btnCareer.className = idleBtn;
+      if (btnPrep) btnPrep.className = idleBtn;
+      if (btnPitch) btnPitch.className = idleBtn;
 
-      if (tab === 'prep') {
-        btnPrep.className = 'px-4 py-2 rounded-xl text-xs font-extrabold bg-emerald-600 text-white transition';
-        printArea.classList.remove('hidden');
-        ragArea.classList.add('hidden');
-        printArea.innerHTML = marked.parse((currentWorkflowState && currentWorkflowState.deal_prep_md) || '');
+      let content = '';
+      if (tab === 'career') {
+        if (btnCareer) btnCareer.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 text-white transition';
+        content = (currentWorkflowState && currentWorkflowState.career_report_md) || '';
+      } else if (tab === 'prep') {
+        if (btnPrep) btnPrep.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 text-white transition';
+        content = (currentWorkflowState && currentWorkflowState.deal_prep_md) || '';
       } else if (tab === 'pitch') {
-        btnPitch.className = 'px-4 py-2 rounded-xl text-xs font-extrabold bg-sky-600 text-white transition';
-        printArea.classList.remove('hidden');
-        ragArea.classList.add('hidden');
-        printArea.innerHTML = marked.parse((currentWorkflowState && currentWorkflowState.pitch_deck_md) || '');
+        if (btnPitch) btnPitch.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 text-white transition';
+        content = (currentWorkflowState && currentWorkflowState.pitch_deck_md) || '';
+      }
+
+      if (content) {
+        printArea.innerHTML = marked.parse(content);
       } else {
-        btnRag.className = 'px-4 py-2 rounded-xl text-xs font-extrabold bg-purple-600 text-white transition';
-        printArea.classList.add('hidden');
-        ragArea.classList.remove('hidden');
-        runInteractiveRagSearch();
+        printArea.innerHTML = `
+          <div class="text-center py-16 text-zinc-500 space-y-2">
+            <div class="text-sm font-semibold text-zinc-300">해당 문서가 아직 생성되지 않았습니다.</div>
+            <p class="text-xs text-zinc-500 max-w-sm mx-auto">
+              [이적 및 계약 협상]에서 모의 협상을 완료하면 3종 문서가 실시간으로 이곳에 렌더링됩니다.
+            </p>
+            <button onclick="showPage('page-strategy')"
+              class="mt-2 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition">
+              협상 전략 수립하러 가기 →
+            </button>
+          </div>
+        `;
       }
     }
 
     function copyActiveMarkdown() {
-      if (!currentWorkflowState) return;
-      const md = activeDocTab === 'pitch' ? currentWorkflowState.pitch_deck_md : currentWorkflowState.deal_prep_md;
+      if (!currentWorkflowState) {
+        alert('복사할 생성 문서가 없습니다.');
+        return;
+      }
+      let md = currentWorkflowState.career_report_md || '';
+      if (activeDocTab === 'prep') md = currentWorkflowState.deal_prep_md || '';
+      else if (activeDocTab === 'pitch') md = currentWorkflowState.pitch_deck_md || '';
       navigator.clipboard.writeText(md || '');
-      alert('클립보드에 마크다운 원문이 복사되었습니다!');
+      alert('마크다운이 클립보드에 복사되었습니다.');
     }
 
     function downloadActiveMarkdown() {
-      if (!currentWorkflowState || !currentWorkflowState.saved_files) return;
-      const fullPath = activeDocTab === 'pitch'
-        ? currentWorkflowState.saved_files.external_club_pitch_deck
-        : currentWorkflowState.saved_files.internal_deal_prep_sheet;
+      if (!currentWorkflowState || !currentWorkflowState.saved_files) {
+        alert('다운로드할 파일이 없습니다.');
+        return;
+      }
+      let fullPath = currentWorkflowState.saved_files.career_report_file || currentWorkflowState.saved_files.root_career_file;
+      if (activeDocTab === 'prep') {
+        fullPath = currentWorkflowState.saved_files.deal_prep_file || currentWorkflowState.saved_files.internal_deal_prep_sheet;
+      } else if (activeDocTab === 'pitch') {
+        fullPath = currentWorkflowState.saved_files.pitch_deck_file || currentWorkflowState.saved_files.external_club_pitch_deck;
+      }
+      if (!fullPath) return;
       const fileName = fullPath.split(/[\\/]/).pop();
       window.open(`/api/outputs/${fileName}`, '_blank');
     }
 
-    async function runInteractiveRagSearch() {
-      const query = document.getElementById('rag-search-input').value.trim();
-      const sType = document.getElementById('rag-search-type').value;
-      const pos = selectedPlayer ? selectedPlayer.position : 'RB';
-      const res = await fetch('/api/rag/search', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query, search_type: sType, position: pos, top_k: 4 })
-      });
-      const data = await res.json();
-      const container = document.getElementById('rag-lab-results');
-
-      if (data.search_type === 'LEGAL_REGULATIONS') {
-        container.innerHTML = (data.results || []).map(r => `
-          <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-800 space-y-1">
-            <div class="flex justify-between items-center">
-              <span class="text-xs font-extrabold text-purple-300">${r.title}</span>
-              <span class="text-[11px] px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 font-mono">
-                Cosine+Keyword Score: ${r.similarity_score} | ${r.query_embedding_model}
-              </span>
+    // -------------------------------------------------------------------------
+    // Undervalued Prospects & Bosman Radar
+    // -------------------------------------------------------------------------
+    async function loadUndervaluedProspects() {
+      const grid = document.getElementById('prospects-grid');
+      if (!grid) return;
+      grid.innerHTML = '<div class="text-xs text-zinc-500 py-3 col-span-3">유망주 스캔 중...</div>';
+      try {
+        const res = await fetch('/api/scout/prospects?max_age=23&min_percentile=75&limit=6');
+        const data = await res.json();
+        const list = data.prospects || [];
+        grid.innerHTML = list.map(p => `
+          <div onclick="selectProspectByName('${p.name}')"
+            class="p-2.5 rounded-lg bg-[#0e1117] border border-white/[0.04] hover:border-zinc-600 transition cursor-pointer space-y-1 text-xs">
+            <div class="flex items-center justify-between font-semibold text-white">
+              <span>${p.name_ko} (${p.name})</span>
+              <span class="text-[10px] text-zinc-400 font-mono">${p.position} · ${p.age}세</span>
             </div>
-            <div class="text-[11px] text-emerald-400 font-semibold">출처: ${r.source_citation} (기준일: ${r.effective_date})</div>
-            <pre class="text-[11px] text-slate-300 whitespace-pre-wrap font-sans mt-1">${r.content}</pre>
+            <div class="text-[11px] text-zinc-400">${p.current_club} (${p.league})</div>
+            <div class="flex items-center justify-between text-[11px] pt-1 border-t border-white/[0.04]">
+              <span class="text-emerald-400 font-semibold">€${(p.market_value_eur/1000000).toFixed(1)}M</span>
+              <span class="text-zinc-400">상위 ${100 - p.pos_percentile + 1}%</span>
+            </div>
           </div>
         `).join('');
-      } else {
-        container.innerHTML = (data.results || []).map(r => `
-          <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-800 space-y-1">
-            <div class="flex justify-between items-center">
-              <span class="text-xs font-extrabold text-amber-300">${r.club_name} (${r.league} · ${r.position})</span>
-              <span class="text-[11px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono">
-                Tactical Similarity: ${r.tactical_similarity_score} | ${r.embedding_model}
-              </span>
-            </div>
-            <div class="text-xs text-slate-200">${r.tactical_note}</div>
-          </div>
-        `).join('');
+      } catch (e) {
+        grid.innerHTML = '<div class="text-xs text-zinc-500 py-2 col-span-3">유망주 스캔 실패</div>';
       }
     }
 
-    function switchWorkbenchTab(tab) {
-      ['bosman', 'psr', 'custom'].forEach(t => {
-        document.getElementById(`wb-panel-${t}`).classList.toggle('hidden', t !== tab);
-      });
-      document.getElementById('wb-tab-bosman').className = tab === 'bosman'
-        ? 'px-3 py-1.5 rounded-lg text-xs font-extrabold bg-emerald-600 text-white transition'
-        : 'px-3 py-1.5 rounded-lg text-xs font-extrabold bg-slate-800 text-slate-300 hover:bg-slate-700 transition';
-      document.getElementById('wb-tab-psr').className = tab === 'psr'
-        ? 'px-3 py-1.5 rounded-lg text-xs font-extrabold bg-amber-600 text-white transition'
-        : 'px-3 py-1.5 rounded-lg text-xs font-extrabold bg-slate-800 text-slate-300 hover:bg-slate-700 transition';
-      document.getElementById('wb-tab-custom').className = tab === 'custom'
-        ? 'px-3 py-1.5 rounded-lg text-xs font-extrabold bg-sky-600 text-white transition'
-        : 'px-3 py-1.5 rounded-lg text-xs font-extrabold bg-slate-800 text-sky-300 hover:bg-slate-700 transition';
+    function selectProspectByName(name) {
+      const found = allPlayers.find(p => p.name === name);
+      if (found) {
+        selectPlayer(found);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     }
 
+    async function loadBosmanRadar() {
+      const pos = document.getElementById('bosman-pos-select').value;
+      const lg = document.getElementById('bosman-league-select').value;
+      const grid = document.getElementById('bosman-radar-grid');
+      const badge = document.getElementById('bosman-count-badge');
+      if (!grid) return;
+      try {
+        const res = await fetch(`/api/radar/bosman?position=${encodeURIComponent(pos)}&league=${encodeURIComponent(lg)}`);
+        const data = await res.json();
+        const list = data.targets || [];
+        badge.textContent = `타겟 구단 ${list.length}개 포착`;
+        grid.innerHTML = list.map(t => `
+          <div class="p-2.5 rounded-lg bg-[#0e1117] border border-white/[0.04] space-y-1 text-xs">
+            <div class="flex items-center justify-between font-semibold text-white">
+              <span>${t.club_name} (${t.league})</span>
+              <span class="text-[10px] text-emerald-400 font-mono">${t.priority_score}점</span>
+            </div>
+            <div class="text-[11px] text-zinc-300">${t.opportunity_type}</div>
+            <div class="text-[11px] text-zinc-400">현 주전: ${t.current_starter} (${t.starter_age}세)</div>
+            <div class="flex items-center justify-between pt-1 border-t border-white/[0.04] text-[10px] text-zinc-400">
+              <span>이적료 예산 €${((t.max_transfer_fee_budget_eur || 0)/1000000).toFixed(1)}M</span>
+              <span class="text-emerald-400 font-medium">최대 주급 €${(t.max_weekly_wage_offer_eur || 0).toLocaleString()}/주</span>
+            </div>
+          </div>
+        `).join('');
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    function switchScoutingSubTab(tab) {
+      ['prospects', 'bosman', 'custom'].forEach(t => {
+        const panel = document.getElementById(`scout-panel-${t}`);
+        if (panel) panel.classList.toggle('hidden', t !== tab);
+      });
+      document.getElementById('wb-tab-prospects').className = tab === 'prospects'
+        ? 'px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 text-white transition'
+        : 'px-3 py-1.5 rounded-lg text-xs font-medium bg-zinc-800 text-zinc-300 hover:bg-zinc-700 transition';
+      document.getElementById('wb-tab-bosman').className = tab === 'bosman'
+        ? 'px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 text-white transition'
+        : 'px-3 py-1.5 rounded-lg text-xs font-medium bg-zinc-800 text-zinc-300 hover:bg-zinc-700 transition';
+      document.getElementById('wb-tab-custom').className = tab === 'custom'
+        ? 'px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 text-white transition'
+        : 'px-3 py-1.5 rounded-lg text-xs font-medium bg-zinc-800 text-zinc-300 hover:bg-zinc-700 transition';
+    }
+
+    async function registerCustomClient() {
+      const payload = {
+        name_ko: document.getElementById('cust-name-ko').value.trim(),
+        name: document.getElementById('cust-name-en').value.trim(),
+        position: document.getElementById('cust-pos').value,
+        secondary_positions: document.getElementById('cust-sec-pos').value.trim(),
+        current_club: document.getElementById('cust-club').value.trim(),
+        league: document.getElementById('cust-league').value.trim(),
+        age: parseInt(document.getElementById('cust-age').value || '20', 10),
+        current_league_band: parseInt(document.getElementById('cust-band').value || '2', 10),
+        market_value_eur: parseInt(document.getElementById('cust-val').value || '4500000', 10),
+        weekly_wage_eur: parseInt(document.getElementById('cust-wage').value || '15000', 10),
+        contract_expires: '2027-06-30',
+        nationality: 'South Korea',
+        goals_per90: 0.35,
+        assists_per90: 0.22,
+        xg_per90: 0.30,
+        xa_per90: 0.20,
+        progressive_actions_per90: 6.5,
+        key_passes_per90: 1.7,
+        defensive_duels_won_pct: 57.5,
+        minutes_played: 2580,
+        appearances: 31,
+        intl_match_pct: 45,
+        continental_minutes_pct: 60,
+        is_eu_citizen: 0,
+        strengths_summary: '드리블 돌파 및 양발 결정력',
+        weaknesses_summary: ''
+      };
+      try {
+        const res = await fetch('/api/players/custom', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.detail || '등록 실패');
+        await loadPlayers();
+        selectPlayer(data.player);
+        alert(`외부 선수 [${data.player.name_ko}] 등록 완료`);
+        showPage('page-strategy');
+      } catch (e) {
+        alert('선수 등록 오류: ' + e);
+      }
+    }
+
+    // -------------------------------------------------------------------------
+    // Financial PSR & Tax Simulator
+    // -------------------------------------------------------------------------
     async function previewPsrLive() {
       if (!selectedPlayer) return;
       const box = document.getElementById('live-psr-mini-preview');
@@ -1445,13 +2049,12 @@
         });
         const d = await res.json();
         box.innerHTML = `
-          <div class="flex justify-between font-bold text-emerald-300">
-            <span>📊 목표 주급 €${targetWage.toLocaleString()}/주 기준 (${d.league} · ${d.negotiation_basis})</span>
-            <span>실수령(Net): €${d.weekly_net_wage_eur.toLocaleString()}/주</span>
+          <div class="flex justify-between font-semibold text-zinc-200">
+            <span>목표 주급 €${targetWage.toLocaleString()}/주 (${d.league})</span>
+            <span>실수령: €${d.weekly_net_wage_eur.toLocaleString()}/주</span>
           </div>
-          <div class="text-slate-300 mt-0.5">
-            • <b>구단 연간 PSR 장부 총비용:</b> <b class="text-amber-300">€${d.annual_psr_book_cost_eur.toLocaleString()}/년</b>
-            (이적료 상각 €${d.annual_transfer_amortization_eur.toLocaleString()} + 세전연봉 €${d.annual_gross_wage_eur.toLocaleString()} + 사회보장세/수수료)
+          <div class="text-zinc-400 mt-0.5">
+            구단 연간 PSR 장부 비용: <span class="text-zinc-200 font-semibold">€${d.annual_psr_book_cost_eur.toLocaleString()}/년</span>
           </div>
         `;
       } catch (e) {
@@ -1484,113 +2087,233 @@
         });
         const d = await res.json();
         box.innerHTML = `
-          <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-2">
-            <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800">
-              <div class="text-[10px] text-slate-400">구단 연간 PSR 장부 총비용 (감가상각 ${d.amortization_years_applied}년 한도)</div>
-              <div class="text-sm font-extrabold text-amber-400 mt-0.5">€${d.annual_psr_book_cost_eur.toLocaleString()} / 년</div>
-              <div class="text-[10px] text-slate-400">이적료 상각: €${d.annual_transfer_amortization_eur.toLocaleString()}/년</div>
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-2.5 mb-2.5">
+            <div class="p-2.5 rounded-lg bg-[#12151c] border border-white/[0.04]">
+              <div class="text-[11px] text-zinc-400">구단 연간 PSR 장부 비용</div>
+              <div class="text-sm font-bold text-white mt-0.5">€${d.annual_psr_book_cost_eur.toLocaleString()} / 년</div>
+              <div class="text-[10px] text-zinc-500 mt-0.5">이적료 상각: €${d.annual_transfer_amortization_eur.toLocaleString()}</div>
             </div>
-            <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800">
-              <div class="text-[10px] text-slate-400">선수 세전(Gross) vs 세후(Net) 실수령액</div>
-              <div class="text-sm font-extrabold text-emerald-400 mt-0.5">세후 €${d.weekly_net_wage_eur.toLocaleString()}/주 (연 €${d.annual_net_wage_eur.toLocaleString()})</div>
-              <div class="text-[10px] text-slate-400">세전 연봉 €${d.annual_gross_wage_eur.toLocaleString()} · 소득세율 ${d.top_income_tax_rate_pct}%</div>
+            <div class="p-2.5 rounded-lg bg-[#12151c] border border-white/[0.04]">
+              <div class="text-[11px] text-zinc-400">선수 세후 실수령액</div>
+              <div class="text-sm font-bold text-emerald-400 mt-0.5">€${d.weekly_net_wage_eur.toLocaleString()}/주</div>
+              <div class="text-[10px] text-zinc-500 mt-0.5">세전 연봉 €${d.annual_gross_wage_eur.toLocaleString()} · 세율 ${d.top_income_tax_rate_pct}%</div>
             </div>
-            <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800">
-              <div class="text-[10px] text-slate-400">에이전트 총 수수료 (${d.agent_fee_pct}%) & 사이닝 보너스</div>
-              <div class="text-sm font-extrabold text-sky-400 mt-0.5">수수료 €${d.agent_commission_total_eur.toLocaleString()}</div>
-              <div class="text-[10px] text-slate-400">사이닝 보너스 €${d.signing_bonus_eur.toLocaleString()} · 구단 사회보장세 연 €${d.employer_social_tax_annual_eur.toLocaleString()}</div>
+            <div class="p-2.5 rounded-lg bg-[#12151c] border border-white/[0.04]">
+              <div class="text-[11px] text-zinc-400">에이전트 수수료 (${d.agent_fee_pct}%)</div>
+              <div class="text-sm font-bold text-zinc-200 mt-0.5">€${d.agent_commission_total_eur.toLocaleString()}</div>
+              <div class="text-[10px] text-zinc-500 mt-0.5">사이닝 보너스: €${d.signing_bonus_eur.toLocaleString()}</div>
             </div>
-            <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800">
-              <div class="text-[10px] text-slate-400">${d.contract_years}년 총 딜 패키지 현금 지출액 (Total Outlay)</div>
-              <div class="text-sm font-extrabold text-purple-300 mt-0.5">€${d.total_deal_package_cost_eur.toLocaleString()}</div>
-              <div class="text-[10px] text-slate-400">협상 관행: <b>${d.negotiation_basis}</b> ${d.mandatory_release_clause ? '· 의무 바이아웃 필수' : ''}</div>
+            <div class="p-2.5 rounded-lg bg-[#12151c] border border-white/[0.04]">
+              <div class="text-[11px] text-zinc-400">${d.contract_years}년 총 계약 비용</div>
+              <div class="text-sm font-bold text-zinc-200 mt-0.5">€${d.total_deal_package_cost_eur.toLocaleString()}</div>
+              <div class="text-[10px] text-zinc-500 mt-0.5">협상 관행: ${d.negotiation_basis}</div>
             </div>
           </div>
-          <div class="text-[11px] text-slate-300">📌 <b>세제 & 재정 규정 가이드:</b> ${d.tax_regime_note}</div>
+          <div class="text-xs text-zinc-400 bg-[#12151c] p-2.5 rounded-lg border border-white/[0.04]">
+            리그 세제 정보: ${d.tax_regime_note}
+          </div>
         `;
       } catch (e) {
         console.error(e);
       }
     }
 
-    async function loadBosmanRadar() {
-      const pos = document.getElementById('bosman-pos-select').value;
-      const lg = document.getElementById('bosman-league-select').value;
-      const grid = document.getElementById('bosman-radar-grid');
-      const badge = document.getElementById('bosman-count-badge');
-      try {
-        const res = await fetch(`/api/radar/bosman?position=${encodeURIComponent(pos)}&league=${encodeURIComponent(lg)}`);
-        const data = await res.json();
-        const list = data.targets || [];
-        badge.textContent = `포착된 타겟 구단 ${list.length}개`;
-        grid.innerHTML = list.map(t => `
-          <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 hover:border-emerald-500/50 transition space-y-1 text-xs">
-            <div class="flex items-center justify-between font-bold text-white">
-              <span>🏟️ ${t.club_name} (${t.league} · ${t.position})</span>
-              <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300">우선순위 ${t.priority_score}점</span>
+    // -------------------------------------------------------------------------
+    // Regulations Vector RAG Search
+    // -------------------------------------------------------------------------
+    async function runInteractiveRagSearch() {
+      const query = document.getElementById('rag-search-input').value.trim();
+      const sType = document.getElementById('rag-search-type').value;
+      const pos = selectedPlayer ? selectedPlayer.position : 'RB';
+      const res = await fetch('/api/rag/search', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query, search_type: sType, position: pos, top_k: 4 })
+      });
+      const data = await res.json();
+      const container = document.getElementById('rag-lab-results');
+
+      if (data.search_type === 'LEGAL_REGULATIONS') {
+        container.innerHTML = (data.results || []).map(r => `
+          <div class="p-3 rounded-lg bg-[#0e1117] border border-white/[0.04] space-y-1">
+            <div class="flex justify-between items-center">
+              <span class="text-xs font-semibold text-white">${r.title}</span>
+              <span class="text-[10px] px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-400 font-mono">
+                유사도: ${r.similarity_score}
+              </span>
             </div>
-            <div class="text-[11px] text-amber-300 font-semibold">⚡ ${t.opportunity_type}</div>
-            <div class="text-[11px] text-slate-300">
-              현 주전: <b>${t.current_starter}</b> (${t.starter_age}세, 만료 ${t.starter_contract_expires}) · 주급 €${(t.starter_weekly_wage_eur || 0).toLocaleString()}
-            </div>
-            <div class="text-[10px] text-sky-300">
-              👔 감독 ${t.manager_name || '-'} (${t.preferred_formation || '-'}): ${t.manager_tactical_requirement || ''}
-            </div>
-            <div class="flex items-center justify-between pt-1 border-t border-slate-800 text-[10px] text-slate-400">
-              <span>이적료 예산 €${((t.max_transfer_fee_budget_eur || 0)/1000000).toFixed(1)}M</span>
-              <span class="text-emerald-400 font-bold">최대 주급 €${(t.max_weekly_wage_offer_eur || 0).toLocaleString()}/주</span>
-            </div>
+            <div class="text-[11px] text-zinc-400">출처: ${r.source_citation} (${r.effective_date})</div>
+            <pre class="text-[11px] text-zinc-300 whitespace-pre-wrap font-sans mt-0.5">${r.content}</pre>
           </div>
         `).join('');
-      } catch (e) {
-        console.error(e);
+      } else {
+        container.innerHTML = (data.results || []).map(r => `
+          <div class="p-3 rounded-lg bg-[#0e1117] border border-white/[0.04] space-y-1">
+            <div class="flex justify-between items-center">
+              <span class="text-xs font-semibold text-white">${r.club_name} (${r.league} · ${r.position})</span>
+              <span class="text-[10px] px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-400 font-mono">
+                유사도: ${r.tactical_similarity_score}
+              </span>
+            </div>
+            <div class="text-xs text-zinc-300">${r.tactical_note}</div>
+          </div>
+        `).join('');
       }
     }
 
-    async function registerCustomClient() {
-      const payload = {
-        name_ko: document.getElementById('cust-name-ko').value.trim(),
-        name: document.getElementById('cust-name-en').value.trim(),
-        position: document.getElementById('cust-pos').value,
-        secondary_positions: document.getElementById('cust-sec-pos').value.trim(),
-        current_club: document.getElementById('cust-club').value.trim(),
-        league: document.getElementById('cust-league').value.trim(),
-        age: parseInt(document.getElementById('cust-age').value || '20', 10),
-        current_league_band: parseInt(document.getElementById('cust-band').value || '2', 10),
-        market_value_eur: parseInt(document.getElementById('cust-val').value || '4500000', 10),
-        weekly_wage_eur: parseInt(document.getElementById('cust-wage').value || '15000', 10),
-        contract_expires: '2027-06-30',
-        nationality: 'South Korea',
-        goals_per90: parseFloat(document.getElementById('cust-g90').value || '0.35'),
-        assists_per90: parseFloat(document.getElementById('cust-a90').value || '0.22'),
-        xg_per90: parseFloat(document.getElementById('cust-g90').value || '0.30') * 0.88,
-        xa_per90: parseFloat(document.getElementById('cust-a90').value || '0.20') * 0.88,
-        progressive_actions_per90: parseFloat(document.getElementById('cust-prog90').value || '6.5'),
-        key_passes_per90: parseFloat(document.getElementById('cust-kp90').value || '1.7'),
-        defensive_duels_won_pct: 57.5,
-        minutes_played: 2580,
-        appearances: 31,
-        intl_match_pct: parseFloat(document.getElementById('cust-intl').value || '45'),
-        continental_minutes_pct: parseFloat(document.getElementById('cust-cont').value || '60'),
-        is_eu_citizen: 0,
-        strengths_summary: document.getElementById('cust-strengths').value.trim(),
-        weaknesses_summary: ''
-      };
+    // =======================================================================
+    // API-Football Precision Features: Injury Verification & Prospect Onboarding
+    // =======================================================================
+    async function runPrecisionMedicalCheck() {
+      const resContainer = document.getElementById('precision-medical-result');
+      if (!resContainer) return;
+
+      const playerName = CURRENT_PLAYER_NAME || document.getElementById('strat-target-name')?.innerText || '손흥민';
+      resContainer.classList.remove('hidden');
+      resContainer.innerHTML = `
+        <div class="flex items-center gap-2 text-xs text-red-300">
+          <svg class="animate-spin h-3.5 w-3.5 text-red-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+          </svg>
+          <span>API-Football 공식 의무 기록 및 부상 데이터 실시간 인출 중... (${playerName})</span>
+        </div>
+      `;
+
       try {
-        const res = await fetch('/api/players/custom', {
+        const resp = await fetch('/api/live/precision-check', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
+          body: JSON.stringify({ player_name: playerName })
         });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.detail || '등록 실패');
-        await loadPlayers();
-        selectPlayer(data.player);
-        alert(`🌟 외부 리그 선수 [${data.player.name_ko} (${data.player.name})] DB 등록 및 선택 완료!\n이제 우측 '전략 생성 & 1차 모의 협상 시작' 버튼을 누르면 유럽 5대 리그 96개 구단·감독과 전술/재정 매칭을 즉시 실행합니다.`);
-      } catch (e) {
-        alert('외부 선수 등록 오류: ' + e);
+        const data = await resp.json();
+        const inj = data.injuries || {};
+        const count = inj.injuries_count || (inj.injuries ? inj.injuries.length : 0);
+        const sourceLabel = inj.source || 'API-Football Official';
+        const isFallback = inj.fallback_used;
+
+        let itemsHtml = '';
+        if (inj.injuries && inj.injuries.length > 0) {
+          itemsHtml = `
+            <div class="mt-2 space-y-1.5 max-h-40 overflow-y-auto pr-1">
+              ${inj.injuries.slice(-6).reverse().map(i => `
+                <div class="p-2 rounded-lg bg-red-950/30 border border-red-500/20 text-xs flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <span class="w-1.5 h-1.5 rounded-full ${i.injury_type === 'Missing Fixture' ? 'bg-red-400' : 'bg-amber-400'}"></span>
+                    <span class="font-semibold text-white">${i.reason}</span>
+                    <span class="text-zinc-400 text-[11px]">(${i.injury_type})</span>
+                  </div>
+                  <span class="text-[11px] text-zinc-400 font-mono">${(i.fixture_date || '').split('T')[0]}</span>
+                </div>
+              `).join('')}
+            </div>
+          `;
+        } else if (inj.summary) {
+          itemsHtml = `<div class="mt-1 text-xs text-zinc-300 leading-relaxed">${inj.summary}</div>`;
+        } else {
+          itemsHtml = `<div class="mt-1 text-xs text-emerald-400 font-medium">✓ 현재 공식 결장 및 부상 의무 기록이 없습니다. (정상 출전 가능)</div>`;
+        }
+
+        resContainer.innerHTML = `
+          <div class="flex items-center justify-between pb-2 border-b border-red-500/20">
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-bold text-red-200">공식 의무 기록 리포트 (Official Medical Status)</span>
+              <span class="text-[10px] px-1.5 py-0.5 rounded ${isFallback ? 'bg-zinc-800 text-zinc-400' : 'bg-red-500/20 text-red-300 font-mono'}">
+                ${sourceLabel}
+              </span>
+            </div>
+            <button onclick="document.getElementById('precision-medical-result').classList.add('hidden')"
+              class="text-[11px] text-zinc-400 hover:text-white">✕ 닫기</button>
+          </div>
+          <div class="pt-1">
+            <div class="text-xs text-zinc-200">
+              <span class="font-semibold text-white">${inj.official_name || playerName}</span>: 총 <span class="font-bold text-red-400">${count}건</span>의 의무 기록 확인
+            </div>
+            ${itemsHtml}
+          </div>
+        `;
+
+        loadQuotaStatus();
+      } catch (err) {
+        resContainer.innerHTML = `
+          <div class="text-xs text-red-400">부상 검증 중 통신 오류가 발생했습니다: ${err.message}</div>
+        `;
       }
     }
+
+    async function onboardExternalProspectUI() {
+      const inputEl = document.getElementById('external-prospect-input');
+      const btnEl = document.getElementById('btn-onboard-prospect');
+      const resEl = document.getElementById('onboard-result-box');
+      if (!inputEl || !resEl) return;
+
+      const playerName = inputEl.value.trim();
+      if (!playerName) {
+        alert('유망주 이름을 입력해 주세요 (예: Seol, Yang Min-Hyeok, Estevao 등).');
+        return;
+      }
+
+      btnEl.disabled = true;
+      btnEl.innerHTML = `
+        <svg class="animate-spin h-3 w-3 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+        </svg>
+        <span>인출 중...</span>
+      `;
+      resEl.classList.remove('hidden');
+      resEl.innerHTML = `<span class="text-zinc-400 text-xs">API-Football 전 세계 1,100개 리그 DB에서 '${playerName}' 공식 프로필 및 2024 실측 스탯 인출 중...</span>`;
+
+      try {
+        const resp = await fetch('/api/prospects/onboard-external', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ player_name: playerName, season: 2024 })
+        });
+        const data = await resp.json();
+
+        if (resp.ok && data.success) {
+          resEl.innerHTML = `
+            <div class="flex items-center gap-3">
+              ${data.photo ? `<img src="${data.photo}" alt="${data.name}" class="w-10 h-10 rounded-full border border-emerald-500/40 object-cover bg-zinc-900" />` : ''}
+              <div class="flex-1">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-white">${data.name} (${data.name_ko})</span>
+                  <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-semibold">${data.league}</span>
+                </div>
+                <div class="text-[11px] text-zinc-300 mt-0.5">
+                  소속: <span class="text-white font-medium">${data.club}</span> · 포지션: ${data.position} · 나이: ${data.age}세 · 국적: ${data.nationality}
+                </div>
+                <div class="text-[10px] text-zinc-400 mt-0.5 font-mono">
+                  실측 출전: ${data.appearances}경기 ${data.minutes}분 (${data.goals}골 ${data.assists}도움, 평점: ${data.rating})
+                </div>
+              </div>
+            </div>
+            <div class="mt-2 text-[11px] text-emerald-400 font-medium">
+              ✓ SQLite DB 및 벡터 스토어 인덱싱 완료! 이제 스카우팅 및 협상 데스크에서 바로 선택할 수 있습니다.
+            </div>
+          `;
+          inputEl.value = '';
+          await loadPlayers();
+          loadQuotaStatus();
+        } else {
+          resEl.innerHTML = `<div class="text-xs text-amber-400">등록 실패: ${data.detail || data.error || '선수 정보를 찾을 수 없습니다.'}</div>`;
+        }
+      } catch (err) {
+        resEl.innerHTML = `<div class="text-xs text-red-400">등록 중 통신 오류 발생: ${err.message}</div>`;
+      } finally {
+        btnEl.disabled = false;
+        btnEl.innerHTML = `<span>등록</span>`;
+      }
+    }
+
+    // Hash change event listener
+    window.addEventListener('hashchange', () => {
+      const hash = window.location.hash.replace('#', '');
+      if (hash && `page-${hash}` !== activePageId) {
+        showPage(`page-${hash}`);
+      }
+    });
 
     window.addEventListener('DOMContentLoaded', initDashboard);
   </script>

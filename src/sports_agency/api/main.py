@@ -23,7 +23,9 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from mcp_server.football_mcp_server import (
+    analyze_career_timing_and_path,
     calculate_psr_and_tax_breakdown,
+    discover_undervalued_prospects,
     get_agency_deep_analytics_overview,
     get_player_complete_data,
     list_agency_managers,
@@ -38,6 +40,12 @@ from sports_agency.live_sync import (
     sync_single_player_via_vertex_grounding,
 )
 from sports_agency.rag.sqlite_vector_store import VECTOR_STORE
+from sports_agency.api_football_client import (
+    get_quota_status,
+    fetch_live_injury_data,
+    fetch_live_transfer_history,
+    onboard_external_prospect,
+)
 
 STATIC_DIR = Path(__file__).resolve().parent / "static"
 
@@ -166,6 +174,12 @@ def serve_dashboard() -> HTMLResponse:
     if not index_file.exists():
         return HTMLResponse("<h1>Dashboard index.html not found</h1>", status_code=404)
     return HTMLResponse(index_file.read_text(encoding="utf-8"))
+
+
+@app.get("/health")
+@app.get("/api/health")
+def health_check() -> dict[str, str]:
+    return {"status": "ok", "version": "3.0.0"}
 
 
 @app.get("/api/status")
@@ -380,6 +394,113 @@ def api_search_sqlite_vector_db(req: RagSearchRequest) -> dict[str, Any]:
             "embedding_model": CONFIG.primary_embedding_model,
             "results": chunks,
         }
+
+
+@app.get("/api/career/timing")
+def api_analyze_career_timing(
+    player_name: str,
+    target_league: str = "ALL",
+    min_starter_pct: float = 60.0,
+) -> dict[str, Any]:
+    """[Career Agent Endpoint] Evaluates contract expiration leverage, availability, and determines optimal career pathway (Immediate Transfer vs Bosman Hold vs Loan)."""
+    res = analyze_career_timing_and_path(
+        player_name=player_name,
+        target_league_preference=target_league,
+        min_starter_guarantee_pct=min_starter_pct,
+    )
+    if "error" in res:
+        raise HTTPException(status_code=404, detail=res["error"])
+    return res
+
+
+@app.get("/api/scout/prospects")
+def api_discover_prospects(
+    position: str = "ALL",
+    max_age: int = 23,
+    min_percentile: float = 75.0,
+    max_market_value_eur: int = 15000000,
+    limit: int = 12,
+) -> dict[str, Any]:
+    """[Scouting Agent Endpoint] Scans the 2,662 player database for high-performing undervalued prospects."""
+    prospects = discover_undervalued_prospects(
+        target_position=position,
+        max_age=max_age,
+        min_percentile=min_percentile,
+        max_market_value_eur=max_market_value_eur,
+        limit=limit,
+    )
+    return {"count": len(prospects), "prospects": prospects}
+
+
+class PrecisionCheckRequest(BaseModel):
+    player_name: str
+    team_name: str = ""
+    season: int = 2024
+
+
+class ProspectOnboardRequest(BaseModel):
+    player_name: str
+    team_name: str = ""
+    season: int = 2024
+
+
+@app.get("/api/quota/status")
+def api_get_quota_status() -> dict[str, Any]:
+    """Returns real-time daily quota usage for API-Football (100 req/day limit) & fallback status."""
+    return get_quota_status()
+
+
+@app.post("/api/live/precision-check")
+def api_live_precision_check(req: PrecisionCheckRequest) -> dict[str, Any]:
+    """
+    On-Demand Precision Strike for official player injuries and transfers.
+    Uses API-Football (max 100 calls/day), and automatically falls back to
+    Football-Data.org / Google Search Grounding when quota is exhausted or key is absent.
+    """
+    injuries = fetch_live_injury_data(player_name=req.player_name, team_name=req.team_name, season=req.season)
+    transfers = fetch_live_transfer_history(player_name=req.player_name)
+    quota = get_quota_status()
+    return {
+        "player_name": req.player_name,
+        "team_name": req.team_name,
+        "injuries": injuries,
+        "transfers": transfers,
+        "quota": quota,
+    }
+
+
+@app.post("/api/prospects/onboard-external")
+def api_onboard_external_prospect(req: ProspectOnboardRequest) -> dict[str, Any]:
+    """
+    Onboards a prospect outside the Big 5 Leagues (K League, J League, South America, Eredivisie, etc.)
+    using API-Football real-time data, persisting into SQLite agency_desk.db and generating vector embeddings.
+    """
+    res = onboard_external_prospect(
+        player_name=req.player_name,
+        team_name=req.team_name,
+        season=req.season,
+    )
+    if not res.get("success"):
+        raise HTTPException(status_code=400, detail=res.get("error", "Onboarding failed"))
+    return res
+
+
+@app.get("/api/outputs/{player_folder}/{filename}")
+def download_nested_output_markdown(player_folder: str, filename: str) -> FileResponse:
+    safe_folder = Path(player_folder).name
+    safe_file = Path(filename).name
+    target_path = CONFIG.output_dir / safe_folder / safe_file
+    if not target_path.exists():
+        # Fallback to root outputs dir
+        root_path = CONFIG.output_dir / safe_file
+        if root_path.exists():
+            return FileResponse(path=str(root_path), media_type="text/markdown; charset=utf-8", filename=safe_file)
+        raise HTTPException(status_code=404, detail=f"Output file {safe_folder}/{safe_file} not found")
+    return FileResponse(
+        path=str(target_path),
+        media_type="text/markdown; charset=utf-8",
+        filename=safe_file,
+    )
 
 
 @app.get("/api/outputs/{filename}")
