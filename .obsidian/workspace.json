@@ -190,6 +190,7 @@
   },
   "active": "bf761550caf7c1d6",
   "lastOpenFiles": [
+    "scratch/inspect_calc_22_return.py",
     "scratch/inspect_calc_22.py",
     "scratch/inspect_hud_update.py",
     "scratch/find_missing_ids.py",
@@ -200,7 +201,6 @@
     "scratch/check_element_ids.py",
     "scratch/diagnose_render_pitch_3.py",
     "scratch/diagnose_render_pitch_2.py",
-    "scratch/diagnose_render_pitch.py",
     "outputs/recruitment_pitch_Arda_Güler.md",
     "outputs/recruitment_pitch_Pep_Guardiola.md",
     "outputs/recruitment_pitch_Adrien_Thomasson.md",
