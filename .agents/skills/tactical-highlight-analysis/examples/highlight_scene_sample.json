@@ -1,0 +1,52 @@
+{
+  "match_id": "MCI_ARS_2024",
+  "target_player": "Erling Haaland",
+  "highlight_chapters": [
+    {
+      "timestamp": "32:15",
+      "icon": "⚽",
+      "title": "[Erling Haaland] 시그니처 박스 타점 결정적 득점",
+      "xG": 0.38,
+      "xA": null,
+      "duration_seconds": 18.5,
+      "playback_speed": 0.9,
+      "half_space_zone": "Zone 4 (Right Half-Space)",
+      "sequence": [
+        "1. Rodri recovers loose ball at midfield",
+        "2. De Bruyne penetrates right half-space with continuous carry",
+        "3. Bernardo Silva makes decoy overlap run pulling left-back",
+        "4. Haaland curves run between center-backs and finishes first-time"
+      ]
+    },
+    {
+      "timestamp": "64:40",
+      "icon": "🎯",
+      "title": "[Erling Haaland] 35m 킬러 스루패스 찬스 메이킹",
+      "xG": null,
+      "xA": 0.24,
+      "duration_seconds": 16.0,
+      "playback_speed": 0.9,
+      "half_space_zone": "Zone 3 to Zone 2",
+      "sequence": [
+        "1. Haaland drops deep to link up, dragging defender",
+        "2. First-time outside-foot through ball into left half-space",
+        "3. Winger penetrates behind defensive line for shot"
+      ]
+    },
+    {
+      "timestamp": "81:20",
+      "icon": "🛡️",
+      "title": "[Erling Haaland] 전방 압박 볼 탈환 & 40m 전진 캐리 전개",
+      "xG": 0.15,
+      "xA": 0.18,
+      "duration_seconds": 21.0,
+      "playback_speed": 0.85,
+      "half_space_zone": "Zone 2 to Zone 3",
+      "sequence": [
+        "1. Coordinated front-two pressing traps center-back near touchline",
+        "2. Ball intercepted; Haaland executes 40m direct forward carry",
+        "3. Square pass across six-yard box creating high-danger scoring chance"
+      ]
+    }
+  ]
+}

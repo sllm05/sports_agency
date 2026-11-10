@@ -1983,19 +1983,15 @@ def generate_client_recruitment_pitch_deck(
     <rect x="55" y="{max(20, round(105 - (curr_mv / 1000000) * 0.28))}" width="42" height="{round((curr_mv / 1000000) * 0.28)}" fill="#475569" rx="4" />
     <text x="76" y="{max(16, round(100 - (curr_mv / 1000000) * 0.28))}" text-anchor="middle" fill="#94a3b8" font-size="10" font-weight="bold">€{round(curr_mv/1000000)}M</text>
     <text x="76" y="120" text-anchor="middle" fill="#64748b" font-size="10">현재(Y0)</text>
-
     <rect x="145" y="{max(20, round(105 - ((curr_mv * 1.25) / 1000000) * 0.28))}" width="42" height="{round(((curr_mv * 1.25) / 1000000) * 0.28)}" fill="#0284c7" rx="4" />
     <text x="166" y="{max(16, round(100 - ((curr_mv * 1.25) / 1000000) * 0.28))}" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="bold">€{round((curr_mv*1.25)/1000000)}M</text>
     <text x="166" y="120" text-anchor="middle" fill="#64748b" font-size="10">Y1 (재계약)</text>
-
     <rect x="235" y="{max(20, round(105 - ((curr_mv * 1.55) / 1000000) * 0.28))}" width="42" height="{round(((curr_mv * 1.55) / 1000000) * 0.28)}" fill="#0284c7" rx="4" />
     <text x="256" y="{max(16, round(100 - ((curr_mv * 1.55) / 1000000) * 0.28))}" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="bold">€{round((curr_mv*1.55)/1000000)}M</text>
     <text x="256" y="120" text-anchor="middle" fill="#64748b" font-size="10">Y2 (스폰서)</text>
-
     <rect x="325" y="{max(20, round(105 - ((curr_mv * 1.85) / 1000000) * 0.28))}" width="42" height="{round(((curr_mv * 1.85) / 1000000) * 0.28)}" fill="#059669" rx="4" />
     <text x="346" y="{max(16, round(100 - ((curr_mv * 1.85) / 1000000) * 0.28))}" text-anchor="middle" fill="#34d399" font-size="10" font-weight="bold">€{round((curr_mv*1.85)/1000000)}M</text>
     <text x="346" y="120" text-anchor="middle" fill="#64748b" font-size="10">Y3 (메가딜)</text>
-
     <rect x="415" y="{max(20, round(105 - (proj_5yr / 1000000) * 0.28))}" width="42" height="{round((proj_5yr / 1000000) * 0.28)}" fill="#10b981" rx="4" />
     <text x="436" y="{max(16, round(100 - (proj_5yr / 1000000) * 0.28))}" text-anchor="middle" fill="#10b981" font-size="10" font-weight="bold">€{round(proj_5yr/1000000)}M</text>
     <text x="436" y="120" text-anchor="middle" fill="#10b981" font-size="10" font-weight="bold">Y5 (정상등극)</text>
@@ -2102,6 +2098,380 @@ AGSM은 런던, 마드리드, 뮌헨, 서울 지사의 글로벌 디렉터 네�
         "filename": output_filename,
         "file_path": str(output_path),
         "markdown_content": md_content,
+    }
+
+
+@mcp.tool()
+def generate_client_recruitment_deal_memo(
+    target_id: int,
+    target_type: str = "PLAYER"
+) -> dict[str, Any]:
+    """
+    [Pillar 2: Client Recruitment Deal Memorandum]
+    Synthesizes an institutional-grade investment & signing committee memorandum (사내 전속 영입 심사 및 계약 결재 보고서)
+    for acquiring a player or manager into Antigravity Sports active management.
+    Includes:
+    1. 6-Axis Recruitment Radar Scores (Potential, Stardom, Financial ROI, Durability, GBE/Regulatory Mobility, Camp Stability & FIFA Compliance)
+    2. Target Overview & Contract Status (Current Agency, Contract Expiration, D-Day status)
+    3. Upside Investment Thesis (3 strategic drivers)
+    4. Downside Risk Matrix & Hedging Mitigation
+    5. 5-Year Agency Cash Flow Projection (Sponsorship, Wage Renewal, Mega Transfer Commission, etc.)
+    6. FIFA FFAR Article 12/13 Legal Compliance Verification
+    7. Executive Committee Recommendation & Default Sign-off metadata
+    """
+    conn = _get_conn()
+    cur = conn.cursor()
+
+    cur.execute(
+        "SELECT * FROM agency_recruitment_targets WHERE target_id = ? AND target_type = ?",
+        (target_id, target_type)
+    )
+    target_row = cur.fetchone()
+    target = dict(target_row) if target_row else None
+
+    player_data = None
+    manager_data = None
+    tendencies_data = None
+    stats_data = None
+
+    if target_type == "PLAYER":
+        cur.execute("SELECT * FROM players WHERE player_id = ?", (target_id,))
+        p_row = cur.fetchone()
+        if p_row:
+            player_data = dict(p_row)
+        cur.execute("SELECT * FROM player_stats WHERE player_id = ?", (target_id,))
+        s_row = cur.fetchone()
+        if s_row:
+            stats_data = dict(s_row)
+        cur.execute("SELECT * FROM player_playstyle_and_tendencies WHERE player_id = ?", (target_id,))
+        tend_row = cur.fetchone()
+        if tend_row:
+            tendencies_data = dict(tend_row)
+    else:
+        cur.execute("SELECT * FROM managers WHERE manager_id = ?", (target_id,))
+        m_row = cur.fetchone()
+        if m_row:
+            manager_data = dict(m_row)
+
+    conn.close()
+
+    if not target:
+        if player_data:
+            target = {
+                "target_id": target_id,
+                "target_type": "PLAYER",
+                "name": player_data["name"],
+                "name_ko": player_data.get("name_ko") or player_data["name"],
+                "category": "SCOUTED_TARGET",
+                "current_agency": "미상 / 가족 직할 대리",
+                "agency_contract_expires": "2025-06-30",
+                "potential_ceiling_score": 92.0,
+                "stardom_commercial_score": 90.0,
+                "agency_fit_score": 92.0,
+                "projected_5yr_valuation_eur": int((player_data.get("market_value_eur") or 50000000) * 1.5),
+                "projected_agency_roi_eur": int((player_data.get("market_value_eur") or 50000000) * 0.08),
+                "recruitment_pitch_rationale": "잠재력과 경기력을 바탕으로 에이전시 전속 영입 검토 대상입니다."
+            }
+        elif manager_data:
+            target = {
+                "target_id": target_id,
+                "target_type": "MANAGER",
+                "name": manager_data["name"],
+                "name_ko": manager_data.get("name_ko") or manager_data["name"],
+                "category": "FA_LEGEND",
+                "current_agency": "독립 대리인 체제",
+                "agency_contract_expires": "2025-06-30",
+                "potential_ceiling_score": 95.0,
+                "stardom_commercial_score": 95.0,
+                "agency_fit_score": 95.0,
+                "projected_5yr_valuation_eur": 80000000,
+                "projected_agency_roi_eur": 6000000,
+                "recruitment_pitch_rationale": "글로벌 명장 프로젝트 총괄 대행 대상입니다."
+            }
+        else:
+            return {"error": f"Target ID {target_id} ({target_type}) not found in database"}
+
+    # Basic fields
+    name = target.get("name", "Unknown")
+    name_ko = target.get("name_ko") or name
+    category = target.get("category", "SCOUTED_TARGET")
+    current_agency = target.get("current_agency") or "미상 / 가족 직할 대리"
+    agency_contract_expires = target.get("agency_contract_expires") or "2025-06-30"
+
+    current_club = (player_data.get("current_club") if player_data else (manager_data.get("current_club") if manager_data else "Top Club"))
+    league = (player_data.get("league") if player_data else (manager_data.get("league") if manager_data else "글로벌 리그"))
+    position = (player_data.get("position") if player_data else "MGR")
+    age = (player_data.get("age") if player_data else (manager_data.get("age") if manager_data else 25))
+    nationality = (player_data.get("nationality") if player_data else (manager_data.get("nationality") if manager_data else "Unknown"))
+    market_value_eur = (player_data.get("market_value_eur") if player_data else 0)
+    weekly_wage_eur = (player_data.get("weekly_wage_eur") if player_data else (manager_data.get("weekly_wage_eur") if manager_data else 0))
+
+    # Category friendly label
+    category_map = {
+        "FAMILY_REPRESENTED": "가족 대리인 체제 / 글로벌 듀얼 파트너십 유치",
+        "EXPIRING_D6": "대리인 계약 만료 임박 (D-6M 이내 합법 교섭)",
+        "MEGA_TAKEOVER": "메가 에이전시 이관 대상 / 바이아웃 프로젝트",
+        "FA_LEGEND": "FA 월드클래스 명장 / 자유계약 직영 대행",
+        "STEPUP_PROSPECTS": "차세대 특급 유망주 / 메가스텝업 타깃",
+        "SCOUTED_TARGET": "자체 스카우팅 타깃"
+    }
+    category_label = category_map.get(category, "전속 영입 대상")
+
+    # 1. 6-Axis Pillar Scores
+    potential_score = float(target.get("potential_ceiling_score") or 92.0)
+    stardom_score = float(target.get("stardom_commercial_score") or 90.0)
+
+    proj_roi = int(target.get("projected_agency_roi_eur") or 5000000)
+    if proj_roi >= 15000000:
+        roi_score = 98.0
+    elif proj_roi >= 10000000:
+        roi_score = 95.0
+    elif proj_roi >= 7000000:
+        roi_score = 92.0
+    elif proj_roi >= 4000000:
+        roi_score = 88.0
+    else:
+        roi_score = 84.0
+
+    if target_type == "PLAYER":
+        avail_pct = float(tendencies_data.get("minutes_availability_pct") or 88.0) if tendencies_data else 88.0
+        if player_data and player_data.get("is_injured") == 1:
+            durability_score = max(60.0, avail_pct - 15.0)
+        else:
+            durability_score = min(99.0, max(70.0, avail_pct))
+
+        intl_pct = float(player_data.get("intl_match_pct") or 0.0) if player_data else 0.0
+        is_eu = int(player_data.get("is_eu_citizen") or 0) if player_data else 0
+        if intl_pct >= 70.0 or is_eu == 1:
+            regulatory_score = 98.0
+        elif is_eu == 1 or intl_pct >= 40.0:
+            regulatory_score = 94.0
+        else:
+            regulatory_score = 84.0
+    else:
+        durability_score = 94.0
+        regulatory_score = 96.0
+
+    if category == "FA_LEGEND":
+        camp_stability_score = 98.0
+    elif category == "EXPIRING_D6":
+        camp_stability_score = 95.0
+    elif category == "STEPUP_PROSPECTS":
+        camp_stability_score = 93.0
+    elif category == "FAMILY_REPRESENTED":
+        camp_stability_score = 89.0
+    elif category == "MEGA_TAKEOVER":
+        camp_stability_score = 88.0
+    else:
+        camp_stability_score = 91.0
+
+    radar_scores = [
+        round(potential_score, 1),
+        round(stardom_score, 1),
+        round(roi_score, 1),
+        round(durability_score, 1),
+        round(regulatory_score, 1),
+        round(camp_stability_score, 1),
+    ]
+    avg_score = sum(radar_scores) / len(radar_scores)
+    overall_grade = "S+" if avg_score >= 94.0 else ("S" if avg_score >= 90.0 else "A+")
+
+    radar_axes = [
+        {
+            "axis": "온피치 포텐셜",
+            "score": round(potential_score, 1),
+            "benchmark": 90.0,
+            "metric_detail": f"포텐셜 지수 {potential_score:.0f}점 / 전술 적합도 {target.get('agency_fit_score', 90):.0f}점",
+            "desc": "축구적 잠재 한계치, 현재 경기력 및 유럽 빅클럽 핵심 전술 적합성"
+        },
+        {
+            "axis": "글로벌 스타성",
+            "score": round(stardom_score, 1),
+            "benchmark": 88.0,
+            "metric_detail": f"상업 마케팅 지수 {stardom_score:.0f}점 / 글로벌 미디어 영향력 S급",
+            "desc": "글로벌 브랜드 협찬, 소셜 미디어 파급력 및 아시아/북미 시장 초상권 상업화 역량"
+        },
+        {
+            "axis": "재무 ROI",
+            "score": round(roi_score, 1),
+            "benchmark": 85.0,
+            "metric_detail": f"5개년 기대수익 €{round(proj_roi / 1000000, 1)}M (예상 가치 €{round((target.get('projected_5yr_valuation_eur') or 50000000)/1000000, 0):.0f}M)",
+            "desc": "5개년 이적료/주급/광고 수수료 창출력 대비 영입 유치 투자 비용 회수율"
+        },
+        {
+            "axis": "신체 내구성",
+            "score": round(durability_score, 1),
+            "benchmark": 85.0,
+            "metric_detail": f"경기 출전 가용률 {durability_score:.1f}% " + ("(부상 주의)" if player_data and player_data.get("is_injured") == 1 else "(정상 가용)"),
+            "desc": "선발 소화력, 리그 분당 가용률 및 고질적 근육/관절 메디컬 리스크 검증"
+        },
+        {
+            "axis": "규제·GBE",
+            "score": round(regulatory_score, 1),
+            "benchmark": 85.0,
+            "metric_detail": f"GBE 요건: " + ("EPL 15pt Auto-Pass 충족" if regulatory_score >= 95.0 else "포인트 심사 대상") + f" / EU권역 이동성 자유",
+            "desc": "영국 FA GBE 워크퍼밋 15점 자동 통과 요건 및 EU 여권/비EU 쿼터 제약 해소"
+        },
+        {
+            "axis": "캠프 안정성",
+            "score": round(camp_stability_score, 1),
+            "benchmark": 88.0,
+            "metric_detail": f"현 대리인 만료: {agency_contract_expires} (FIFA 탬퍼링 저촉 리스크 0%)",
+            "desc": "기존 대리인 계약 만료 D-Day 확인, 가족/캠프 의사결정 안정성 및 분쟁 방지"
+        },
+    ]
+
+    # 2. 5-Year Agency Cash Flow Projection
+    y1_rev = round(proj_roi * 0.12)
+    y2_rev = round(proj_roi * 0.18)
+    y3_rev = round(proj_roi * 0.42)
+    y4_rev = round(proj_roi * 0.14)
+    y5_rev = round(proj_roi * 0.14)
+
+    cash_flow = [
+        {
+            "year": "Y1 (2025)",
+            "milestone": "전속 계약 체결 & 글로벌 상업 브랜드 스폰서십 유치",
+            "revenue_eur": y1_rev,
+            "revenue_str": f"€{round(y1_rev / 1000000, 2)}M",
+            "category": "스폰서십·체결 수수료"
+        },
+        {
+            "year": "Y2 (2026)",
+            "milestone": "소속 구단 연장 재계약 주급 인상 및 인센티브 보전 (3~5%)",
+            "revenue_eur": y2_rev,
+            "revenue_str": f"€{round(y2_rev / 1000000, 2)}M",
+            "category": "주급 수수료"
+        },
+        {
+            "year": "Y3 (2027)",
+            "milestone": "메가 클럽 바이아웃 발동 / 레코드 이적료 수수료 (5.0%)",
+            "revenue_eur": y3_rev,
+            "revenue_str": f"€{round(y3_rev / 1000000, 2)}M",
+            "category": "이적료 수수료"
+        },
+        {
+            "year": "Y4 (2028)",
+            "milestone": "UCL/리그 우승 인센티브 & 글로벌 초상권 라이선싱 확대",
+            "revenue_eur": y4_rev,
+            "revenue_str": f"€{round(y4_rev / 1000000, 2)}M",
+            "category": "초상권·보너스"
+        },
+        {
+            "year": "Y5 (2029)",
+            "milestone": "최정상 연장 재계약 피크 or 2차 스텝업 이적 수수료",
+            "revenue_eur": y5_rev,
+            "revenue_str": f"€{round(y5_rev / 1000000, 2)}M",
+            "category": "재계약·롱런"
+        },
+    ]
+
+    # 3. Upside Investment Thesis
+    upside_theses = [
+        {
+            "title": "압도적 재무 창출력 & 수수료 레버리지",
+            "detail": f"5개년 예상 시장가치 €{round((target.get('projected_5yr_valuation_eur') or 50000000)/1000000, 0):.0f}M 달성 시 에이전시 누적 기대수익 총 €{round(proj_roi / 1000000, 1)}M를 창출하는 최상급 코어 자산."
+        },
+        {
+            "title": "초상권 및 글로벌 상업 파트너십 독점화",
+            "detail": "선수의 글로벌 인지도를 바탕으로 아시아 및 북미 권역 엔도스먼트, 프리미엄 브랜드 앰버서더십을 단독 대행하여 비경기적 부가가치 극대화."
+        },
+        {
+            "title": "유럽 빅클럽 이적 및 바이아웃 협상 우위",
+            "detail": "선수의 전술적 희소성과 리그 최상위 경기력을 지렛대 삼아 구단과의 연봉 재협상 및 빅클럽 이적 시 유리한 바이아웃 구조 사전 확보."
+        },
+    ]
+
+    # 4. Downside Risk Matrix & Mitigation
+    durability_note = (tendencies_data.get("durability_and_availability_note") if tendencies_data else "") or "시즌 선발 출전율 및 경기 소화력 양호"
+    downside_risks = [
+        {
+            "risk": "기존 대리인 계약 중복 및 FIFA 탬퍼링 분쟁 리스크",
+            "mitigation": f"현 대리인({current_agency})과의 계약 만료일({agency_contract_expires})을 엄격 준수하고, 만료 직후 공식 발효되는 조건부 사전 계약(Conditional Representation Agreement)을 작성하여 FIFA FFAR 분쟁 완전 차단."
+        },
+        {
+            "risk": "신체 피로도 및 시즌 메디컬/부상 결장 리스크",
+            "mitigation": f"{durability_note[:80]}... 등에 대응하여 출전 수당 연동 인센티브(Pay-as-you-play) 구조를 적용하고 사내 전담 스포츠 사이언스/피지오 팀을 즉각 배속."
+        },
+        {
+            "risk": "FIFA 규정 및 법정 수수료 요율 상한 준수",
+            "mitigation": "FIFA FFAR 제12조(최장 24개월 한도, 자동 연장 무효) 및 제13조(선수 연봉 20만 달러 초과 시 3.0%, 이하 5.0% 상한)를 계약서 표준 약관에 명시하여 규제 리스크 원천 배제."
+        },
+    ]
+
+    # 5. FIFA FFAR Compliance Checklist
+    fifa_compliance = [
+        {
+            "rule": "FIFA FFAR 제12조 (계약 기간 한도)",
+            "status": "COMPLIANT",
+            "badge": "준수 완료 (24M)",
+            "desc": "전속 대리 계약 기간은 최대 24개월로 엄격 제한되며 자동 연장 조항은 원천 배제됩니다."
+        },
+        {
+            "rule": "FIFA FFAR 제13조 (수수료 상한 요율)",
+            "status": "COMPLIANT",
+            "badge": "준수 완료 (3~5%)",
+            "desc": "선수 보수 20만 달러 이하 5.0%, 초과분 3.0% 법정 서비스 피 상한을 엄격 적용합니다."
+        },
+        {
+            "rule": "FIFA 윤리 규정 (사전 탬퍼링 방지)",
+            "status": "VERIFIED",
+            "badge": "검증 완료 (D-Day 확인)",
+            "desc": f"기존 대리인({current_agency}) 계약 만료일({agency_contract_expires})을 확인하고 합법적 교섭 절차를 준수합니다."
+        },
+        {
+            "rule": "이해상충 방지 (Dual Representation 금지)",
+            "status": "CLEARED",
+            "badge": "검증 완료 (단독 대리)",
+            "desc": "구단과 선수를 동시 대리하는 쌍방 대리를 전면 금지하고 선수 단독 대리인으로만 수임합니다."
+        },
+    ]
+
+    # 6. Committee Sign-off Metadata
+    executive_signoff = {
+        "committee_status": "APPROVED_FOR_SIGNING",
+        "committee_recommendation": f"[{name_ko}] 전속 영입 심사 가결 — 대표 파트너 최종 서명 및 체결 권고",
+        "default_lead_agent": "김대표 수석 파트너 (FIFA Licensed Agent)",
+        "agent_license_id": "FA-2024-8841",
+        "recommended_commission_pct": 5.0,
+        "contract_term_months": 24,
+        "effective_date": "2025-02-01",
+        "expiry_date": "2027-01-31",
+    }
+
+    log_work_event("MCP_DEAL_MEMO", f"Generated Recruitment Deal Memo for {name} ({target_type}): Overall Grade {overall_grade}")
+
+    return {
+        "status": "success",
+        "target_id": target_id,
+        "target_type": target_type,
+        "name": name,
+        "name_ko": name_ko,
+        "current_club": current_club,
+        "league": league,
+        "position": position,
+        "age": age,
+        "nationality": nationality,
+        "market_value_eur": market_value_eur,
+        "weekly_wage_eur": weekly_wage_eur,
+        "category": category,
+        "category_label": category_label,
+        "current_agency": current_agency,
+        "agency_contract_expires": agency_contract_expires,
+        "overall_grade": overall_grade,
+        "radar_data": {
+            "labels": [ax["axis"] for ax in radar_axes],
+            "scores": [ax["score"] for ax in radar_axes],
+            "benchmarks": [ax["benchmark"] for ax in radar_axes],
+        },
+        "radar_axes": radar_axes,
+        "cash_flow": cash_flow,
+        "total_projected_roi_eur": proj_roi,
+        "projected_5yr_valuation_eur": target.get("projected_5yr_valuation_eur") or 50000000,
+        "upside_theses": upside_theses,
+        "downside_risks": downside_risks,
+        "fifa_compliance": fifa_compliance,
+        "executive_signoff": executive_signoff,
     }
 
 
@@ -2463,6 +2833,349 @@ def sign_client_to_new_club(
 
 
 @mcp.tool()
+def simulate_client_club_renewal_pipeline(
+    client_id: int,
+    client_type: str = "PLAYER",
+    requested_weekly_wage_eur: int = 120000,
+    contract_years: int = 3,
+    requested_buyout_eur: int | None = None,
+    signing_bonus_eur: int = 0,
+    action: str = "EVALUATE",  # 'EVALUATE', 'CONFIRM_DIRECT', 'ACCEPT_COUNTER'
+) -> dict[str, Any]:
+    """
+    [Institutional Contract Renewal Pipeline]
+    Replaces one-click renewal with realistic Sporting Director & PSR Headroom audit:
+    1. Evaluates requested wage hike % and club PSR/FFP headroom impact.
+    2. Sporting Director generates an official decision:
+       - 'ACCEPTED_DIRECTLY': Wage hike <= 22%, immediate sign-off.
+       - 'COUNTER_OFFER': Wage hike 22%~55%, club counters with adjusted base wage + performance incentives.
+       - 'PSR_LIMIT_WARNING': Wage hike > 55%, exceeds squad wage structure; maximum allowable cap counter.
+    3. When action is 'CONFIRM_DIRECT' or 'ACCEPT_COUNTER', executes formal Addendum and updates DB.
+    """
+    conn = _get_conn()
+    cur = conn.cursor()
+
+    if client_type == "PLAYER":
+        cur.execute(
+            """
+            SELECT p.name, p.name_ko, p.current_club, p.league, p.weekly_wage_eur, p.market_value_eur,
+                   p.estimated_buyout_eur, COALESCE(s.pos_percentile, 75) as pos_percentile
+            FROM players p
+            LEFT JOIN player_stats s ON p.player_id = s.player_id
+            WHERE p.player_id = ?
+            """,
+            (client_id,)
+        )
+    else:
+        cur.execute("SELECT name, name_ko, current_club, league, weekly_wage_eur, estimated_buyout_eur, points_per_game as pos_percentile FROM managers WHERE manager_id = ?", (client_id,))
+
+    row = cur.fetchone()
+    if not row:
+        conn.close()
+        return {"error": f"Client ID {client_id} ({client_type}) not found"}
+
+    client = dict(row)
+    conn.close()
+
+    name = client["name"]
+    name_ko = client.get("name_ko") or name
+    club = client["current_club"]
+    curr_wage = client["weekly_wage_eur"] or 50000
+    mv = client.get("market_value_eur") or 30000000
+
+    wage_delta = requested_weekly_wage_eur - curr_wage
+    wage_increase_pct = round((wage_delta / max(1, curr_wage)) * 100, 1)
+    annual_cost_delta = wage_delta * 52
+
+    elite_clubs = {
+        "Real Madrid CF", "FC Barcelona", "Manchester City FC", "Arsenal FC", "Liverpool FC",
+        "FC Bayern München", "Paris Saint-Germain FC", "Chelsea FC", "Manchester United FC",
+        "Juventus FC", "FC Internazionale Milano", "Club Atlético de Madrid", "Tottenham Hotspur FC"
+    }
+    is_elite = club in elite_clubs
+    psr_headroom_eur = 65000000 if is_elite else 18000000
+    headroom_usage_pct = round((annual_cost_delta / max(1, psr_headroom_eur)) * 100, 1)
+
+    if wage_increase_pct <= 22.0:
+        decision = "ACCEPTED_DIRECTLY"
+        decision_label = "✅ 구단 단장 원안 승인 (Accepted Directly)"
+        status_msg = f"{club} 스포츠 디렉터가 연봉 {wage_increase_pct:+}% 인상 요구를 타당한 핵심 전력 대우로 판단하여 즉시 승인했습니다."
+        agreed_wage = requested_weekly_wage_eur
+        agreed_buyout = requested_buyout_eur or client.get("estimated_buyout_eur") or (mv * 2)
+        agreed_bonus = signing_bonus_eur
+        counter_offer = None
+    elif wage_increase_pct <= 55.0:
+        decision = "COUNTER_OFFER"
+        decision_label = "⚖️ 구단 디렉터 역제안 제출 (Counter-Offer Required)"
+        offered_base = round(curr_wage + wage_delta * 0.65)
+        offered_bonus = round(offered_base * 0.12)
+        demanded_buyout = round(max(mv * 1.5, (requested_buyout_eur or (mv * 2)) * 1.15))
+        status_msg = f"{club} 재정 위원회가 PSR 급여 총액 한도를 이유로 기본 주급 €{offered_base:,} + 경기당 성과 수당 €{offered_bonus:,} 조건의 수정 역제안을 송부했습니다."
+        counter_offer = {
+            "offered_weekly_wage_eur": offered_base,
+            "performance_bonus_per_match": offered_bonus,
+            "demanded_buyout_eur": demanded_buyout,
+            "contract_years": contract_years,
+            "incentive_description": "선발 출전 시 €10,000 / 클린시트·공격포인트 시 €15,000 인센티브 패키지"
+        }
+        agreed_wage = offered_base
+        agreed_buyout = demanded_buyout
+        agreed_bonus = round(signing_bonus_eur * 0.7)
+    else:
+        decision = "PSR_LIMIT_WARNING"
+        decision_label = "⚠️ 급여 상한선 초과 역제안 (Salary Cap Warning)"
+        offered_base = round(curr_wage * 1.35)
+        demanded_buyout = round(mv * 2.2)
+        status_msg = f"요청 인상폭({wage_increase_pct:+}% / 연간 €{annual_cost_delta:,} 증가)이 {club}의 내부 급여 체계를 초과합니다. 최고 상한 주급 €{offered_base:,} 및 바이아웃 €{demanded_buyout:,} 상향안으로만 재계약이 가능합니다."
+        counter_offer = {
+            "offered_weekly_wage_eur": offered_base,
+            "performance_bonus_per_match": round(offered_base * 0.2),
+            "demanded_buyout_eur": demanded_buyout,
+            "contract_years": min(contract_years, 3),
+            "incentive_description": "구단 내 최고 상한선(Tier 1 Cap) 적용 및 성과급 비중 극대화"
+        }
+        agreed_wage = offered_base
+        agreed_buyout = demanded_buyout
+        agreed_bonus = 0
+
+    if action == "CONFIRM_DIRECT":
+        if decision != "ACCEPTED_DIRECTLY":
+            return {"error": "구단이 원안을 승인하지 않았습니다. 역제안을 검토하거나 수락하십시오."}
+        return negotiate_client_club_renewal(
+            client_id=client_id,
+            client_type=client_type,
+            new_weekly_wage_eur=agreed_wage,
+            contract_years=contract_years,
+            new_buyout_eur=agreed_buyout,
+            signing_bonus_eur=agreed_bonus
+        )
+    elif action == "ACCEPT_COUNTER":
+        if not counter_offer:
+            return {"error": "수락할 구단 역제안이 존재하지 않습니다."}
+        return negotiate_client_club_renewal(
+            client_id=client_id,
+            client_type=client_type,
+            new_weekly_wage_eur=counter_offer["offered_weekly_wage_eur"],
+            contract_years=counter_offer["contract_years"],
+            new_buyout_eur=counter_offer["demanded_buyout_eur"],
+            signing_bonus_eur=round(signing_bonus_eur * 0.5)
+        )
+
+    return {
+        "status": "evaluated",
+        "client_id": client_id,
+        "client_name": name,
+        "client_name_ko": name_ko,
+        "club": club,
+        "current_weekly_wage_eur": curr_wage,
+        "requested_weekly_wage_eur": requested_weekly_wage_eur,
+        "wage_increase_pct": wage_increase_pct,
+        "annual_cost_delta_eur": annual_cost_delta,
+        "club_psr_headroom_eur": psr_headroom_eur,
+        "headroom_usage_pct": headroom_usage_pct,
+        "decision": decision,
+        "decision_label": decision_label,
+        "status_message": status_msg,
+        "counter_offer": counter_offer,
+        "contract_years": contract_years,
+        "requested_buyout_eur": requested_buyout_eur,
+        "signing_bonus_eur": signing_bonus_eur,
+    }
+
+
+@mcp.tool()
+def simulate_client_club_transfer_pipeline(
+    client_id: int,
+    client_type: str = "PLAYER",
+    destination_club: str = "Tottenham Hotspur FC",
+    destination_league: str = "Premier League",
+    offered_transfer_fee_eur: int = 40000000,
+    offered_weekly_wage_eur: int = 140000,
+    contract_years: int = 4,
+    action: str = "SIMULATE",  # 'SIMULATE' or 'EXECUTE_TRANSFER'
+) -> dict[str, Any]:
+    """
+    [4-Stage Institutional Transfer Transaction Gateway]
+    Replaces one-click transfer with comprehensive European transfer transaction pipeline:
+    Stage 1: Club-to-Club Fee Agreement (Valuation parity & Sell-on clause check)
+    Stage 2: UK FA GBE Points & International Visa / Non-EU Work Permit Clearance
+    Stage 3: Comprehensive Medical & Physical Examination (Orthopedic & Cardiovascular Exam)
+    Stage 4: FIFA TMS (Transfer Matching System) Certificate Clearing & Agent Representation Commission
+    """
+    conn = _get_conn()
+    cur = conn.cursor()
+
+    if client_type == "PLAYER":
+        cur.execute("SELECT name, name_ko, current_club, league, weekly_wage_eur, market_value_eur, estimated_buyout_eur, nationality, intl_match_pct, is_injured, injury_detail, injury_return_date FROM players WHERE player_id = ?", (client_id,))
+    else:
+        cur.execute("SELECT name, name_ko, current_club, league, weekly_wage_eur, nationality FROM managers WHERE manager_id = ?", (client_id,))
+
+    row = cur.fetchone()
+    if not row:
+        conn.close()
+        return {"error": f"Client ID {client_id} ({client_type}) not found"}
+
+    client = dict(row)
+    conn.close()
+
+    name = client["name"]
+    name_ko = client.get("name_ko") or name
+    current_club = client["current_club"]
+    mv = client.get("market_value_eur") or 30000000
+    buyout = client.get("estimated_buyout_eur") or 0
+    intl_pct = client.get("intl_match_pct") or 50
+    is_injured = client.get("is_injured") == 1
+
+    # Stage 1: Fee Agreement
+    fee_ratio = offered_transfer_fee_eur / max(1, mv)
+    if buyout > 0 and offered_transfer_fee_eur >= buyout:
+        stage1_status = "PASSED"
+        stage1_code = "BUYOUT_TRIGGERED"
+        stage1_detail = f"바이아웃 조항(€{buyout:,}) 발동으로 {current_club}의 거부권 무력화 및 개인 협상 직행."
+    elif fee_ratio >= 0.88:
+        stage1_status = "PASSED"
+        stage1_code = "FEE_AGREED"
+        stage1_detail = f"{current_club}과 {destination_club} 간 기본 이적료 €{offered_transfer_fee_eur:,} 및 향후 재이적 시 10% 셀온(Sell-on) 조항 합의 완료."
+    else:
+        stage1_status = "CONDITIONAL"
+        stage1_code = "BONUS_ADDONS_REQUIRED"
+        stage1_detail = f"제안 이적료가 시세 대비 {round((1-fee_ratio)*100)}% 낮아, 출전 20경기 달성 시 €{round(mv*0.15):,} 보너스 옵션 추가 합의 조건부 승인."
+
+    # Stage 2: GBE / Work Permit
+    if "Premier League" in destination_league or "Championship" in destination_league:
+        if intl_pct >= 70:
+            stage2_status = "PASSED"
+            stage2_code = "GBE_AUTO_PASS"
+            stage2_detail = f"영국 내무부/FA 공인 A매치 출전 점유율 {intl_pct}% 충족으로 GBE (Governing Body Endorsement) 자동 통과 (Auto-Pass)."
+        else:
+            stage2_status = "PASSED"
+            stage2_code = "GBE_POINTS_PASS"
+            stage2_detail = f"유럽 5대 리그 Band 1 소속(12점) 및 대륙 대항전 출전 가산점으로 GBE 기준(15점 이상) 공식 획득."
+    else:
+        stage2_status = "PASSED"
+        stage2_code = "NON_EU_SLOT_CLEARED"
+        stage2_detail = f"{destination_league} 규정에 따른 Non-EU 쿼터 슬롯 확보 및 취업 비자(Work Permit) 발급 심사 통과."
+
+    # Stage 3: Medical Exam
+    if is_injured:
+        inj_desc = client.get("injury_detail") or "부상 치료 중"
+        stage3_status = "CONDITIONAL"
+        stage3_code = "MEDICAL_CONTINGENCY"
+        stage3_detail = f"현재 [{inj_desc}] 재활 중으로, 메디컬 2차 정밀 진단 후 복귀 시점까지 급여 보증 보험 조항(Insurance Clause) 삽입 합의."
+    else:
+        stage3_status = "PASSED"
+        stage3_code = "GRADE_A_FIT"
+        stage3_detail = f"정형외과 관절 내시경 및 심장 MRI 검사 결과 1등급(Grade A) 최상 피지컬 인증 획득."
+
+    # Stage 4: FIFA TMS & Legal Sign-off
+    tms_id = f"TMS-2025-{(destination_league[:3]).upper()}-{abs(hash(str(client_id)+destination_club)) % 89999 + 10000}"
+    solidarity_eur = round(offered_transfer_fee_eur * 0.05)
+    agent_commission_eur = round(offered_weekly_wage_eur * 52 * 0.05)
+    stage4_status = "READY_FOR_SIGNING"
+    stage4_code = "TMS_READY"
+    stage4_detail = f"FIFA TMS 인증 번호 [{tms_id}] 생성 완료. 유소년 육성 연대기여금(5%: €{solidarity_eur:,}) 정산 및 에이전트 보수(FIFA FFAR 제13조 5.0% 상한 준수) 합의."
+
+    all_cleared = stage1_status in ("PASSED", "CONDITIONAL") and stage2_status == "PASSED" and stage3_status in ("PASSED", "CONDITIONAL")
+
+    if action == "EXECUTE_TRANSFER":
+        if not all_cleared:
+            return {"error": "이적 게이트웨이 심사를 통과하지 못했습니다."}
+        return negotiate_client_club_transfer(
+            client_id=client_id,
+            client_type=client_type,
+            destination_club=destination_club,
+            destination_league=destination_league,
+            transfer_fee_eur=offered_transfer_fee_eur,
+            new_weekly_wage_eur=offered_weekly_wage_eur,
+            contract_years=contract_years
+        )
+
+    return {
+        "status": "simulated",
+        "client_id": client_id,
+        "client_name": name,
+        "client_name_ko": name_ko,
+        "from_club": current_club,
+        "to_club": destination_club,
+        "to_league": destination_league,
+        "transfer_fee_eur": offered_transfer_fee_eur,
+        "weekly_wage_eur": offered_weekly_wage_eur,
+        "contract_years": contract_years,
+        "all_stages_cleared": all_cleared,
+        "stages": [
+            {"stage": 1, "title": "구단 간 이적료 및 셀온 조항 합의", "status": stage1_status, "code": stage1_code, "detail": stage1_detail},
+            {"stage": 2, "title": "UK FA GBE 워크퍼밋 및 비자 승인", "status": stage2_status, "code": stage2_code, "detail": stage2_detail},
+            {"stage": 3, "title": "공식 정밀 메디컬 & 피지컬 테스트", "status": stage3_status, "code": stage3_code, "detail": stage3_detail},
+            {"stage": 4, "title": "FIFA TMS(이적매칭시스템) 증명서 발급", "status": stage4_status, "code": stage4_code, "detail": stage4_detail},
+        ],
+        "tms_certificate_id": tms_id,
+        "solidarity_contribution_eur": solidarity_eur,
+        "fifa_agent_commission_eur": agent_commission_eur,
+    }
+
+
+@mcp.tool()
+def terminate_agency_client_contract_formal(
+    client_id: int,
+    client_type: str = "PLAYER",
+    settlement_type: str = "MUTUAL_RELEASE",
+    reason: str = "상호 합의 계약 해지",
+    settled_commission_eur: int = 0,
+    handover_notes: str = "",
+) -> dict[str, Any]:
+    """
+    [Formal Agency Representation Mutual Termination & Settlement]
+    Replaces browser prompt with formal Mutual Termination & Commission Settlement Agreement:
+    1. Updates agency_contracts status to 'TERMINATED'.
+    2. Logs settled vs waived commission settlement.
+    3. Resets client status and returns target to scouting pool with status 'TARGETED'.
+    """
+    conn = _get_conn()
+    cur = conn.cursor()
+
+    client_name = ""
+    if client_type == "PLAYER":
+        cur.execute("SELECT name FROM players WHERE player_id = ?", (client_id,))
+        p = cur.fetchone()
+        client_name = p["name"] if p else f"Client #{client_id}"
+        cur.execute("UPDATE players SET is_agency_client = 0 WHERE player_id = ?", (client_id,))
+    else:
+        cur.execute("SELECT name FROM managers WHERE manager_id = ?", (client_id,))
+        m = cur.fetchone()
+        client_name = m["name"] if m else f"Client #{client_id}"
+        cur.execute("UPDATE managers SET is_agency_client = 0 WHERE manager_id = ?", (client_id,))
+
+    term_note = (
+        f" | [공식 합의 해지: {settlement_type} / 사유: {reason} / "
+        f"정산 수수료: €{settled_commission_eur:,} / 비고: {handover_notes}]"
+    )
+
+    cur.execute(
+        "UPDATE agency_contracts SET status = 'TERMINATED', notes = notes || ? WHERE client_id = ? AND client_type = ? AND status = 'ACTIVE'",
+        (term_note, client_id, client_type)
+    )
+
+    cur.execute(
+        "UPDATE agency_recruitment_targets SET scouting_status = 'TARGETED' WHERE target_id = ? AND target_type = ?",
+        (client_id, client_type)
+    )
+
+    conn.commit()
+    conn.close()
+
+    log_work_event("MCP_AGENCY_FORMAL_TERMINATION", f"Formal termination for {client_name} ({client_type}): {settlement_type}, €{settled_commission_eur:,} settled")
+
+    return {
+        "status": "success",
+        "message": f"[{client_name}] 전속 대리 계약이 상호 합의에 따라 공식 해지 및 정산 완료되었습니다. 선수는 스카우팅 타깃 리스트로 복귀되었습니다.",
+        "client_id": client_id,
+        "client_name": client_name,
+        "settlement_type": settlement_type,
+        "settled_commission_eur": settled_commission_eur,
+    }
+
+
+@mcp.tool()
 def toggle_target_watchlist(
     target_id: int,
     target_type: str = "PLAYER",
@@ -2603,8 +3316,11 @@ HERMES_MCP_TOOLS = {
     "enroll_target_as_agency_client": enroll_target_as_agency_client,
     "terminate_agency_client_contract": terminate_agency_client_contract,
     "negotiate_client_club_renewal": negotiate_client_club_renewal,
+    "simulate_client_club_renewal_pipeline": simulate_client_club_renewal_pipeline,
     "negotiate_client_club_transfer": negotiate_client_club_transfer,
+    "simulate_client_club_transfer_pipeline": simulate_client_club_transfer_pipeline,
     "sign_client_to_new_club": sign_client_to_new_club,
+    "terminate_agency_client_contract_formal": terminate_agency_client_contract_formal,
     "toggle_target_watchlist": toggle_target_watchlist,
     "check_target_watchlist": check_target_watchlist,
 }

@@ -74,19 +74,15 @@ AGSM은 런던, 마드리드, 뮌헨, 서울 지사의 글로벌 디렉터 네�
     <rect x="55" y="80" width="42" height="25" fill="#475569" rx="4" />
     <text x="76" y="75" text-anchor="middle" fill="#94a3b8" font-size="10" font-weight="bold">€90M</text>
     <text x="76" y="120" text-anchor="middle" fill="#64748b" font-size="10">현재(Y0)</text>
-
     <rect x="145" y="74" width="42" height="32" fill="#0284c7" rx="4" />
     <text x="166" y="68" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="bold">€112M</text>
     <text x="166" y="120" text-anchor="middle" fill="#64748b" font-size="10">Y1 (재계약)</text>
-
     <rect x="235" y="66" width="42" height="39" fill="#0284c7" rx="4" />
     <text x="256" y="61" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="bold">€140M</text>
     <text x="256" y="120" text-anchor="middle" fill="#64748b" font-size="10">Y2 (스폰서)</text>
-
     <rect x="325" y="58" width="42" height="47" fill="#059669" rx="4" />
     <text x="346" y="53" text-anchor="middle" fill="#34d399" font-size="10" font-weight="bold">€166M</text>
     <text x="346" y="120" text-anchor="middle" fill="#64748b" font-size="10">Y3 (메가딜)</text>
-
     <rect x="415" y="66" width="42" height="39" fill="#10b981" rx="4" />
     <text x="436" y="61" text-anchor="middle" fill="#10b981" font-size="10" font-weight="bold">€140M</text>
     <text x="436" y="120" text-anchor="middle" fill="#10b981" font-size="10" font-weight="bold">Y5 (정상등극)</text>

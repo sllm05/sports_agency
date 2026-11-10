@@ -84,6 +84,9 @@
   </style>
 </head>
 <body class="min-h-screen pb-16">
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-[9999] flex flex-col gap-2 pointer-events-none max-w-sm w-full"></div>
+
 
   <!-- ========================================================================= -->
   <!-- Top Global Navigation Bar (Sticky, Minimal, Modern) -->
@@ -768,6 +771,18 @@
 
         <!-- Sub-Tab 3: Custom Player -->
         <div id="scout-panel-custom" class="hidden space-y-3 pt-1">
+          <!-- Position Template Quick Selectors -->
+          <div class="flex items-center gap-1.5 flex-wrap pb-1 border-b border-white/[0.06]">
+            <span class="text-[10px] text-zinc-400 font-semibold mr-1">포지션별 스탯 템플릿:</span>
+            <button type="button" onclick="applyCustomPositionTemplate('FW')" class="px-2 py-0.5 rounded text-[10px] bg-rose-500/10 text-rose-300 border border-rose-500/20 hover:bg-rose-500/20 transition">⚽ 스트라이커 (ST/FW)</button>
+            <button type="button" onclick="applyCustomPositionTemplate('WG')" class="px-2 py-0.5 rounded text-[10px] bg-amber-500/10 text-amber-300 border border-amber-500/20 hover:bg-amber-500/20 transition">⚡ 윙어 (LW/RW)</button>
+            <button type="button" onclick="applyCustomPositionTemplate('AM')" class="px-2 py-0.5 rounded text-[10px] bg-purple-500/10 text-purple-300 border border-purple-500/20 hover:bg-purple-500/20 transition">🎯 공미 (AM/10번)</button>
+            <button type="button" onclick="applyCustomPositionTemplate('CM')" class="px-2 py-0.5 rounded text-[10px] bg-sky-500/10 text-sky-300 border border-sky-500/20 hover:bg-sky-500/20 transition">⚙️ 중원 (CM/DM)</button>
+            <button type="button" onclick="applyCustomPositionTemplate('CB')" class="px-2 py-0.5 rounded text-[10px] bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 hover:bg-emerald-500/20 transition">🛡️ 센터백 (CB)</button>
+            <button type="button" onclick="applyCustomPositionTemplate('FB')" class="px-2 py-0.5 rounded text-[10px] bg-teal-500/10 text-teal-300 border border-teal-500/20 hover:bg-teal-500/20 transition">🏃 풀백 (RB/LB)</button>
+            <button type="button" onclick="applyCustomPositionTemplate('GK')" class="px-2 py-0.5 rounded text-[10px] bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 hover:bg-indigo-500/20 transition">🧤 골키퍼 (GK)</button>
+          </div>
+
           <div class="grid grid-cols-2 md:grid-cols-6 gap-2 text-xs">
             <div>
               <label class="text-[10px] text-zinc-400 block mb-0.5">한글 이름</label>
@@ -780,44 +795,91 @@
             <div>
               <label class="text-[10px] text-zinc-400 block mb-0.5">포지션</label>
               <div class="flex gap-1">
-                <select id="cust-pos" class="w-1/2 bg-[#0e1117] border border-white/[0.08] rounded px-1.5 py-1 text-xs text-white">
-                  <option value="RW">RW</option><option value="LW">LW</option><option value="ST">ST</option>
+                <select id="cust-pos" onchange="applyCustomPositionTemplate(this.value)" class="w-1/2 bg-[#0e1117] border border-white/[0.08] rounded px-1.5 py-1 text-xs text-white">
+                  <option value="RW" selected>RW</option><option value="LW">LW</option><option value="ST">ST</option>
                   <option value="AM">AM</option><option value="CM">CM</option><option value="DM">DM</option>
-                  <option value="CB">CB</option><option value="RB">RB</option><option value="LB">LB</option>
+                  <option value="CB">CB</option><option value="RB">RB</option><option value="LB">LB</option><option value="GK">GK</option>
                 </select>
                 <input id="cust-sec-pos" type="text" value="LW, AM" class="w-1/2 bg-[#0e1117] border border-white/[0.08] rounded px-1.5 py-1 text-xs text-white" />
               </div>
             </div>
             <div>
-              <label class="text-[10px] text-zinc-400 block mb-0.5">소속팀 & 리그</label>
-              <div class="flex gap-1">
-                <input id="cust-club" type="text" value="Gangwon / QPR" class="w-1/2 bg-[#0e1117] border border-white/[0.08] rounded px-1.5 py-1 text-xs text-white" />
-                <input id="cust-league" type="text" value="K League 1" class="w-1/2 bg-[#0e1117] border border-white/[0.08] rounded px-1.5 py-1 text-xs text-white" />
-              </div>
+              <label class="text-[10px] text-zinc-400 block mb-0.5">현재 소속팀</label>
+              <input id="cust-club" type="text" value="Gangwon FC" class="w-full bg-[#0e1117] border border-white/[0.08] rounded px-2 py-1 text-xs text-white" />
             </div>
             <div>
-              <label class="text-[10px] text-zinc-400 block mb-0.5">나이 / GBE 밴드(1~6)</label>
-              <div class="flex gap-1">
-                <input id="cust-age" type="number" value="20" class="w-1/2 bg-[#0e1117] border border-white/[0.08] rounded px-1.5 py-1 text-xs text-white" />
-                <input id="cust-band" type="number" value="2" min="1" max="6" class="w-1/2 bg-[#0e1117] border border-white/[0.08] rounded px-1.5 py-1 text-xs text-white" />
-              </div>
+              <label class="text-[10px] text-zinc-400 block mb-0.5">소속 리그</label>
+              <input id="cust-league" type="text" value="K League 1" class="w-full bg-[#0e1117] border border-white/[0.08] rounded px-2 py-1 text-xs text-white" />
             </div>
             <div>
-              <label class="text-[10px] text-zinc-400 block mb-0.5">시세(€) / 주급(€)</label>
-              <div class="flex gap-1">
-                <input id="cust-val" type="number" value="4500000" step="500000" class="w-1/2 bg-[#0e1117] border border-white/[0.08] rounded px-1.5 py-1 text-xs text-white" />
-                <input id="cust-wage" type="number" value="15000" step="1000" class="w-1/2 bg-[#0e1117] border border-white/[0.08] rounded px-1.5 py-1 text-xs text-white" />
-              </div>
+              <label class="text-[10px] text-zinc-400 block mb-0.5">국적</label>
+              <input id="cust-nationality" type="text" value="South Korea" class="w-full bg-[#0e1117] border border-white/[0.08] rounded px-2 py-1 text-xs text-white" />
             </div>
           </div>
-          <div class="flex justify-end pt-1">
+
+          <div class="grid grid-cols-2 md:grid-cols-6 gap-2 text-xs">
+            <div>
+              <label class="text-[10px] text-zinc-400 block mb-0.5">나이</label>
+              <input id="cust-age" type="number" value="19" class="w-full bg-[#0e1117] border border-white/[0.08] rounded px-2 py-1 text-xs text-white font-mono" />
+            </div>
+            <div>
+              <label class="text-[10px] text-zinc-400 block mb-0.5">시장가치 (€)</label>
+              <input id="cust-val" type="number" value="4500000" step="100000" class="w-full bg-[#0e1117] border border-white/[0.08] rounded px-2 py-1 text-xs text-white font-mono" />
+            </div>
+            <div>
+              <label class="text-[10px] text-zinc-400 block mb-0.5">현재 주급 (€)</label>
+              <input id="cust-wage" type="number" value="15000" step="1000" class="w-full bg-[#0e1117] border border-white/[0.08] rounded px-2 py-1 text-xs text-white font-mono" />
+            </div>
+            <div>
+              <label class="text-[10px] text-zinc-400 block mb-0.5">계약 만료일</label>
+              <input id="cust-contract-expires" type="text" value="2027-06-30" class="w-full bg-[#0e1117] border border-white/[0.08] rounded px-2 py-1 text-xs text-white font-mono" />
+            </div>
+            <div>
+              <label class="text-[10px] text-zinc-400 block mb-0.5">리그 밴드 (1~5)</label>
+              <input id="cust-band" type="number" value="2" min="1" max="5" class="w-full bg-[#0e1117] border border-white/[0.08] rounded px-2 py-1 text-xs text-white font-mono" />
+            </div>
+            <div class="flex items-center gap-2 pt-4">
+              <input id="cust-is-eu" type="checkbox" class="rounded bg-[#0e1117] border-white/[0.1] text-emerald-500" />
+              <label for="cust-is-eu" class="text-xs text-zinc-300">EU 시민권 보유</label>
+            </div>
+          </div>
+
+          <!-- Position-Tailored Metric Fields -->
+          <div class="grid grid-cols-2 md:grid-cols-6 gap-2 text-xs p-2.5 rounded-lg bg-[#0e1117] border border-white/[0.04]">
+            <div>
+              <label id="lbl-stat-1" class="text-[10px] text-zinc-400 block mb-0.5">90분당 득점 (Goals)</label>
+              <input id="cust-stat-1" type="number" step="0.01" value="0.38" class="w-full bg-black/40 border border-white/[0.08] rounded px-2 py-1 text-xs text-white font-mono" />
+            </div>
+            <div>
+              <label id="lbl-stat-2" class="text-[10px] text-zinc-400 block mb-0.5">90분당 기대득점 (xG)</label>
+              <input id="cust-stat-2" type="number" step="0.01" value="0.32" class="w-full bg-black/40 border border-white/[0.08] rounded px-2 py-1 text-xs text-white font-mono" />
+            </div>
+            <div>
+              <label id="lbl-stat-3" class="text-[10px] text-zinc-400 block mb-0.5">90분당 도움 (Assists)</label>
+              <input id="cust-stat-3" type="number" step="0.01" value="0.25" class="w-full bg-black/40 border border-white/[0.08] rounded px-2 py-1 text-xs text-white font-mono" />
+            </div>
+            <div>
+              <label id="lbl-stat-4" class="text-[10px] text-zinc-400 block mb-0.5">전진 액션 / 90분</label>
+              <input id="cust-stat-4" type="number" step="0.1" value="7.8" class="w-full bg-black/40 border border-white/[0.08] rounded px-2 py-1 text-xs text-white font-mono" />
+            </div>
+            <div>
+              <label id="lbl-stat-5" class="text-[10px] text-zinc-400 block mb-0.5">키패스 / 90분</label>
+              <input id="cust-stat-5" type="number" step="0.1" value="2.1" class="w-full bg-black/40 border border-white/[0.08] rounded px-2 py-1 text-xs text-white font-mono" />
+            </div>
+            <div>
+              <label id="lbl-stat-6" class="text-[10px] text-zinc-400 block mb-0.5">경합 승률 (%)</label>
+              <input id="cust-stat-6" type="number" step="0.1" value="54.2" class="w-full bg-black/40 border border-white/[0.08] rounded px-2 py-1 text-xs text-white font-mono" />
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between pt-1">
+            <span class="text-[11px] text-zinc-400">※ 등록 시 에이전시 DB에 영구 적재되며, 즉시 영입 피칭 제안서 및 심사 결재가 활성화됩니다.</span>
             <button onclick="registerCustomClient()"
-              class="py-1.5 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition">
-              선수 등록 및 선택
+              class="py-1.5 px-4 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition shadow-md shadow-emerald-950/40">
+              선수 등록 및 심사 풀 편입
             </button>
           </div>
         </div>
-      </div>
 
       </div> <!-- End of scouting-view-all -->
     </div> <!-- End of page-scouting -->
@@ -1828,6 +1890,160 @@
   <!-- JavaScript Business Logic & Routing Controller -->
   <!-- ========================================================================= -->
   <script>
+    // =========================================================================
+    // PROFESSIONAL TOAST NOTIFICATION ENGINE
+    // =========================================================================
+    function showToast(message, type = 'info', duration = 3800) {
+      const container = document.getElementById('toast-container');
+      if (!container) {
+        console.log(`[TOAST:${type}] ${message}`);
+        return;
+      }
+      const toast = document.createElement('div');
+      const typeStyles = {
+        success: 'bg-[#0f241a] border-emerald-500/50 text-emerald-200 shadow-emerald-950/50',
+        error: 'bg-[#291215] border-rose-500/50 text-rose-200 shadow-rose-950/50',
+        warning: 'bg-[#291e0a] border-amber-500/50 text-amber-200 shadow-amber-950/50',
+        info: 'bg-[#111927] border-sky-500/50 text-sky-200 shadow-sky-950/50',
+      };
+      const typeIcons = {
+        success: '✅',
+        error: '⚠️',
+        warning: '⚡',
+        info: 'ℹ️'
+      };
+      toast.className = `pointer-events-auto flex items-start gap-2.5 p-3.5 rounded-xl border text-xs font-medium shadow-xl backdrop-blur-md transition-all duration-300 transform translate-y-3 opacity-0 ${typeStyles[type] || typeStyles.info}`;
+      toast.innerHTML = `
+        <span class="text-sm shrink-0">${typeIcons[type] || 'ℹ️'}</span>
+        <div class="flex-1 leading-snug whitespace-pre-line">${message}</div>
+        <button onclick="this.parentElement.remove()" class="text-zinc-400 hover:text-white shrink-0 ml-1 text-xs">✕</button>
+      `;
+      container.appendChild(toast);
+      requestAnimationFrame(() => {
+        toast.classList.remove('translate-y-3', 'opacity-0');
+      });
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-x-4');
+        setTimeout(() => toast.remove(), 320);
+      }, duration);
+    }
+
+    // Position-specific scouting stat templates
+    function applyCustomPositionTemplate(pos) {
+      const p = (pos || 'FW').toUpperCase();
+      const posSelect = document.getElementById('cust-pos');
+      if (posSelect) {
+        for (let i = 0; i < posSelect.options.length; i++) {
+          if (posSelect.options[i].value === p || (p === 'WG' && ['RW', 'LW'].includes(posSelect.options[i].value))) {
+            posSelect.selectedIndex = i;
+            break;
+          }
+        }
+      }
+
+      const templates = {
+        'GK': {
+          l1: '90분당 실점 (GA90)', v1: 0.82,
+          l2: '선방률 (Save %)', v2: 78.5,
+          l3: '클린시트 비율 (%)', v3: 42.0,
+          l4: '패스/롱킥 성공률 (%)', v4: 76.5,
+          l5: '페널티 박스 스위핑 / 90', v5: 1.8,
+          l6: '공중볼 경합 승률 (%)', v6: 88.0,
+          strengths: '경이적인 반사신경 및 스위퍼 키퍼 빌드업 역량'
+        },
+        'CB': {
+          l1: '대인 수비 경합 승률 (%)', v1: 68.5,
+          l2: '공중볼 경합 승률 (%)', v2: 65.2,
+          l3: '인터셉트 & 리커버리 / 90', v3: 6.8,
+          l4: '전진 패스 / 90분', v4: 6.2,
+          l5: '롱패스 정확도 (%)', v5: 72.0,
+          l6: '파울 관리 안정성 (%)', v6: 82.5,
+          strengths: '압도적인 피지컬 경합 우위 및 후방 딥라잉 빌드업'
+        },
+        'FB': {
+          l1: '대인 태클 성공률 (%)', v1: 64.0,
+          l2: '전진 드리블 운반 / 90', v2: 4.8,
+          l3: '크로스 정확도 (%)', v3: 36.5,
+          l4: '키패스 & 찬스 메이킹 / 90', v4: 1.6,
+          l5: '인터셉트 / 90분', v5: 2.1,
+          l6: '스프린트 가속도 지표', v6: 88.0,
+          strengths: '폭발적인 측면 오버래핑 및 정확한 박스 투입 크로스'
+        },
+        'CM': {
+          l1: '패스 성공률 (%)', v1: 88.2,
+          l2: '전진 액션 운반 / 90', v2: 7.4,
+          l3: '키패스 / 90분', v3: 1.9,
+          l4: '파이널서드 진입 패스 / 90', v4: 5.6,
+          l5: '수비 리커버리 / 90', v5: 6.1,
+          l6: '경합 승률 (%)', v6: 58.5,
+          strengths: '탈압박 턴어라운드 및 템포 조율 오케스트레이션'
+        },
+        'DM': {
+          l1: '태클 & 인터셉트 / 90', v1: 5.8,
+          l2: '그라운드 경합 승률 (%)', v2: 66.0,
+          l3: '패스 성공률 (%)', v3: 89.5,
+          l4: '전진 전환 롱패스 / 90', v4: 4.2,
+          l5: '포백 보호 커버리지 (%)', v5: 85.0,
+          l6: '수비 블록 / 90분', v6: 2.4,
+          strengths: '강력한 중원 1차 저지선 및 원볼란치 공간 장악력'
+        },
+        'AM': {
+          l1: '키패스 / 90분', v1: 2.8,
+          l2: '기대도움 (xA) / 90', v2: 0.35,
+          l3: '전진 액션 운반 / 90', v3: 8.5,
+          l4: '90분당 득점 (Goals)', v4: 0.28,
+          l5: '박스 타격 슈팅 / 90', v5: 2.4,
+          l6: '하프스페이스 침투 / 90', v6: 4.2,
+          strengths: '라인 브레이킹 킬패스 및 하프스페이스 시야'
+        },
+        'WG': {
+          l1: '90분당 득점 (Goals)', v1: 0.38,
+          l2: '90분당 기대득점 (xG)', v2: 0.32,
+          l3: '90분당 도움 (Assists)', v3: 0.25,
+          l4: '전진 액션 / 90분', v4: 8.1,
+          l5: '키패스 / 90분', v5: 2.2,
+          l6: '드리블 성공률 (%)', v6: 62.5,
+          strengths: '파괴적인 1대1 아이솔레이션 돌파 및 컷인 슈팅'
+        },
+        'ST': {
+          l1: '90분당 득점 (Goals)', v1: 0.58,
+          l2: '90분당 기대득점 (xG)', v2: 0.52,
+          l3: '유효슈팅 비율 (%)', v3: 48.5,
+          l4: '박스 안 터치 / 90분', v4: 6.8,
+          l5: '공중볼 경합 승률 (%)', v5: 56.0,
+          l6: '연계 패스 성공률 (%)', v6: 78.0,
+          strengths: '치명적인 박스 안 결정력 및 수비 라인 침투 오프더볼'
+        },
+        'FW': {
+          l1: '90분당 득점 (Goals)', v1: 0.55,
+          l2: '90분당 기대득점 (xG)', v2: 0.48,
+          l3: '유효슈팅 비율 (%)', v3: 46.0,
+          l4: '전진 액션 / 90분', v4: 6.2,
+          l5: '키패스 / 90분', v5: 1.8,
+          l6: '경합 승률 (%)', v6: 52.0,
+          strengths: '탁월한 타겟팅 연계 및 양발 박스 피니시'
+        }
+      };
+
+      const key = ['RW', 'LW', 'WG'].includes(p) ? 'WG' : (['AM', '10'].includes(p) ? 'AM' : (['ST'].includes(p) ? 'ST' : (['CM'].includes(p) ? 'CM' : (['DM'].includes(p) ? 'DM' : (['CB'].includes(p) ? 'CB' : (['RB', 'LB', 'FB'].includes(p) ? 'FB' : (['GK'].includes(p) ? 'GK' : 'FW')))))));
+      const t = templates[key] || templates['FW'];
+
+      const el1 = document.getElementById('lbl-stat-1'); if (el1) el1.textContent = t.l1;
+      const val1 = document.getElementById('cust-stat-1'); if (val1) val1.value = t.v1;
+      const el2 = document.getElementById('lbl-stat-2'); if (el2) el2.textContent = t.l2;
+      const val2 = document.getElementById('cust-stat-2'); if (val2) val2.value = t.v2;
+      const el3 = document.getElementById('lbl-stat-3'); if (el3) el3.textContent = t.l3;
+      const val3 = document.getElementById('cust-stat-3'); if (val3) val3.value = t.v3;
+      const el4 = document.getElementById('lbl-stat-4'); if (el4) el4.textContent = t.l4;
+      const val4 = document.getElementById('cust-stat-4'); if (val4) val4.value = t.v4;
+      const el5 = document.getElementById('lbl-stat-5'); if (el5) el5.textContent = t.l5;
+      const val5 = document.getElementById('cust-stat-5'); if (val5) val5.value = t.v5;
+      const el6 = document.getElementById('lbl-stat-6'); if (el6) el6.textContent = t.l6;
+      const val6 = document.getElementById('cust-stat-6'); if (val6) val6.value = t.v6;
+
+      window.currentCustomStrengths = t.strengths;
+    }
+
     let allPlayers = [];
     let selectedPlayer = null;
     let selectedTrack = 'TRACK_A_TRANSFER';
@@ -2847,34 +3063,46 @@
     }
 
     async function registerCustomClient() {
+      const pos = document.getElementById('cust-pos').value;
+      const stat1 = parseFloat(document.getElementById('cust-stat-1').value || '0.35');
+      const stat2 = parseFloat(document.getElementById('cust-stat-2').value || '0.30');
+      const stat3 = parseFloat(document.getElementById('cust-stat-3').value || '0.22');
+      const stat4 = parseFloat(document.getElementById('cust-stat-4').value || '6.5');
+      const stat5 = parseFloat(document.getElementById('cust-stat-5').value || '1.7');
+      const stat6 = parseFloat(document.getElementById('cust-stat-6').value || '57.5');
+
+      const isGK = pos === 'GK';
+      const isDF = ['CB', 'RB', 'LB'].includes(pos);
+
       const payload = {
         name_ko: document.getElementById('cust-name-ko').value.trim(),
         name: document.getElementById('cust-name-en').value.trim(),
-        position: document.getElementById('cust-pos').value,
+        position: pos,
         secondary_positions: document.getElementById('cust-sec-pos').value.trim(),
         current_club: document.getElementById('cust-club').value.trim(),
         league: document.getElementById('cust-league').value.trim(),
+        nationality: document.getElementById('cust-nationality').value.trim() || 'South Korea',
         age: parseInt(document.getElementById('cust-age').value || '20', 10),
         current_league_band: parseInt(document.getElementById('cust-band').value || '2', 10),
         market_value_eur: parseInt(document.getElementById('cust-val').value || '4500000', 10),
         weekly_wage_eur: parseInt(document.getElementById('cust-wage').value || '15000', 10),
-        contract_expires: '2027-06-30',
-        nationality: 'South Korea',
-        goals_per90: 0.35,
-        assists_per90: 0.22,
-        xg_per90: 0.30,
-        xa_per90: 0.20,
-        progressive_actions_per90: 6.5,
-        key_passes_per90: 1.7,
-        defensive_duels_won_pct: 57.5,
+        contract_expires: document.getElementById('cust-contract-expires').value.trim() || '2027-06-30',
+        goals_per90: isGK ? 0.0 : (isDF ? Math.min(stat1, 0.12) : stat1),
+        assists_per90: isGK ? 0.0 : stat3,
+        xg_per90: isGK ? 0.0 : (isDF ? 0.05 : stat2),
+        xa_per90: isGK ? 0.0 : 0.20,
+        progressive_actions_per90: stat4,
+        key_passes_per90: stat5,
+        defensive_duels_won_pct: stat6,
         minutes_played: 2580,
         appearances: 31,
         intl_match_pct: 45,
         continental_minutes_pct: 60,
-        is_eu_citizen: 0,
-        strengths_summary: '드리블 돌파 및 양발 결정력',
+        is_eu_citizen: document.getElementById('cust-is-eu').checked ? 1 : 0,
+        strengths_summary: window.currentCustomStrengths || '탁월한 전술 이해도 및 포지션 적합성',
         weaknesses_summary: ''
       };
+
       try {
         const res = await fetch('/api/players/custom', {
           method: 'POST',
@@ -2882,13 +3110,20 @@
           body: JSON.stringify(payload)
         });
         const data = await res.json();
-        if (!res.ok) throw new Error(data.detail || '등록 실패');
+        if (!res.ok) {
+          showToast('선수 등록 실패: ' + (data.detail || '오류 발생'), 'error');
+          return;
+        }
+
+        showToast(`✅ [${payload.name_ko} (${payload.name})] 선수가 에이전시 공식 DB에 등록되었습니다!`, 'success');
         await loadPlayers();
         selectPlayer(data.player);
-        alert(`외부 선수 [${data.player.name_ko}] 등록 완료`);
+        if (typeof loadAgencyRecruitmentTargets === 'function') {
+          await loadAgencyRecruitmentTargets();
+        }
         showPage('page-strategy');
-      } catch (e) {
-        alert('선수 등록 오류: ' + e);
+      } catch (err) {
+        showToast('선수 등록 오류: ' + err.message, 'error');
       }
     }
 
@@ -6394,9 +6629,9 @@
               class="px-3 py-2 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-semibold text-xs transition flex items-center justify-center gap-1.5 shadow-md shadow-sky-950/30">
               <span>📊 1-Page 제안서</span>
             </button>
-            <button onclick="enrollRecruitmentTarget(${target.target_id}, '${target.target_type}', '${targetNameSafe}')"
-              class="px-3 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition flex items-center justify-center gap-1.5 shadow-md shadow-emerald-950/30">
-              <span>✍️ 전속 계약 체결</span>
+            <button onclick="openDealMemoModal(${target.target_id}, '${target.target_type}', '${targetNameSafe}')"
+              class="px-3 py-2 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-semibold text-xs transition flex items-center justify-center gap-1.5 shadow-md shadow-emerald-950/30">
+              <span>📋 영입 심사·결재 (Deal Memo)</span>
             </button>
           </div>
         </div>
@@ -6465,8 +6700,18 @@
       }
     }
 
+    let currentPitchTargetId = null;
+    let currentPitchTargetType = null;
+    let currentPitchTargetName = null;
+    let dealMemoChartInstance = null;
+    let currentDealMemoData = null;
+
     async function generateRecruitmentPitch(targetId, targetType, targetName) {
       try {
+        currentPitchTargetId = targetId;
+        currentPitchTargetType = targetType;
+        currentPitchTargetName = targetName;
+
         const titleEl = document.getElementById('pitch-modal-title');
         const bodyEl = document.getElementById('pitch-modal-body');
         const enrollBtn = document.getElementById('btn-pitch-enroll-action');
@@ -6474,7 +6719,10 @@
 
         if (titleEl) titleEl.textContent = `[${targetName}] 1-Page Client Acquisition Pitch Deck`;
         if (bodyEl) bodyEl.innerHTML = `<div class="py-16 text-center text-zinc-400 text-sm">🔄 AI 에이전트가 4D 잠재력 지표 및 FIFA FFAR 맞춤 피치덱을 합성 중입니다...</div>`;
-        if (enrollBtn) enrollBtn.onclick = () => enrollRecruitmentTarget(targetId, targetType, targetName);
+        if (enrollBtn) {
+          enrollBtn.onclick = () => openDealMemoModalFromPitch();
+          enrollBtn.innerHTML = `<span>📋 사내 영입 심사 품의서 작성 (Deal Memo) →</span>`;
+        }
         if (modal) modal.classList.remove('hidden');
 
         const res = await fetch('/api/agency/recruitment-pitch', {
@@ -6501,6 +6749,13 @@
       }
     }
 
+    function openDealMemoModalFromPitch() {
+      closePitchModal();
+      if (currentPitchTargetId) {
+        openDealMemoModal(currentPitchTargetId, currentPitchTargetType || 'PLAYER', currentPitchTargetName);
+      }
+    }
+
     function closePitchModal() {
       const modal = document.getElementById('modal-pitch-viewer');
       if (modal) modal.classList.add('hidden');
@@ -6517,40 +6772,335 @@
       URL.revokeObjectURL(url);
     }
 
-    async function enrollRecruitmentTarget(targetId, targetType, targetName) {
-      const agentName = prompt(`[${targetName}] 전속 대리 계약을 체결하시겠습니까?
-담당 리드 에이전트 성함을 입력해주세요:`, currentAuthUser?.full_name || '김대표 Agent');
-      if (!agentName) return;
+    // =========================================================================
+    // CLIENT RECRUITMENT DEAL MEMORANDUM & SIGN-OFF WORKFLOW (PILLAR 2 -> PILLAR 1)
+    // =========================================================================
+    async function openDealMemoModal(targetId, targetType, targetName) {
+      const modal = document.getElementById('modal-recruitment-deal-memo');
+      if (!modal) return;
+      modal.classList.remove('hidden');
 
-      const commRateStr = prompt('계약 수수료율(%)을 입력해주세요 (FIFA FFAR 표준: 5~10%):', '5.0');
-      const commissionPct = parseFloat(commRateStr) || 5.0;
+      // Set loading placeholder
+      document.getElementById('dealmemo-target-name').textContent = `${targetName || '타깃'} (심사 데이터 집계 중...)`;
+      document.getElementById('dealmemo-target-meta').textContent = '에이전시 심사 엔진에서 6각 스코어 및 5개년 현금흐름을 산출하고 있습니다...';
+
+      try {
+        const res = await fetch(`/api/agency/recruitment-deal-memo/${targetType || 'PLAYER'}/${targetId}`);
+        if (!res.ok) {
+          const err = await res.json();
+          alert('영입 심사서 로드 실패: ' + (err.detail || '오류 발생'));
+          closeDealMemoModal();
+          return;
+        }
+        const data = await res.json();
+        currentDealMemoData = data;
+
+        // 1. Target Overview
+        const avatarEl = document.getElementById('dealmemo-avatar');
+        if (avatarEl) avatarEl.textContent = data.target_type === 'MANAGER' ? '👔' : '⚽';
+
+        document.getElementById('dealmemo-target-name').textContent = `${data.name_ko} (${data.name})`;
+        document.getElementById('dealmemo-category-badge').textContent = data.category_label || data.category;
+        document.getElementById('dealmemo-grade-badge').textContent = `심사 등급 ${data.overall_grade || 'S'}`;
+        
+        document.getElementById('dealmemo-target-meta').innerHTML = `
+          <span class="text-zinc-200 font-medium">${data.current_club}</span>
+          <span class="text-zinc-600">·</span>
+          <span class="text-zinc-300 font-mono">${data.league}</span>
+          <span class="text-zinc-600">·</span>
+          <span class="text-emerald-400 font-mono font-medium">${data.position}</span>
+          <span class="text-zinc-600">·</span>
+          <span>${data.age}세</span>
+          <span class="text-zinc-600">·</span>
+          <span>${data.nationality}</span>
+        `;
+
+        const mValStr = data.market_value_eur ? `€${(data.market_value_eur / 1000000).toLocaleString()}M` : 'FA 무소속';
+        const wageStr = data.weekly_wage_eur ? `€${data.weekly_wage_eur.toLocaleString()}/주` : '-';
+        const roiStr = data.total_projected_roi_eur ? `€${(data.total_projected_roi_eur / 1000000).toFixed(1)}M` : '€5.0M';
+
+        document.getElementById('dealmemo-market-val').textContent = mValStr;
+        document.getElementById('dealmemo-weekly-wage').textContent = wageStr;
+        document.getElementById('dealmemo-projected-roi').textContent = roiStr;
+
+        document.getElementById('dealmemo-current-agency').textContent = data.current_agency || '미상 / 가족 직할 대리';
+        document.getElementById('dealmemo-agency-expiry').textContent = data.agency_contract_expires || '2025-06-30';
+
+        // 2. Render 6-Axis Radar Chart
+        renderDealMemoRadar(data.radar_data);
+
+        // 3. Render 6-Axis Pillars Grid
+        const pillarsGrid = document.getElementById('dealmemo-pillars-grid');
+        if (pillarsGrid && data.radar_axes) {
+          pillarsGrid.innerHTML = data.radar_axes.map(ax => {
+            const scoreColor = ax.score >= 95 ? 'text-emerald-400' : (ax.score >= 90 ? 'text-teal-300' : 'text-amber-300');
+            const barColor = ax.score >= 95 ? 'bg-emerald-500' : (ax.score >= 90 ? 'bg-teal-500' : 'bg-amber-500');
+            return `
+              <div class="p-2.5 rounded-lg bg-[#141822] border border-white/[0.04] space-y-1.5">
+                <div class="flex items-center justify-between text-xs">
+                  <span class="font-bold text-zinc-200">${ax.axis}</span>
+                  <div class="flex items-center gap-1.5 font-mono">
+                    <span class="text-[10px] text-zinc-500">기준 ${ax.benchmark}</span>
+                    <span class="${scoreColor} font-bold text-sm">${ax.score}점</span>
+                  </div>
+                </div>
+                <div class="w-full h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+                  <div class="${barColor} h-full rounded-full transition-all duration-500" style="width: ${Math.min(100, ax.score)}%"></div>
+                </div>
+                <p class="text-[11px] text-zinc-400 leading-tight">${ax.metric_detail || ax.desc}</p>
+              </div>
+            `;
+          }).join('');
+        }
+
+        // 4. Render Upside Thesis
+        const upsideList = document.getElementById('dealmemo-upside-list');
+        if (upsideList && data.upside_theses) {
+          upsideList.innerHTML = data.upside_theses.map((item, idx) => `
+            <div class="p-2 rounded-lg bg-[#131b18] border border-emerald-500/20 text-xs space-y-0.5">
+              <div class="font-bold text-emerald-300 flex items-center gap-1">
+                <span class="text-[10px] font-mono text-emerald-400">#${idx + 1}</span>
+                <span>${item.title}</span>
+              </div>
+              <p class="text-zinc-300 text-[11px] leading-relaxed">${item.detail}</p>
+            </div>
+          `).join('');
+        }
+
+        // 5. Render Downside Risks
+        const downsideList = document.getElementById('dealmemo-downside-list');
+        if (downsideList && data.downside_risks) {
+          downsideList.innerHTML = data.downside_risks.map((item, idx) => `
+            <div class="p-2 rounded-lg bg-[#1c1417] border border-rose-500/20 text-xs space-y-0.5">
+              <div class="font-bold text-rose-300 flex items-center gap-1">
+                <span class="text-[10px] font-mono text-rose-400">⚠️ Risk #${idx + 1}</span>
+                <span>${item.risk}</span>
+              </div>
+              <p class="text-zinc-300 text-[11px] leading-relaxed"><strong class="text-amber-300">대응:</strong> ${item.mitigation}</p>
+            </div>
+          `).join('');
+        }
+
+        // 6. Render 5-Year Cash Flow Grid
+        const cashflowGrid = document.getElementById('dealmemo-cashflow-grid');
+        const totalCashflowEl = document.getElementById('dealmemo-total-cashflow');
+        if (totalCashflowEl) {
+          totalCashflowEl.textContent = `5개년 누적 기대수익: €${(data.total_projected_roi_eur / 1000000).toFixed(1)}M`;
+        }
+        if (cashflowGrid && data.cash_flow) {
+          cashflowGrid.innerHTML = data.cash_flow.map(cf => `
+            <div class="p-2.5 rounded-lg bg-[#141822] border border-white/[0.04] text-center space-y-1">
+              <div class="text-[10px] font-mono font-bold text-amber-300">${cf.year}</div>
+              <div class="text-sm font-bold text-white font-mono">${cf.revenue_str}</div>
+              <div class="px-1.5 py-0.5 rounded text-[9px] bg-amber-500/10 text-amber-200 border border-amber-500/20 truncate">
+                ${cf.category}
+              </div>
+              <p class="text-[10px] text-zinc-400 leading-tight line-clamp-2 mt-1">${cf.milestone}</p>
+            </div>
+          `).join('');
+        }
+
+        // 7. Render FIFA Legal Checklist
+        const fifaGrid = document.getElementById('dealmemo-fifa-grid');
+        if (fifaGrid && data.fifa_compliance) {
+          fifaGrid.innerHTML = data.fifa_compliance.map(f => `
+            <div class="p-2 rounded-lg bg-[#141822] border border-white/[0.04] flex items-start gap-2">
+              <span class="text-emerald-400 text-xs font-bold mt-0.5">✅</span>
+              <div class="space-y-0.5 text-xs">
+                <div class="flex items-center gap-1.5">
+                  <span class="font-bold text-zinc-200">${f.rule}</span>
+                  <span class="px-1.5 py-0.2 rounded text-[9px] bg-emerald-500/20 text-emerald-300 font-mono">${f.badge}</span>
+                </div>
+                <p class="text-[11px] text-zinc-400">${f.desc}</p>
+              </div>
+            </div>
+          `).join('');
+        }
+
+        // 8. Sign-off Inputs
+        const agentInput = document.getElementById('dealmemo-signoff-agent');
+        if (agentInput) {
+          agentInput.value = currentAuthUser?.full_name ? `${currentAuthUser.full_name} (${currentAuthUser.department || '선수영입팀'})` : (data.executive_signoff?.default_lead_agent || '김대표 수석 파트너 (FIFA Licensed Agent)');
+        }
+        const commInput = document.getElementById('dealmemo-signoff-commission');
+        if (commInput) {
+          commInput.value = (data.executive_signoff?.recommended_commission_pct || 5.0).toFixed(1);
+        }
+
+      } catch (err) {
+        alert('영입 심사 통신 오류: ' + err.message);
+        closeDealMemoModal();
+      }
+    }
+
+    function renderDealMemoRadar(radarData) {
+      const canvas = document.getElementById('dealMemoRadarCanvas');
+      if (!canvas || typeof Chart === 'undefined') return;
+
+      if (dealMemoChartInstance) {
+        dealMemoChartInstance.destroy();
+        dealMemoChartInstance = null;
+      }
+
+      const ctx = canvas.getContext('2d');
+      dealMemoChartInstance = new Chart(ctx, {
+        type: 'radar',
+        data: {
+          labels: radarData.labels || ['온피치 포텐셜', '글로벌 스타성', '재무 ROI', '신체 내구성', '규제·GBE', '캠프 안정성'],
+          datasets: [
+            {
+              label: '타깃 심사 스코어',
+              data: radarData.scores,
+              backgroundColor: 'rgba(16, 185, 129, 0.25)',
+              borderColor: '#10b981',
+              borderWidth: 2.5,
+              pointBackgroundColor: '#10b981',
+              pointBorderColor: '#fff',
+              pointRadius: 4,
+              pointHoverRadius: 6
+            },
+            {
+              label: '에이전시 S급 벤치마크',
+              data: radarData.benchmarks || [90, 88, 85, 85, 85, 88],
+              backgroundColor: 'rgba(245, 158, 11, 0.05)',
+              borderColor: 'rgba(245, 158, 11, 0.7)',
+              borderWidth: 1.5,
+              borderDash: [4, 4],
+              pointBackgroundColor: '#f59e0b',
+              pointBorderColor: '#fff',
+              pointRadius: 2.5
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            r: {
+              min: 0,
+              max: 100,
+              ticks: {
+                stepSize: 20,
+                display: false,
+                backdropColor: 'transparent'
+              },
+              angleLines: {
+                color: 'rgba(255, 255, 255, 0.08)'
+              },
+              grid: {
+                color: 'rgba(255, 255, 255, 0.08)'
+              },
+              pointLabels: {
+                color: '#e4e4e7',
+                font: {
+                  size: 11,
+                  weight: 'bold'
+                }
+              }
+            }
+          },
+          plugins: {
+            legend: {
+              display: false
+            },
+            tooltip: {
+              backgroundColor: '#181b22',
+              titleColor: '#10b981',
+              bodyColor: '#fff',
+              borderColor: 'rgba(255,255,255,0.1)',
+              borderWidth: 1,
+              padding: 8,
+              displayColors: true,
+              callbacks: {
+                label: function(context) {
+                  return `${context.dataset.label}: ${context.raw}점`;
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    function closeDealMemoModal() {
+      const modal = document.getElementById('modal-recruitment-deal-memo');
+      if (modal) modal.classList.add('hidden');
+      if (dealMemoChartInstance) {
+        dealMemoChartInstance.destroy();
+        dealMemoChartInstance = null;
+      }
+    }
+
+    async function submitDealMemoSignoff() {
+      if (!currentDealMemoData) return;
+
+      const agentInput = document.getElementById('dealmemo-signoff-agent');
+      const commInput = document.getElementById('dealmemo-signoff-commission');
+
+      const leadAgent = (agentInput && agentInput.value.trim()) || '김대표 수석 파트너 (FIFA Licensed Agent)';
+      const commissionPct = parseFloat(commInput && commInput.value) || 5.0;
+
+      if (commissionPct > 5.0) {
+        const confirmHigh = confirm(`[FIFA FFAR 규정 권고 안내]\n현재 입력하신 수수료율(${commissionPct}%)은 FIFA 권고 상한(3~5%)을 상회합니다.\n사내 법무팀 특별 승인 하에 체결을 진행하시겠습니까?`);
+        if (!confirmHigh) return;
+      }
+
+      const submitBtn = document.getElementById('btn-dealmemo-submit');
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `<span>⏳ FIFA Representation Agreement 공식 체결 등록 중...</span>`;
+      }
 
       try {
         const res = await fetch('/api/agency/enroll-client', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            target_id: targetId,
-            target_type: targetType,
-            lead_agent: agentName,
+            target_id: currentDealMemoData.target_id,
+            target_type: currentDealMemoData.target_type,
+            lead_agent: leadAgent,
             commission_pct: commissionPct
           })
         });
-        const data = await res.json();
+        const result = await res.json();
 
         if (!res.ok) {
-          alert('소속 계약 체결 실패: ' + (data.detail || '오류'));
+          alert('전속 계약 체결 승인 실패: ' + (result.detail || '오류 발생'));
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = `<span>🏛️ 대표 파트너 최종 승인 및 전속 계약 공식 체결 (Sign Agreement)</span>`;
+          }
           return;
         }
 
-        alert(data.message || `축하합니다! ${targetName} 님이 Antigravity Sports 전속 고객으로 등록되었습니다.`);
+        alert(`🎉 [FIFA Representation Agreement 공식 체결 완료]\n\n` +
+          `선수/감독: ${currentDealMemoData.name_ko} (${currentDealMemoData.name})\n` +
+          `소속 구단: ${currentDealMemoData.current_club}\n` +
+          `담당 리드: ${leadAgent}\n` +
+          `법정 수수료율: ${commissionPct}%\n` +
+          `계약 기간: 24개월 (2025.02.01 ~ 2027.01.31 / FIFA 제12조 준수)\n\n` +
+          `사내 액티브 포트폴리오로 정식 이관되었습니다!`);
+
+        showToast(`🎉 [FIFA Representation Agreement 체결 완료] ${currentDealMemoData.name_ko} 선수/감독이 액티브 포트폴리오로 정식 등록되었습니다.`, 'success', 5000);
+        closeDealMemoModal();
         closePitchModal();
         showPage('page-portfolio');
         loadAgencyPortfolio();
         loadAgencyRecruitmentTargets();
+
       } catch (err) {
-        alert('계약 등록 통신 오류: ' + err.message);
+        alert('계약 체결 통신 오류: ' + err.message);
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = `<span>🏛️ 대표 파트너 최종 승인 및 전속 계약 공식 체결 (Sign Agreement)</span>`;
+        }
       }
+    }
+
+    async function enrollRecruitmentTarget(targetId, targetType, targetName) {
+      // Fallback redirecting directly to deal memo
+      openDealMemoModal(targetId, targetType, targetName);
     }
 
     // =========================================================================
@@ -6670,7 +7220,7 @@
                   </span>
                   ${isVirtual ? '<span class="px-1.5 py-0.2 rounded text-[9px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">🧪 테스트 인물</span>' : '<span class="px-1.5 py-0.2 rounded text-[9px] font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30">⭐ 실제 고객</span>'}
                 </div>
-                <button onclick="terminateClientContract(${clientId}, '${client.type}', '${clientDisplayName.replace(/'/g, "\\'")}')"
+                <button onclick="openClientTerminationModal(${clientId}, '${client.type}', '${clientDisplayName.replace(/'/g, "\\'")}', '${(client.club || "").replace(/'/g, "\\'")}', ${client.market_value_eur || 0})"
                   class="text-[10px] text-zinc-500 hover:text-rose-400 px-1.5 py-0.5 rounded hover:bg-zinc-800 transition" title="전속 대리 계약 해지">
                   ✕ 전속해지
                 </button>
@@ -6765,17 +7315,23 @@
     // =========================================================================
     // MODAL HANDLERS FOR RENEWAL, TRANSFER, FA SIGNING & TERMINATION
     // =========================================================================
+    let cachedRenewalEvalResult = null;
+
     function openClientRenewalModal(clientId, clientType, clientName, currentClub, currentWage) {
       const modal = document.getElementById('modal-client-renewal');
       if (!modal) return;
 
       document.getElementById('renewal-client-id').value = clientId;
       document.getElementById('renewal-client-type').value = clientType;
-      document.getElementById('renewal-modal-title').textContent = `[${clientName}] 소속팀 재계약 협상`;
+      document.getElementById('renewal-modal-title').textContent = `[${clientName}] 소속 구단 재계약 협상`;
       document.getElementById('renewal-current-club').textContent = currentClub;
       document.getElementById('renewal-current-wage').textContent = `€${Math.round((currentWage || 50000)/1000)}K / 주`;
-      document.getElementById('renewal-wage-input').value = Math.round((currentWage || 50000) * 1.2);
+      document.getElementById('renewal-wage-input').value = Math.round((currentWage || 50000) * 1.25);
+      document.getElementById('renewal-years-select').value = '3';
+      document.getElementById('renewal-bonus-input').value = '';
+      document.getElementById('renewal-buyout-input').value = '';
 
+      returnToRenewalForm();
       modal.classList.remove('hidden');
     }
 
@@ -6784,42 +7340,152 @@
       if (modal) modal.classList.add('hidden');
     }
 
-    async function submitClientRenewal(e) {
+    function returnToRenewalForm() {
+      const p1 = document.getElementById('renewal-panel-form');
+      const p2 = document.getElementById('renewal-panel-review');
+      if (p1) p1.classList.remove('hidden');
+      if (p2) p2.classList.add('hidden');
+    }
+
+    async function evaluateClientRenewalPipeline(e) {
       e.preventDefault();
       const clientId = parseInt(document.getElementById('renewal-client-id').value, 10);
       const clientType = document.getElementById('renewal-client-type').value;
-      const newWage = parseFloat(document.getElementById('renewal-wage-input').value);
+      const requestedWage = parseFloat(document.getElementById('renewal-wage-input').value);
       const years = parseInt(document.getElementById('renewal-years-select').value, 10);
       const buyout = parseFloat(document.getElementById('renewal-buyout-input').value) || null;
       const bonus = parseFloat(document.getElementById('renewal-bonus-input').value) || null;
 
+      const evalBtn = document.getElementById('renewal-submit-eval-btn');
+      if (evalBtn) {
+        evalBtn.disabled = true;
+        evalBtn.innerHTML = `<span>⏳ 구단 스포츠 디렉터 및 재무 심사 진행 중...</span>`;
+      }
+
       try {
-        const res = await fetch('/api/agency/client/renew', {
+        const res = await fetch('/api/agency/client/renew-pipeline', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             client_id: clientId,
             client_type: clientType,
-            new_weekly_wage_eur: newWage,
+            requested_weekly_wage_eur: requestedWage,
             contract_years: years,
-            new_buyout_eur: buyout,
-            signing_bonus_eur: bonus
+            requested_buyout_eur: buyout,
+            signing_bonus_eur: bonus,
+            action: 'EVALUATE'
           })
         });
         const data = await res.json();
-
         if (!res.ok) {
-          alert('재계약 체결 실패: ' + (data.detail || '오류'));
+          showToast('재계약 심사 실패: ' + (data.detail || '오류 발생'), 'error');
           return;
         }
 
-        alert(data.message || '재계약이 성공적으로 체결되었습니다!');
-        closeClientRenewalModal();
-        loadAgencyPortfolio();
+        cachedRenewalEvalResult = data;
+
+        const p1 = document.getElementById('renewal-panel-form');
+        const p2 = document.getElementById('renewal-panel-review');
+        p1.classList.add('hidden');
+        p2.classList.remove('hidden');
+
+        const verdictBadge = document.getElementById('renewal-verdict-badge');
+        const verdictIcon = document.getElementById('renewal-verdict-icon');
+        const decisionText = document.getElementById('renewal-director-decision');
+        const psrBadge = document.getElementById('renewal-psr-status-badge');
+
+        if (data.decision === 'ACCEPTED_DIRECTLY') {
+          verdictBadge.className = 'px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30';
+          verdictBadge.textContent = '구단 디렉터 원안 즉시 수락 (ACCEPTED)';
+          verdictIcon.textContent = '✅';
+          psrBadge.textContent = 'PSR 헤드룸 통과';
+        } else if (data.decision === 'COUNTER_OFFER') {
+          verdictBadge.className = 'px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30';
+          verdictBadge.textContent = '구단 디렉터 공식 역제안 (COUNTER-OFFER)';
+          verdictIcon.textContent = '⚖️';
+          psrBadge.textContent = 'PSR 헤드룸 조정안';
+        } else {
+          verdictBadge.className = 'px-2 py-0.5 rounded text-[10px] font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30';
+          verdictBadge.textContent = 'PSR 한도 경고 (LIMIT WARNING)';
+          verdictIcon.textContent = '⚠️';
+          psrBadge.textContent = 'FSR 초과 리스크';
+        }
+
+        decisionText.textContent = data.director_notes || '구단 스포츠 디렉터 심사가 완료되었습니다.';
+
+        const headroomEur = data.club_psr_headroom_eur || 65000000;
+        document.getElementById('renewal-psr-headroom-val').textContent = `€${(headroomEur / 1000000).toFixed(1)}M`;
+        document.getElementById('renewal-wage-hike-val').textContent = `+${(data.wage_hike_pct || 20).toFixed(1)}%`;
+        document.getElementById('renewal-annual-gross-val').textContent = `€${((data.requested_terms?.annual_gross_wage_eur || 5000000)/1000000).toFixed(2)}M / 년`;
+
+        const counterCard = document.getElementById('renewal-counter-card');
+        const acceptCounterBtn = document.getElementById('renewal-accept-counter-btn');
+
+        if (data.counter_offer_terms) {
+          counterCard.classList.remove('hidden');
+          const ct = data.counter_offer_terms;
+          document.getElementById('renewal-counter-wage').textContent = `€${Math.round(ct.offered_weekly_wage_eur || 0).toLocaleString()} / 주`;
+          document.getElementById('renewal-counter-bonus').textContent = `€${Math.round(ct.performance_bonus_per_week_eur || 0).toLocaleString()} / 주`;
+          document.getElementById('renewal-counter-signing').textContent = `€${Math.round(ct.signing_loyalty_bonus_eur || 0).toLocaleString()}`;
+          document.getElementById('renewal-counter-buyout').textContent = ct.proposed_buyout_eur ? `€${Math.round(ct.proposed_buyout_eur).toLocaleString()}` : '바이아웃 조항 없음';
+          document.getElementById('renewal-counter-notes').textContent = `※ 디렉터 코멘트: "${ct.rationale_ko || ''}"`;
+          acceptCounterBtn.classList.remove('hidden');
+        } else {
+          counterCard.classList.add('hidden');
+          acceptCounterBtn.classList.add('hidden');
+        }
+
+        showToast('구단 스포츠 디렉터 심사 결과가 도착했습니다.', 'info');
       } catch (err) {
-        alert('재계약 통신 오류: ' + err.message);
+        showToast('재계약 통신 오류: ' + err.message, 'error');
+      } finally {
+        if (evalBtn) {
+          evalBtn.disabled = false;
+          evalBtn.innerHTML = `<span>📋 구단 스포츠 디렉터에 공식 제안서 제출 (심사 요청)</span>`;
+        }
       }
     }
+
+    async function finalizeRenewalPipeline(actionType) {
+      if (!cachedRenewalEvalResult) return;
+      const clientId = cachedRenewalEvalResult.client_id;
+      const clientType = cachedRenewalEvalResult.client_type;
+      const terms = cachedRenewalEvalResult.requested_terms || {};
+
+      try {
+        const res = await fetch('/api/agency/client/renew-pipeline', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            client_id: clientId,
+            client_type: clientType,
+            requested_weekly_wage_eur: terms.weekly_wage_eur,
+            contract_years: terms.contract_years,
+            requested_buyout_eur: terms.buyout_clause_eur,
+            signing_bonus_eur: terms.signing_bonus_eur,
+            action: actionType
+          })
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          showToast('재계약 체결 실패: ' + (data.detail || '오류 발생'), 'error');
+          return;
+        }
+
+        closeClientRenewalModal();
+        showToast(data.message || '🎉 재계약 추가합의서(Addendum)가 정식 체결되었습니다!', 'success');
+        loadAgencyPortfolio();
+      } catch (err) {
+        showToast('재계약 체결 통신 오류: ' + err.message, 'error');
+      }
+    }
+
+    // Legacy alias
+    async function submitClientRenewal(e) {
+      evaluateClientRenewalPipeline(e);
+    }
+
+    let cachedTransferEvalResult = null;
 
     function openClientTransferModal(clientId, clientType, clientName, currentClub, currentVal, currentWage) {
       const modal = document.getElementById('modal-client-transfer');
@@ -6827,12 +7493,14 @@
 
       document.getElementById('transfer-client-id').value = clientId;
       document.getElementById('transfer-client-type').value = clientType;
-      document.getElementById('transfer-modal-title').textContent = `[${clientName}] 구단 이적 협상`;
+      document.getElementById('transfer-modal-title').textContent = `[${clientName}] 구단 이적 트랜잭션 게이트웨이`;
       document.getElementById('transfer-current-club').textContent = currentClub;
       document.getElementById('transfer-current-val').textContent = `€${((currentVal || 30000000)/1000000).toFixed(1)}M`;
-      document.getElementById('transfer-fee-input').value = Math.round((currentVal || 30000000) * 1.1);
-      document.getElementById('transfer-wage-input').value = Math.round((currentWage || 60000) * 1.3);
+      document.getElementById('transfer-fee-input').value = Math.round((currentVal || 30000000) * 1.15);
+      document.getElementById('transfer-wage-input').value = Math.round((currentWage || 50000) * 1.35);
+      document.getElementById('transfer-years-select').value = '4';
 
+      returnToTransferForm();
       modal.classList.remove('hidden');
     }
 
@@ -6841,7 +7509,14 @@
       if (modal) modal.classList.add('hidden');
     }
 
-    async function submitClientTransfer(e) {
+    function returnToTransferForm() {
+      const p1 = document.getElementById('transfer-panel-form');
+      const p2 = document.getElementById('transfer-panel-stepper');
+      if (p1) p1.classList.remove('hidden');
+      if (p2) p2.classList.add('hidden');
+    }
+
+    async function startTransferPipelineEvaluation(e) {
       e.preventDefault();
       const clientId = parseInt(document.getElementById('transfer-client-id').value, 10);
       const clientType = document.getElementById('transfer-client-type').value;
@@ -6851,8 +7526,14 @@
       const wage = parseFloat(document.getElementById('transfer-wage-input').value);
       const years = parseInt(document.getElementById('transfer-years-select').value, 10);
 
+      const startBtn = document.getElementById('transfer-start-btn');
+      if (startBtn) {
+        startBtn.disabled = true;
+        startBtn.innerHTML = `<span>⏳ 4단계 트랜잭션 게이트웨이 적격성 심사 중...</span>`;
+      }
+
       try {
-        const res = await fetch('/api/agency/client/transfer', {
+        const res = await fetch('/api/agency/client/transfer-pipeline', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -6860,24 +7541,93 @@
             client_type: clientType,
             destination_club: club,
             destination_league: league,
-            transfer_fee_eur: fee,
-            new_weekly_wage_eur: wage,
-            contract_years: years
+            offered_transfer_fee_eur: fee,
+            offered_weekly_wage_eur: wage,
+            contract_years: years,
+            action: 'EVALUATE'
           })
         });
         const data = await res.json();
-
         if (!res.ok) {
-          alert('이적 협상 실패: ' + (data.detail || '오류'));
+          showToast('이적 게이트웨이 심사 실패: ' + (data.detail || '오류 발생'), 'error');
           return;
         }
 
-        alert(data.message || '이적이 성공적으로 완료되었습니다!');
-        closeClientTransferModal();
-        loadAgencyPortfolio();
+        cachedTransferEvalResult = data;
+
+        const p1 = document.getElementById('transfer-panel-form');
+        const p2 = document.getElementById('transfer-panel-stepper');
+        p1.classList.add('hidden');
+        p2.classList.remove('hidden');
+
+        const s1 = data.stage_1_fee_and_buyout || {};
+        document.getElementById('stage1-fee-badge').textContent = `€${((s1.agreed_transfer_fee_eur || fee)/1000000).toFixed(1)}M 합의`;
+        document.getElementById('stage1-desc').textContent = `${s1.summary || ''} (셀온 공제액: €${((s1.sell_on_deduction_eur || 0)/1000000).toFixed(2)}M)`;
+
+        const s2 = data.stage_2_gbe_and_visa || {};
+        document.getElementById('stage2-gbe-badge').textContent = s2.status || 'Auto-Pass';
+        document.getElementById('stage2-desc').textContent = `${s2.regulatory_summary || ''} · ${s2.notes || ''}`;
+
+        const s3 = data.stage_3_medical_exam || {};
+        document.getElementById('stage3-medical-badge').textContent = s3.status || 'ALL PASS';
+        document.getElementById('stage3-desc').textContent = `${s3.medical_summary || ''} · ${s3.insurance_status || ''}`;
+
+        const s4 = data.stage_4_fifa_tms_clearing || {};
+        document.getElementById('stage4-tms-code').textContent = s4.tms_certificate_id || 'TMS-2025';
+        document.getElementById('stage4-desc').textContent = `${s4.tms_summary || ''} · ${s4.solidarity_contribution_ko || ''}`;
+
+        document.getElementById('transfer-summary-club').textContent = `${data.destination_club} · ${data.destination_league}`;
+        document.getElementById('transfer-summary-wage').textContent = `€${Math.round(wage).toLocaleString()} / 주 (${years}년 계약)`;
+        document.getElementById('transfer-summary-commission').textContent = `€${Math.round(data.agent_commission_eur || (fee * 0.05)).toLocaleString()}`;
+
+        showToast('4단계 이적 트랜잭션 게이트웨이 심사가 완료되었습니다.', 'info');
       } catch (err) {
-        alert('이적 통신 오류: ' + err.message);
+        showToast('이적 심사 통신 오류: ' + err.message, 'error');
+      } finally {
+        if (startBtn) {
+          startBtn.disabled = false;
+          startBtn.innerHTML = `<span>🚀 4단계 이적 트랜잭션 게이트웨이 심사 개시</span>`;
+        }
       }
+    }
+
+    async function finalizeTransferPipeline() {
+      if (!cachedTransferEvalResult) return;
+      const d = cachedTransferEvalResult;
+
+      try {
+        const res = await fetch('/api/agency/client/transfer-pipeline', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            client_id: d.client_id,
+            client_type: d.client_type,
+            destination_club: d.destination_club,
+            destination_league: d.destination_league,
+            offered_transfer_fee_eur: d.agreed_transfer_fee_eur,
+            offered_weekly_wage_eur: d.new_weekly_wage_eur,
+            contract_years: d.contract_years,
+            action: 'FORCE_EXECUTE'
+          })
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          showToast('이적 발효 실패: ' + (data.detail || '오류 발생'), 'error');
+          return;
+        }
+
+        closeClientTransferModal();
+        showToast(data.message || `🏛️ FIFA TMS 이적이 공식 발효되었습니다! (${d.destination_club} 이적 완료)`, 'success');
+        loadAgencyPortfolio();
+        loadAgencyRecruitmentTargets();
+      } catch (err) {
+        showToast('이적 발효 통신 오류: ' + err.message, 'error');
+      }
+    }
+
+    // Legacy alias
+    async function submitClientTransfer(e) {
+      startTransferPipelineEvaluation(e);
     }
 
     function openClientSignClubModal(clientId, clientType, clientName) {
@@ -6934,35 +7684,73 @@
       }
     }
 
-    async function terminateClientContract(clientId, clientType, clientName) {
-      const reason = prompt(`[${clientName}] 전속 계약을 해지하시겠습니까?
-해지 사유를 입력해주세요 (예: 선수 요청, 계약 만료, 상호 합의):`, '상호 합의 계약 해지');
-      if (!reason) return;
+    // Formal Mutual Release & Commission Settlement Modal
+    function openClientTerminationModal(clientId, clientType, clientName, currentClub, currentVal) {
+      const modal = document.getElementById('modal-client-termination');
+      if (!modal) return;
+
+      document.getElementById('term-client-id').value = clientId;
+      document.getElementById('term-client-type').value = clientType;
+      document.getElementById('term-client-name').textContent = clientName;
+      document.getElementById('term-client-club').textContent = currentClub || '소속 구단';
+      document.getElementById('term-client-val').textContent = currentVal ? `€${(currentVal/1000000).toFixed(1)}M` : '-';
+      document.getElementById('term-settled-fee').value = '0';
+      document.getElementById('term-waived-fee').value = '0';
+      document.getElementById('term-reason-input').value = '선수의 차기 리그 도전 및 대리인 상호 합의에 따른 원만한 계약 종료';
+      document.getElementById('term-notes-input').value = '';
+
+      modal.classList.remove('hidden');
+    }
+
+    function closeClientTerminationModal() {
+      const modal = document.getElementById('modal-client-termination');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    async function submitFormalTermination(e) {
+      e.preventDefault();
+      const clientId = parseInt(document.getElementById('term-client-id').value, 10);
+      const clientType = document.getElementById('term-client-type').value;
+      const clientName = document.getElementById('term-client-name').textContent;
+      const settlementType = document.getElementById('term-settlement-type').value;
+      const settledFee = parseFloat(document.getElementById('term-settled-fee').value) || 0;
+      const waivedFee = parseFloat(document.getElementById('term-waived-fee').value) || 0;
+      const reason = document.getElementById('term-reason-input').value.trim();
+      const notes = document.getElementById('term-notes-input').value.trim();
 
       try {
-        const res = await fetch('/api/agency/terminate-contract', {
+        const res = await fetch('/api/agency/client/terminate-formal', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             client_id: clientId,
             client_type: clientType,
-            reason: reason
+            settlement_type: settlementType,
+            settled_commission_eur: settledFee,
+            waived_commission_eur: waivedFee,
+            release_reason: reason,
+            handover_notes: notes
           })
         });
         const data = await res.json();
-
         if (!res.ok) {
-          alert('계약 해지 실패: ' + (data.detail || '오류'));
+          showToast('계약 해지 처리 실패: ' + (data.detail || '오류 발생'), 'error');
           return;
         }
 
-        alert(data.message || `'${clientName}' 전속 계약이 해지되었으며, 영입 관심 풀로 복귀되었습니다.`);
+        closeClientTerminationModal();
+        showToast(data.message || `'${clientName}' 전속 계약이 공식 해지되었으며 타깃 풀로 복귀되었습니다.`, 'success');
         loadAgencyPortfolio();
         loadAgencyRecruitmentTargets();
       } catch (err) {
-        alert('계약 해지 통신 오류: ' + err.message);
+        showToast('계약 해지 통신 오류: ' + err.message, 'error');
       }
     }
+
+    function terminateClientContract(clientId, clientType, clientName) {
+      openClientTerminationModal(clientId, clientType, clientName, '', 0);
+    }
+
 
 
     // -------------------------------------------------------------------------
@@ -7364,9 +8152,9 @@
           FIFA Football Agent Regulations (Article 12/13) 표준 전속 제안서
         </div>
         <div class="flex items-center gap-2">
-          <button id="btn-pitch-enroll-action" onclick=""
-            class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition flex items-center gap-1.5 shadow-md">
-            <span>✍️ 전속 대리 계약 체결 (소속 등록)</span>
+          <button id="btn-pitch-enroll-action" onclick="openDealMemoModalFromPitch()"
+            class="px-4 py-2 rounded-lg bg-gradient-to-r from-amber-600 to-emerald-600 hover:from-amber-500 hover:to-emerald-500 text-white font-semibold text-xs transition flex items-center gap-1.5 shadow-md">
+            <span>📋 사내 전속 영입 심사 품의서 작성 (Deal Memo) →</span>
           </button>
         </div>
       </div>
@@ -7374,10 +8162,239 @@
   </div>
 
   <!-- ========================================================================= -->
-  <!-- MODAL: CLIENT CONTRACT RENEWAL (소속팀 재계약) -->
+  <!-- MODAL: CLIENT RECRUITMENT DEAL MEMORANDUM (사내 전속 영입 심사 및 계약 결재) -->
+  <!-- ========================================================================= -->
+  <div id="modal-recruitment-deal-memo" class="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md hidden p-4">
+    <div class="ui-card w-full max-w-5xl max-h-[92vh] flex flex-col border-white/[0.12] bg-[#11141a] shadow-2xl relative overflow-hidden">
+      <!-- Modal Header -->
+      <div class="px-6 py-3.5 border-b border-white/[0.08] flex items-center justify-between bg-[#161a22]">
+        <div class="flex items-center gap-2.5">
+          <span class="px-2.5 py-0.5 rounded text-[10px] font-bold bg-gradient-to-r from-amber-500/20 to-emerald-500/20 text-amber-300 border border-amber-500/30 flex items-center gap-1">
+            <span>🏛️ CONFIDENTIAL</span>
+            <span class="text-zinc-500">|</span>
+            <span>DEAL MEMORANDUM</span>
+          </span>
+          <h3 class="text-sm md:text-base font-bold text-white tracking-tight">
+            사내 전속 영입 심사 및 계약 결재 보고서
+          </h3>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="window.print()" class="px-2.5 py-1 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs font-medium transition flex items-center gap-1">
+            <span>🖨️ 인쇄 / PDF</span>
+          </button>
+          <button onclick="closeDealMemoModal()" class="text-zinc-400 hover:text-white p-1 ml-1 transition">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Modal Body (Scrollable) -->
+      <div class="flex-1 overflow-y-auto p-6 space-y-6">
+        <!-- Target Overview Banner -->
+        <div class="p-4 rounded-xl bg-gradient-to-br from-[#161a24] to-[#12141a] border border-white/[0.08] shadow-sm">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <div id="dealmemo-avatar" class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-xl font-bold font-mono">
+                ⚽
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <h2 id="dealmemo-target-name" class="text-lg font-bold text-white tracking-tight">선수명</h2>
+                  <span id="dealmemo-category-badge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/10 text-amber-300 border border-amber-500/20">
+                    카테고리
+                  </span>
+                  <span id="dealmemo-grade-badge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-mono">
+                    등급 S+
+                  </span>
+                </div>
+                <p id="dealmemo-target-meta" class="text-xs text-zinc-400 mt-0.5">
+                  소속 구단 · 리그 · 포지션 · 나이 · 국적
+                </p>
+              </div>
+            </div>
+
+            <!-- Financial & Agency KPIs -->
+            <div class="flex items-center gap-3 text-right">
+              <div class="px-3 py-1.5 rounded-lg bg-[#0e1117] border border-white/[0.06]">
+                <div class="text-[10px] text-zinc-500">현재 시장 가치</div>
+                <div id="dealmemo-market-val" class="text-xs font-bold text-white font-mono">-</div>
+              </div>
+              <div class="px-3 py-1.5 rounded-lg bg-[#0e1117] border border-white/[0.06]">
+                <div class="text-[10px] text-zinc-500">현재 추정 주급</div>
+                <div id="dealmemo-weekly-wage" class="text-xs font-bold text-amber-300 font-mono">-</div>
+              </div>
+              <div class="px-3 py-1.5 rounded-lg bg-amber-950/20 border border-amber-500/20">
+                <div class="text-[10px] text-amber-300 font-medium">5개년 에이전시 기대수익</div>
+                <div id="dealmemo-projected-roi" class="text-xs font-bold text-amber-400 font-mono">-</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Existing Agency & Contract Status Sub-bar -->
+          <div class="mt-3 pt-3 border-t border-white/[0.06] flex flex-wrap items-center justify-between gap-2 text-xs">
+            <div class="flex items-center gap-1.5 text-zinc-400">
+              <span class="text-zinc-500">현재 대리인/에이전시:</span>
+              <strong id="dealmemo-current-agency" class="text-zinc-200">-</strong>
+            </div>
+            <div class="flex items-center gap-1.5 text-zinc-400">
+              <span class="text-zinc-500">기존 대리 계약 만료일:</span>
+              <strong id="dealmemo-agency-expiry" class="text-amber-300 font-mono">-</strong>
+              <span class="px-1.5 py-0.5 rounded text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">
+                🛡️ FIFA Anti-Tampering 준수 교섭 대상
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 1: 6-Axis Recruitment Radar & Pillars Breakdown -->
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <h4 class="text-xs font-bold text-zinc-300 uppercase tracking-wider flex items-center gap-1.5">
+              <span>📊 6각 영입 다각도 심사 매트릭스 (Recruitment Radar)</span>
+            </h4>
+            <span class="text-[11px] text-zinc-500">
+              FIFA FFAR / DataMB 정밀 벤치마크 기준
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+            <!-- Left: Radar Canvas -->
+            <div class="lg:col-span-5 p-3 rounded-xl bg-[#0e1117] border border-white/[0.06] flex flex-col items-center justify-center relative">
+              <div class="w-full h-64 flex items-center justify-center">
+                <canvas id="dealMemoRadarCanvas"></canvas>
+              </div>
+              <div class="text-[10px] text-zinc-500 mt-2 flex items-center gap-4">
+                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block"></span> 타깃 심사 스코어</span>
+                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-amber-400/60 inline-block"></span> 에이전시 S급 기준선</span>
+              </div>
+            </div>
+
+            <!-- Right: 6-Axis Pillar Scorecards -->
+            <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-2.5" id="dealmemo-pillars-grid">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2: Upside Investment Thesis vs Downside Risk Mitigation -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Left: Upside Thesis -->
+          <div class="p-4 rounded-xl bg-[#0e1117] border border-emerald-500/20 space-y-3">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-md bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-xs font-bold">📈</span>
+              <h4 class="text-xs font-bold text-emerald-300">핵심 영입 당위성 및 투자 가치 (Upside Thesis)</h4>
+            </div>
+            <div id="dealmemo-upside-list" class="space-y-2.5">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <!-- Right: Downside Risk & Mitigation -->
+          <div class="p-4 rounded-xl bg-[#0e1117] border border-rose-500/20 space-y-3">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-md bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400 text-xs font-bold">🛡️</span>
+              <h4 class="text-xs font-bold text-rose-300">다운사이드 리스크 및 헤징 전략 (Risk & Mitigation)</h4>
+            </div>
+            <div id="dealmemo-downside-list" class="space-y-2.5">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 3: 5-Year Agency Cash Flow Projection -->
+        <div class="p-4 rounded-xl bg-[#0e1117] border border-white/[0.06] space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-md bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-xs font-bold">💰</span>
+              <h4 class="text-xs font-bold text-amber-300">5개년 에이전시 현금흐름 전망 (5-Year Cash Flow Projection)</h4>
+            </div>
+            <span id="dealmemo-total-cashflow" class="text-xs font-bold text-amber-400 font-mono">
+              누적 기대수익: €0.0M
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-5 gap-2" id="dealmemo-cashflow-grid">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Section 4: FIFA Legal & FFAR Compliance Verification -->
+        <div class="p-4 rounded-xl bg-[#0e1117] border border-white/[0.06] space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-md bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-400 text-xs font-bold">⚖️</span>
+              <h4 class="text-xs font-bold text-sky-300">FIFA 에이전트 규정 (FFAR) 및 법무 컴플라이언스 사전 검증</h4>
+            </div>
+            <span class="text-[10px] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 font-medium">
+              모든 법무 심사 요건 적합 (PASSED)
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2" id="dealmemo-fifa-grid">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Section 5: Executive Committee Sign-Off & Official Representation Agreement Terms -->
+        <div class="p-4 rounded-xl bg-gradient-to-r from-[#141822] to-[#10131a] border border-emerald-500/30 space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-md bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-xs font-bold">✍️</span>
+              <h4 class="text-xs font-bold text-white">사내 전속 계약 결재 및 공식 서명 (Executive Sign-Off)</h4>
+            </div>
+            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+              APPROVED_FOR_SIGNING (영입 가결)
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+            <div>
+              <label class="block text-[11px] text-zinc-400 mb-1">담당 리드 에이전트</label>
+              <input type="text" id="dealmemo-signoff-agent" required
+                class="w-full bg-[#0a0c10] text-xs px-3 py-2 rounded-lg border border-white/[0.08] text-white focus:outline-none focus:border-emerald-500">
+            </div>
+            <div>
+              <label class="block text-[11px] text-zinc-400 mb-1">법정 수수료율 (%) [FIFA FFAR 표준: 3~5%]</label>
+              <input type="number" id="dealmemo-signoff-commission" step="0.5" min="1.0" max="10.0" value="5.0" required
+                class="w-full bg-[#0a0c10] text-xs px-3 py-2 rounded-lg border border-white/[0.08] text-amber-300 font-mono font-bold focus:outline-none focus:border-emerald-500">
+            </div>
+            <div>
+              <label class="block text-[11px] text-zinc-400 mb-1">계약 기간 (FIFA FFAR 제12조 준수)</label>
+              <div class="w-full bg-[#0a0c10] text-xs px-3 py-2 rounded-lg border border-white/[0.08] text-zinc-300 font-mono flex items-center justify-between">
+                <span>최장 24개월 (2년)</span>
+                <span class="text-[10px] text-emerald-400">자동연장금지 준수</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="px-6 py-3 border-t border-white/[0.08] flex flex-wrap items-center justify-between gap-2 bg-[#161a22]">
+        <div class="text-[11px] text-zinc-400">
+          ※ 본 품의서 최종 승인 시 FIFA Representation Agreement 전속 계약이 체결되며 사내 액티브 포트폴리오로 정식 이관됩니다.
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="closeDealMemoModal()"
+            class="px-3 py-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs font-medium transition">
+            취소 / 심사 보류
+          </button>
+          <button id="btn-dealmemo-submit" onclick="submitDealMemoSignoff()"
+            class="px-4 py-2 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs transition flex items-center gap-1.5 shadow-lg shadow-emerald-950/40">
+            <span>🏛️ 대표 파트너 최종 승인 및 전속 계약 공식 체결 (Sign Agreement)</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: CLIENT RENEWAL PIPELINE (구단 재계약 & PSR 모의협상) -->
   <!-- ========================================================================= -->
   <div id="modal-client-renewal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm hidden p-4">
-    <div class="ui-card w-full max-w-lg p-6 border-white/[0.12] bg-[#12151c] shadow-2xl relative">
+    <div class="ui-card w-full max-w-xl p-6 border-white/[0.12] bg-[#12151c] shadow-2xl relative max-h-[90vh] overflow-y-auto">
       <button onclick="closeClientRenewalModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-white transition">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
       </button>
@@ -7385,76 +8402,153 @@
       <div class="flex items-center gap-2 mb-4">
         <span class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold text-sm">🔄</span>
         <div>
-          <h3 id="renewal-modal-title" class="text-base font-bold text-white tracking-tight">소속팀 재계약 협상</h3>
-          <p id="renewal-modal-subtitle" class="text-xs text-zinc-400">현재 소속 구단과의 계약 연장 및 주급 인상 협상</p>
+          <h3 id="renewal-modal-title" class="text-base font-bold text-white tracking-tight">소속 구단 재계약 협상 파이프라인</h3>
+          <p id="renewal-modal-subtitle" class="text-xs text-zinc-400">구단 PSR 재정 건전성 심사 및 스포츠 디렉터 공식 제안·역제안 절차</p>
         </div>
       </div>
 
-      <form onsubmit="submitClientRenewal(event)" class="space-y-4">
-        <input type="hidden" id="renewal-client-id">
-        <input type="hidden" id="renewal-client-type" value="PLAYER">
+      <!-- PANEL 1: Initial Negotiation Offer Form -->
+      <div id="renewal-panel-form" class="space-y-4">
+        <form onsubmit="evaluateClientRenewalPipeline(event)" class="space-y-4">
+          <input type="hidden" id="renewal-client-id">
+          <input type="hidden" id="renewal-client-type" value="PLAYER">
 
-        <div class="grid grid-cols-2 gap-3 p-3 rounded-lg bg-[#0e1117] border border-white/[0.04] text-xs">
-          <div>
-            <span class="text-zinc-500">현재 구단:</span>
-            <span id="renewal-current-club" class="font-bold text-white ml-1">-</span>
+          <div class="grid grid-cols-2 gap-3 p-3 rounded-lg bg-[#0e1117] border border-white/[0.04] text-xs">
+            <div>
+              <span class="text-zinc-500">현재 구단:</span>
+              <span id="renewal-current-club" class="font-bold text-white ml-1">-</span>
+            </div>
+            <div>
+              <span class="text-zinc-500">현재 주급:</span>
+              <span id="renewal-current-wage" class="font-mono font-bold text-amber-300 ml-1">-</span>
+            </div>
           </div>
-          <div>
-            <span class="text-zinc-500">현재 주급:</span>
-            <span id="renewal-current-wage" class="font-mono font-bold text-amber-300 ml-1">-</span>
-          </div>
-        </div>
 
-        <div>
-          <label class="block text-xs font-medium text-zinc-300 mb-1">희망 주급 (€ / Week)</label>
-          <input type="number" id="renewal-wage-input" required min="1000" step="1000"
-            class="w-full bg-[#0e1117] text-xs px-3 py-2 rounded-lg border border-white/[0.08] text-white focus:outline-none focus:border-emerald-500 font-mono">
-          <p class="text-[10px] text-zinc-500 mt-1">※ 기본 권장: 현 주급 대비 15~25% 인상안</p>
-        </div>
-
-        <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block text-xs font-medium text-zinc-300 mb-1">계약 연장 기간</label>
-            <select id="renewal-years-select" class="w-full bg-[#0e1117] text-xs px-3 py-2 rounded-lg border border-white/[0.08] text-white focus:outline-none focus:border-emerald-500">
-              <option value="1">1년 연장</option>
-              <option value="2">2년 연장</option>
-              <option value="3" selected>3년 연장 (표준)</option>
-              <option value="4">4년 연장</option>
-              <option value="5">5년 장기계약</option>
-            </select>
+            <label class="block text-xs font-medium text-zinc-300 mb-1">희망 주급 (€ / Week)</label>
+            <input type="number" id="renewal-wage-input" required min="1000" step="1000"
+              class="w-full bg-[#0e1117] text-xs px-3 py-2 rounded-lg border border-white/[0.08] text-white focus:outline-none focus:border-emerald-500 font-mono">
+            <p class="text-[10px] text-zinc-500 mt-1">※ 구단 PSR 여력 초과 시(+22% 이상 인상), 스포츠 디렉터의 성과급 연동 역제안이 자동 생성됩니다.</p>
           </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-medium text-zinc-300 mb-1">계약 연장 기간</label>
+              <select id="renewal-years-select" class="w-full bg-[#0e1117] text-xs px-3 py-2 rounded-lg border border-white/[0.08] text-white focus:outline-none focus:border-emerald-500">
+                <option value="1">1년 연장</option>
+                <option value="2">2년 연장</option>
+                <option value="3" selected>3년 연장 (표준)</option>
+                <option value="4">4년 연장</option>
+                <option value="5">5년 장기계약</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-zinc-300 mb-1">재계약 보너스 (€)</label>
+              <input type="number" id="renewal-bonus-input" placeholder="선택사항 (예: 2000000)" min="0" step="50000"
+                class="w-full bg-[#0e1117] text-xs px-3 py-2 rounded-lg border border-white/[0.08] text-white focus:outline-none focus:border-emerald-500 font-mono">
+            </div>
+          </div>
+
           <div>
-            <label class="block text-xs font-medium text-zinc-300 mb-1">재계약 보너스 (€)</label>
-            <input type="number" id="renewal-bonus-input" placeholder="선택사항 (예: 2000000)" min="0" step="50000"
+            <label class="block text-xs font-medium text-zinc-300 mb-1">신규 바이아웃 조항 (€ - 선택사항)</label>
+            <input type="number" id="renewal-buyout-input" placeholder="미설정 시 구단 바이아웃 방침 준용" min="0" step="1000000"
               class="w-full bg-[#0e1117] text-xs px-3 py-2 rounded-lg border border-white/[0.08] text-white focus:outline-none focus:border-emerald-500 font-mono">
           </div>
+
+          <div class="pt-2 flex items-center justify-end gap-2 border-t border-white/[0.06]">
+            <button type="button" onclick="closeClientRenewalModal()"
+              class="px-3.5 py-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs font-medium transition">
+              취소
+            </button>
+            <button type="submit" id="renewal-submit-eval-btn"
+              class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition shadow-md shadow-emerald-950/40 flex items-center gap-1.5">
+              <span>📋 구단 스포츠 디렉터에 공식 제안서 제출 (심사 요청)</span>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- PANEL 2: Sporting Director Review & Counter-Offer -->
+      <div id="renewal-panel-review" class="hidden space-y-4">
+        <div id="renewal-verdict-banner" class="p-3.5 rounded-xl border flex items-start gap-3 bg-emerald-950/20 border-emerald-500/30">
+          <span id="renewal-verdict-icon" class="text-xl">🏛️</span>
+          <div class="flex-1">
+            <div class="flex items-center gap-2">
+              <span id="renewal-verdict-badge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">심사 결과</span>
+              <span id="renewal-psr-status-badge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-sky-500/20 text-sky-300 border border-sky-500/30">PSR 헤드룸 검증 완료</span>
+            </div>
+            <p id="renewal-director-decision" class="text-xs text-white font-medium mt-1.5 leading-relaxed"></p>
+          </div>
         </div>
 
-        <div>
-          <label class="block text-xs font-medium text-zinc-300 mb-1">신규 바이아웃 조항 (€ - 선택사항)</label>
-          <input type="number" id="renewal-buyout-input" placeholder="미설정 시 구단 방침 준용" min="0" step="1000000"
-            class="w-full bg-[#0e1117] text-xs px-3 py-2 rounded-lg border border-white/[0.08] text-white focus:outline-none focus:border-emerald-500 font-mono">
+        <div class="p-3 rounded-lg bg-[#0e1117] border border-white/[0.06] space-y-2 text-xs">
+          <div class="flex items-center justify-between border-b border-white/[0.04] pb-2">
+            <span class="text-zinc-400">구단 잔여 PSR 헤드룸 여력:</span>
+            <span id="renewal-psr-headroom-val" class="font-mono font-bold text-emerald-400">€65.0M</span>
+          </div>
+          <div class="flex items-center justify-between border-b border-white/[0.04] pb-2">
+            <span class="text-zinc-400">에이전시 요구 주급 인상폭:</span>
+            <span id="renewal-wage-hike-val" class="font-mono font-bold text-amber-300">+25.0%</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-zinc-400">신규 연간 총 보수 (Gross):</span>
+            <span id="renewal-annual-gross-val" class="font-mono font-bold text-white">€12.5M / 년</span>
+          </div>
         </div>
 
-        <div class="pt-2 flex items-center justify-end gap-2">
-          <button type="button" onclick="closeClientRenewalModal()"
-            class="px-3.5 py-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs font-medium transition">
-            취소
-          </button>
-          <button type="submit"
-            class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition shadow-md shadow-emerald-950/40">
-            재계약 체결 실행
-          </button>
+        <div id="renewal-counter-card" class="p-3.5 rounded-xl bg-amber-950/20 border border-amber-500/30 space-y-2.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-amber-300 flex items-center gap-1.5">
+              <span>💼</span> 구단 스포츠 디렉터 역제안 (Counter-Offer)
+            </span>
+            <span class="text-[10px] text-zinc-400">성과급 연동 리스크 분산안</span>
+          </div>
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <div class="p-2 rounded bg-black/40 border border-white/[0.04]">
+              <span class="text-zinc-500 block text-[10px]">구단 제시 기본 주급</span>
+              <span id="renewal-counter-wage" class="font-mono font-bold text-white text-sm">€200,000 / 주</span>
+            </div>
+            <div class="p-2 rounded bg-black/40 border border-white/[0.04]">
+              <span class="text-zinc-500 block text-[10px]">출전 및 성과 보너스</span>
+              <span id="renewal-counter-bonus" class="font-mono font-bold text-emerald-400 text-sm">€35,000 / 주</span>
+            </div>
+            <div class="p-2 rounded bg-black/40 border border-white/[0.04]">
+              <span class="text-zinc-500 block text-[10px]">충성도/사이닝 보너스</span>
+              <span id="renewal-counter-signing" class="font-mono font-bold text-sky-400 text-sm">€2,000,000</span>
+            </div>
+            <div class="p-2 rounded bg-black/40 border border-white/[0.04]">
+              <span class="text-zinc-500 block text-[10px]">구단 합의 바이아웃</span>
+              <span id="renewal-counter-buyout" class="font-mono font-bold text-purple-400 text-sm">€150,000,000</span>
+            </div>
+          </div>
+          <p id="renewal-counter-notes" class="text-[11px] text-zinc-300 leading-normal italic"></p>
         </div>
-      </form>
+
+        <div class="pt-2 flex flex-wrap items-center justify-between gap-2 border-t border-white/[0.06]">
+          <button type="button" onclick="returnToRenewalForm()"
+            class="px-3 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs font-medium transition">
+            ← 조건 수정 후 재협상
+          </button>
+          <div class="flex items-center gap-2">
+            <button type="button" id="renewal-force-btn" onclick="finalizeRenewalPipeline('FORCE_EXECUTE')"
+              class="px-3 py-1.5 rounded-lg bg-zinc-700 hover:bg-zinc-600 text-white font-medium text-xs transition" title="구단 디렉터를 압박하여 원안 요구 고수">
+              원안 고수 강행
+            </button>
+            <button type="button" id="renewal-accept-counter-btn" onclick="finalizeRenewalPipeline('ACCEPT_COUNTER')"
+              class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition shadow-md shadow-emerald-950/40 flex items-center gap-1.5">
+              <span>✍️ 구단 역제안 수락 및 추가합의서(Addendum) 정식 체결</span>
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
   <!-- ========================================================================= -->
-  <!-- MODAL: CLIENT TRANSFER (5대 리그 구단 이적) -->
+  <!-- MODAL: CLIENT TRANSFER GATEWAY (4단계 이적 트랜잭션 게이트웨이) -->
   <!-- ========================================================================= -->
   <div id="modal-client-transfer" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm hidden p-4">
-    <div class="ui-card w-full max-w-lg p-6 border-white/[0.12] bg-[#12151c] shadow-2xl relative">
+    <div class="ui-card w-full max-w-xl p-6 border-white/[0.12] bg-[#12151c] shadow-2xl relative max-h-[90vh] overflow-y-auto">
       <button onclick="closeClientTransferModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-white transition">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
       </button>
@@ -7462,77 +8556,252 @@
       <div class="flex items-center gap-2 mb-4">
         <span class="w-8 h-8 rounded-lg bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-400 font-bold text-sm">🚀</span>
         <div>
-          <h3 id="transfer-modal-title" class="text-base font-bold text-white tracking-tight">구단 이적 협상</h3>
-          <p id="transfer-modal-subtitle" class="text-xs text-zinc-400">새로운 구단으로의 이적 계약 및 연봉 협상</p>
+          <h3 id="transfer-modal-title" class="text-base font-bold text-white tracking-tight">구단 이적 트랜잭션 게이트웨이 (4-Stage Pipeline)</h3>
+          <p id="transfer-modal-subtitle" class="text-xs text-zinc-400">구단 합의 → GBE 워크퍼밋 → 정형·심혈관 메디컬 → FIFA TMS 공식 발령</p>
         </div>
       </div>
 
-      <form onsubmit="submitClientTransfer(event)" class="space-y-4">
-        <input type="hidden" id="transfer-client-id">
-        <input type="hidden" id="transfer-client-type" value="PLAYER">
+      <!-- PANEL 1: Initial Transfer Offer Form -->
+      <div id="transfer-panel-form" class="space-y-4">
+        <form onsubmit="startTransferPipelineEvaluation(event)" class="space-y-4">
+          <input type="hidden" id="transfer-client-id">
+          <input type="hidden" id="transfer-client-type" value="PLAYER">
 
-        <div class="grid grid-cols-2 gap-3 p-3 rounded-lg bg-[#0e1117] border border-white/[0.04] text-xs">
-          <div>
-            <span class="text-zinc-500">현재 구단:</span>
-            <span id="transfer-current-club" class="font-bold text-white ml-1">-</span>
+          <div class="grid grid-cols-2 gap-3 p-3 rounded-lg bg-[#0e1117] border border-white/[0.04] text-xs">
+            <div>
+              <span class="text-zinc-500">현재 구단:</span>
+              <span id="transfer-current-club" class="font-bold text-white ml-1">-</span>
+            </div>
+            <div>
+              <span class="text-zinc-500">현재 시장가치:</span>
+              <span id="transfer-current-val" class="font-mono font-bold text-emerald-400 ml-1">-</span>
+            </div>
           </div>
-          <div>
-            <span class="text-zinc-500">현재 시장가치:</span>
-            <span id="transfer-current-val" class="font-mono font-bold text-emerald-400 ml-1">-</span>
-          </div>
-        </div>
 
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block text-xs font-medium text-zinc-300 mb-1">이적 목적지 구단명</label>
-            <input type="text" id="transfer-club-input" required placeholder="예: Real Madrid, Arsenal"
-              class="w-full bg-[#0e1117] text-xs px-3 py-2 rounded-lg border border-white/[0.08] text-white focus:outline-none focus:border-sky-500">
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-medium text-zinc-300 mb-1">이적 목적지 구단명</label>
+              <input type="text" id="transfer-club-input" required placeholder="예: Real Madrid, Arsenal, FC Bayern"
+                class="w-full bg-[#0e1117] text-xs px-3 py-2 rounded-lg border border-white/[0.08] text-white focus:outline-none focus:border-sky-500">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-zinc-300 mb-1">소속 리그</label>
+              <select id="transfer-league-select" class="w-full bg-[#0e1117] text-xs px-3 py-2 rounded-lg border border-white/[0.08] text-white focus:outline-none focus:border-sky-500">
+                <option value="Premier League">Premier League (EPL)</option>
+                <option value="La Liga">La Liga</option>
+                <option value="Bundesliga">Bundesliga</option>
+                <option value="Serie A">Serie A</option>
+                <option value="Ligue 1">Ligue 1</option>
+                <option value="기타 글로벌 리그">기타 글로벌 리그</option>
+              </select>
+            </div>
           </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-medium text-zinc-300 mb-1">제시 이적료 (€)</label>
+              <input type="number" id="transfer-fee-input" required min="100000" step="500000"
+                class="w-full bg-[#0e1117] text-xs px-3 py-2 rounded-lg border border-white/[0.08] text-white focus:outline-none focus:border-sky-500 font-mono">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-zinc-300 mb-1">신규 주급 (€ / Week)</label>
+              <input type="number" id="transfer-wage-input" required min="1000" step="1000"
+                class="w-full bg-[#0e1117] text-xs px-3 py-2 rounded-lg border border-white/[0.08] text-white focus:outline-none focus:border-sky-500 font-mono">
+            </div>
+          </div>
+
           <div>
-            <label class="block text-xs font-medium text-zinc-300 mb-1">소속 리그</label>
-            <select id="transfer-league-select" class="w-full bg-[#0e1117] text-xs px-3 py-2 rounded-lg border border-white/[0.08] text-white focus:outline-none focus:border-sky-500">
-              <option value="Premier League">Premier League (EPL)</option>
-              <option value="La Liga">La Liga</option>
-              <option value="Bundesliga">Bundesliga</option>
-              <option value="Serie A">Serie A</option>
-              <option value="Ligue 1">Ligue 1</option>
-              <option value="테스트 리그 (Test League)">테스트 리그 (Test League)</option>
-              <option value="기타 글로벌 리그">기타 글로벌 리그</option>
+            <label class="block text-xs font-medium text-zinc-300 mb-1">계약 기간</label>
+            <select id="transfer-years-select" class="w-full bg-[#0e1117] text-xs px-3 py-2 rounded-lg border border-white/[0.08] text-white focus:outline-none focus:border-sky-500">
+              <option value="2">2년 계약</option>
+              <option value="3">3년 계약</option>
+              <option value="4" selected>4년 계약 (표준)</option>
+              <option value="5">5년 계약 (장기)</option>
             </select>
           </div>
+
+          <div class="pt-2 flex items-center justify-end gap-2 border-t border-white/[0.06]">
+            <button type="button" onclick="closeClientTransferModal()"
+              class="px-3.5 py-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs font-medium transition">
+              취소
+            </button>
+            <button type="submit" id="transfer-start-btn"
+              class="px-4 py-2 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-semibold text-xs transition shadow-md shadow-sky-950/40 flex items-center gap-1.5">
+              <span>🚀 4단계 이적 트랜잭션 게이트웨이 심사 개시</span>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- PANEL 2: 4-Stage Stepper & Settlement Verification -->
+      <div id="transfer-panel-stepper" class="hidden space-y-4">
+        <div class="grid grid-cols-4 gap-1.5 p-2 rounded-xl bg-[#0e1117] border border-white/[0.06] text-center text-[10px]">
+          <div id="stage-tab-1" class="p-1.5 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 font-bold">
+            1. 이적료 합의
+          </div>
+          <div id="stage-tab-2" class="p-1.5 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 font-bold">
+            2. GBE 워크퍼밋
+          </div>
+          <div id="stage-tab-3" class="p-1.5 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 font-bold">
+            3. 메디컬 테스트
+          </div>
+          <div id="stage-tab-4" class="p-1.5 rounded-lg bg-sky-500/15 border border-sky-500/30 text-sky-300 font-bold">
+            4. FIFA TMS
+          </div>
         </div>
 
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block text-xs font-medium text-zinc-300 mb-1">최종 이적료 (€)</label>
-            <input type="number" id="transfer-fee-input" required min="100000" step="500000"
-              class="w-full bg-[#0e1117] text-xs px-3 py-2 rounded-lg border border-white/[0.08] text-white focus:outline-none focus:border-sky-500 font-mono">
+        <div class="space-y-2.5 text-xs">
+          <div class="p-3 rounded-lg bg-[#0e1117] border border-white/[0.06] space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-white flex items-center gap-1.5">
+                <span class="text-emerald-400">✓</span> 1단계: 구단 간 이적료 및 셀온(Sell-On) 합의
+              </span>
+              <span id="stage1-fee-badge" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300">합의 완료</span>
+            </div>
+            <p id="stage1-desc" class="text-[11px] text-zinc-400 leading-normal"></p>
           </div>
+
+          <div class="p-3 rounded-lg bg-[#0e1117] border border-white/[0.06] space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-white flex items-center gap-1.5">
+                <span class="text-emerald-400">✓</span> 2단계: UK FA GBE 워크퍼밋 / 리그 비자 적격성
+              </span>
+              <span id="stage2-gbe-badge" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-sky-500/20 text-sky-300">Auto-Pass</span>
+            </div>
+            <p id="stage2-desc" class="text-[11px] text-zinc-400 leading-normal"></p>
+          </div>
+
+          <div class="p-3 rounded-lg bg-[#0e1117] border border-white/[0.06] space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-white flex items-center gap-1.5">
+                <span class="text-emerald-400">✓</span> 3단계: 정형외과 및 심혈관 메디컬 적합성
+              </span>
+              <span id="stage3-medical-badge" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300">ALL PASS</span>
+            </div>
+            <p id="stage3-desc" class="text-[11px] text-zinc-400 leading-normal"></p>
+          </div>
+
+          <div class="p-3 rounded-lg bg-[#0e1117] border border-sky-500/20 space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-white flex items-center gap-1.5">
+                <span class="text-sky-400">🏛️</span> 4단계: FIFA TMS 이적이행증명서 & 연대기여금
+              </span>
+              <span id="stage4-tms-code" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-sky-500/20 text-sky-300">TMS-2025-ENG</span>
+            </div>
+            <p id="stage4-desc" class="text-[11px] text-zinc-400 leading-normal"></p>
+          </div>
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-emerald-950/20 border border-emerald-500/30 flex items-center justify-between">
           <div>
-            <label class="block text-xs font-medium text-zinc-300 mb-1">신규 주급 (€ / Week)</label>
-            <input type="number" id="transfer-wage-input" required min="1000" step="1000"
-              class="w-full bg-[#0e1117] text-xs px-3 py-2 rounded-lg border border-white/[0.08] text-white focus:outline-none focus:border-sky-500 font-mono">
+            <div class="text-[10px] text-zinc-400 uppercase font-semibold">이적 후 신규 계약 조건</div>
+            <div id="transfer-summary-club" class="text-sm font-bold text-white mt-0.5">Arsenal FC · Premier League</div>
+            <div id="transfer-summary-wage" class="text-xs font-mono text-emerald-400 mt-0.5">€250,000 / 주 (4년 계약)</div>
+          </div>
+          <div class="text-right">
+            <div class="text-[10px] text-zinc-400 uppercase font-semibold">에이전시 중개 수수료</div>
+            <div id="transfer-summary-commission" class="text-sm font-bold text-amber-300 font-mono">€1,500,000</div>
+            <div class="text-[9px] text-zinc-500">FIFA FFAR 5.0% 캡 준수</div>
+          </div>
+        </div>
+
+        <div class="pt-2 flex items-center justify-between gap-2 border-t border-white/[0.06]">
+          <button type="button" onclick="returnToTransferForm()"
+            class="px-3 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs font-medium transition">
+            ← 조건 재조정 / 수정
+          </button>
+          <button type="button" onclick="finalizeTransferPipeline()"
+            class="px-4 py-2 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-semibold text-xs transition shadow-md shadow-sky-950/40 flex items-center gap-1.5">
+            <span>🏛️ FIFA TMS 최종 이적 공식 발효 승인</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: CLIENT FORMAL TERMINATION (상호 합의 해지 및 수수료 정산 협약서) -->
+  <!-- ========================================================================= -->
+  <div id="modal-client-termination" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm hidden p-4">
+    <div class="ui-card w-full max-w-lg p-6 border-white/[0.12] bg-[#12151c] shadow-2xl relative">
+      <button onclick="closeClientTerminationModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-white transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+      </button>
+
+      <div class="flex items-center gap-2 mb-4">
+        <span class="w-8 h-8 rounded-lg bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400 font-bold text-sm">📜</span>
+        <div>
+          <h3 class="text-base font-bold text-white tracking-tight">전속 대리 계약 합의 해지 및 수수료 정산 협약서</h3>
+          <p class="text-xs text-zinc-400">FIFA FFAR Article 12 규정에 의거한 공식 상호 합의 해약 및 잔여 권리·의무 정산</p>
+        </div>
+      </div>
+
+      <form onsubmit="submitFormalTermination(event)" class="space-y-4">
+        <input type="hidden" id="term-client-id">
+        <input type="hidden" id="term-client-type" value="PLAYER">
+
+        <div class="p-3 rounded-lg bg-[#0e1117] border border-white/[0.04] text-xs space-y-1.5">
+          <div class="flex justify-between">
+            <span class="text-zinc-500">해지 대상 고객:</span>
+            <span id="term-client-name" class="font-bold text-white">-</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-zinc-500">현재 소속:</span>
+            <span id="term-client-club" class="font-medium text-zinc-300">-</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-zinc-500">현재 시장 가치:</span>
+            <span id="term-client-val" class="font-mono font-bold text-emerald-400">-</span>
           </div>
         </div>
 
         <div>
-          <label class="block text-xs font-medium text-zinc-300 mb-1">계약 기간</label>
-          <select id="transfer-years-select" class="w-full bg-[#0e1117] text-xs px-3 py-2 rounded-lg border border-white/[0.08] text-white focus:outline-none focus:border-sky-500">
-            <option value="2">2년 계약</option>
-            <option value="3">3년 계약</option>
-            <option value="4" selected>4년 계약 (표준)</option>
-            <option value="5">5년 계약</option>
+          <label class="block text-xs font-medium text-zinc-300 mb-1">해지 유형 및 사유 구분</label>
+          <select id="term-settlement-type" class="w-full bg-[#0e1117] text-xs px-3 py-2 rounded-lg border border-white/[0.08] text-white focus:outline-none focus:border-rose-500">
+            <option value="MUTUAL_RELEASE">상호 합의 해지 (Mutual Release - 차기 프로젝트 전환)</option>
+            <option value="BUYOUT_COMPENSATION">위약벌 및 보상금 정산 해지 (Buyout Compensation)</option>
+            <option value="EXPIRATION">대리 계약 기간 만료 (Contract Expiration)</option>
           </select>
         </div>
 
-        <div class="pt-2 flex items-center justify-end gap-2">
-          <button type="button" onclick="closeClientTransferModal()"
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-medium text-zinc-300 mb-1">기수령·정산 완료 수수료 (€)</label>
+            <input type="number" id="term-settled-fee" value="0" min="0" step="10000"
+              class="w-full bg-[#0e1117] text-xs px-3 py-2 rounded-lg border border-white/[0.08] text-white focus:outline-none focus:border-rose-500 font-mono">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-zinc-300 mb-1">포기·감면 수수료 (€)</label>
+            <input type="number" id="term-waived-fee" value="0" min="0" step="10000"
+              class="w-full bg-[#0e1117] text-xs px-3 py-2 rounded-lg border border-white/[0.08] text-white focus:outline-none focus:border-rose-500 font-mono">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-zinc-300 mb-1">공식 해지 사유 (Release Reason)</label>
+          <input type="text" id="term-reason-input" required value="선수의 신규 리그 도전 및 대리인 상호 합의에 따른 원만한 계약 종료"
+            class="w-full bg-[#0e1117] text-xs px-3 py-2 rounded-lg border border-white/[0.08] text-white focus:outline-none focus:border-rose-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-zinc-300 mb-1">후속 대리인 및 선수 측 인수인계 사항 (Handover Notes)</label>
+          <textarea id="term-notes-input" rows="2" placeholder="후임 대리인 또는 가족 법인과의 권리 인수인계 사항을 기록합니다."
+            class="w-full bg-[#0e1117] text-xs px-3 py-2 rounded-lg border border-white/[0.08] text-white focus:outline-none focus:border-rose-500"></textarea>
+        </div>
+
+        <div class="p-2.5 rounded bg-rose-950/20 border border-rose-500/20 text-[11px] text-rose-300 flex items-center gap-2">
+          <span>⚠️</span>
+          <span>해지 서명 즉시 활성 포트폴리오에서 차감되며, 영입 관심 타깃 풀로 안전하게 자동 복귀됩니다.</span>
+        </div>
+
+        <div class="pt-2 flex items-center justify-end gap-2 border-t border-white/[0.06]">
+          <button type="button" onclick="closeClientTerminationModal()"
             class="px-3.5 py-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs font-medium transition">
             취소
           </button>
           <button type="submit"
-            class="px-4 py-2 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-semibold text-xs transition shadow-md shadow-sky-950/40">
-            이적 계약 완료
+            class="px-4 py-2 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-semibold text-xs transition shadow-md shadow-rose-950/40">
+            ✍️ 상호 합의 해지 협약서 최종 서명
           </button>
         </div>
       </form>

@@ -294,6 +294,128 @@ class TestFullBackendSuite(unittest.TestCase):
         self.assertIn("Touches in box", data_st["axes_labels"])
         self.assertIn("Conversion%", data_st["axes_labels"])
 
+    def test_17_recruitment_deal_memo(self):
+        """Test [Pillar 2] Client Recruitment Deal Memorandum (사내 전속 영입 심사 품의서)."""
+        # 1. Test Player Deal Memo (Erling Haaland)
+        res_player = self.client.get("/api/agency/recruitment-deal-memo/PLAYER/1")
+        self.assertEqual(res_player.status_code, 200)
+        data_p = res_player.json()
+        self.assertEqual(data_p["name"], "Erling Haaland")
+        self.assertEqual(data_p["target_type"], "PLAYER")
+        self.assertIn("radar_data", data_p)
+        self.assertEqual(len(data_p["radar_data"]["labels"]), 6)
+        self.assertEqual(len(data_p["radar_data"]["scores"]), 6)
+        self.assertIn("cash_flow", data_p)
+        self.assertEqual(len(data_p["cash_flow"]), 5)
+        self.assertIn("fifa_compliance", data_p)
+        self.assertEqual(len(data_p["fifa_compliance"]), 4)
+        self.assertIn("executive_signoff", data_p)
+        self.assertEqual(data_p["executive_signoff"]["committee_status"], "APPROVED_FOR_SIGNING")
+
+        # 2. Test Manager Deal Memo (Pep Guardiola)
+        res_mgr = self.client.get("/api/agency/recruitment-deal-memo/MANAGER/101")
+        self.assertEqual(res_mgr.status_code, 200)
+        data_m = res_mgr.json()
+        self.assertEqual(data_m["name"], "Pep Guardiola")
+        self.assertEqual(data_m["target_type"], "MANAGER")
+        self.assertEqual(data_m["overall_grade"], "S+")
+        self.assertGreater(data_m["total_projected_roi_eur"], 0)
+
+    def test_18_client_renewal_pipeline(self):
+        """Test [Pillar 1] Realistic Club Renewal Pipeline with PSR Headroom Audit."""
+        # 1. Enroll client for renewal test
+        enroll_res = self.client.post("/api/agency/enroll-client", json={
+            "target_id": 1,
+            "target_type": "PLAYER",
+            "lead_agent": "Lead Partner Kim",
+            "commission_pct": 5.0
+        })
+        self.assertEqual(enroll_res.status_code, 200)
+
+        # 2. Evaluate reasonable wage increase (Direct acceptance)
+        eval_res = self.client.post("/api/agency/client/renew-pipeline", json={
+            "client_id": 1,
+            "client_type": "PLAYER",
+            "requested_weekly_wage_eur": 520000,
+            "contract_years": 4,
+            "action": "EVALUATE"
+        })
+        self.assertEqual(eval_res.status_code, 200)
+        data_eval = eval_res.json()
+        self.assertIn("decision", data_eval)
+        self.assertIn("club_psr_headroom_eur", data_eval)
+
+        # 3. Confirm Direct or Counter
+        action_to_take = "CONFIRM_DIRECT" if data_eval["decision"] == "ACCEPTED_DIRECTLY" else "ACCEPT_COUNTER"
+        confirm_res = self.client.post("/api/agency/client/renew-pipeline", json={
+            "client_id": 1,
+            "client_type": "PLAYER",
+            "requested_weekly_wage_eur": 520000,
+            "contract_years": 4,
+            "action": action_to_take
+        })
+        self.assertEqual(confirm_res.status_code, 200)
+        self.assertEqual(confirm_res.json()["status"], "success")
+
+    def test_19_client_transfer_pipeline(self):
+        """Test [Pillar 1] 4-Stage Transfer Transaction Gateway (Fee, GBE, Medical, FIFA TMS)."""
+        # 1. Simulate 4-Stage Transfer Gateway
+        eval_res = self.client.post("/api/agency/client/transfer-pipeline", json={
+            "client_id": 1,
+            "client_type": "PLAYER",
+            "destination_club": "Real Madrid CF",
+            "destination_league": "La Liga",
+            "offered_transfer_fee_eur": 220000000,
+            "offered_weekly_wage_eur": 550000,
+            "contract_years": 5,
+            "action": "EVALUATE"
+        })
+        self.assertEqual(eval_res.status_code, 200)
+        data_trans = eval_res.json()
+        self.assertEqual(len(data_trans["stages"]), 4)
+        self.assertTrue(data_trans["tms_certificate_id"].startswith("TMS-2025"))
+        self.assertEqual(data_trans["solidarity_contribution_eur"], 11000000)
+
+        # 2. Execute Transfer
+        exec_res = self.client.post("/api/agency/client/transfer-pipeline", json={
+            "client_id": 1,
+            "client_type": "PLAYER",
+            "destination_club": "Real Madrid CF",
+            "destination_league": "La Liga",
+            "offered_transfer_fee_eur": 220000000,
+            "offered_weekly_wage_eur": 550000,
+            "contract_years": 5,
+            "action": "EXECUTE_TRANSFER"
+        })
+        self.assertEqual(exec_res.status_code, 200)
+        self.assertEqual(exec_res.json()["status"], "success")
+
+    def test_20_client_formal_termination(self):
+        """Test [Pillar 1] Formal Mutual Release & Commission Settlement Agreement."""
+        term_res = self.client.post("/api/agency/client/terminate-formal", json={
+            "client_id": 1,
+            "client_type": "PLAYER",
+            "settlement_type": "MUTUAL_RELEASE",
+            "reason": "Contract mutual release and handover to player family office.",
+            "settled_commission_eur": 200000,
+            "handover_notes": "All historical commercial rights and image rights settled."
+        })
+        self.assertEqual(term_res.status_code, 200)
+        self.assertEqual(term_res.json()["status"], "success")
+        self.assertEqual(term_res.json()["settled_commission_eur"], 200000)
+
+    @classmethod
+    def tearDownClass(cls):
+        """Clean up test client records to maintain empty active portfolio as requested by user."""
+        import sqlite3
+        conn = sqlite3.connect("data/agency_desk.db")
+        cur = conn.cursor()
+        cur.execute("DELETE FROM agency_contracts WHERE client_name = 'Erling Haaland'")
+        cur.execute("UPDATE agency_recruitment_targets SET scouting_status = 'TARGETED' WHERE target_id = 1 AND target_type = 'PLAYER'")
+        cur.execute("UPDATE players SET current_club = 'Manchester City FC', league = 'Premier League', is_agency_client = 0 WHERE player_id = 1")
+        conn.commit()
+        conn.close()
+
 
 if __name__ == "__main__":
     unittest.main()

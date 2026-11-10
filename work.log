@@ -3280,130 +3280,384 @@
 [2026-11-10 16:28:56] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
 [2026-11-10 16:29:09] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
 [2026-11-10 16:29:10] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
-[2026-11-10 16:29:21] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
-[2026-11-10 16:29:25] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
-[2026-11-10 16:29:25] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
-[2026-11-10 16:29:29] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
-[2026-11-10 16:29:32] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
-[2026-11-10 16:29:38] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
-[2026-11-10 16:29:39] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
-[2026-11-10 16:29:39] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
-[2026-11-10 16:29:40] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
-[2026-11-10 16:29:40] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
-[2026-11-10 16:29:41] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
-[2026-11-10 16:29:42] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
-[2026-11-10 16:30:05] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
-[2026-11-10 16:30:10] [INFO] [MCP_RECRUITMENT_PITCH] Generated Pitch Deck for Arda Güler (PLAYER): recruitment_pitch_Arda_Güler.md
-[2026-11-10 16:31:16] [INFO] [MCP_AGENCY_ENROLL] Signed new client: Arda Güler (PLAYER) by 김대표 Agent (대표 관리자)
-[2026-11-10 16:31:18] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 1 players, 0 managers, Total MV €90,000,000
-[2026-11-10 16:31:18] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
-[2026-11-10 16:31:18] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 1 players, 0 managers, Total MV €90,000,000
-[2026-11-10 16:31:29] [INFO] [MCP_AGENCY_TERMINATE] Terminated agency contract for client ID 27 (PLAYER)
-[2026-11-10 16:31:30] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
-[2026-11-10 16:31:30] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
-[2026-11-10 16:31:45] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
-[2026-11-10 16:31:46] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
-[2026-11-10 16:31:47] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
-[2026-11-10 16:31:47] [INFO] [MCP_RECRUITMENT_PITCH] Generated Pitch Deck for Pep Guardiola (MANAGER): recruitment_pitch_Pep_Guardiola.md
-[2026-11-10 16:31:47] [INFO] [MCP_RECRUITMENT_PITCH] Generated Pitch Deck for Lamine Yamal (PLAYER): recruitment_pitch_Lamine_Yamal.md
-[2026-11-10 16:31:52] [INFO] [MCP_RECRUITMENT_PITCH] Generated Pitch Deck for Arda Güler (PLAYER): recruitment_pitch_Arda_Güler.md
-[2026-11-10 16:31:55] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
-[2026-11-10 16:32:11] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
-[2026-11-10 16:32:12] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
-[2026-11-10 16:32:13] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
-[2026-11-10 16:32:14] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
-[2026-11-10 16:39:29] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
-[2026-11-10 17:08:38] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
-[2026-11-10 17:11:13] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€38,000,000, wage=€105,000/wk, 4yr) -> annual_psr=€16,877,130
-[2026-11-10 17:11:13] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
-[2026-11-10 17:11:14] [INFO] [MCP_TOOL_11] Discovered 6 undervalued prospects (pos=ALL, max_age=23)
-[2026-11-10 17:11:14] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
-[2026-11-10 17:11:14] [INFO] [MCP_TOOL_8] scan_bosman_and_replacement_targets(pos=ALL, league=ALL) -> 25 club targets found
-[2026-11-10 17:11:18] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
-[2026-11-10 17:11:26] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
-[2026-11-10 17:12:07] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
-[2026-11-10 17:12:09] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
-[2026-11-10 17:12:14] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
-[2026-11-10 17:12:21] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
-[2026-11-10 17:12:25] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€220,000,000, wage=€807,300/wk, 4yr) -> annual_psr=€108,011,357
-[2026-11-10 17:12:25] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€220,000,000
-[2026-11-10 17:12:27] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=La Liga, fee=€200,000,000, wage=€585,000/wk, 4yr) -> annual_psr=€86,651,700
-[2026-11-10 17:12:27] [INFO] [MCP_TOOL_1] get_player_complete_data(Lamine Yamal) -> club=FC Barcelona, val=€200,000,000
-[2026-11-10 17:12:28] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=La Liga, fee=€180,000,000, wage=€585,000/wk, 4yr) -> annual_psr=€81,476,700
-[2026-11-10 17:12:28] [INFO] [MCP_TOOL_1] get_player_complete_data(Kylian Mbappé) -> club=Real Madrid CF, val=€180,000,000
-[2026-11-10 17:12:29] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€220,000,000, wage=€807,300/wk, 4yr) -> annual_psr=€108,011,357
-[2026-11-10 17:12:29] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€220,000,000
-[2026-11-10 17:12:31] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=La Liga, fee=€200,000,000, wage=€585,000/wk, 4yr) -> annual_psr=€86,651,700
-[2026-11-10 17:12:31] [INFO] [MCP_TOOL_1] get_player_complete_data(Lamine Yamal) -> club=FC Barcelona, val=€200,000,000
-[2026-11-10 17:12:35] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€220,000,000, wage=€807,300/wk, 4yr) -> annual_psr=€108,011,357
-[2026-11-10 17:12:35] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€220,000,000
-[2026-11-10 17:12:39] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=La Liga, fee=€180,000,000, wage=€585,000/wk, 4yr) -> annual_psr=€81,476,700
-[2026-11-10 17:12:39] [INFO] [MCP_TOOL_1] get_player_complete_data(Kylian Mbappé) -> club=Real Madrid CF, val=€180,000,000
-[2026-11-10 17:12:40] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=La Liga, fee=€150,000,000, wage=€440,700/wk, 4yr) -> annual_psr=€65,197,614
-[2026-11-10 17:12:40] [INFO] [MCP_TOOL_1] get_player_complete_data(Pedri) -> club=FC Barcelona, val=€150,000,000
-[2026-11-10 17:12:51] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€38,000,000, wage=€312,000/wk, 4yr) -> annual_psr=€29,806,092
-[2026-11-10 17:12:51] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Tottenham Hotspur FC, val=€38,000,000
-[2026-11-10 17:14:39] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=테스트/가상 리그 (Virtual League), fee=€8,500,000, wage=€18,200/wk, 4yr) -> annual_psr=€3,717,626
-[2026-11-10 17:14:39] [INFO] [MCP_TOOL_1] get_player_complete_data(Mateo Silva) -> club=솔라리스 시티 FC, val=€8,500,000
-[2026-11-10 17:29:01] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€38,000,000, wage=€105,000/wk, 4yr) -> annual_psr=€16,877,130
-[2026-11-10 17:29:02] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
-[2026-11-10 17:29:02] [INFO] [MCP_TOOL_11] Discovered 6 undervalued prospects (pos=ALL, max_age=23)
-[2026-11-10 17:29:02] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
-[2026-11-10 17:29:02] [INFO] [MCP_TOOL_8] scan_bosman_and_replacement_targets(pos=ALL, league=ALL) -> 25 club targets found
-[2026-11-10 17:29:09] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
-[2026-11-10 17:30:10] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
-[2026-11-10 17:30:12] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
-[2026-11-10 17:30:29] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
-[2026-11-10 17:31:06] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
-[2026-11-10 17:32:06] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
-[2026-11-10 17:32:42] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
-[2026-11-10 17:32:43] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
-[2026-11-10 17:32:44] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
-[2026-11-10 17:32:50] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
-[2026-11-10 17:33:05] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
-[2026-11-10 17:33:31] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
-[2026-11-10 17:33:33] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€38,000,000, wage=€105,000/wk, 4yr) -> annual_psr=€16,877,130
-[2026-11-10 17:33:33] [INFO] [MCP_TOOL_11] Discovered 6 undervalued prospects (pos=ALL, max_age=23)
-[2026-11-10 17:33:33] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
-[2026-11-10 17:33:34] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
-[2026-11-10 17:33:34] [INFO] [MCP_TOOL_8] scan_bosman_and_replacement_targets(pos=ALL, league=ALL) -> 25 club targets found
-[2026-11-10 17:33:39] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
-[2026-11-10 17:33:41] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
-[2026-11-10 17:33:41] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
-[2026-11-10 17:33:44] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
-[2026-11-10 17:33:56] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
-[2026-11-10 17:33:56] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
-[2026-11-10 17:33:57] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
-[2026-11-10 17:33:57] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
-[2026-11-10 17:33:57] [INFO] [VERTEX_LLM_CALL] Model=gemini-3.8-flash | Temp=0.3 | OutputChars=3060
-[2026-11-10 17:33:58] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
-[2026-11-10 17:33:59] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
-[2026-11-10 17:35:10] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
-[2026-11-10 17:35:35] [INFO] [VERTEX_LLM_CALL] Model=gemini-3.8-flash | Temp=0.3 | OutputChars=3290
-[2026-11-10 17:36:04] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
-[2026-11-10 17:36:05] [INFO] [API_FOOTBALL_QUOTA] API-Football call recorded. Used today: 1/100
-[2026-11-10 17:36:06] [INFO] [API_FOOTBALL_QUOTA] API-Football call recorded. Used today: 2/100
-[2026-11-10 17:36:07] [INFO] [API_FOOTBALL_QUOTA] API-Football call recorded. Used today: 3/100
-[2026-11-10 17:36:07] [INFO] [API_FOOTBALL_QUOTA] API-Football call recorded. Used today: 4/100
-[2026-11-10 17:36:08] [INFO] [API_FOOTBALL_QUOTA] API-Football call recorded. Used today: 5/100
-[2026-11-10 17:36:19] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
-[2026-11-10 17:36:20] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
-[2026-11-10 17:36:22] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
-[2026-11-10 17:36:22] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
-[2026-11-10 17:36:25] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
-[2026-11-10 17:36:33] [INFO] [VERTEX_GROUNDING_SEARCH] Model=gemini-3.5-flash | Club=Manchester City FC | Pos=Player | Headline=Maresca's Midfield Overhaul at Manchester City Struggles for
-[2026-11-10 17:38:18] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
-[2026-11-10 17:39:50] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
-[2026-11-10 17:39:51] [INFO] [API_FOOTBALL_QUOTA] API-Football call recorded. Used today: 6/100
-[2026-11-10 17:40:26] [INFO] [DAILY_INJURY_SYNC_WARN] Error syncing La Liga: database is locked
-[2026-11-10 17:42:43] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
-[2026-11-10 17:43:14] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
-[2026-11-10 17:43:16] [INFO] [API_FOOTBALL_QUOTA] API-Football call recorded. Used today: 7/100
-[2026-11-10 17:43:18] [INFO] [API_FOOTBALL_QUOTA] API-Football call recorded. Used today: 8/100
-[2026-11-10 17:43:20] [INFO] [API_FOOTBALL_QUOTA] API-Football call recorded. Used today: 9/100
-[2026-11-10 17:43:22] [INFO] [API_FOOTBALL_QUOTA] API-Football call recorded. Used today: 10/100
-[2026-11-10 17:43:25] [INFO] [API_FOOTBALL_QUOTA] API-Football call recorded. Used today: 11/100
-[2026-11-10 17:43:26] [INFO] [DAILY_INJURY_SYNC_DONE] Daily injury sync completed. Updated: 585, Total active in DB: 578
-[2026-11-10 17:44:52] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
-[2026-11-10 17:48:55] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
-[2026-11-10 17:51:29] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+... [truncated for diff preview][2026-11-10 22:26:43] [INFO] [VERTEX_STRUCTURED_LLM_CALL] Model=gemini-3.8-flash | Schema=TripleOutputDocsSchema | Temp=0.25
+[2026-11-10 22:26:43] [INFO] [MCP_TOOL_12] Exported Triple Agency Documents for Min-Jae Kim -> C:\Users\DJ\Documents\ai_google\sports_agency\outputs\Min-Jae_Kim
+[2026-11-10 22:26:43] [INFO] [LANGGRAPH_NODE_5] Generated & saved Triple-Output Markdown documents for Min-Jae Kim
+[2026-11-10 22:26:43] [INFO] [MCP_TOOL_16] DataMB Peer Matrix Comparison: Pedri, Declan Rice (CM)
+[2026-11-10 22:26:43] [INFO] [MCP_TOOL_16] DataMB Peer Matrix Comparison: Erling Haaland, Harry Kane (ST)
+[2026-11-10 22:26:43] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Erling Haaland (Manchester City FC vs Arsenal FC)
+[2026-11-10 22:26:43] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Bukayo Saka (Arsenal FC vs Manchester City FC)
+[2026-11-10 22:26:43] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Min-Jae Kim (FC Bayern München vs Borussia Dortmund)
+[2026-11-10 22:26:43] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-10 22:26:43] [INFO] [MCP_TOOL_3] get_peer_group_wage_band(pos=CB, age=30) -> Q25=€76,000, Median=€76,000, Q75=€91,000
+[2026-11-10 22:26:59] [INFO] [VERTEX_GROUNDING_SEARCH] Model=gemini-3.5-flash | Club=FC Bayern München | Pos=CB | Headline=Kim Min-jae and Upamecano Anchor Kompany's High Line as Baye
+[2026-11-10 22:26:59] [INFO] [MCP_TOOL_4] search_live_club_injury_and_rumors(club=FC Bayern München, pos=CB) -> source=Vertex AI Google Search Grounding (gemini-3.5-flash)
+[2026-11-10 22:26:59] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Bundesliga, fee=€0, wage=€253,845/wk, 4yr) -> annual_psr=€15,179,931
+[2026-11-10 22:27:13] [INFO] [VERTEX_LLM_CALL] Model=gemini-3.8-flash | Temp=0.3 | OutputChars=547
+[2026-11-10 22:27:13] [INFO] [LANGGRAPH_NODE_2B] Completed Hermes Renewal Analysis for Min-Jae Kim
+[2026-11-10 22:27:13] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Los Angeles FC, val=€15,000,000
+[2026-11-10 22:27:13] [INFO] [MCP_TOOL_3] get_peer_group_wage_band(pos=LW, age=33) -> Q25=€59,000, Median=€73,000, Q75=€91,000
+[2026-11-10 22:27:13] [INFO] [MCP_TOOL_2] find_matching_clubs_for_transfer(pos=LW, fee=15000000, wage=273125, league=Premier League) -> 3 clubs matched
+[2026-11-10 22:27:14] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-001 | Count=1 | Dim=768
+[2026-11-10 22:27:39] [INFO] [VERTEX_GROUNDING_SEARCH] Model=gemini-3.5-flash | Club=Chelsea FC | Pos=LW | Headline=Chelsea's LW Restructuring Under Xabi Alonso: Jamie Gittens 
+[2026-11-10 22:27:39] [INFO] [MCP_TOOL_4] search_live_club_injury_and_rumors(club=Chelsea FC, pos=LW) -> source=Vertex AI Google Search Grounding (gemini-3.5-flash)
+[2026-11-10 22:27:39] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€15,000,000, wage=€273,125/wk, 4yr) -> annual_psr=€21,037,870
+[2026-11-10 22:27:58] [INFO] [VERTEX_LLM_CALL] Model=gemini-3.8-flash | Temp=0.3 | OutputChars=588
+[2026-11-10 22:27:58] [INFO] [LANGGRAPH_NODE_2A] Completed Hermes Transfer Analysis for Heung-min Son
+[2026-11-10 22:28:04] [INFO] [VERTEX_LLM_CALL] Model=gemini-3.5-flash | Temp=0.2 | OutputChars=216
+[2026-11-10 22:28:04] [INFO] [LANGGRAPH_NODE_1] Supervisor routed player=Heung-min Son to mode=TRACK_A_TRANSFER
+[2026-11-10 22:28:04] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Los Angeles FC, val=€15,000,000
+[2026-11-10 22:28:04] [INFO] [MCP_TOOL_11] Discovered 5 undervalued prospects (pos=ALL, max_age=23)
+[2026-11-10 22:28:04] [INFO] [MCP_TOOL_12] Exported Triple Agency Documents for Heung-min Son -> C:\Users\DJ\Documents\ai_google\sports_agency\outputs\Heung-min_Son
+[2026-11-10 22:28:08] [INFO] [VERTEX_LLM_CALL] Model=gemini-3.5-flash | Temp=0.2 | OutputChars=187
+[2026-11-10 22:28:08] [INFO] [LANGGRAPH_NODE_1] Supervisor routed player=Heung-min Son to mode=TRACK_A_TRANSFER
+[2026-11-10 22:28:08] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Los Angeles FC, val=€15,000,000
+[2026-11-10 22:28:08] [INFO] [MCP_TOOL_3] get_peer_group_wage_band(pos=LW, age=33) -> Q25=€59,000, Median=€73,000, Q75=€91,000
+[2026-11-10 22:28:08] [INFO] [MCP_TOOL_2] find_matching_clubs_for_transfer(pos=LW, fee=15000000, wage=273125, league=ALL) -> 5 clubs matched
+[2026-11-10 22:28:09] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-001 | Count=1 | Dim=768
+[2026-11-10 22:28:24] [INFO] [VERTEX_GROUNDING_SEARCH] Model=gemini-3.5-flash | Club=Chelsea FC | Pos=LW | Headline=Chelsea's £50m Winger Jamie Gittens Faces January Loan Exit 
+[2026-11-10 22:28:24] [INFO] [MCP_TOOL_4] search_live_club_injury_and_rumors(club=Chelsea FC, pos=LW) -> source=Vertex AI Google Search Grounding (gemini-3.5-flash)
+[2026-11-10 22:28:24] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€15,000,000, wage=€273,125/wk, 4yr) -> annual_psr=€21,037,870
+[2026-11-10 22:28:35] [INFO] [VERTEX_LLM_CALL] Model=gemini-3.8-flash | Temp=0.3 | OutputChars=576
+[2026-11-10 22:28:35] [INFO] [LANGGRAPH_NODE_2A] Completed Hermes Transfer Analysis for Heung-min Son
+[2026-11-10 22:28:35] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Los Angeles FC, val=€15,000,000
+[2026-11-10 22:28:39] [INFO] [VERTEX_LLM_CALL] Model=gemini-3.5-flash | Temp=0.25 | OutputChars=238
+[2026-11-10 22:28:39] [INFO] [LANGGRAPH_NODE_2C] Career Strategy resolved for Heung-min Son: 보스만 윈도우 잔류 후 자유계약 (Zero-Fee Mega Signing)
+[2026-11-10 22:28:40] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=1 | Dim=768
+[2026-11-10 22:28:41] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=1 | Dim=768
+[2026-11-10 22:28:41] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 22:28:41] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=1 | Dim=768
+[2026-11-10 22:28:50] [INFO] [MCP_TOOL_11] Discovered 6 undervalued prospects (pos=ALL, max_age=23)
+[2026-11-10 22:28:50] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€38,000,000, wage=€105,000/wk, 4yr) -> annual_psr=€16,877,130
+[2026-11-10 22:28:50] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
+[2026-11-10 22:28:50] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 19 targets (category=ALL, type=ALL)
+[2026-11-10 22:28:50] [INFO] [MCP_TOOL_8] scan_bosman_and_replacement_targets(pos=ALL, league=ALL) -> 25 club targets found
+[2026-11-10 22:28:52] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
+[2026-11-10 22:28:53] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 19 targets (category=ALL, type=ALL)
+[2026-11-10 22:28:54] [INFO] [MCP_RECRUITMENT_PITCH] Generated Pitch Deck for Pep Guardiola (MANAGER): recruitment_pitch_Pep_Guardiola.md
+[2026-11-10 22:28:56] [INFO] [VERTEX_STRUCTURED_LLM_CALL] Model=gemini-3.5-flash | Schema=LegalRagReviewSchema | Temp=0.1
+[2026-11-10 22:28:56] [INFO] [LANGGRAPH_NODE_3] Completed SQLite Vector RAG & GBE calculation (15 pts) for Heung-min Son
+[2026-11-10 22:29:02] [INFO] [VERTEX_STRUCTURED_LLM_CALL] Model=gemini-3.8-flash | Schema=SparringRound1Schema | Temp=0.35
+[2026-11-10 22:29:02] [INFO] [LANGGRAPH_NODE_4A] Sparring Round 1 completed vs Chelsea FC (ask=€273,125, counter=€245,812)
+[2026-11-10 22:29:08] [INFO] [VERTEX_STRUCTURED_LLM_CALL] Model=gemini-3.8-flash | Schema=SparringRound2Schema | Temp=0.3
+[2026-11-10 22:29:08] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€15,000,000, wage=€259,468/wk, 4yr) -> annual_psr=€20,103,155
+[2026-11-10 22:29:08] [INFO] [LANGGRAPH_NODE_4B] Sparring Round 2 resolved with strategy=OPTION_2_BONUS_AND_RELEASE_CLAUSE -> agreed_base=€259,468, bonus=€40,968, annual_psr=€20,103,155
+[2026-11-10 22:29:38] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
+[2026-11-10 22:29:42] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 19 targets (category=ALL, type=ALL)
+[2026-11-10 22:29:42] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 19 targets (category=ALL, type=ALL)
+[2026-11-10 22:30:02] [INFO] [VERTEX_STRUCTURED_LLM_CALL] Model=gemini-3.8-flash | Schema=TripleOutputDocsSchema | Temp=0.25
+[2026-11-10 22:30:02] [INFO] [MCP_TOOL_12] Exported Triple Agency Documents for Heung-min Son -> C:\Users\DJ\Documents\ai_google\sports_agency\outputs\Heung-min_Son
+[2026-11-10 22:30:02] [INFO] [LANGGRAPH_NODE_5] Generated & saved Triple-Output Markdown documents for Heung-min Son
+[2026-11-10 22:30:02] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Los Angeles FC, val=€15,000,000
+[2026-11-10 22:30:02] [INFO] [MCP_TOOL_11] Discovered 3 undervalued prospects (pos=ALL, max_age=23)
+[2026-11-10 22:30:08] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 19 targets (category=ALL, type=ALL)
+[2026-11-10 22:30:09] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 19 targets (category=ALL, type=ALL)
+[2026-11-10 22:30:10] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 19 targets (category=ALL, type=ALL)
+[2026-11-10 22:30:26] [INFO] [MCP_RECRUITMENT_PITCH] Generated Pitch Deck for Erling Haaland (PLAYER): recruitment_pitch_Erling_Haaland.md
+[2026-11-10 22:51:33] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 22:51:35] [INFO] [Capology verified wages synchronized] Updated 34 players with verified Capology data
+[2026-11-10 22:51:35] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Erling Haaland (Manchester City FC vs Arsenal FC)
+[2026-11-10 22:51:35] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Los Angeles FC, val=€15,000,000
+[2026-11-10 22:51:35] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-10 22:51:35] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€220,000,000
+[2026-11-10 22:51:35] [INFO] [MCP_TOOL_11] Discovered 5 undervalued prospects (pos=ALL, max_age=23)
+[2026-11-10 22:51:35] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Los Angeles FC, val=€15,000,000
+[2026-11-10 22:51:35] [INFO] [MCP_TOOL_8] scan_bosman_and_replacement_targets(pos=LW, league=Premier League) -> 5 club targets found
+[2026-11-10 22:51:35] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€40,000,000, wage=€120,000/wk, 4yr) -> annual_psr=€18,637,920
+[2026-11-10 22:51:38] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=1 | Dim=768
+[2026-11-10 22:51:39] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-001 | Count=1 | Dim=768
+[2026-11-10 22:51:39] [INFO] [MCP_TOOL_9] Registered custom external client 정상빈 (Jeong Sang-bin, Minnesota United) -> player_id=2760
+[2026-11-10 22:51:39] [INFO] [MCP_TOOL_1] get_player_complete_data(Jeong Sang-bin) -> club=Minnesota United, val=€2,500,000
+[2026-11-10 22:51:43] [INFO] [VERTEX_LLM_CALL] Model=gemini-3.5-flash | Temp=0.2 | OutputChars=195
+[2026-11-10 22:51:43] [INFO] [LANGGRAPH_NODE_1] Supervisor routed player=Min-Jae Kim to mode=TRACK_A_TRANSFER
+[2026-11-10 22:51:43] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-10 22:51:43] [INFO] [MCP_TOOL_3] get_peer_group_wage_band(pos=CB, age=30) -> Q25=€76,000, Median=€76,000, Q75=€91,000
+[2026-11-10 22:51:43] [INFO] [MCP_TOOL_2] find_matching_clubs_for_transfer(pos=CB, fee=20000000, wage=276922, league=ALL) -> 5 clubs matched
+[2026-11-10 22:51:45] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-001 | Count=1 | Dim=768
+[2026-11-10 22:52:54] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 22:52:54] [INFO] [MCP_DEAL_MEMO] Generated Recruitment Deal Memo for Erling Haaland (PLAYER): Overall Grade A+
+[2026-11-10 22:52:54] [INFO] [MCP_DEAL_MEMO] Generated Recruitment Deal Memo for Pep Guardiola (MANAGER): Overall Grade S+
+[2026-11-10 22:53:21] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 22:53:22] [INFO] [MCP_DEAL_MEMO] Generated Recruitment Deal Memo for Erling Haaland (PLAYER): Overall Grade A+
+[2026-11-10 22:53:22] [INFO] [MCP_DEAL_MEMO] Generated Recruitment Deal Memo for Pep Guardiola (MANAGER): Overall Grade S+
+[2026-11-10 22:54:48] [INFO] [VERTEX_GROUNDING_SEARCH] Model=gemini-3.5-flash | Club=Paris Saint-Germain FC | Pos=CB | Headline=PSG Navigates CB Transition: Marquinhos' Aging and Zabarnyi'
+[2026-11-10 22:54:48] [INFO] [MCP_TOOL_4] search_live_club_injury_and_rumors(club=Paris Saint-Germain FC, pos=CB) -> source=Vertex AI Google Search Grounding (gemini-3.5-flash)
+[2026-11-10 22:54:48] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Ligue 1, fee=€20,000,000, wage=€276,922/wk, 4yr) -> annual_psr=€23,246,930
+[2026-11-10 22:54:57] [INFO] [VERTEX_LLM_CALL] Model=gemini-3.8-flash | Temp=0.3 | OutputChars=479
+[2026-11-10 22:54:57] [INFO] [LANGGRAPH_NODE_2A] Completed Hermes Transfer Analysis for Min-Jae Kim
+[2026-11-10 22:54:57] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-10 22:55:03] [INFO] [VERTEX_LLM_CALL] Model=gemini-3.5-flash | Temp=0.25 | OutputChars=251
+[2026-11-10 22:55:03] [INFO] [LANGGRAPH_NODE_2C] Career Strategy resolved for Min-Jae Kim: 최고 가치 도달 시기 즉시 이적 (Immediate Transfer to Tier-1/2 Club)
+[2026-11-10 22:55:03] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=1 | Dim=768
+[2026-11-10 22:55:04] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=1 | Dim=768
+[2026-11-10 22:55:04] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=1 | Dim=768
+[2026-11-10 22:55:12] [INFO] [VERTEX_STRUCTURED_LLM_CALL] Model=gemini-3.5-flash | Schema=LegalRagReviewSchema | Temp=0.1
+[2026-11-10 22:55:12] [INFO] [LANGGRAPH_NODE_3] Completed SQLite Vector RAG & GBE calculation (15 pts) for Min-Jae Kim
+[2026-11-10 22:55:22] [INFO] [VERTEX_STRUCTURED_LLM_CALL] Model=gemini-3.8-flash | Schema=SparringRound1Schema | Temp=0.35
+[2026-11-10 22:55:22] [INFO] [LANGGRAPH_NODE_4A] Sparring Round 1 completed vs Paris Saint-Germain FC (ask=€276,922, counter=€253,845)
+[2026-11-10 22:55:28] [INFO] [VERTEX_STRUCTURED_LLM_CALL] Model=gemini-3.8-flash | Schema=SparringRound2Schema | Temp=0.3
+[2026-11-10 22:55:28] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Ligue 1, fee=€20,000,000, wage=€265,383/wk, 4yr) -> annual_psr=€22,412,394
+[2026-11-10 22:55:28] [INFO] [LANGGRAPH_NODE_4B] Sparring Round 2 resolved with strategy=OPTION_2_BONUS_AND_RELEASE_CLAUSE -> agreed_base=€265,383, bonus=€41,538, annual_psr=€22,412,394
+[2026-11-10 22:56:19] [INFO] [VERTEX_STRUCTURED_LLM_CALL] Model=gemini-3.8-flash | Schema=TripleOutputDocsSchema | Temp=0.25
+[2026-11-10 22:56:19] [INFO] [MCP_TOOL_12] Exported Triple Agency Documents for Min-Jae Kim -> C:\Users\DJ\Documents\ai_google\sports_agency\outputs\Min-Jae_Kim
+[2026-11-10 22:56:19] [INFO] [LANGGRAPH_NODE_5] Generated & saved Triple-Output Markdown documents for Min-Jae Kim
+[2026-11-10 22:56:19] [INFO] [MCP_TOOL_16] DataMB Peer Matrix Comparison: Pedri, Declan Rice (CM)
+[2026-11-10 22:56:19] [INFO] [MCP_TOOL_16] DataMB Peer Matrix Comparison: Erling Haaland, Harry Kane (ST)
+[2026-11-10 22:56:19] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Erling Haaland (Manchester City FC vs Arsenal FC)
+[2026-11-10 22:56:19] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Bukayo Saka (Arsenal FC vs Manchester City FC)
+[2026-11-10 22:56:19] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Min-Jae Kim (FC Bayern München vs Borussia Dortmund)
+[2026-11-10 22:56:19] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-10 22:56:19] [INFO] [MCP_TOOL_3] get_peer_group_wage_band(pos=CB, age=30) -> Q25=€76,000, Median=€76,000, Q75=€91,000
+[2026-11-10 22:56:33] [INFO] [VERTEX_GROUNDING_SEARCH] Model=gemini-3.5-flash | Club=FC Bayern München | Pos=CB | Headline=Bayern Munich Solidifies Defense with Upamecano Renewal and 
+[2026-11-10 22:56:33] [INFO] [MCP_TOOL_4] search_live_club_injury_and_rumors(club=FC Bayern München, pos=CB) -> source=Vertex AI Google Search Grounding (gemini-3.5-flash)
+[2026-11-10 22:56:33] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Bundesliga, fee=€0, wage=€253,845/wk, 4yr) -> annual_psr=€15,179,931
+[2026-11-10 22:56:50] [INFO] [VERTEX_LLM_CALL] Model=gemini-3.8-flash | Temp=0.3 | OutputChars=673
+[2026-11-10 22:56:50] [INFO] [LANGGRAPH_NODE_2B] Completed Hermes Renewal Analysis for Min-Jae Kim
+[2026-11-10 22:56:50] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Los Angeles FC, val=€15,000,000
+[2026-11-10 22:56:50] [INFO] [MCP_TOOL_3] get_peer_group_wage_band(pos=LW, age=33) -> Q25=€59,000, Median=€73,000, Q75=€91,000
+[2026-11-10 22:56:50] [INFO] [MCP_TOOL_2] find_matching_clubs_for_transfer(pos=LW, fee=15000000, wage=273125, league=Premier League) -> 3 clubs matched
+[2026-11-10 22:56:51] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-001 | Count=1 | Dim=768
+[2026-11-10 22:57:06] [INFO] [VERTEX_GROUNDING_SEARCH] Model=gemini-3.5-flash | Club=Chelsea FC | Pos=LW | Headline=Chelsea's Left-Flank Reshuffle Under Xabi Alonso: Gittens' I
+[2026-11-10 22:57:06] [INFO] [MCP_TOOL_4] search_live_club_injury_and_rumors(club=Chelsea FC, pos=LW) -> source=Vertex AI Google Search Grounding (gemini-3.5-flash)
+[2026-11-10 22:57:06] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€15,000,000, wage=€273,125/wk, 4yr) -> annual_psr=€21,037,870
+[2026-11-10 22:57:24] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 22:57:25] [INFO] [MCP_DEAL_MEMO] Generated Recruitment Deal Memo for Erling Haaland (PLAYER): Overall Grade A+
+[2026-11-10 22:57:25] [INFO] [MCP_DEAL_MEMO] Generated Recruitment Deal Memo for Lamine Yamal (PLAYER): Overall Grade S
+[2026-11-10 22:57:25] [INFO] [MCP_DEAL_MEMO] Generated Recruitment Deal Memo for Kylian Mbappé (PLAYER): Overall Grade S
+[2026-11-10 22:57:25] [INFO] [MCP_DEAL_MEMO] Generated Recruitment Deal Memo for Ansu Fati (PLAYER): Overall Grade A+
+[2026-11-10 22:57:25] [INFO] [MCP_DEAL_MEMO] Generated Recruitment Deal Memo for Pep Guardiola (MANAGER): Overall Grade S+
+[2026-11-10 22:57:25] [INFO] [MCP_DEAL_MEMO] Generated Recruitment Deal Memo for Jürgen Klopp (MANAGER): Overall Grade S+
+[2026-11-10 22:57:25] [INFO] [MCP_DEAL_MEMO] Generated Recruitment Deal Memo for Zinedine Zidane (MANAGER): Overall Grade S+
+[2026-11-10 22:57:59] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 22:58:16] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 22:58:17] [INFO] [MCP_DEAL_MEMO] Generated Recruitment Deal Memo for Erling Haaland (PLAYER): Overall Grade A+
+[2026-11-10 22:58:17] [INFO] [MCP_DEAL_MEMO] Generated Recruitment Deal Memo for Pep Guardiola (MANAGER): Overall Grade S+
+[2026-11-10 23:01:20] [CLIENT_RECRUITMENT] Built Client Recruitment Deal Memo & sign-off workflow (6-Axis Radar, 5-Year Cash Flow, FIFA FFAR Audit, Committee Approval) and updated qa.md (Q100).
+[2026-11-10 23:01:12] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 23:01:13] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Los Angeles FC, val=€15,000,000
+[2026-11-10 23:01:13] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-10 23:01:13] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€220,000,000
+[2026-11-10 23:01:13] [INFO] [MCP_TOOL_11] Discovered 5 undervalued prospects (pos=ALL, max_age=23)
+[2026-11-10 23:01:13] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Los Angeles FC, val=€15,000,000
+[2026-11-10 23:01:13] [INFO] [MCP_TOOL_8] scan_bosman_and_replacement_targets(pos=LW, league=Premier League) -> 5 club targets found
+[2026-11-10 23:01:13] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€40,000,000, wage=€120,000/wk, 4yr) -> annual_psr=€18,637,920
+[2026-11-10 23:01:16] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=1 | Dim=768
+[2026-11-10 23:01:17] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-001 | Count=1 | Dim=768
+[2026-11-10 23:01:17] [INFO] [MCP_TOOL_9] Registered custom external client 정상빈 (Jeong Sang-bin, Minnesota United) -> player_id=2760
+[2026-11-10 23:01:17] [INFO] [MCP_TOOL_1] get_player_complete_data(Jeong Sang-bin) -> club=Minnesota United, val=€2,500,000
+[2026-11-10 23:01:22] [INFO] [VERTEX_LLM_CALL] Model=gemini-3.5-flash | Temp=0.2 | OutputChars=213
+[2026-11-10 23:01:22] [INFO] [LANGGRAPH_NODE_1] Supervisor routed player=Min-Jae Kim to mode=TRACK_A_TRANSFER
+[2026-11-10 23:01:22] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-10 23:01:22] [INFO] [MCP_TOOL_3] get_peer_group_wage_band(pos=CB, age=30) -> Q25=€76,000, Median=€76,000, Q75=€91,000
+[2026-11-10 23:01:22] [INFO] [MCP_TOOL_2] find_matching_clubs_for_transfer(pos=CB, fee=20000000, wage=276922, league=ALL) -> 5 clubs matched
+[2026-11-10 23:01:23] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-001 | Count=1 | Dim=768
+[2026-11-10 23:01:34] [INFO] [VERTEX_GROUNDING_SEARCH] Model=gemini-3.5-flash | Club=Paris Saint-Germain FC | Pos=CB | Headline=PSG Eyes Lens Starlet Pierre Ismaelo Ganiou to Address Marqu
+[2026-11-10 23:01:34] [INFO] [MCP_TOOL_4] search_live_club_injury_and_rumors(club=Paris Saint-Germain FC, pos=CB) -> source=Vertex AI Google Search Grounding (gemini-3.5-flash)
+[2026-11-10 23:01:34] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Ligue 1, fee=€20,000,000, wage=€276,922/wk, 4yr) -> annual_psr=€23,246,930
+[2026-11-10 23:01:44] [INFO] [VERTEX_LLM_CALL] Model=gemini-3.8-flash | Temp=0.3 | OutputChars=474
+[2026-11-10 23:01:44] [INFO] [LANGGRAPH_NODE_2A] Completed Hermes Transfer Analysis for Min-Jae Kim
+[2026-11-10 23:01:44] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-10 23:01:49] [INFO] [VERTEX_LLM_CALL] Model=gemini-3.5-flash | Temp=0.25 | OutputChars=305
+[2026-11-10 23:01:49] [INFO] [LANGGRAPH_NODE_2C] Career Strategy resolved for Min-Jae Kim: 최고 가치 도달 시기 즉시 이적 (Immediate Transfer to Tier-1/2 Club)
+[2026-11-10 23:01:50] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=1 | Dim=768
+[2026-11-10 23:01:50] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=1 | Dim=768
+[2026-11-10 23:01:51] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=1 | Dim=768
+[2026-11-10 23:01:58] [INFO] [VERTEX_STRUCTURED_LLM_CALL] Model=gemini-3.5-flash | Schema=LegalRagReviewSchema | Temp=0.1
+[2026-11-10 23:01:58] [INFO] [LANGGRAPH_NODE_3] Completed SQLite Vector RAG & GBE calculation (15 pts) for Min-Jae Kim
+[2026-11-10 23:02:06] [INFO] [VERTEX_STRUCTURED_LLM_CALL] Model=gemini-3.8-flash | Schema=SparringRound1Schema | Temp=0.35
+[2026-11-10 23:02:06] [INFO] [LANGGRAPH_NODE_4A] Sparring Round 1 completed vs Paris Saint-Germain FC (ask=€276,923, counter=€253,846)
+[2026-11-10 23:02:13] [INFO] [VERTEX_STRUCTURED_LLM_CALL] Model=gemini-3.8-flash | Schema=SparringRound2Schema | Temp=0.3
+[2026-11-10 23:02:13] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Ligue 1, fee=€20,000,000, wage=€265,384/wk, 4yr) -> annual_psr=€22,412,460
+[2026-11-10 23:02:13] [INFO] [LANGGRAPH_NODE_4B] Sparring Round 2 resolved with strategy=OPTION_2_BONUS_AND_RELEASE_CLAUSE -> agreed_base=€265,384, bonus=€41,538, annual_psr=€22,412,460
+[2026-11-10 23:03:06] [INFO] [VERTEX_STRUCTURED_LLM_CALL] Model=gemini-3.8-flash | Schema=TripleOutputDocsSchema | Temp=0.25
+[2026-11-10 23:03:06] [INFO] [MCP_TOOL_12] Exported Triple Agency Documents for Min-Jae Kim -> C:\Users\DJ\Documents\ai_google\sports_agency\outputs\Min-Jae_Kim
+[2026-11-10 23:03:06] [INFO] [LANGGRAPH_NODE_5] Generated & saved Triple-Output Markdown documents for Min-Jae Kim
+[2026-11-10 23:03:06] [INFO] [MCP_TOOL_16] DataMB Peer Matrix Comparison: Pedri, Declan Rice (CM)
+[2026-11-10 23:03:06] [INFO] [MCP_TOOL_16] DataMB Peer Matrix Comparison: Erling Haaland, Harry Kane (ST)
+[2026-11-10 23:03:06] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Erling Haaland (Manchester City FC vs Arsenal FC)
+[2026-11-10 23:03:06] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Bukayo Saka (Arsenal FC vs Manchester City FC)
+[2026-11-10 23:03:06] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Min-Jae Kim (FC Bayern München vs Borussia Dortmund)
+[2026-11-10 23:03:06] [INFO] [MCP_DEAL_MEMO] Generated Recruitment Deal Memo for Erling Haaland (PLAYER): Overall Grade A+
+[2026-11-10 23:03:06] [INFO] [MCP_DEAL_MEMO] Generated Recruitment Deal Memo for Pep Guardiola (MANAGER): Overall Grade S+
+[2026-11-10 23:08:18] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
+[2026-11-10 23:11:05] [INFO] [MCP_TOOL_2] find_matching_clubs_for_transfer(pos=ST, fee=50000000, wage=100000, league=ALL) -> 5 clubs matched
+[2026-11-10 23:11:10] [INFO] [MCP_TOOL_2] find_matching_clubs_for_transfer(pos=ST, fee=50000000, wage=100000, league=ALL) -> 5 clubs matched
+[2026-11-10 23:11:17] [INFO] [MCP_TOOL_2] find_matching_clubs_for_transfer(pos=ST, fee=50000000, wage=100000, league=ALL) -> 5 clubs matched
+[2026-11-10 23:11:17] [INFO] [MCP_TOOL_3] get_peer_group_wage_band(pos=ST, age=24) -> Q25=€121,000, Median=€127,000, Q75=€191,000
+[2026-11-10 23:11:23] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 23:11:31] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 23:11:42] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 23:11:45] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€38,000,000, wage=€105,000/wk, 4yr) -> annual_psr=€16,877,130
+[2026-11-10 23:11:45] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
+[2026-11-10 23:11:45] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 19 targets (category=ALL, type=ALL)
+[2026-11-10 23:11:45] [INFO] [MCP_TOOL_11] Discovered 6 undervalued prospects (pos=ALL, max_age=23)
+[2026-11-10 23:11:45] [INFO] [MCP_TOOL_8] scan_bosman_and_replacement_targets(pos=ALL, league=ALL) -> 25 club targets found
+[2026-11-10 23:11:58] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
+[2026-11-10 23:11:59] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 19 targets (category=ALL, type=ALL)
+[2026-11-10 23:12:04] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 19 targets (category=ALL, type=ALL)
+[2026-11-10 23:12:06] [INFO] [MCP_RECRUITMENT_PITCH] Generated Pitch Deck for Pep Guardiola (MANAGER): recruitment_pitch_Pep_Guardiola.md
+[2026-11-10 23:12:17] [INFO] [MCP_DEAL_MEMO] Generated Recruitment Deal Memo for Pep Guardiola (MANAGER): Overall Grade S+
+[2026-11-10 23:12:53] [INFO] [MCP_AGENCY_ENROLL] Signed new client: Pep Guardiola (MANAGER) by 김대표 Agent (대표 관리자) (에이전시 대표실)
+[2026-11-10 23:12:56] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 1 managers, Total MV €0
+[2026-11-10 23:12:56] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 19 targets (category=ALL, type=ALL)
+[2026-11-10 23:12:56] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 1 managers, Total MV €0
+[2026-11-10 23:12:58] [INFO] [MCP_AGENCY_TERMINATE] Terminated agency contract for client ID 101 (MANAGER)
+[2026-11-10 23:12:59] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
+[2026-11-10 23:12:59] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 19 targets (category=ALL, type=ALL)
+[2026-11-10 23:13:02] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 19 targets (category=ALL, type=ALL)
+[2026-11-10 23:13:06] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
+[2026-11-10 23:13:07] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 19 targets (category=ALL, type=ALL)
+[2026-11-10 23:13:10] [INFO] [MCP_DEAL_MEMO] Generated Recruitment Deal Memo for Erling Haaland (PLAYER): Overall Grade A+
+[2026-11-10 23:13:29] [INFO] [MCP_AGENCY_ENROLL] Signed new client: Erling Haaland (PLAYER) by 김대표 Agent (대표 관리자) (에이전시 대표실)
+[2026-11-10 23:13:31] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 1 players, 0 managers, Total MV €220,000,000
+[2026-11-10 23:13:31] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 19 targets (category=ALL, type=ALL)
+[2026-11-10 23:13:31] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 1 players, 0 managers, Total MV €220,000,000
+[2026-11-10 23:13:39] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€220,000,000, wage=€807,300/wk, 4yr) -> annual_psr=€108,011,357
+[2026-11-10 23:13:39] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€220,000,000
+[2026-11-10 23:13:44] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 19 targets (category=ALL, type=ALL)
+[2026-11-10 23:13:46] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 1 players, 0 managers, Total MV €220,000,000
+[2026-11-10 23:13:50] [INFO] [MCP_AGENCY_TERMINATE] Terminated agency contract for client ID 1 (PLAYER)
+[2026-11-10 23:13:51] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
+[2026-11-10 23:13:51] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 19 targets (category=ALL, type=ALL)
+[2026-11-10 23:13:52] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
+[2026-11-10 23:13:53] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
+[2026-11-10 23:13:54] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 19 targets (category=ALL, type=ALL)
+[2026-11-10 23:14:25] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
+[2026-11-10 23:14:26] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 19 targets (category=ALL, type=ALL)
+[2026-11-10 23:16:57] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
+[2026-11-10 23:16:58] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 19 targets (category=ALL, type=ALL)
+[2026-11-10 23:16:58] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 19 targets (category=ALL, type=ALL)
+[2026-11-10 23:17:05] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 19 targets (category=ALL, type=ALL)
+[2026-11-10 23:17:05] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
+[2026-11-10 23:17:06] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 19 targets (category=ALL, type=ALL)
+[2026-11-10 23:17:39] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Ligue 1, fee=€150,000, wage=€113,400/wk, 4yr) -> annual_psr=€7,814,296
+[2026-11-10 23:17:40] [INFO] [MCP_TOOL_1] get_player_complete_data(Karim Coulibaly) -> club=RC Strasbourg Alsace, val=€150,000
+[2026-11-10 23:17:52] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 19 targets (category=ALL, type=ALL)
+[2026-11-10 23:17:53] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
+[2026-11-10 23:17:54] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 19 targets (category=ALL, type=ALL)
+[2026-11-10 23:18:20] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
+[2026-11-10 23:18:38] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
+[2026-11-10 23:18:40] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 19 targets (category=ALL, type=ALL)
+[2026-11-10 23:21:58] [INFO] [MCP_RECRUITMENT_PITCH] Generated Pitch Deck for Kylian Mbappé (PLAYER): recruitment_pitch_Kylian_Mbappé.md
+[2026-11-10 23:22:13] [INFO] [MCP_RECRUITMENT_PITCH] Generated Pitch Deck for Kylian Mbappé (PLAYER): recruitment_pitch_Kylian_Mbappé.md
+[2026-11-10 23:22:17] [INFO] [MCP_RECRUITMENT_PITCH] Generated Pitch Deck for Kylian Mbappé (PLAYER): recruitment_pitch_Kylian_Mbappé.md
+[2026-11-10 23:22:22] [INFO] [MCP_RECRUITMENT_PITCH] Generated Pitch Deck for Kylian Mbappé (PLAYER): recruitment_pitch_Kylian_Mbappé.md
+[2026-11-10 23:22:27] [INFO] [MCP_RECRUITMENT_PITCH] Generated Pitch Deck for Kylian Mbappé (PLAYER): recruitment_pitch_Kylian_Mbappé.md
+[2026-11-10 23:22:47] [INFO] [MCP_RECRUITMENT_PITCH] Generated Pitch Deck for Kylian Mbappé (PLAYER): recruitment_pitch_Kylian_Mbappé.md
+[2026-11-10 23:25:26] [INFO] [MCP_RECRUITMENT_PITCH] Generated Pitch Deck for Kylian Mbappé (PLAYER): recruitment_pitch_Kylian_Mbappé.md
+[2026-11-10 23:27:13] [INFO] [MCP_RECRUITMENT_PITCH] Generated Pitch Deck for Kylian Mbappé (PLAYER): recruitment_pitch_Kylian_Mbappé.md
+[2026-11-10 23:29:24] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 23:29:32] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 23:29:46] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 23:30:22] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 23:30:40] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 23:31:47] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 23:31:54] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 23:41:23] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 23:41:24] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Los Angeles FC, val=€15,000,000
+[2026-11-10 23:41:24] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-10 23:41:24] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€220,000,000
+[2026-11-10 23:41:24] [INFO] [MCP_TOOL_11] Discovered 5 undervalued prospects (pos=ALL, max_age=23)
+[2026-11-10 23:41:24] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Los Angeles FC, val=€15,000,000
+[2026-11-10 23:41:24] [INFO] [MCP_TOOL_8] scan_bosman_and_replacement_targets(pos=LW, league=Premier League) -> 5 club targets found
+[2026-11-10 23:41:24] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€40,000,000, wage=€120,000/wk, 4yr) -> annual_psr=€18,637,920
+[2026-11-10 23:41:26] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=1 | Dim=768
+[2026-11-10 23:41:27] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-001 | Count=1 | Dim=768
+[2026-11-10 23:41:27] [INFO] [MCP_TOOL_9] Registered custom external client 정상빈 (Jeong Sang-bin, Minnesota United) -> player_id=2760
+[2026-11-10 23:41:27] [INFO] [MCP_TOOL_1] get_player_complete_data(Jeong Sang-bin) -> club=Minnesota United, val=€2,500,000
+[2026-11-10 23:41:32] [INFO] [VERTEX_LLM_CALL] Model=gemini-3.5-flash | Temp=0.2 | OutputChars=182
+[2026-11-10 23:41:32] [INFO] [LANGGRAPH_NODE_1] Supervisor routed player=Min-Jae Kim to mode=TRACK_A_TRANSFER
+[2026-11-10 23:41:32] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-10 23:41:32] [INFO] [MCP_TOOL_3] get_peer_group_wage_band(pos=CB, age=30) -> Q25=€76,000, Median=€76,000, Q75=€91,000
+[2026-11-10 23:41:32] [INFO] [MCP_TOOL_2] find_matching_clubs_for_transfer(pos=CB, fee=20000000, wage=276922, league=ALL) -> 5 clubs matched
+[2026-11-10 23:41:32] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-001 | Count=1 | Dim=768
+[2026-11-10 23:41:47] [INFO] [VERTEX_GROUNDING_SEARCH] Model=gemini-3.5-flash | Club=Paris Saint-Germain FC | Pos=CB | Headline=PSG Seeks Long-Term Successor to Marquinhos as Luis Enrique 
+[2026-11-10 23:41:47] [INFO] [MCP_TOOL_4] search_live_club_injury_and_rumors(club=Paris Saint-Germain FC, pos=CB) -> source=Vertex AI Google Search Grounding (gemini-3.5-flash)
+[2026-11-10 23:41:47] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Ligue 1, fee=€20,000,000, wage=€276,922/wk, 4yr) -> annual_psr=€23,246,930
+[2026-11-10 23:42:01] [INFO] [VERTEX_LLM_CALL] Model=gemini-3.8-flash | Temp=0.3 | OutputChars=585
+[2026-11-10 23:42:01] [INFO] [LANGGRAPH_NODE_2A] Completed Hermes Transfer Analysis for Min-Jae Kim
+[2026-11-10 23:42:01] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-10 23:42:06] [INFO] [VERTEX_LLM_CALL] Model=gemini-3.5-flash | Temp=0.25 | OutputChars=265
+[2026-11-10 23:42:06] [INFO] [LANGGRAPH_NODE_2C] Career Strategy resolved for Min-Jae Kim: 최고 가치 도달 시기 즉시 이적 (Immediate Transfer to Tier-1/2 Club)
+[2026-11-10 23:42:07] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=1 | Dim=768
+[2026-11-10 23:42:07] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=1 | Dim=768
+[2026-11-10 23:42:08] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=1 | Dim=768
+[2026-11-10 23:42:17] [INFO] [VERTEX_STRUCTURED_AUTH_WARN] Live Vertex AI structured call failed (429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to https://cloud.google.com/vertex-ai/generative-ai/docs/error-code-429 for more details.', 'status': 'RESOURCE_EXHAUSTED'}}); engaging schema fallback
+[2026-11-10 23:42:17] [INFO] [LANGGRAPH_NODE_3] Completed SQLite Vector RAG & GBE calculation (15 pts) for Min-Jae Kim
+[2026-11-10 23:42:25] [INFO] [VERTEX_STRUCTURED_LLM_CALL] Model=gemini-3.8-flash | Schema=SparringRound1Schema | Temp=0.35
+[2026-11-10 23:42:25] [INFO] [LANGGRAPH_NODE_4A] Sparring Round 1 completed vs Paris Saint-Germain FC (ask=€276,922, counter=€253,845)
+[2026-11-10 23:44:33] [INFO] [VERTEX_STRUCTURED_LLM_CALL] Model=gemini-3.8-flash | Schema=SparringRound2Schema | Temp=0.3
+[2026-11-10 23:44:33] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Ligue 1, fee=€20,000,000, wage=€265,383/wk, 4yr) -> annual_psr=€22,461,294
+[2026-11-10 23:44:33] [INFO] [LANGGRAPH_NODE_4B] Sparring Round 2 resolved with strategy=OPTION_2_BONUS_AND_RELEASE_CLAUSE -> agreed_base=€265,383, bonus=€41,538, annual_psr=€22,461,294
+[2026-11-10 23:45:21] [INFO] [VERTEX_STRUCTURED_LLM_CALL] Model=gemini-3.8-flash | Schema=TripleOutputDocsSchema | Temp=0.25
+[2026-11-10 23:45:21] [INFO] [MCP_TOOL_12] Exported Triple Agency Documents for Min-Jae Kim -> C:\Users\DJ\Documents\ai_google\sports_agency\outputs\Min-Jae_Kim
+[2026-11-10 23:45:21] [INFO] [LANGGRAPH_NODE_5] Generated & saved Triple-Output Markdown documents for Min-Jae Kim
+[2026-11-10 23:45:22] [INFO] [MCP_TOOL_16] DataMB Peer Matrix Comparison: Pedri, Declan Rice (CM)
+[2026-11-10 23:45:22] [INFO] [MCP_TOOL_16] DataMB Peer Matrix Comparison: Erling Haaland, Harry Kane (ST)
+[2026-11-10 23:45:22] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Erling Haaland (Manchester City FC vs Arsenal FC)
+[2026-11-10 23:45:22] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Bukayo Saka (Arsenal FC vs Manchester City FC)
+[2026-11-10 23:45:22] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Min-Jae Kim (FC Bayern München vs Borussia Dortmund)
+[2026-11-10 23:45:22] [INFO] [MCP_DEAL_MEMO] Generated Recruitment Deal Memo for Erling Haaland (PLAYER): Overall Grade A+
+[2026-11-10 23:45:22] [INFO] [MCP_DEAL_MEMO] Generated Recruitment Deal Memo for Pep Guardiola (MANAGER): Overall Grade S+
+[2026-11-11 00:37:35] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-11 00:37:36] [INFO] [MCP_AGENCY_ENROLL] Signed new client: Erling Haaland (PLAYER) by Test Lead Agent
+[2026-11-11 00:50:53] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-11 00:50:54] [INFO] [MCP_AGENCY_ENROLL] Signed new client: Erling Haaland (PLAYER) by Test Lead Agent
+[2026-11-11 00:50:54] [INFO] [MCP_AGENCY_FORMAL_TERMINATION] Formal termination for Erling Haaland (PLAYER): MUTUAL_RELEASE, €250,000 settled
+[2026-11-11 00:51:21] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-11 00:51:23] [INFO] [MCP_AGENCY_ENROLL] Signed new client: Erling Haaland (PLAYER) by Test Lead Agent
+[2026-11-11 00:51:41] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-11 00:51:42] [INFO] [MCP_CLUB_RENEWAL] Renewed contract for Erling Haaland with Manchester City FC: €450,000/wk until 2030-06-30
+[2026-11-11 00:51:42] [INFO] [MCP_CLUB_RENEWAL] Renewed contract for Erling Haaland with Manchester City FC: €547,500/wk until 2030-06-30
+[2026-11-11 00:51:42] [INFO] [MCP_CLUB_TRANSFER] Transfer completed: Erling Haaland from Manchester City FC to Real Madrid CF for €220,000,000
+[2026-11-11 00:53:53] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-11 00:53:54] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Los Angeles FC, val=€15,000,000
+[2026-11-11 00:53:54] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-11 00:53:54] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€242,000,000
+[2026-11-11 00:53:54] [INFO] [MCP_TOOL_11] Discovered 5 undervalued prospects (pos=ALL, max_age=23)
+[2026-11-11 00:53:54] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Los Angeles FC, val=€15,000,000
+[2026-11-11 00:53:54] [INFO] [MCP_TOOL_8] scan_bosman_and_replacement_targets(pos=LW, league=Premier League) -> 5 club targets found
+[2026-11-11 00:53:54] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€40,000,000, wage=€120,000/wk, 4yr) -> annual_psr=€18,637,920
+[2026-11-11 00:53:56] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=1 | Dim=768
+[2026-11-11 00:53:57] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-001 | Count=1 | Dim=768
+[2026-11-11 00:53:57] [INFO] [MCP_TOOL_9] Registered custom external client 정상빈 (Jeong Sang-bin, Minnesota United) -> player_id=2760
+[2026-11-11 00:53:57] [INFO] [MCP_TOOL_1] get_player_complete_data(Jeong Sang-bin) -> club=Minnesota United, val=€2,500,000
+[2026-11-11 00:54:02] [INFO] [VERTEX_LLM_CALL] Model=gemini-3.5-flash | Temp=0.2 | OutputChars=207
+[2026-11-11 00:54:02] [INFO] [LANGGRAPH_NODE_1] Supervisor routed player=Min-Jae Kim to mode=TRACK_A_TRANSFER
+[2026-11-11 00:54:02] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-11 00:54:02] [INFO] [MCP_TOOL_3] get_peer_group_wage_band(pos=CB, age=30) -> Q25=€76,000, Median=€76,000, Q75=€91,000
+[2026-11-11 00:54:02] [INFO] [MCP_TOOL_2] find_matching_clubs_for_transfer(pos=CB, fee=20000000, wage=276922, league=ALL) -> 5 clubs matched
+[2026-11-11 00:54:02] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-001 | Count=1 | Dim=768
+[2026-11-11 00:54:19] [INFO] [VERTEX_GROUNDING_SEARCH] Model=gemini-3.5-flash | Club=Paris Saint-Germain FC | Pos=CB | Headline=PSG Eyes Lens Starlet Pierre Ismaelo Ganiou as Long-Term Suc
+[2026-11-11 00:54:19] [INFO] [MCP_TOOL_4] search_live_club_injury_and_rumors(club=Paris Saint-Germain FC, pos=CB) -> source=Vertex AI Google Search Grounding (gemini-3.5-flash)
+[2026-11-11 00:54:19] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Ligue 1, fee=€20,000,000, wage=€276,922/wk, 4yr) -> annual_psr=€23,246,930
+[2026-11-11 00:54:33] [INFO] [VERTEX_LLM_CALL] Model=gemini-3.8-flash | Temp=0.3 | OutputChars=531
+[2026-11-11 00:54:33] [INFO] [LANGGRAPH_NODE_2A] Completed Hermes Transfer Analysis for Min-Jae Kim
+[2026-11-11 00:54:33] [INFO] [MCP_TOOL_1] get_player_complete_data(Min-Jae Kim) -> club=FC Bayern München, val=€20,000,000
+[2026-11-11 00:54:41] [INFO] [VERTEX_LLM_AUTH_WARN] Live Vertex AI call failed (429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to https://cloud.google.com/vertex-ai/generative-ai/docs/error-code-429 for more details.', 'status': 'RESOURCE_EXHAUSTED'}}); engaging deterministic domain fallback
+[2026-11-11 00:54:41] [INFO] [LANGGRAPH_NODE_2C] Career Strategy resolved for Min-Jae Kim: 최고 가치 도달 시기 즉시 이적 (Immediate Transfer to Tier-1/2 Club)
+[2026-11-11 00:54:41] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=1 | Dim=768
+[2026-11-11 00:54:42] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=1 | Dim=768
+[2026-11-11 00:54:42] [INFO] [VERTEX_EMBEDDING_CALL] Model=gemini-embedding-2 | Count=1 | Dim=768
+[2026-11-11 00:54:51] [INFO] [VERTEX_STRUCTURED_LLM_CALL] Model=gemini-3.5-flash | Schema=LegalRagReviewSchema | Temp=0.1
+[2026-11-11 00:54:51] [INFO] [LANGGRAPH_NODE_3] Completed SQLite Vector RAG & GBE calculation (15 pts) for Min-Jae Kim
+[2026-11-11 00:55:30] [INFO] [VERTEX_STRUCTURED_LLM_CALL] Model=gemini-3.8-flash | Schema=SparringRound1Schema | Temp=0.35
+[2026-11-11 00:55:30] [INFO] [LANGGRAPH_NODE_4A] Sparring Round 1 completed vs Paris Saint-Germain FC (ask=€276,922, counter=€253,845)
+[2026-11-11 00:58:48] [INFO] [VERTEX_STRUCTURED_LLM_CALL] Model=gemini-3.8-flash | Schema=SparringRound2Schema | Temp=0.3
+[2026-11-11 00:58:48] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Ligue 1, fee=€20,000,000, wage=€265,383/wk, 4yr) -> annual_psr=€22,412,394
+[2026-11-11 00:58:48] [INFO] [LANGGRAPH_NODE_4B] Sparring Round 2 resolved with strategy=OPTION_2_BONUS_AND_RELEASE_CLAUSE -> agreed_base=€265,383, bonus=€41,538, annual_psr=€22,412,394
+[2026-11-11 00:59:36] [INFO] [VERTEX_STRUCTURED_LLM_CALL] Model=gemini-3.8-flash | Schema=TripleOutputDocsSchema | Temp=0.25
+[2026-11-11 00:59:36] [INFO] [MCP_TOOL_12] Exported Triple Agency Documents for Min-Jae Kim -> C:\Users\DJ\Documents\ai_google\sports_agency\outputs\Min-Jae_Kim
+[2026-11-11 00:59:36] [INFO] [LANGGRAPH_NODE_5] Generated & saved Triple-Output Markdown documents for Min-Jae Kim
+[2026-11-11 00:59:36] [INFO] [MCP_TOOL_16] DataMB Peer Matrix Comparison: Pedri, Declan Rice (CM)
+[2026-11-11 00:59:37] [INFO] [MCP_TOOL_16] DataMB Peer Matrix Comparison: Erling Haaland, Harry Kane (ST)
+[2026-11-11 00:59:37] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Erling Haaland (Manchester City FC vs Arsenal FC)
+[2026-11-11 00:59:37] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Bukayo Saka (Arsenal FC vs Manchester City FC)
+[2026-11-11 00:59:37] [INFO] [TACTICAL_HIGHLIGHT_GEN] Generated 2D tactical highlight for Min-Jae Kim (FC Bayern München vs Borussia Dortmund)
+[2026-11-11 00:59:37] [INFO] [MCP_DEAL_MEMO] Generated Recruitment Deal Memo for Erling Haaland (PLAYER): Overall Grade A+
+[2026-11-11 00:59:37] [INFO] [MCP_DEAL_MEMO] Generated Recruitment Deal Memo for Pep Guardiola (MANAGER): Overall Grade S+
+[2026-11-11 00:59:37] [INFO] [MCP_AGENCY_ENROLL] Signed new client: Erling Haaland (PLAYER) by Lead Partner Kim
+[2026-11-11 00:59:37] [INFO] [MCP_CLUB_RENEWAL] Renewed contract for Erling Haaland with Manchester City FC: €520,000/wk until 2030-06-30
+[2026-11-11 00:59:37] [INFO] [MCP_CLUB_TRANSFER] Transfer completed: Erling Haaland from Manchester City FC to Real Madrid CF for €220,000,000
+[2026-11-11 00:59:37] [INFO] [MCP_AGENCY_FORMAL_TERMINATION] Formal termination for Erling Haaland (PLAYER): MUTUAL_RELEASE, €200,000 settled
+[2026-11-11 01:00:00] [COMPLETION] [PIPELINE_OVERHAUL] Completed 100% overhaul: Deal memo modal restored, recruitment buttons updated, 4-stage transfer & renewal PSR pipelines verified, 0 active client clean state preserved, documented Q101 in qa.md.

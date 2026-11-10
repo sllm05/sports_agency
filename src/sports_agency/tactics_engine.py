@@ -14,6 +14,7 @@ from typing import Any, Optional
 
 from sports_agency.config import CONFIG
 from sports_agency.logger import log_work_event
+from sports_agency.data_pipeline import get_understat_real_match_moments
 
 RIVAL_CLUBS: dict[str, str] = {
     "Manchester City FC": "Arsenal FC",
@@ -87,15 +88,15 @@ YOUTUBE_STARS: dict[str, str] = {
     # Cole Palmer: Official Premier League Goals & Assists (playable in embed)
     "Cole Palmer": "3CFm0dj96sI",
     "콜 파머": "3CFm0dj96sI",
-    # Florian Wirtz: World Class Moments (playable in embed)
-    "Florian Wirtz": "CSMj6VIPGE8",
-    "플로리안 비르츠": "CSMj6VIPGE8",
+    # Florian Wirtz: Official Bundesliga / Leverkusen Playmaker Moments
+    "Florian Wirtz": "I6e05sW1qT8",
+    "플로리안 비르츠": "I6e05sW1qT8",
     # Rodri: Art of CDM (playable in embed)
     "Rodri": "Lpz4PUPJ5kM",
     "로드리": "Lpz4PUPJ5kM",
     # Phil Foden: Official Man City (playable in embed)
-    "Phil Foden": "8cfwD8ybFfw",
-    "필 포든": "8cfwD8ybFfw",
+    "Phil Foden": "eY_O2w4m9uU",
+    "필 포든": "eY_O2w4m9uU",
     # Vinicius Junior: Real Madrid (playable in embed)
     "Vinicius Junior": "6VC5VHn5EQM",
     "비니시우스": "6VC5VHn5EQM",
@@ -412,7 +413,16 @@ def build_player_tactics_payload(
     target_slot_id = f"H{target_slot_idx+1}"
 
     # Moment 1: Signature Action (Goal / Header / High-Impact Save)
-    if pos in ["CB", "LB", "RB", "GK"]:
+    understat_moments = get_understat_real_match_moments(p["name"])
+    if understat_moments and len(understat_moments) >= 1:
+        u1 = understat_moments[0]
+        m1_title = u1["title"]
+        m1_desc = u1["desc"]
+        m1_loc = [u1["x"], u1["y"]]
+        m1_grid = [round(u1["x"] * 18 / 120, 2), round(u1["y"] * 12 / 82, 2)]
+        m1_pass = u1.get("pass_start", [92.0, 48.0])
+        xg_val = u1.get("xg", xg_val)
+    elif pos in ["CB", "LB", "RB", "GK"]:
         m1_title = f"[{p_display}] 세트피스 강력 헤더 득점 (xG {xg_val})"
         m1_desc = f"[{archetype}] 코너킥 상황에서 타점 높은 제공권 장악으로 골망을 가르는 완벽한 헤더 골!"
         m1_loc = [112.0, 39.5]
@@ -444,7 +454,15 @@ def build_player_tactics_payload(
         m1_pass = [92.0, 48.0]
 
     # Moment 2: Chance Creation / Playmaking
-    if pos in ["CB", "LB", "RB", "GK"]:
+    if understat_moments and len(understat_moments) >= 2:
+        u2 = understat_moments[1]
+        m2_title = u2["title"]
+        m2_desc = u2["desc"]
+        m2_loc = [u2["x"], u2["y"]]
+        m2_grid = [round(u2["x"] * 18 / 120, 2), round(u2["y"] * 12 / 82, 2)]
+        m2_end = u2.get("pass_start", [107.5, 43.0])
+        xa_val = u2.get("xa", xa_val)
+    elif pos in ["CB", "LB", "RB", "GK"]:
         m2_title = f"[{p_display}] 최후방 빌드업 45m 전진 레이저 롱패스 전개"
         m2_desc = f"상대 전방 압박을 무력화하며 반대편 윙어 발밑에 정확히 배달된 45m 전진 다이렉트 롱패스."
         m2_loc = [28.5, 42.0]
@@ -622,12 +640,16 @@ def build_player_tactics_payload(
 
     # Video Sync ID & Direct External Search URL
     yt_id = YOUTUBE_STARS.get(p["name"]) or YOUTUBE_STARS.get(p.get("name_ko", ""))
+    is_custom_search_fallback = False
     if not yt_id:
+        # Avoid generic Bruno Fernandes fallback: assign search query list embed for unmapped player
         yt_id = "h2EwOys6evI"
+        is_custom_search_fallback = True
 
     youtube_watch_url = f"https://www.youtube.com/watch?v={yt_id}"
     search_query = f"{p['name']} official highlights skills"
     youtube_search_url = f"https://www.youtube.com/results?search_query={urllib.parse.quote_plus(search_query)}"
+    youtube_search_embed_url = f"https://www.youtube.com/embed?listType=search&list={urllib.parse.quote_plus(search_query)}"
 
     home_top_names = ", ".join([r["name"] for r in home_roster if r.get("player_id")][:4])
     away_top_names = ", ".join([r["name"] for r in away_roster if r.get("player_id")][:4])
@@ -663,6 +685,8 @@ def build_player_tactics_payload(
             "youtube_watch_url": youtube_watch_url,
             "youtube_search_query": search_query,
             "youtube_search_url": youtube_search_url,
+            "youtube_search_embed_url": youtube_search_embed_url,
+            "is_custom_search_fallback": is_custom_search_fallback,
             "home_top_names": home_top_names,
             "away_top_names": away_top_names,
         },

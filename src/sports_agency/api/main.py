@@ -29,6 +29,7 @@ from mcp_server.football_mcp_server import (
     discover_undervalued_prospects,
     enroll_target_as_agency_client,
     generate_client_recruitment_pitch_deck,
+    generate_client_recruitment_deal_memo,
     get_agency_deep_analytics_overview,
     get_agency_portfolio_overview,
     get_player_complete_data,
@@ -39,8 +40,11 @@ from mcp_server.football_mcp_server import (
     register_custom_external_client,
     scan_bosman_and_replacement_targets,
     terminate_agency_client_contract,
+    terminate_agency_client_contract_formal,
     negotiate_client_club_renewal,
+    simulate_client_club_renewal_pipeline,
     negotiate_client_club_transfer,
+    simulate_client_club_transfer_pipeline,
     sign_client_to_new_club,
     toggle_target_watchlist,
     check_target_watchlist,
@@ -116,7 +120,7 @@ class ContractOverrideInput(BaseModel):
     contract_years: int = Field(4, ge=1, le=8, description="목표 계약 기간(년)")
     signing_bonus_eur: int = Field(0, ge=0, description="사이닝 보너스(Signing-on Fee, EUR)")
     current_release_clause_eur: int = Field(0, ge=0, description="현재 계약서상 바이아웃(EUR)")
-    agent_fee_pct: float = Field(7.0, ge=1.0, le=15.0, description="목표 에이전트 수수료율(%)")
+    agent_fee_pct: float = Field(5.0, ge=1.0, le=6.0, description="목표 에이전트 수수료율(% - FIFA FFAR 제13조 상한 3~5%, 쌍방 6% 준수)")
 
 
 class StartWorkflowRequest(BaseModel):
@@ -218,7 +222,7 @@ class EnrollClientRequest(BaseModel):
     target_id: int = Field(..., description="영입 타깃 ID")
     target_type: str = Field("PLAYER", description="PLAYER 또는 MANAGER")
     lead_agent: str = Field("Daniel Kim (FIFA Licensed)", description="전담 수석 에이전트 이름")
-    commission_pct: float = Field(7.0, ge=1.0, le=15.0, description="대리 수수료율(%)")
+    commission_pct: float = Field(5.0, ge=1.0, le=6.0, description="대리 수수료율(% - FIFA FFAR 제13조 상한 5~6% 준수)")
 
 
 class TerminateContractRequest(BaseModel):
@@ -253,6 +257,36 @@ class ClientSignClubRequest(BaseModel):
     destination_league: str = Field("가상 슈퍼리그", description="입단 구단 리그명")
     weekly_wage_eur: int = Field(80000, description="합의 주급 (EUR)")
     contract_years: int = Field(2, ge=1, le=5, description="계약 기간 (년)")
+
+
+class ClientRenewalPipelineRequest(BaseModel):
+    client_id: int = Field(..., description="재계약 대상 고객 ID")
+    client_type: str = Field("PLAYER", description="PLAYER 또는 MANAGER")
+    requested_weekly_wage_eur: int = Field(120000, description="요청 주급 (EUR)")
+    contract_years: int = Field(3, ge=1, le=6, description="계약 연장 기간 (년)")
+    requested_buyout_eur: int | None = Field(None, description="요청 바이아웃 금액 (EUR)")
+    signing_bonus_eur: int = Field(0, description="계약금/서명 보너스 (EUR)")
+    action: str = Field("EVALUATE", description="EVALUATE | CONFIRM_DIRECT | ACCEPT_COUNTER")
+
+
+class ClientTransferPipelineRequest(BaseModel):
+    client_id: int = Field(..., description="이적 대상 고객 ID")
+    client_type: str = Field("PLAYER", description="PLAYER 또는 MANAGER")
+    destination_club: str = Field("Tottenham Hotspur FC", description="이적 대상 구단명")
+    destination_league: str = Field("Premier League", description="이적 대상 리그명")
+    offered_transfer_fee_eur: int = Field(40000000, description="제안 이적료 (EUR)")
+    offered_weekly_wage_eur: int = Field(140000, description="제안 주급 (EUR)")
+    contract_years: int = Field(4, ge=1, le=6, description="계약 기간 (년)")
+    action: str = Field("SIMULATE", description="SIMULATE | EXECUTE_TRANSFER")
+
+
+class ClientFormalTerminationRequest(BaseModel):
+    client_id: int = Field(..., description="해지 대상 고객 ID")
+    client_type: str = Field("PLAYER", description="PLAYER 또는 MANAGER")
+    settlement_type: str = Field("MUTUAL_RELEASE", description="MUTUAL_RELEASE | EXPEDITED_BUYOUT | DISPUTE_WAIVER")
+    reason: str = Field("상호 합의 계약 해지", description="해지 사유")
+    settled_commission_eur: int = Field(0, ge=0, description="정산 합의 수수료 (EUR)")
+    handover_notes: str = Field("", description="이관 및 정산 합의 비고")
 
 
 class WatchlistToggleRequest(BaseModel):
@@ -478,6 +512,15 @@ def api_generate_recruitment_pitch(req: RecruitmentPitchRequest) -> dict[str, An
     return res
 
 
+@app.get("/api/agency/recruitment-deal-memo/{target_type}/{target_id}")
+def api_get_recruitment_deal_memo(target_type: str, target_id: int) -> dict[str, Any]:
+    """[Pillar 2: Deal Memo] Returns comprehensive 6-Axis recruitment radar, upside/downside matrix, 5yr cash flow and FIFA FFAR compliance signoff."""
+    res = generate_client_recruitment_deal_memo(target_id=target_id, target_type=target_type.upper())
+    if "error" in res:
+        raise HTTPException(status_code=404, detail=res["error"])
+    return res
+
+
 @app.post("/api/agency/enroll-client")
 def api_enroll_client(req: EnrollClientRequest) -> dict[str, Any]:
     """[Pillar 2 -> Pillar 1] Signs and enrolls a recruitment target into Antigravity Sports active portfolio."""
@@ -521,6 +564,23 @@ def api_client_renew_contract(req: ClientRenewalRequest) -> dict[str, Any]:
     return res
 
 
+@app.post("/api/agency/client/renew-pipeline")
+def api_client_renew_pipeline(req: ClientRenewalPipelineRequest) -> dict[str, Any]:
+    """[Pillar 1: Realistic Renewal Pipeline] Evaluates club PSR headroom, sporting director counter-offer & executes addendum."""
+    res = simulate_client_club_renewal_pipeline(
+        client_id=req.client_id,
+        client_type=req.client_type,
+        requested_weekly_wage_eur=req.requested_weekly_wage_eur,
+        contract_years=req.contract_years,
+        requested_buyout_eur=req.requested_buyout_eur,
+        signing_bonus_eur=req.signing_bonus_eur,
+        action=req.action,
+    )
+    if "error" in res:
+        raise HTTPException(status_code=400, detail=res["error"])
+    return res
+
+
 @app.post("/api/agency/client/transfer")
 def api_client_transfer(req: ClientTransferRequest) -> dict[str, Any]:
     """[Pillar 1: Club Transfer] Executes transfer for client to a new club."""
@@ -532,6 +592,40 @@ def api_client_transfer(req: ClientTransferRequest) -> dict[str, Any]:
         transfer_fee_eur=req.transfer_fee_eur,
         new_weekly_wage_eur=req.new_weekly_wage_eur,
         contract_years=req.contract_years,
+    )
+    if "error" in res:
+        raise HTTPException(status_code=400, detail=res["error"])
+    return res
+
+
+@app.post("/api/agency/client/transfer-pipeline")
+def api_client_transfer_pipeline(req: ClientTransferPipelineRequest) -> dict[str, Any]:
+    """[Pillar 1: 4-Stage Transfer Transaction Gateway] Fee agreement -> GBE/Visa -> Medical exam -> FIFA TMS clearing."""
+    res = simulate_client_club_transfer_pipeline(
+        client_id=req.client_id,
+        client_type=req.client_type,
+        destination_club=req.destination_club,
+        destination_league=req.destination_league,
+        offered_transfer_fee_eur=req.offered_transfer_fee_eur,
+        offered_weekly_wage_eur=req.offered_weekly_wage_eur,
+        contract_years=req.contract_years,
+        action=req.action,
+    )
+    if "error" in res:
+        raise HTTPException(status_code=400, detail=res["error"])
+    return res
+
+
+@app.post("/api/agency/client/terminate-formal")
+def api_client_terminate_formal(req: ClientFormalTerminationRequest) -> dict[str, Any]:
+    """[Pillar 1: Formal Mutual Termination] Mutual release & commission settlement agreement."""
+    res = terminate_agency_client_contract_formal(
+        client_id=req.client_id,
+        client_type=req.client_type,
+        settlement_type=req.settlement_type,
+        reason=req.reason,
+        settled_commission_eur=req.settled_commission_eur,
+        handover_notes=req.handover_notes,
     )
     if "error" in res:
         raise HTTPException(status_code=400, detail=res["error"])
