@@ -1,18 +1,18 @@
 # 📄 [CONFIDENTIAL] 선수·가족 전속 대리 계약 유치 제안서
-**Antigravity Sports Management (AGSM) x Lamine Yamal (라민 야말) 전속 파트너십 오퍼**
+**Antigravity Sports Management (AGSM) x 라민 야말 (Lamine Yamal) 전속 파트너십 오퍼**
 
-> **타깃 구분**: 💎 무소속 / 미계약 원석 (Exclusive Representation)  
-> **현재 소속 구단**: FC Barcelona | **현재 소속 대리인**: Family & Provisional Advisor  
+> **타깃 구분**: 💎 가족 대리인 체제 / 메가 스타 에이전시 파트너십 (Family-Agency Transfer)  
+> **현재 소속 구단**: FC Barcelona | **현재 소속 대리인**: Mounir Nasraoui & Family (Gestifute 파트너)  
 > **발행 일자**: 2025년 2월 | **작성 주관**: Daniel Kim (Head of Football, FIFA Licensed Agent)
 
 ---
 
 ## 1. Executive Summary: 왜 Antigravity Sports인가?
-Lamine Yamal 선수 및 가족 여러분, Antigravity Sports Management(AGSM)는 선수가 경기장에서 최고의 퍼포먼스를 발휘할 수 있도록 **경기 외적인 모든 리스크(계약, 세무, 스폰서십, 언론 대응, 커리어 플랜)를 전담하는 글로벌 탑티어 스포츠 에이전시**입니다.
+Lamine Yamal 선수 및 가족 여러분, Antigravity Sports Management(AGSM)는 선수께서 경기장에서 최고의 퍼포먼스를 발휘에만 전념할 수 있도록 **모든 대외 리스크(구단 선임/이적 협상, 연봉 극대화, 세무, 글로벌 스폰서십, 언론 대응, 커리어 플랜)를 전담하는 글로벌 탑티어 스포츠 에이전시**입니다.
 
-현재 Lamine Yamal 선수는 전 세계 축구계가 주목하는 압도적인 재능과 스타성을 보유하고 있으나, 기존의 `Family & Provisional Advisor` 체제에서는 **글로벌 브랜드 스폰서십 유치, 유럽 빅클럽 간 메가 딜 레버리지, 체계적인 초상권(Image Rights) 자산화**에 명확한 한계가 존재합니다.
+현재 라민 야말 선수께서는 전 세계 축구계가 주목하는 압도적인 위상과 스타성을 보유하고 계시나, 기존의 `Mounir Nasraoui & Family (Gestifute 파트너)` 체제에서는 **글로벌 메가 딜 레버리지, 체계적인 초상권(Image Rights) 자산화 및 장기적 구단 패키지 계약**에 구조적 한계가 존재합니다.
 
-AGSM은 런던, 마드리드, 뮌헨, 서울 지사의 글로벌 네트워크를 바탕으로 **향후 5년간 선수의 시장 가치를 €200,000,000에서 €300,000,000까지 폭발적으로 성장시키는 맞춤형 전속 대리 솔루션**을 제안합니다.
+AGSM은 런던, 마드리드, 뮌헨, 서울 지사의 글로벌 디렉터 네트워크를 바탕으로 **향후 5년간 선수의 가치를 극대화(목표 가치: €280,000,000)하는 맞춤형 전속 대리 솔루션**을 제안합니다.
 
 <div style="background: linear-gradient(180deg, #0e1117 0%, #0a0c10 100%); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 12px; padding: 18px; margin: 18px 0; box-shadow: 0 10px 30px -5px rgba(0,0,0,0.6);">
   <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 10px; margin-bottom: 12px;">
@@ -21,28 +21,28 @@ AGSM은 런던, 마드리드, 뮌헨, 서울 지사의 글로벌 네트워크를
       🎯 Antigravity Sports — 4D 에이전시 전속 영입 잠재력 & 스타성 평가 매트릭스
     </span>
     <span style="font-size: 11px; padding: 3px 10px; border-radius: 6px; background: rgba(16, 185, 129, 0.15); color: #34d399; font-weight: bold; border: 1px solid rgba(16, 185, 129, 0.3);">
-      Recruitment Fit: 97.3/100
+      Recruitment Fit: 98.3/100
     </span>
   </div>
   <svg viewBox="0 0 420 220" style="width: 100%; max-width: 440px; height: auto; display: block; margin: 0 auto;">
     <polygon points="210,30 330,110 330,180 210,210 90,180 90,110" fill="none" stroke="#27272a" stroke-width="1" />
     <polygon points="210,65 280,110 280,150 210,170 140,150 140,110" fill="none" stroke="#27272a" stroke-width="1" />
-    <polygon points="210,31 318,110 296,176 210,195 124,176 101,110"
+    <polygon points="210,31 319,110 297,178 210,195 123,178 101,110"
              fill="rgba(16, 185, 129, 0.25)" stroke="#10b981" stroke-width="2.5" />
     <circle cx="210" cy="31" r="4.5" fill="#10b981" stroke="#fff" stroke-width="1.5" />
-    <circle cx="318" cy="110" r="4.5" fill="#10b981" stroke="#fff" stroke-width="1.5" />
+    <circle cx="319" cy="110" r="4.5" fill="#10b981" stroke="#fff" stroke-width="1.5" />
     <circle cx="210" cy="195" r="4.5" fill="#10b981" stroke="#fff" stroke-width="1.5" />
     <circle cx="101" cy="110" r="4.5" fill="#10b981" stroke="#fff" stroke-width="1.5" />
     <text x="210" y="18" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="bold">온피치 잠재력 99.0점</text>
-    <text x="345" y="114" text-anchor="start" fill="#e2e8f0" font-size="11" font-weight="bold">스타성 98.0점</text>
-    <text x="210" y="215" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="bold">에이전시 시너지 95.0점</text>
+    <text x="345" y="114" text-anchor="start" fill="#e2e8f0" font-size="11" font-weight="bold">스타성 99.0점</text>
+    <text x="210" y="215" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="bold">에이전시 시너지 97.0점</text>
     <text x="75" y="114" text-anchor="end" fill="#e2e8f0" font-size="11" font-weight="bold">피크 상한 99.0점</text>
   </svg>
   <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 12px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.06); text-align: center; font-size: 11px;">
     <div><span style="color: #71717a;">현재 시장가</span><br><b style="color: #f1f5f9; font-size: 12px;">€200,000,000</b></div>
-    <div><span style="color: #71717a;">5년 목표 가치</span><br><b style="color: #34d399; font-size: 12px;">€300,000,000</b></div>
-    <div><span style="color: #71717a;">가치 상승 배수</span><br><b style="color: #38bdf8; font-size: 12px;">+50%</b></div>
-    <div><span style="color: #71717a;">에이전시 예상 수수료</span><br><b style="color: #fbbf24; font-size: 12px;">€15,000,000</b></div>
+    <div><span style="color: #71717a;">5년 목표 가치</span><br><b style="color: #34d399; font-size: 12px;">€280,000,000</b></div>
+    <div><span style="color: #71717a;">가치 상승 배수</span><br><b style="color: #38bdf8; font-size: 12px;">+40%</b></div>
+    <div><span style="color: #71717a;">에이전시 예상 수수료</span><br><b style="color: #fbbf24; font-size: 12px;">€18,000,000</b></div>
   </div>
 </div>
 
@@ -50,15 +50,15 @@ AGSM은 런던, 마드리드, 뮌헨, 서울 지사의 글로벌 네트워크를
 
 ## 2. 4D 영입 타당성 및 계약 유치 분석 (Recruitment Rationale)
 
-【영입 당위성】 17세 나이에 발롱도르 포디움 후보 및 유로 2024 우승 주역. 현재 가족 대리인 중심 체제에서 글로벌 대형 에이전시 전문 매니지먼트 절실. Antigravity Sports의 글로벌 스폰서십 네트워크 및 초상권 전담 법무팀을 제시하여 10년 독점 대리권 확보 추진.
+【영입 당위성】 차세대 발롱도르 0순위 19세 슈퍼스타. 가족 중심 대리 체제의 법적 한계를 넘어 글로벌 1티어 브랜드 스폰서십 및 초고액 바이아웃 재계약을 완벽 케어할 전속 에이전시 유치.
 
 ### 📊 4대 핵심 역량 진단 지표
 | 평가 축 | 평가 점수 | 업계 상위 백분위 | 핵심 시너지 및 당사 지원 방안 |
 | :--- | :---: | :---: | :--- |
 | **온피치 잠재력 및 최고점 (Ceiling)** | **99.0/100** | 상위 1% | 빅5 리그 90분당 실측 공격/전술 기여도 바탕, 바이아웃 최적화 |
-| **스타성 및 글로벌 마케팅 파워** | **98.0/100** | 상위 2% | 글로벌 스포츠 브랜드 메가 스폰서십 및 초상권 수익 배분 극대화 |
-| **에이전시 네트워크 적합도** | **95.0/100** | 상위 1% | AGSM 소속 빅클럽 디렉터 직통 라인 가동, 협상 레버리지 100% 행사 |
-| **5개년 예상 시장 가치 (5-Yr MV)** | **€300,000,000** | 역대 최고 수준 | 현 시세 대비 **+50%** 가치 도약 보장 |
+| **스타성 및 글로벌 마케팅 파워** | **99.0/100** | 상위 2% | 글로벌 스포츠 브랜드 메가 스폰서십 및 초상권 수익 배분 극대화 |
+| **에이전시 네트워크 적합도** | **97.0/100** | 상위 1% | AGSM 소속 빅클럽 디렉터 직통 라인 가동, 협상 레버리지 100% 행사 |
+| **5개년 예상 시장 가치 (5-Yr MV)** | **€280,000,000** | 역대 최고 수준 | 현 시세 대비 **+40%** 가치 도약 보장 |
 
 ---
 
@@ -87,8 +87,8 @@ AGSM은 런던, 마드리드, 뮌헨, 서울 지사의 글로벌 네트워크를
     <text x="346" y="16" text-anchor="middle" fill="#34d399" font-size="10" font-weight="bold">€370M</text>
     <text x="346" y="120" text-anchor="middle" fill="#64748b" font-size="10">Y3 (메가딜)</text>
 
-    <rect x="415" y="21" width="42" height="84" fill="#10b981" rx="4" />
-    <text x="436" y="16" text-anchor="middle" fill="#10b981" font-size="10" font-weight="bold">€300M</text>
+    <rect x="415" y="27" width="42" height="78" fill="#10b981" rx="4" />
+    <text x="436" y="22" text-anchor="middle" fill="#10b981" font-size="10" font-weight="bold">€280M</text>
     <text x="436" y="120" text-anchor="middle" fill="#10b981" font-size="10" font-weight="bold">Y5 (정상등극)</text>
   </svg>
 </div>

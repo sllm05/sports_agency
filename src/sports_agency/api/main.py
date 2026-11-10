@@ -85,6 +85,10 @@ app.add_middleware(
 if STATIC_DIR.exists():
     app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 
+REA_DIR = PROJECT_ROOT / "rea"
+if REA_DIR.exists():
+    app.mount("/rea", StaticFiles(directory=str(REA_DIR)), name="rea")
+
 
 # ============================================================================
 # Request Schemas
@@ -233,6 +237,7 @@ class ClientSignClubRequest(BaseModel):
 class WatchlistToggleRequest(BaseModel):
     target_id: int = Field(..., description="관심 등록/해제 대상 선수 또는 감독 ID")
     target_type: str = Field("PLAYER", description="PLAYER 또는 MANAGER")
+    action: str | None = Field(None, description="TARGET, UNWATCH 또는 None(토글)")
 
 
 class AuthLoginRequest(BaseModel):
@@ -298,7 +303,24 @@ def serve_dashboard() -> HTMLResponse:
     index_file = STATIC_DIR / "index.html"
     if not index_file.exists():
         return HTMLResponse("<h1>Dashboard index.html not found</h1>", status_code=404)
-    return HTMLResponse(index_file.read_text(encoding="utf-8"))
+    return HTMLResponse(
+        content=index_file.read_text(encoding="utf-8"),
+        headers={
+            "Cache-Control": "no-cache, no-store, must-revalidate, max-age=0",
+            "Pragma": "no-cache",
+            "Expires": "0",
+        },
+    )
+
+
+@app.get("/tactics", response_class=HTMLResponse)
+@app.get("/fm", response_class=HTMLResponse)
+@app.get("/fm-match", response_class=HTMLResponse)
+def serve_tactics_engine() -> HTMLResponse:
+    tactics_file = PROJECT_ROOT / "rea" / "fm_2d_grid_match.html"
+    if not tactics_file.exists():
+        return HTMLResponse("<h1>Tactics 2D Grid Engine file not found</h1>", status_code=404)
+    return HTMLResponse(tactics_file.read_text(encoding="utf-8"))
 
 
 @app.get("/health")
@@ -514,7 +536,7 @@ def api_client_sign_club(req: ClientSignClubRequest) -> dict[str, Any]:
 @app.post("/api/agency/watchlist/toggle")
 def api_toggle_watchlist(req: WatchlistToggleRequest) -> dict[str, Any]:
     """[Pillar 2: Watchlist Toggle] Toggles candidate into/out of agency recruitment watchlist."""
-    res = toggle_target_watchlist(target_id=req.target_id, target_type=req.target_type)
+    res = toggle_target_watchlist(target_id=req.target_id, target_type=req.target_type, action=req.action)
     if "error" in res:
         raise HTTPException(status_code=400, detail=res["error"])
     return res

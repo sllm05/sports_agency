@@ -1,8 +1,8 @@
-with open("src/sports_agency/api/static/index.html", "r", encoding="utf-8") as f:
-    lines = f.readlines()
+with open('src/sports_agency/api/static/index.html', 'r', encoding='utf-8') as f:
+    text = f.read()
 
-for i, line in enumerate(lines):
-    if "function selectPlayer" in line:
-        print(f"Line {i+1}: {line.strip()}")
-        for j in range(i, min(i+25, len(lines))):
-            print(f"  {lines[j].strip()}")
+# Let's search for selectPlayer or similar player dossier functions
+import re
+matches = [m.start() for m in re.finditer(r'function selectPlayer\(', text)]
+for idx in matches:
+    print(text[idx:idx+1500])

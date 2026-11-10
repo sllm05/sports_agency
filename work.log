@@ -3222,3 +3222,93 @@
 [2026-11-10 15:20:39] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 13 targets (category=ALL, type=ALL)
 [2026-11-10 15:20:48] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 13 targets (category=ALL, type=ALL)
 [2026-11-10 15:20:58] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 13 targets (category=ALL, type=ALL)
+[2026-11-10 15:44:59] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 15:45:09] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 15:46:02] [INFO] [MCP_RECRUITMENT_PITCH] Generated Pitch Deck for Pep Guardiola (MANAGER): recruitment_pitch_Pep_Guardiola.md
+[2026-11-10 15:46:23] [INFO] [MCP_AGENCY_ENROLL] Signed new client: Pep Guardiola (MANAGER) by 김대표 수석에이전트
+[2026-11-10 15:46:23] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 1 managers, Total MV €0
+[2026-11-10 15:46:46] [INFO] [MCP_AGENCY_TERMINATE] Terminated agency contract for client ID 101 (MANAGER)
+[2026-11-10 15:48:52] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 15:48:52] [INFO] [MCP_RECRUITMENT_PITCH] Generated Pitch Deck for Pep Guardiola (MANAGER): recruitment_pitch_Pep_Guardiola.md
+[2026-11-10 15:48:52] [INFO] [MCP_AGENCY_ENROLL] Signed new client: Pep Guardiola (MANAGER) by 수석 에이전트
+[2026-11-10 15:48:52] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 1 managers, Total MV €0
+[2026-11-10 15:48:52] [INFO] [MCP_AGENCY_TERMINATE] Terminated agency contract for client ID 101 (MANAGER)
+[2026-11-10 15:48:52] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
+[2026-11-10 16:08:06] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 16:08:24] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 16:08:51] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 16:09:08] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 16:09:12] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 16:09:14] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 16:09:14] [INFO] [MCP_RECRUITMENT_PITCH] Generated Pitch Deck for Pep Guardiola (MANAGER): recruitment_pitch_Pep_Guardiola.md
+[2026-11-10 16:09:38] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 16:09:40] [INFO] [MCP_RECRUITMENT_PITCH] Generated Pitch Deck for Pep Guardiola (MANAGER): recruitment_pitch_Pep_Guardiola.md
+[2026-11-10 16:10:07] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 16:10:08] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 16:10:08] [INFO] [MCP_RECRUITMENT_PITCH] Generated Pitch Deck for Pep Guardiola (MANAGER): recruitment_pitch_Pep_Guardiola.md
+[2026-11-10 16:10:09] [INFO] [MCP_RECRUITMENT_PITCH] Generated Pitch Deck for Lamine Yamal (PLAYER): recruitment_pitch_Lamine_Yamal.md
+[2026-11-10 16:10:26] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 16:11:27] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 16:11:31] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 16:11:31] [INFO] [MCP_RECRUITMENT_PITCH] Generated Pitch Deck for Pep Guardiola (MANAGER): recruitment_pitch_Pep_Guardiola.md
+[2026-11-10 16:11:31] [INFO] [MCP_RECRUITMENT_PITCH] Generated Pitch Deck for Lamine Yamal (PLAYER): recruitment_pitch_Lamine_Yamal.md
+[2026-11-10 16:12:08] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 16:12:27] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 16:24:13] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 16:26:30] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 16:28:21] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 16:28:40] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€38,000,000, wage=€105,000/wk, 4yr) -> annual_psr=€16,877,130
+[2026-11-10 16:28:40] [INFO] [MCP_TOOL_11] Discovered 6 undervalued prospects (pos=ALL, max_age=23)
+[2026-11-10 16:28:40] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
+[2026-11-10 16:28:40] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 16:28:40] [INFO] [MCP_TOOL_8] scan_bosman_and_replacement_targets(pos=ALL, league=ALL) -> 25 club targets found
+[2026-11-10 16:28:40] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€220,000,000, wage=€807,300/wk, 4yr) -> annual_psr=€108,011,357
+[2026-11-10 16:28:40] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City, val=€220,000,000
+[2026-11-10 16:28:41] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 16:28:41] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 16:28:43] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 16:28:43] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 16:28:53] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
+[2026-11-10 16:28:53] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€38,000,000, wage=€105,000/wk, 4yr) -> annual_psr=€16,877,130
+[2026-11-10 16:28:53] [INFO] [MCP_TOOL_11] Discovered 6 undervalued prospects (pos=ALL, max_age=23)
+[2026-11-10 16:28:53] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 16:28:53] [INFO] [MCP_TOOL_8] scan_bosman_and_replacement_targets(pos=ALL, league=ALL) -> 25 club targets found
+[2026-11-10 16:28:53] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€220,000,000, wage=€807,300/wk, 4yr) -> annual_psr=€108,011,357
+[2026-11-10 16:28:53] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City, val=€220,000,000
+[2026-11-10 16:28:53] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 16:28:55] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
+[2026-11-10 16:28:56] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 16:29:09] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
+[2026-11-10 16:29:10] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 16:29:21] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 16:29:25] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 16:29:25] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 16:29:29] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 16:29:32] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 16:29:38] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 16:29:39] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 16:29:39] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 16:29:40] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 16:29:40] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 16:29:41] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 16:29:42] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 16:30:05] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 16:30:10] [INFO] [MCP_RECRUITMENT_PITCH] Generated Pitch Deck for Arda Güler (PLAYER): recruitment_pitch_Arda_Güler.md
+[2026-11-10 16:31:16] [INFO] [MCP_AGENCY_ENROLL] Signed new client: Arda Güler (PLAYER) by 김대표 Agent (대표 관리자)
+[2026-11-10 16:31:18] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 1 players, 0 managers, Total MV €90,000,000
+[2026-11-10 16:31:18] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 16:31:18] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 1 players, 0 managers, Total MV €90,000,000
+[2026-11-10 16:31:29] [INFO] [MCP_AGENCY_TERMINATE] Terminated agency contract for client ID 27 (PLAYER)
+[2026-11-10 16:31:30] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
+[2026-11-10 16:31:30] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 16:31:45] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 16:31:46] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 16:31:47] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 16:31:47] [INFO] [MCP_RECRUITMENT_PITCH] Generated Pitch Deck for Pep Guardiola (MANAGER): recruitment_pitch_Pep_Guardiola.md
+[2026-11-10 16:31:47] [INFO] [MCP_RECRUITMENT_PITCH] Generated Pitch Deck for Lamine Yamal (PLAYER): recruitment_pitch_Lamine_Yamal.md
+[2026-11-10 16:31:52] [INFO] [MCP_RECRUITMENT_PITCH] Generated Pitch Deck for Arda Güler (PLAYER): recruitment_pitch_Arda_Güler.md
+[2026-11-10 16:31:55] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 16:32:11] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 16:32:12] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 16:32:13] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 16:32:14] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)

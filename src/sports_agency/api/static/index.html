@@ -108,9 +108,15 @@
           class="nav-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-zinc-800 transition flex items-center gap-1.5 shadow-sm">
           <span>대시보드</span>
         </button>
+        <button id="nav-btn-portfolio" onclick="showPage('page-portfolio')"
+          class="nav-btn px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800/60 transition flex items-center gap-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+          <span>소속 고객</span>
+          <span id="nav-portfolio-count" class="px-1.5 py-0.2 rounded-full text-[10px] bg-emerald-500/20 text-emerald-400 font-mono hidden">0</span>
+        </button>
         <button id="nav-btn-scouting" onclick="showPage('page-scouting')"
           class="nav-btn px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800/60 transition flex items-center gap-1.5">
-          <span>스카우팅</span>
+          <span>선수·감독 스카우팅 & 영입</span>
         </button>
         <button id="nav-btn-strategy" onclick="showPage('page-strategy')"
           class="nav-btn px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800/60 transition flex items-center gap-1.5">
@@ -121,6 +127,12 @@
           <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
           <span>전술·하이라이트</span>
         </button>
+        <a href="/tactics" target="_blank"
+          class="px-2.5 py-1.5 rounded-lg text-xs font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 hover:bg-emerald-500/20 transition flex items-center gap-1 shadow-sm"
+          title="손흥민, 홀란드, 김민재, 이강인 등 유럽 5대 리그 76인 전술 재현 엔진을 새 창으로 엽니다">
+          <span>⚽ 2D 전술 재현기 (76인)</span>
+          <span class="text-[10px]">↗</span>
+        </a>
         <button id="nav-btn-documents" onclick="showPage('page-documents')"
           class="nav-btn px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800/60 transition flex items-center gap-1.5">
           <span>문서 센터</span>
@@ -189,17 +201,17 @@
             <div class="text-[11px] text-zinc-400">등록 선수 및 감독</div>
             <div class="text-sm font-bold text-white mt-0.5">2,758명 (96개 구단)</div>
           </div>
+          <div onclick="showPage('page-scouting')" class="p-3 rounded-lg bg-[#0e1117] border border-amber-500/30 hover:border-amber-400 transition cursor-pointer">
+            <div class="text-[11px] text-amber-400 font-medium">🎯 신규 영입 추천 타깃</div>
+            <div class="text-sm font-bold text-amber-300 mt-0.5">15인 (펩·클롭·야말 등) →</div>
+          </div>
+          <div onclick="showPage('page-portfolio')" class="p-3 rounded-lg bg-[#0e1117] border border-emerald-500/30 hover:border-emerald-400 transition cursor-pointer">
+            <div class="text-[11px] text-emerald-400 font-medium">🤝 소속 전속 고객 관리</div>
+            <div class="text-sm font-bold text-emerald-300 mt-0.5">실시간 포트폴리오 →</div>
+          </div>
           <div class="p-3 rounded-lg bg-[#0e1117] border border-white/[0.04]">
             <div class="text-[11px] text-zinc-400">규정 및 전술 DB</div>
             <div id="home-vecdb-stat" class="text-sm font-bold text-zinc-200 mt-0.5">687 규정 + 3,268 전술</div>
-          </div>
-          <div class="p-3 rounded-lg bg-[#0e1117] border border-white/[0.04]">
-            <div class="text-[11px] text-zinc-400">현재 작업 대상</div>
-            <div id="home-active-player-stat" class="text-sm font-bold text-emerald-400 mt-0.5">손흥민 (33세, LW)</div>
-          </div>
-          <div class="p-3 rounded-lg bg-[#0e1117] border border-white/[0.04]">
-            <div class="text-[11px] text-zinc-400">실무 문서 체계</div>
-            <div class="text-sm font-bold text-zinc-200 mt-0.5">커리어·협상·피칭 3종</div>
           </div>
         </div>
       </div>
@@ -212,25 +224,49 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 
-          <!-- Card 1: Scouting -->
+          <!-- Card 1: Scouting & Recruitment -->
           <div onclick="showPage('page-scouting')"
-            class="ui-card ui-card-hover p-5 cursor-pointer flex flex-col justify-between">
+            class="ui-card ui-card-hover p-5 cursor-pointer flex flex-col justify-between border-amber-500/20 hover:border-amber-500/50">
             <div class="space-y-2">
               <div class="flex items-center justify-between">
-                <span class="text-xs font-semibold text-white">선수 스카우팅 및 분석</span>
-                <span class="text-[11px] text-zinc-500 font-mono">2,758명 DB</span>
+                <span class="text-xs font-semibold text-white flex items-center gap-1.5">
+                  <span class="text-amber-400">🎯</span>
+                  <span>선수·감독 스카우팅 & 신규 영입</span>
+                </span>
+                <span class="text-[11px] text-amber-400 font-mono font-semibold">15인 풀 + 2,758명</span>
               </div>
               <p class="text-xs text-zinc-400 leading-relaxed">
-                5대 리그 공식 로스터 검색, 퍼포먼스 5각 레이더 차트, AI 저평가 유망주 발굴 및 보스만 룰 만료 타겟 분석.
+                👑 <strong>FA 무직 명장</strong>(펩 과르디올라, 클롭, 지단), 💎 <strong>메가스타</strong>(라민 야말, 음바페, 홀란드) 1-Page AI 피치덱 제안, 전속 대리 계약, 관심 리스트(Watchlist) 및 5대 리그 전체 탐색.
               </p>
             </div>
-            <div class="mt-5 pt-3 border-t border-white/[0.06] flex items-center justify-between text-xs font-medium text-emerald-400">
-              <span>스카우팅 열기</span>
+            <div class="mt-5 pt-3 border-t border-white/[0.06] flex items-center justify-between text-xs font-medium text-amber-400">
+              <span>스카우팅 & 영입 센터 열기</span>
               <span>→</span>
             </div>
           </div>
 
-          <!-- Card 2: Strategy -->
+          <!-- Card 2: Agency Portfolio -->
+          <div onclick="showPage('page-portfolio')"
+            class="ui-card ui-card-hover p-5 cursor-pointer flex flex-col justify-between border-emerald-500/20 hover:border-emerald-500/50">
+            <div class="space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-semibold text-white flex items-center gap-1.5">
+                  <span class="text-emerald-400">🤝</span>
+                  <span>소속 고객 포트폴리오 관리실</span>
+                </span>
+                <span class="text-[11px] text-emerald-400 font-mono font-semibold">Active Clients</span>
+              </div>
+              <p class="text-xs text-zinc-400 leading-relaxed">
+                에이전시와 전속 대리 계약을 체결한 선수·감독 실시간 관리. 현 소속팀과의 재계약 갱신, 바이아웃 타 구단 이적 협상 및 FA 공식 입단 체결 지원.
+              </p>
+            </div>
+            <div class="mt-5 pt-3 border-t border-white/[0.06] flex items-center justify-between text-xs font-medium text-emerald-400">
+              <span>소속 포트폴리오 열기</span>
+              <span>→</span>
+            </div>
+          </div>
+
+          <!-- Card 3: Strategy -->
           <div onclick="showPage('page-strategy')"
             class="ui-card ui-card-hover p-5 cursor-pointer flex flex-col justify-between">
             <div class="space-y-2">
@@ -338,19 +374,127 @@
             ← 대시보드
           </button>
           <div>
-            <h2 class="text-base font-bold text-white">선수 스카우팅 및 분석</h2>
-            <p class="text-xs text-zinc-400">2,758명 선수·감독 로스터 검색 및 데이터 분석</p>
+            <h2 class="text-base font-bold text-white flex items-center gap-2">
+              <span>선수·감독 스카우팅 & 영입 센터</span>
+              <span class="text-xs font-normal text-emerald-400 font-mono">(Talent Acquisition Radar)</span>
+            </h2>
+            <p class="text-xs text-zinc-400">FA 월드클래스 명장 및 스타 영입 제안부터 2,758명 5대 리그 전체 탐색까지 통합 지원</p>
           </div>
         </div>
 
-        <button onclick="showPage('page-strategy')"
-          class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition">
-          선택한 선수로 협상 전략 수립 →
-        </button>
+        <div class="flex items-center gap-2">
+          <button onclick="showPage('page-portfolio')"
+            class="px-3 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-semibold transition flex items-center gap-1.5">
+            <span>소속 포트폴리오 보기 →</span>
+          </button>
+          <button onclick="showPage('page-strategy')"
+            class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition">
+            선택한 고객 협상 수립 →
+          </button>
+        </div>
       </div>
 
-      <!-- Main Scouting Workspace Grid -->
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+      <!-- Scouting & Recruitment Unified Sub-Views Switcher -->
+      <div class="flex flex-wrap items-center justify-between gap-3 bg-[#11141a] p-2.5 rounded-xl border border-white/[0.08]">
+        <div class="flex flex-wrap items-center gap-2" id="scouting-main-view-tabs">
+          <button id="scout-view-tab-recruitment" onclick="switchScoutingView('RECRUITMENT')"
+            class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 bg-amber-500 text-black shadow-sm">
+            <span>🎯 에이전시 영입 추천 타깃</span>
+            <span id="scout-tab-rec-count" class="px-1.5 py-0.2 rounded-full text-[10px] bg-black/20 font-mono">15</span>
+          </button>
+          <button id="scout-view-tab-watchlist" onclick="switchScoutingView('WATCHLIST')"
+            class="px-3.5 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800 transition flex items-center gap-1.5">
+            <span>⭐ 내 관심 리스트 (Watchlist)</span>
+            <span id="scout-tab-watch-count" class="px-1.5 py-0.2 rounded-full text-[10px] bg-zinc-800 font-mono">0</span>
+          </button>
+          <button id="scout-view-tab-all" onclick="switchScoutingView('ALL_ROSTER')"
+            class="px-3.5 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800 transition flex items-center gap-1.5">
+            <span>🔍 5대 리그 전체 탐색 (2,758명 선수 & 100+명 감독)</span>
+          </button>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-[11px] text-zinc-500 font-mono">FIFA FFAR 준수</span>
+        </div>
+      </div>
+
+      <!-- =================================================================== -->
+      <!-- SUB-VIEW 1: RECRUITMENT TARGETS (FA 명장, 메가스타, 만료임박, 유망주) -->
+      <!-- =================================================================== -->
+      <div id="scouting-view-recruitment" class="space-y-4">
+        <!-- Recruitment Category & Search Bar -->
+        <div class="flex flex-wrap items-center justify-between gap-3 bg-[#11141a] p-3 rounded-xl border border-white/[0.06]">
+          <div class="flex flex-wrap items-center gap-1.5" id="recruitment-filter-tabs">
+            <button onclick="filterRecruitmentTargets('ALL')" id="rec-tab-ALL" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-500 text-black transition shadow-sm">
+              <span>전체 타깃</span>
+              <span id="rec-count-all" class="ml-1 px-1.5 py-0.2 rounded-full text-[10px] bg-black/20 font-mono">15</span>
+            </button>
+            <button onclick="filterRecruitmentTargets('FA_LEGEND')" id="rec-tab-FA_LEGEND" class="px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800 transition">
+              <span>👑 FA 명장</span>
+              <span id="rec-count-fa-legend" class="ml-1 px-1.5 py-0.2 rounded-full text-[10px] bg-zinc-800 font-mono">4</span>
+            </button>
+            <button onclick="filterRecruitmentTargets('FAMILY_REPRESENTED')" id="rec-tab-FAMILY_REPRESENTED" class="px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800 transition">
+              <span>💎 가족대리/메가스타</span>
+              <span id="rec-count-star" class="ml-1 px-1.5 py-0.2 rounded-full text-[10px] bg-zinc-800 font-mono">3</span>
+            </button>
+            <button onclick="filterRecruitmentTargets('EXPIRING_D6')" id="rec-tab-EXPIRING_D6" class="px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800 transition">
+              <span>⏳ 만료임박 D-6</span>
+              <span id="rec-count-expiring" class="ml-1 px-1.5 py-0.2 rounded-full text-[10px] bg-zinc-800 font-mono">4</span>
+            </button>
+            <button onclick="filterRecruitmentTargets('STEPUP_PROSPECTS')" id="rec-tab-STEPUP_PROSPECTS" class="px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800 transition">
+              <span>🚀 스텝업 유망주</span>
+              <span id="rec-count-prospects" class="ml-1 px-1.5 py-0.2 rounded-full text-[10px] bg-zinc-800 font-mono">4</span>
+            </button>
+            <button onclick="filterRecruitmentTargets('PLAYER')" id="rec-tab-PLAYER" class="px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800 transition">
+              <span>선수만</span>
+              <span id="rec-count-player" class="ml-1 px-1.5 py-0.2 rounded-full text-[10px] bg-zinc-800 font-mono">11</span>
+            </button>
+            <button onclick="filterRecruitmentTargets('MANAGER')" id="rec-tab-MANAGER" class="px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800 transition">
+              <span>감독만</span>
+              <span id="rec-count-manager" class="ml-1 px-1.5 py-0.2 rounded-full text-[10px] bg-zinc-800 font-mono">4</span>
+            </button>
+          </div>
+          <div class="flex items-center gap-2">
+            <input type="text" id="recruitment-search-input" oninput="handleRecruitmentSearch(this.value)" placeholder="타깃명/구단/포지션 (예: 펩, 야말, 클롭, 홀란드)..."
+              class="bg-[#0e1117] text-xs px-3 py-1.5 rounded-lg border border-white/[0.08] text-white placeholder-zinc-500 focus:outline-none focus:border-amber-500/50 w-64">
+          </div>
+        </div>
+
+        <!-- Recruitment Target Cards Grid -->
+        <div id="scouting-recruitment-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+
+      <!-- =================================================================== -->
+      <!-- SUB-VIEW 2: WATCHLIST (내 영입 관심 리스트) -->
+      <!-- =================================================================== -->
+      <div id="scouting-view-watchlist" class="hidden space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3 bg-[#11141a] p-3.5 rounded-xl border border-white/[0.06]">
+          <div>
+            <h3 class="text-sm font-bold text-white flex items-center gap-2">
+              <span>⭐ 내 영입 관심 리스트</span>
+              <span id="watchlist-total-count" class="text-xs text-amber-400 font-mono">0인</span>
+            </h3>
+            <p class="text-[11px] text-zinc-400 mt-0.5">
+              스카우팅 탐색 중 '⭐ 영입 관심 타깃 등록'을 누른 선수 및 감독들입니다. 1-Page AI 제안서를 생성하고 전속 계약을 체결할 수 있습니다.
+            </p>
+          </div>
+          <button onclick="switchScoutingView('ALL_ROSTER')" class="px-3.5 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-xs font-semibold text-zinc-200 transition">
+            + 5대 리그 전체 로스터에서 관심 타깃 추가하기
+          </button>
+        </div>
+        <div id="scouting-watchlist-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+
+      <!-- =================================================================== -->
+      <!-- SUB-VIEW 3: ALL ROSTER (5대 리그 전체 탐색 및 상세 분석) -->
+      <!-- =================================================================== -->
+      <div id="scouting-view-all" class="hidden space-y-5">
+
+        <!-- Main Scouting Workspace Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
 
         <!-- Left 5 Cols: Roster Filter & List -->
         <div class="lg:col-span-5 ui-card p-4 flex flex-col justify-between">
@@ -604,7 +748,8 @@
         </div>
       </div>
 
-    </div>
+      </div> <!-- End of scouting-view-all -->
+    </div> <!-- End of page-scouting -->
 
 
     <!-- ======================================================================= -->
@@ -902,10 +1047,31 @@
         </div>
 
         <div class="flex items-center gap-2">
+          <a href="/tactics" target="_blank"
+            class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-1.5 transition shadow-lg shadow-emerald-600/30">
+            <span>⚡ 손흥민·홀란드 76인 전술 엔진 새창 열기 ↗</span>
+          </a>
           <button onclick="showPage('page-scouting')"
             class="px-3 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs font-medium transition">
             선수 스카우팅으로 이동 →
           </button>
+        </div>
+      </div>
+
+      <!-- 76 Elite Players 2D FM Grid Replayer Embedded Frame -->
+      <div class="ui-card p-3 space-y-2 border border-emerald-500/30 bg-[#0b101a]">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="text-xs font-bold text-white">⚡ 유럽 5대 리그 정예 76인 시그니처 전술 재현 엔진 (손흥민 감아차기 · 홀란드 대포알 레이저 · 김민재 스토퍼 · 이강인 라파우사)</span>
+          </div>
+          <a href="/tactics" target="_blank" class="text-xs text-emerald-400 hover:underline flex items-center gap-1">
+            <span>풀스크린 전체화면으로 열기</span>
+            <span>↗</span>
+          </a>
+        </div>
+        <div class="w-full h-[760px] rounded-xl overflow-hidden border border-white/[0.08] shadow-2xl bg-[#090d16]">
+          <iframe src="/tactics" class="w-full h-full border-0" title="2D Tactical Match Engine"></iframe>
         </div>
       </div>
 
@@ -1470,10 +1636,10 @@
             </p>
           </div>
           <div class="flex items-center gap-2">
-            <button onclick="showPage('page-recruitment')"
+            <button onclick="showPage('page-scouting'); switchScoutingView('RECRUITMENT');"
               class="px-3.5 py-2 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-xs font-semibold transition flex items-center gap-1.5 border border-amber-500/30 shadow-lg shadow-amber-950/20">
-              <span>⭐ 영입 관심 리스트 (Watchlist) 보기</span>
-              <span id="portfolio-header-rec-count" class="px-1.5 py-0.2 rounded-full text-[10px] bg-amber-500/30 text-amber-200 font-mono">13</span>
+              <span>🎯 에이전시 영입 추천 타깃 보기</span>
+              <span id="portfolio-header-rec-count" class="px-1.5 py-0.2 rounded-full text-[10px] bg-amber-500/30 text-amber-200 font-mono">15</span>
             </button>
           </div>
         </div>
@@ -1525,110 +1691,7 @@
     </div>
 
 
-    <!-- ======================================================================= -->
-    <!-- PAGE: RECRUITMENT WATCHLIST (영입 관심 리스트 및 피치덱 센터) -->
-    <!-- ======================================================================= -->
-    <div id="page-recruitment" class="page-view hidden space-y-6">
-
-      <!-- Header Banner -->
-      <div class="ui-card p-6 border-white/[0.08] relative overflow-hidden">
-        <div class="absolute -right-10 -bottom-10 w-72 h-72 bg-amber-500/5 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <div class="flex items-center gap-2">
-              <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-amber-500/10 text-amber-300 border border-amber-500/20">
-                ⭐ Agency Recruitment Watchlist
-              </span>
-              <span class="text-xs text-zinc-400">잠재력 · 스타성 4D 입체 분석 & 대리권 전속 유치</span>
-            </div>
-            <h2 class="text-2xl font-bold text-white tracking-tight mt-1.5 flex items-center gap-2">
-              <span>영입 관심 리스트</span>
-              <span class="text-xs font-normal text-zinc-400 font-mono">(Watchlist Radar)</span>
-            </h2>
-            <p class="text-xs text-zinc-400 mt-1">
-              스카우팅에서 관심 타깃으로 등록한 선수·감독 및 가상 테스트 풀을 관리하며, 1-Page 제안서 생성과 전속 계약 체결을 지원합니다.
-            </p>
-          </div>
-          <div class="flex items-center gap-2">
-            <button onclick="showPage('page-scouting')"
-              class="px-3.5 py-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-semibold transition flex items-center gap-1.5">
-              <span>← 스카우팅 로스터로 이동</span>
-            </button>
-            <button onclick="showPage('page-portfolio')"
-              class="px-3.5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition flex items-center gap-1.5 shadow-md shadow-emerald-950/30">
-              <span>소속 포트폴리오 보기 →</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- 4 Recruitment Categories Pills -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 pt-5 mt-5 border-t border-white/[0.06]">
-          <div onclick="filterRecruitmentTargets('UNREPRESENTED')" id="rec-cat-UNREPRESENTED" class="cursor-pointer p-3 rounded-xl bg-[#0e1117] border border-white/[0.04] hover:border-emerald-500/30 transition">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-emerald-400">💎 무소속 / FA 원석</span>
-              <span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-1.5 py-0.5 rounded">즉시협상</span>
-            </div>
-            <p class="text-[11px] text-zinc-400 mt-1">가족 대리인 체제 탈피 및 전문 에이전시 론칭 타깃</p>
-          </div>
-          <div onclick="filterRecruitmentTargets('EXPIRING_D6')" id="rec-cat-EXPIRING_D6" class="cursor-pointer p-3 rounded-xl bg-[#0e1117] border border-white/[0.04] hover:border-amber-500/30 transition">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-amber-300">⏳ 대리계약 만료 임박 (D-6)</span>
-              <span class="text-[10px] bg-amber-500/10 text-amber-300 px-1.5 py-0.5 rounded">FFAR 합법 접촉</span>
-            </div>
-            <p class="text-[11px] text-zinc-400 mt-1">기존 대리 계약 2개월 미만 잔여 선수 선점 접촉</p>
-          </div>
-          <div onclick="filterRecruitmentTargets('TIER2_STEPUP')" id="rec-cat-TIER2_STEPUP" class="cursor-pointer p-3 rounded-xl bg-[#0e1117] border border-white/[0.04] hover:border-sky-500/30 transition">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-sky-400">🚀 메가에이전시 스텝업</span>
-              <span class="text-[10px] bg-sky-500/10 text-sky-400 px-1.5 py-0.5 rounded">글로벌 확장</span>
-            </div>
-            <p class="text-[11px] text-zinc-400 mt-1">현 소속사 케어 한계 극복 및 빅클럽 이적 희망</p>
-          </div>
-          <div onclick="filterRecruitmentTargets('ELITE_MANAGER')" id="rec-cat-ELITE_MANAGER" class="cursor-pointer p-3 rounded-xl bg-[#0e1117] border border-white/[0.04] hover:border-purple-500/30 transition">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-purple-400">👔 차세대 명장 유치 타깃</span>
-              <span class="text-[10px] bg-purple-500/10 text-purple-400 px-1.5 py-0.5 rounded">사령탑 확보</span>
-            </div>
-            <p class="text-[11px] text-zinc-400 mt-1">빅클럽 차기 감독 선임 및 바이아웃 협상 대행</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Filter Controls & Target Search -->
-      <div class="flex flex-wrap items-center justify-between gap-3 bg-[#11141a] p-3 rounded-xl border border-white/[0.06]">
-        <div class="flex flex-wrap items-center gap-1.5" id="recruitment-filter-tabs">
-          <button onclick="filterRecruitmentTargets('ALL')" id="rec-tab-ALL" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 text-white transition">
-            <span>전체</span>
-            <span id="rec-count-all" class="ml-1 px-1.5 py-0.2 rounded-full text-[10px] bg-white/20 font-mono">13</span>
-          </button>
-          <button onclick="filterRecruitmentTargets('PLAYER')" id="rec-tab-PLAYER" class="px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800 transition">
-            <span>선수</span>
-            <span id="rec-count-player" class="ml-1 px-1.5 py-0.2 rounded-full text-[10px] bg-zinc-800 font-mono">10</span>
-          </button>
-          <button onclick="filterRecruitmentTargets('MANAGER')" id="rec-tab-MANAGER" class="px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800 transition">
-            <span>감독</span>
-            <span id="rec-count-manager" class="ml-1 px-1.5 py-0.2 rounded-full text-[10px] bg-zinc-800 font-mono">3</span>
-          </button>
-          <button onclick="filterRecruitmentTargets('VIRTUAL')" id="rec-tab-VIRTUAL" class="px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800 transition">
-            <span>🧪 가상 테스트 풀</span>
-            <span id="rec-count-virtual" class="ml-1 px-1.5 py-0.2 rounded-full text-[10px] bg-zinc-800 font-mono">13</span>
-          </button>
-          <button onclick="filterRecruitmentTargets('SCOUTED')" id="rec-tab-SCOUTED" class="px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800 transition">
-            <span>⭐ 스카우팅 발굴 관심</span>
-            <span id="rec-count-scouted" class="ml-1 px-1.5 py-0.2 rounded-full text-[10px] bg-zinc-800 font-mono">0</span>
-          </button>
-        </div>
-        <div class="flex items-center gap-2">
-          <input type="text" id="recruitment-search-input" oninput="handleRecruitmentSearch(this.value)" placeholder="타깃명/구단/포지션 검색..."
-            class="bg-[#0e1117] text-xs px-3 py-1.5 rounded-lg border border-white/[0.08] text-white placeholder-zinc-500 focus:outline-none focus:border-amber-500/50 w-52">
-        </div>
-      </div>
-
-      <!-- Recruitment Target Cards Grid -->
-      <div id="recruitment-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <!-- Rendered dynamically via renderRecruitmentCards() -->
-      </div>
-    </div>
+    <!-- [REMOVED: page-recruitment is now merged into page-scouting sub-views] -->
 
 
     <!-- ======================================================================= -->
@@ -1726,16 +1789,23 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
 
+      if (pageId === 'page-recruitment') {
+        showPage('page-scouting');
+        switchScoutingView('RECRUITMENT');
+        return;
+      }
+
       updateNavState(pageId);
 
       // Lazy load tab data
       if (pageId === 'page-portfolio') loadAgencyPortfolio();
-      if (pageId === 'page-recruitment') loadAgencyRecruitmentTargets();
+      if (pageId === 'page-scouting') {
+        loadAgencyRecruitmentTargets();
+        if (selectedPlayer) updateRadarChart(selectedPlayer);
+      }
       if (pageId === 'page-admin') loadAdminDashboard();
 
-      if (pageId === 'page-scouting' && selectedPlayer) {
-        updateRadarChart(selectedPlayer);
-      } else if (pageId === 'page-tactics') {
+      if (pageId === 'page-tactics') {
         initTacticsDesk();
       } else if (pageId === 'page-documents' && currentWorkflowState) {
         switchDocTab(activeDocTab || 'career');
@@ -1751,7 +1821,6 @@
       const buttons = [
         { id: 'nav-btn-home', key: 'home' },
         { id: 'nav-btn-portfolio', key: 'portfolio' },
-        { id: 'nav-btn-recruitment', key: 'recruitment' },
         { id: 'nav-btn-scouting', key: 'scouting' },
         { id: 'nav-btn-strategy', key: 'strategy' },
         { id: 'nav-btn-tactics', key: 'tactics' },
@@ -5945,8 +6014,38 @@
     }
 
     // =========================================================================
-    // TALENT & MANAGER RECRUITMENT WATCHLIST CONTROLLER (PILLAR 2)
+    // UNIFIED SCOUTING & CLIENT RECRUITMENT CONTROLLER (PILLAR 2)
     // =========================================================================
+    let currentScoutingView = 'RECRUITMENT'; // 'RECRUITMENT', 'WATCHLIST', 'ALL_ROSTER'
+
+    function switchScoutingView(view) {
+      currentScoutingView = view;
+      const viewRec = document.getElementById('scouting-view-recruitment');
+      const viewWatch = document.getElementById('scouting-view-watchlist');
+      const viewAll = document.getElementById('scouting-view-all');
+
+      const tabRec = document.getElementById('scout-view-tab-recruitment');
+      const tabWatch = document.getElementById('scout-view-tab-watchlist');
+      const tabAll = document.getElementById('scout-view-tab-all');
+
+      if (viewRec) viewRec.classList.toggle('hidden', view !== 'RECRUITMENT');
+      if (viewWatch) viewWatch.classList.toggle('hidden', view !== 'WATCHLIST');
+      if (viewAll) viewAll.classList.toggle('hidden', view !== 'ALL_ROSTER');
+
+      const activeClass = 'px-3.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 bg-amber-500 text-black shadow-sm';
+      const inactiveClass = 'px-3.5 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800 transition flex items-center gap-1.5';
+
+      if (tabRec) tabRec.className = (view === 'RECRUITMENT') ? activeClass : inactiveClass;
+      if (tabWatch) tabWatch.className = (view === 'WATCHLIST') ? activeClass : inactiveClass;
+      if (tabAll) tabAll.className = (view === 'ALL_ROSTER') ? activeClass : inactiveClass;
+
+      if (view === 'RECRUITMENT' || view === 'WATCHLIST') {
+        loadAgencyRecruitmentTargets();
+      } else if (view === 'ALL_ROSTER' && selectedPlayer) {
+        updateRadarChart(selectedPlayer);
+      }
+    }
+
     async function loadAgencyRecruitmentTargets() {
       try {
         const res = await fetch('/api/agency/recruitment-targets');
@@ -5954,29 +6053,38 @@
         cachedRecruitmentData = await res.json();
 
         const targets = cachedRecruitmentData.targets || [];
-        const virtualCount = targets.filter(t => t.is_virtual).length;
-        const scoutedCount = targets.filter(t => !t.is_virtual || t.category === 'SCOUTED_TARGET').length;
+        const targetedCount = targets.filter(t => t.scouting_status === 'TARGETED').length;
+        const faLegendCount = targets.filter(t => t.category === 'FA_LEGEND').length;
+        const starCount = targets.filter(t => t.category === 'FAMILY_REPRESENTED' || t.category === 'MEGA_TAKEOVER').length;
+        const expiringCount = targets.filter(t => t.category === 'EXPIRING_D6').length;
+        const prospectsCount = targets.filter(t => t.category === 'STEPUP_PROSPECTS').length;
         const playerCount = targets.filter(t => t.target_type === 'PLAYER').length;
         const managerCount = targets.filter(t => t.target_type === 'MANAGER').length;
 
-        // Update counters on page & header badges
+        // Sub-view tab badges
+        const scoutRecCount = document.getElementById('scout-tab-rec-count');
+        const scoutWatchCount = document.getElementById('scout-tab-watch-count');
+        if (scoutRecCount) scoutRecCount.textContent = targets.length;
+        if (scoutWatchCount) scoutWatchCount.textContent = targetedCount;
+
+        // Filter chips counters
         const countAllEl = document.getElementById('rec-count-all');
+        const countFaEl = document.getElementById('rec-count-fa-legend');
+        const countStarEl = document.getElementById('rec-count-star');
+        const countExpEl = document.getElementById('rec-count-expiring');
+        const countProEl = document.getElementById('rec-count-prospects');
         const countPlayerEl = document.getElementById('rec-count-player');
         const countMgrEl = document.getElementById('rec-count-manager');
-        const countVirtEl = document.getElementById('rec-count-virtual');
-        const countScoutEl = document.getElementById('rec-count-scouted');
+        const watchTotalEl = document.getElementById('watchlist-total-count');
 
         if (countAllEl) countAllEl.textContent = targets.length;
+        if (countFaEl) countFaEl.textContent = faLegendCount;
+        if (countStarEl) countStarEl.textContent = starCount;
+        if (countExpEl) countExpEl.textContent = expiringCount;
+        if (countProEl) countProEl.textContent = prospectsCount;
         if (countPlayerEl) countPlayerEl.textContent = playerCount;
         if (countMgrEl) countMgrEl.textContent = managerCount;
-        if (countVirtEl) countVirtEl.textContent = virtualCount;
-        if (countScoutEl) countScoutEl.textContent = scoutedCount;
-
-        const navWatchlistBadge = document.getElementById('nav-watchlist-count');
-        if (navWatchlistBadge) navWatchlistBadge.textContent = targets.length;
-
-        const bannerWatchlistBadge = document.getElementById('scouting-banner-watchlist-count');
-        if (bannerWatchlistBadge) bannerWatchlistBadge.textContent = targets.length;
+        if (watchTotalEl) watchTotalEl.textContent = `${targetedCount}인`;
 
         const pfRecBadge = document.getElementById('portfolio-header-rec-count');
         if (pfRecBadge) pfRecBadge.textContent = targets.length;
@@ -5989,7 +6097,8 @@
 
     function filterRecruitmentTargets(cat) {
       currentRecCategory = cat;
-      ['ALL', 'PLAYER', 'MANAGER', 'VIRTUAL', 'SCOUTED', 'UNREPRESENTED', 'EXPIRING_D6', 'TIER2_STEPUP', 'ELITE_MANAGER'].forEach(c => {
+      const cats = ['ALL', 'FA_LEGEND', 'FAMILY_REPRESENTED', 'EXPIRING_D6', 'STEPUP_PROSPECTS', 'PLAYER', 'MANAGER'];
+      cats.forEach(c => {
         const tab = document.getElementById(`rec-tab-${c}`);
         if (tab) {
           if (c === cat) {
@@ -6007,148 +6116,180 @@
       renderRecruitmentCards();
     }
 
-    function renderRecruitmentCards() {
-      const grid = document.getElementById('recruitment-cards-grid');
-      if (!grid || !cachedRecruitmentData) return;
-
-      let targets = cachedRecruitmentData.targets || [];
-
-      // Filter by Category Tab
-      if (currentRecCategory === 'PLAYER') {
-        targets = targets.filter(t => t.target_type === 'PLAYER');
-      } else if (currentRecCategory === 'MANAGER') {
-        targets = targets.filter(t => t.target_type === 'MANAGER');
-      } else if (currentRecCategory === 'VIRTUAL') {
-        targets = targets.filter(t => t.is_virtual);
-      } else if (currentRecCategory === 'SCOUTED') {
-        targets = targets.filter(t => !t.is_virtual || t.category === 'SCOUTED_TARGET');
-      } else if (['UNREPRESENTED', 'EXPIRING_D6', 'TIER2_STEPUP', 'ELITE_MANAGER'].includes(currentRecCategory)) {
-        targets = targets.filter(t => t.category === currentRecCategory);
-      }
-
-      // Filter by Search Query
-      if (recruitmentSearchQuery) {
-        targets = targets.filter(t => {
-          const matchName = (t.name || '').toLowerCase().includes(recruitmentSearchQuery);
-          const matchKo = (t.name_ko || '').toLowerCase().includes(recruitmentSearchQuery);
-          const matchClub = (t.current_club || '').toLowerCase().includes(recruitmentSearchQuery);
-          const matchNat = (t.player_nat || '').toLowerCase().includes(recruitmentSearchQuery);
-          return matchName || matchKo || matchClub || matchNat;
-        });
-      }
-
-      if (targets.length === 0) {
-        grid.innerHTML = `
-          <div class="col-span-full py-16 text-center text-zinc-500 text-sm ui-card bg-[#11141a]">
-            선택한 조건의 영입 관심 타깃이 없습니다. 스카우팅 로스터에서 선수·감독을 발굴해 <strong>[⭐ 영입 관심 타깃 등록]</strong>을 눌러보세요.
-          </div>
-        `;
-        return;
-      }
-
+    function buildRecruitmentCardHtml(target) {
       const catBadges = {
-        'UNREPRESENTED': { label: '💎 무소속 원석', style: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' },
-        'EXPIRING_D6': { label: '⏳ 대리계약 만료 임박 D-6', style: 'bg-amber-500/10 text-amber-300 border-amber-500/20' },
-        'TIER2_STEPUP': { label: '🚀 메가에이전시 희망', style: 'bg-sky-500/10 text-sky-400 border-sky-500/20' },
-        'ELITE_MANAGER': { label: '👔 차세대 명장 타깃', style: 'bg-purple-500/10 text-purple-400 border-purple-500/20' },
-        'SCOUTED_TARGET': { label: '⭐ 스카우팅 발굴 관심', style: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' }
+        'FA_LEGEND': { label: '👑 FA 월드클래스 명장', style: 'bg-purple-500/15 text-purple-300 border-purple-500/30' },
+        'FAMILY_REPRESENTED': { label: '💎 가족대리/메가스타', style: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30' },
+        'MEGA_TAKEOVER': { label: '🔥 메가에이전시 이관', style: 'bg-rose-500/15 text-rose-300 border-rose-500/30' },
+        'EXPIRING_D6': { label: '⏳ 보스만 만료임박 D-6', style: 'bg-amber-500/15 text-amber-300 border-amber-500/30' },
+        'STEPUP_PROSPECTS': { label: '🚀 차세대 특급 유망주', style: 'bg-sky-500/15 text-sky-300 border-sky-500/30' },
+        'SCOUTED_TARGET': { label: '⭐ 스카우팅 관심 발굴', style: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30' }
       };
 
-      grid.innerHTML = targets.map(target => {
-        const catInfo = catBadges[target.category] || { label: target.category, style: 'bg-zinc-800 text-zinc-300 border-zinc-700' };
-        const isPlayer = target.target_type === 'PLAYER';
-        const isVirtual = target.is_virtual;
-        const marketValStr = target.market_value_eur ? `€${(target.market_value_eur/1000000).toFixed(0)}M` : '-';
-        const projValStr = target.projected_5yr_valuation_eur ? `€${(target.projected_5yr_valuation_eur/1000000).toFixed(0)}M` : '-';
-        const roiStr = target.projected_agency_roi_eur ? `€${(target.projected_agency_roi_eur/1000000).toFixed(1)}M` : '-';
-        const roleLabel = isPlayer ? (target.position || 'FW') : `감독 (${target.preferred_formation || '4-3-3'})`;
+      const catInfo = catBadges[target.category] || { label: target.category, style: 'bg-zinc-800 text-zinc-300 border-zinc-700' };
+      const isPlayer = target.target_type === 'PLAYER';
+      const roleLabel = isPlayer ? (target.position || 'FW') : `감독 (${target.preferred_formation || '4-3-3'})`;
+      const currentClub = target.current_club || '무소속 (FA)';
 
-        return `
-          <div class="ui-card p-5 border-white/[0.08] hover:border-amber-500/40 transition flex flex-col justify-between space-y-4 bg-[#11141a]">
-            <div>
-              <!-- Category Pill & Virtual Pool Badge -->
-              <div class="flex items-center justify-between">
-                <div class="flex items-center gap-1.5">
-                  <span class="px-2 py-0.5 rounded text-[10px] font-bold border ${catInfo.style}">
-                    ${catInfo.label}
-                  </span>
-                  ${isVirtual ? '<span class="px-1.5 py-0.2 rounded text-[9px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">🧪 가상 풀</span>' : '<span class="px-1.5 py-0.2 rounded text-[9px] font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30">⭐ 실제 발굴</span>'}
-                </div>
-                <button onclick="removeTargetFromWatchlist(${target.target_id}, '${target.target_type}', '${target.name_ko}')"
-                  class="text-zinc-500 hover:text-rose-400 text-xs px-1.5 py-0.5 rounded hover:bg-zinc-800 transition" title="관심 리스트에서 제외">
-                  ✕ 관심 해제
-                </button>
-              </div>
+      let valHeader = '현재 시장가치';
+      let valDisplay = target.market_value_eur ? `€${(target.market_value_eur/1000000).toFixed(0)}M` : '-';
+      if (!isPlayer) {
+        valHeader = '예상 주급 기준';
+        valDisplay = target.weekly_wage_eur ? `€${(target.weekly_wage_eur).toLocaleString()} / 주` : '€300K / 주';
+      }
 
-              <!-- Header Info -->
-              <div class="flex items-start justify-between gap-3 mt-3">
-                <div>
-                  <h4 class="text-base font-bold text-white tracking-tight flex items-center gap-1.5">
-                    <span>${target.name_ko}</span>
-                    <span class="text-xs font-normal text-zinc-400 font-mono">${target.name}</span>
-                  </h4>
-                  <p class="text-xs text-zinc-400 mt-0.5">
-                    <span class="text-zinc-200 font-medium">${target.current_club || '무소속 (FA)'}</span>
-                    <span class="text-zinc-600">·</span>
-                    <span>${target.league || '가상 리그'}</span>
-                    <span class="text-zinc-600">·</span>
-                    <span class="text-amber-400 font-mono font-medium">${roleLabel}</span>
-                  </p>
-                </div>
-                <div class="text-right">
-                  <div class="text-[10px] text-zinc-500 uppercase font-semibold">현재 시장가치</div>
-                  <div class="text-sm font-bold text-white font-mono">${marketValStr}</div>
-                </div>
-              </div>
-            </div>
+      const projValStr = target.projected_5yr_valuation_eur ? `€${(target.projected_5yr_valuation_eur/1000000).toFixed(0)}M` : '-';
+      const roiStr = target.projected_agency_roi_eur ? `€${(target.projected_agency_roi_eur/1000000).toFixed(1)}M` : '-';
 
-            <!-- 4D Potential & Stardom Score Board -->
-            <div class="grid grid-cols-3 gap-2 p-3 rounded-lg bg-[#0e1117] border border-white/[0.04] text-center">
-              <div>
-                <div class="text-[10px] text-zinc-500">잠재력 포텐셜</div>
-                <div class="text-base font-bold text-emerald-400 font-mono mt-0.5">${target.potential_ceiling_score || 95}점</div>
+      return `
+        <div class="ui-card p-5 border-white/[0.08] hover:border-amber-500/40 transition flex flex-col justify-between space-y-4 bg-[#11141a]">
+          <div>
+            <!-- Category Badge & Type Pill -->
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-1.5">
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold border ${catInfo.style}">
+                  ${catInfo.label}
+                </span>
+                <span class="px-1.5 py-0.2 rounded text-[9px] font-bold ${isPlayer ? 'bg-sky-500/10 text-sky-400 border border-sky-500/20' : 'bg-purple-500/10 text-purple-400 border border-purple-500/20'}">
+                  ${isPlayer ? '⚽ 선수' : '👔 감독'}
+                </span>
               </div>
-              <div>
-                <div class="text-[10px] text-zinc-500">스타성·마케팅</div>
-                <div class="text-base font-bold text-amber-300 font-mono mt-0.5">${target.stardom_commercial_score || 90}점</div>
-              </div>
-              <div>
-                <div class="text-[10px] text-zinc-500">에이전시 적합도</div>
-                <div class="text-base font-bold text-sky-400 font-mono mt-0.5">${target.agency_fit_score || 90}점</div>
-              </div>
-            </div>
-
-            <!-- Valuation & Agency Projected ROI -->
-            <div class="flex items-center justify-between text-xs px-3 py-2 rounded-lg bg-amber-950/20 border border-amber-500/20">
-              <div>
-                <span class="text-zinc-400 text-[11px]">5개년 예상 가치: </span>
-                <span class="font-bold text-white font-mono">${projValStr}</span>
-              </div>
-              <div>
-                <span class="text-amber-300 text-[11px]">에이전시 기대수익: </span>
-                <span class="font-bold text-amber-400 font-mono">${roiStr}</span>
-              </div>
-            </div>
-
-            <!-- Scouting Rationale Preview -->
-            <p class="text-xs text-zinc-400 leading-relaxed line-clamp-3 bg-[#0e1117] p-2.5 rounded-lg border border-white/[0.04]">
-              ${target.recruitment_pitch_rationale || '글로벌 브랜드 및 스폰서십 연계와 빅클럽 이적 프로젝트를 대행합니다.'}
-            </p>
-
-            <!-- Actions -->
-            <div class="grid grid-cols-2 gap-2 pt-1">
-              <button onclick="generateRecruitmentPitch(${target.target_id}, '${target.target_type}', '${target.name_ko}')"
-                class="px-3 py-2 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-semibold text-xs transition flex items-center justify-center gap-1.5 shadow-md shadow-sky-950/30">
-                <span>📊 1-Page 제안서 생성</span>
+              <button onclick="removeTargetFromWatchlist(${target.target_id}, '${target.target_type}', '${target.name_ko}')"
+                class="text-zinc-500 hover:text-rose-400 text-xs px-1.5 py-0.5 rounded hover:bg-zinc-800 transition" title="관심 제외">
+                ✕ 관심 제외
               </button>
-              <button onclick="enrollRecruitmentTarget(${target.target_id}, '${target.target_type}', '${target.name_ko}')"
-                class="px-3 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition flex items-center justify-center gap-1.5 shadow-md shadow-emerald-950/30">
-                <span>✍️ 전속 계약 체결</span>
-              </button>
+            </div>
+
+            <!-- Header Info -->
+            <div class="flex items-start justify-between gap-3 mt-3">
+              <div>
+                <h4 class="text-base font-bold text-white tracking-tight flex items-center gap-1.5">
+                  <span>${target.name_ko}</span>
+                  <span class="text-xs font-normal text-zinc-400 font-mono">${target.name}</span>
+                </h4>
+                <p class="text-xs text-zinc-400 mt-0.5">
+                  <span class="text-zinc-200 font-medium">${currentClub}</span>
+                  <span class="text-zinc-600">·</span>
+                  <span>${target.league || '글로벌 무대'}</span>
+                  <span class="text-zinc-600">·</span>
+                  <span class="text-amber-400 font-mono font-medium">${roleLabel}</span>
+                </p>
+              </div>
+              <div class="text-right">
+                <div class="text-[10px] text-zinc-500 uppercase font-semibold">${valHeader}</div>
+                <div class="text-sm font-bold text-white font-mono">${valDisplay}</div>
+              </div>
             </div>
           </div>
-        `;
-      }).join('');
+
+          <!-- 4D Potential & Stardom Score Board -->
+          <div class="grid grid-cols-3 gap-2 p-2.5 rounded-lg bg-[#0e1117] border border-white/[0.04] text-center">
+            <div>
+              <div class="text-[10px] text-zinc-500">잠재력 포텐셜</div>
+              <div class="text-base font-bold text-emerald-400 font-mono mt-0.5">${target.potential_ceiling_score || 95}점</div>
+            </div>
+            <div>
+              <div class="text-[10px] text-zinc-500">스타성·마케팅</div>
+              <div class="text-base font-bold text-amber-300 font-mono mt-0.5">${target.stardom_commercial_score || 90}점</div>
+            </div>
+            <div>
+              <div class="text-[10px] text-zinc-500">에이전시 적합도</div>
+              <div class="text-base font-bold text-sky-400 font-mono mt-0.5">${target.agency_fit_score || 90}점</div>
+            </div>
+          </div>
+
+          <!-- Valuation & Agency Projected ROI -->
+          <div class="flex items-center justify-between text-xs px-3 py-2 rounded-lg bg-amber-950/20 border border-amber-500/20">
+            <div>
+              <span class="text-zinc-400 text-[11px]">5개년 예상 가치: </span>
+              <span class="font-bold text-white font-mono">${projValStr}</span>
+            </div>
+            <div>
+              <span class="text-amber-300 text-[11px]">에이전시 기대수익: </span>
+              <span class="font-bold text-amber-400 font-mono">${roiStr}</span>
+            </div>
+          </div>
+
+          <!-- Scouting Rationale Preview -->
+          <p class="text-xs text-zinc-300 leading-relaxed line-clamp-3 bg-[#0e1117] p-2.5 rounded-lg border border-white/[0.04]">
+            ${target.recruitment_pitch_rationale || '글로벌 브랜드 및 스폰서십 연계와 빅클럽 이적·취임 프로젝트를 대행합니다.'}
+          </p>
+
+          <!-- Action Buttons -->
+          <div class="grid grid-cols-2 gap-2 pt-1">
+            <button onclick="generateRecruitmentPitch(${target.target_id}, '${target.target_type}', '${target.name_ko}')"
+              class="px-3 py-2 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-semibold text-xs transition flex items-center justify-center gap-1.5 shadow-md shadow-sky-950/30">
+              <span>📊 1-Page 제안서</span>
+            </button>
+            <button onclick="enrollRecruitmentTarget(${target.target_id}, '${target.target_type}', '${target.name_ko}')"
+              class="px-3 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition flex items-center justify-center gap-1.5 shadow-md shadow-emerald-950/30">
+              <span>✍️ 전속 계약 체결</span>
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderRecruitmentCards() {
+      const recGrid = document.getElementById('scouting-recruitment-cards-grid') || document.getElementById('recruitment-cards-grid');
+      const watchGrid = document.getElementById('scouting-watchlist-cards-grid');
+      if (!cachedRecruitmentData) return;
+
+      const allTargets = cachedRecruitmentData.targets || [];
+
+      // 1. Render Main Recruitment Grid
+      if (recGrid) {
+        let targets = [...allTargets];
+
+        if (currentRecCategory === 'PLAYER') {
+          targets = targets.filter(t => t.target_type === 'PLAYER');
+        } else if (currentRecCategory === 'MANAGER') {
+          targets = targets.filter(t => t.target_type === 'MANAGER');
+        } else if (currentRecCategory === 'FA_LEGEND') {
+          targets = targets.filter(t => t.category === 'FA_LEGEND');
+        } else if (currentRecCategory === 'FAMILY_REPRESENTED') {
+          targets = targets.filter(t => t.category === 'FAMILY_REPRESENTED' || t.category === 'MEGA_TAKEOVER');
+        } else if (currentRecCategory === 'EXPIRING_D6') {
+          targets = targets.filter(t => t.category === 'EXPIRING_D6');
+        } else if (currentRecCategory === 'STEPUP_PROSPECTS') {
+          targets = targets.filter(t => t.category === 'STEPUP_PROSPECTS');
+        }
+
+        if (recruitmentSearchQuery) {
+          targets = targets.filter(t => {
+            const matchName = (t.name || '').toLowerCase().includes(recruitmentSearchQuery);
+            const matchKo = (t.name_ko || '').toLowerCase().includes(recruitmentSearchQuery);
+            const matchClub = (t.current_club || '').toLowerCase().includes(recruitmentSearchQuery);
+            const matchNat = (t.player_nat || '').toLowerCase().includes(recruitmentSearchQuery);
+            return matchName || matchKo || matchClub || matchNat;
+          });
+        }
+
+        if (targets.length === 0) {
+          recGrid.innerHTML = `
+            <div class="col-span-full py-16 text-center text-zinc-500 text-sm ui-card bg-[#11141a]">
+              선택한 조건의 영입 추천 타깃이 없습니다. 상단 필터를 변경하거나 검색어를 초기화해보세요.
+            </div>
+          `;
+        } else {
+          recGrid.innerHTML = targets.map(buildRecruitmentCardHtml).join('');
+        }
+      }
+
+      // 2. Render Watchlist Grid
+      if (watchGrid) {
+        const watchTargets = allTargets.filter(t => t.scouting_status === 'TARGETED');
+        if (watchTargets.length === 0) {
+          watchGrid.innerHTML = `
+            <div class="col-span-full py-16 text-center text-zinc-500 text-sm ui-card bg-[#11141a]">
+              현재 관심 타깃으로 등록된 선수나 감독이 없습니다. <br>
+              <strong>[5대 리그 전체 탐색]</strong>에서 원하는 인물을 찾아 <strong>[⭐ 영입 관심 타깃 등록]</strong>을 눌러보세요.
+            </div>
+          `;
+        } else {
+          watchGrid.innerHTML = watchTargets.map(buildRecruitmentCardHtml).join('');
+        }
+      }
     }
 
     async function generateRecruitmentPitch(targetId, targetType, targetName) {

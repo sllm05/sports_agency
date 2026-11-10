@@ -1755,7 +1755,7 @@ def get_agency_portfolio_overview() -> dict[str, Any]:
     # Query represented managers
     cur.execute(
         """
-        SELECT c.*, m.current_club, m.league, m.preferred_formation, m.win_rate_pct,
+        SELECT c.*, m.name, m.name_ko, m.current_club, m.league, m.preferred_formation, m.win_rate_pct,
                m.points_per_game, m.weekly_wage_eur, m.estimated_buyout_eur,
                m.tactical_style, m.games_analyzed, m.age, m.nationality
         FROM agency_contracts c
@@ -1805,11 +1805,13 @@ def list_agency_recruitment_targets(
 
     query = """
         SELECT t.*,
-               p.market_value_eur, p.weekly_wage_eur, p.current_club as player_club,
+               p.market_value_eur, p.weekly_wage_eur as player_wage, p.current_club as player_club,
                p.league as player_league, p.position, p.age as player_age, p.nationality as player_nat,
                s.minutes_played, s.goals_per90, s.assists_per90, s.pos_percentile,
                m.current_club as manager_club, m.league as manager_league,
-               m.preferred_formation, m.win_rate_pct, m.points_per_game
+               m.preferred_formation, m.win_rate_pct, m.points_per_game,
+               m.weekly_wage_eur as manager_wage, m.estimated_buyout_eur as manager_buyout,
+               m.age as manager_age, m.nationality as manager_nat
         FROM agency_recruitment_targets t
         LEFT JOIN players p ON t.target_id = p.player_id AND t.target_type = 'PLAYER'
         LEFT JOIN player_stats s ON p.player_id = s.player_id
@@ -1831,12 +1833,21 @@ def list_agency_recruitment_targets(
 
     # Consolidate club and league
     for t in targets:
+        t["is_virtual"] = True if (t.get("target_id") or 0) >= 90000 else False
         if t.get("target_type") == "PLAYER":
             t["current_club"] = t.get("player_club") or "Top Club"
             t["league"] = t.get("player_league") or "Top League"
+            t["weekly_wage_eur"] = t.get("player_wage") or 0
+            t["age"] = t.get("player_age") or 25
+            t["nationality"] = t.get("player_nat") or "Unknown"
         else:
-            t["current_club"] = t.get("manager_club") or "Top Club"
-            t["league"] = t.get("manager_league") or "Top League"
+            t["current_club"] = t.get("manager_club") or "무직 (FA)"
+            t["league"] = t.get("manager_league") or "자유계약 (FA)"
+            t["weekly_wage_eur"] = t.get("manager_wage") or 0
+            t["estimated_buyout_eur"] = t.get("manager_buyout") or 0
+            t["age"] = t.get("manager_age") or 50
+            t["nationality"] = t.get("manager_nat") or "Unknown"
+            t["position"] = "MGR"
 
     log_work_event("MCP_AGENCY_RECRUITMENT", f"Listed recruitment targets: {len(targets)} targets (category={category}, type={target_type})")
 
@@ -1908,12 +1919,22 @@ def generate_client_recruitment_pitch_deck(
     curr_wage = client_info.get("weekly_wage_eur", 50000)
 
     category_badge_map = {
+        "FA_LEGEND": "👑 무직/FA 월드클래스 명장 (World-Class FA Legend)",
+        "FAMILY_REPRESENTED": "💎 가족 대리인 체제 / 메가 스타 에이전시 파트너십 (Family-Agency Transfer)",
+        "MEGA_TAKEOVER": "⚡ 바이아웃 조항 전담 메가 파트너십 (Buyout Management)",
+        "EXPIRING_D6": "⏳ 보스만 룰 계약 만료 임박 D-6 (Bosman Rule FA Pitch)",
+        "STEPUP_PROSPECTS": "🚀 차세대 원석 & 빅리그 스텝업 유망주 (Next-Gen Step-Up)",
+        "SCOUTED_TARGET": "⭐ 스카우팅 직접 발굴 타깃 (Scouted Target)",
         "UNREPRESENTED": "💎 무소속 / 미계약 원석 (Exclusive Representation)",
-        "EXPIRING_D6": "⏳ 대리계약 만료 임박 D-6 (Legal Direct Pitch)",
         "TIER2_STEPUP": "🚀 스텝업 메가에이전시 이적 타깃 (Global Step-Up)",
         "ELITE_MANAGER": "👔 유럽 명장 전속 유치 타깃 (Elite Manager Representation)"
     }
     cat_label = category_badge_map.get(category, category)
+
+    doc_title = "사령탑 전속 대리 계약 유치 제안서" if target_type == "MANAGER" else "선수·가족 전속 대리 계약 유치 제안서"
+    addressee = f"{name_ko} ({name}) 감독님 및 코칭스태프 여러분" if target_type == "MANAGER" else f"{name} 선수 및 가족 여러분"
+    role_desc = "유럽 최정상 사령탑으로서 구단 지휘와 전술 프로젝트" if target_type == "MANAGER" else "경기장에서 최고의 퍼포먼스를 발휘"
+    target_role_term = "감독님" if target_type == "MANAGER" else "선수"
 
     # 1. 4D Radar SVG
     radar_svg = f"""
@@ -1982,8 +2003,8 @@ def generate_client_recruitment_pitch_deck(
 </div>
 """.strip()
 
-    md_content = f"""# 📄 [CONFIDENTIAL] 선수·가족 전속 대리 계약 유치 제안서
-**Antigravity Sports Management (AGSM) x {name} ({name_ko}) 전속 파트너십 오퍼**
+    md_content = f"""# 📄 [CONFIDENTIAL] {doc_title}
+**Antigravity Sports Management (AGSM) x {name_ko} ({name}) 전속 파트너십 오퍼**
 
 > **타깃 구분**: {cat_label}  
 > **현재 소속 구단**: {curr_club} | **현재 소속 대리인**: {current_agency}  
@@ -1992,11 +2013,11 @@ def generate_client_recruitment_pitch_deck(
 ---
 
 ## 1. Executive Summary: 왜 Antigravity Sports인가?
-{name} 선수 및 가족 여러분, Antigravity Sports Management(AGSM)는 선수가 경기장에서 최고의 퍼포먼스를 발휘할 수 있도록 **경기 외적인 모든 리스크(계약, 세무, 스폰서십, 언론 대응, 커리어 플랜)를 전담하는 글로벌 탑티어 스포츠 에이전시**입니다.
+{addressee}, Antigravity Sports Management(AGSM)는 {target_role_term}께서 {role_desc}에만 전념할 수 있도록 **모든 대외 리스크(구단 선임/이적 협상, 연봉 극대화, 세무, 글로벌 스폰서십, 언론 대응, 커리어 플랜)를 전담하는 글로벌 탑티어 스포츠 에이전시**입니다.
 
-현재 {name} 선수는 전 세계 축구계가 주목하는 압도적인 재능과 스타성을 보유하고 있으나, 기존의 `{current_agency}` 체제에서는 **글로벌 브랜드 스폰서십 유치, 유럽 빅클럽 간 메가 딜 레버리지, 체계적인 초상권(Image Rights) 자산화**에 명확한 한계가 존재합니다.
+현재 {name_ko} {target_role_term}께서는 전 세계 축구계가 주목하는 압도적인 위상과 스타성을 보유하고 계시나, 기존의 `{current_agency}` 체제에서는 **글로벌 메가 딜 레버리지, 체계적인 초상권(Image Rights) 자산화 및 장기적 구단 패키지 계약**에 구조적 한계가 존재합니다.
 
-AGSM은 런던, 마드리드, 뮌헨, 서울 지사의 글로벌 네트워크를 바탕으로 **향후 5년간 선수의 시장 가치를 €{curr_mv:,}에서 €{proj_5yr:,}까지 폭발적으로 성장시키는 맞춤형 전속 대리 솔루션**을 제안합니다.
+AGSM은 런던, 마드리드, 뮌헨, 서울 지사의 글로벌 디렉터 네트워크를 바탕으로 **향후 5년간 {target_role_term}의 가치를 극대화(목표 가치: €{proj_5yr:,})하는 맞춤형 전속 대리 솔루션**을 제안합니다.
 
 {radar_svg}
 
@@ -2103,9 +2124,51 @@ def enroll_target_as_agency_client(
     )
     target = cur.fetchone()
     if not target:
-        conn.close()
-        return {"error": f"Target ID {target_id} not found"}
-    target = dict(target)
+        if target_type == "PLAYER":
+            cur.execute("SELECT * FROM players WHERE player_id = ?", (target_id,))
+            p_row = cur.fetchone()
+            if p_row:
+                p_dict = dict(p_row)
+                target = {
+                    "target_type": "PLAYER",
+                    "target_id": target_id,
+                    "name": p_dict["name"],
+                    "name_ko": p_dict["name_ko"] or p_dict["name"],
+                    "category": "SCOUTED_TARGET",
+                }
+                cur.execute(
+                    """
+                    INSERT INTO agency_recruitment_targets (
+                        target_type, target_id, name, name_ko, category, current_agency, scouting_status
+                    ) VALUES ('PLAYER', ?, ?, ?, 'SCOUTED_TARGET', 'Direct Scouting', 'SIGNED')
+                    """,
+                    (target_id, p_dict["name"], p_dict["name_ko"] or p_dict["name"])
+                )
+        else:
+            cur.execute("SELECT * FROM managers WHERE manager_id = ?", (target_id,))
+            m_row = cur.fetchone()
+            if m_row:
+                m_dict = dict(m_row)
+                target = {
+                    "target_type": "MANAGER",
+                    "target_id": target_id,
+                    "name": m_dict["name"],
+                    "name_ko": m_dict.get("name_ko") or m_dict["name"],
+                    "category": "SCOUTED_TARGET",
+                }
+                cur.execute(
+                    """
+                    INSERT INTO agency_recruitment_targets (
+                        target_type, target_id, name, name_ko, category, current_agency, scouting_status
+                    ) VALUES ('MANAGER', ?, ?, ?, 'SCOUTED_TARGET', 'Direct Scouting', 'SIGNED')
+                    """,
+                    (target_id, m_dict["name"], m_dict.get("name_ko") or m_dict["name"])
+                )
+        if not target:
+            conn.close()
+            return {"error": f"Target ID {target_id} not found in database"}
+    else:
+        target = dict(target)
 
     # Insert into agency_contracts
     cur.execute(
@@ -2120,10 +2183,10 @@ def enroll_target_as_agency_client(
             target_type,
             target_id,
             target["name"],
-            target["name_ko"],
+            target.get("name_ko") or target["name"],
             commission_pct,
             lead_agent,
-            f"신규 영입 성공: {target['category']} 카테고리에서 전속 계약 체결"
+            f"신규 영입 성공: {target.get('category', 'SCOUTED_TARGET')} 카테고리에서 전속 계약 체결"
         )
     )
 
@@ -2135,6 +2198,8 @@ def enroll_target_as_agency_client(
 
     if target_type == "PLAYER":
         cur.execute("UPDATE players SET is_agency_client = 1 WHERE player_id = ?", (target_id,))
+    else:
+        cur.execute("UPDATE managers SET is_agency_client = 1 WHERE manager_id = ?", (target_id,))
 
     conn.commit()
     conn.close()
@@ -2168,6 +2233,8 @@ def terminate_agency_client_contract(
     )
     if client_type == "PLAYER":
         cur.execute("UPDATE players SET is_agency_client = 0 WHERE player_id = ?", (client_id,))
+    else:
+        cur.execute("UPDATE managers SET is_agency_client = 0 WHERE manager_id = ?", (client_id,))
 
     cur.execute(
         "UPDATE agency_recruitment_targets SET scouting_status = 'TARGETED' WHERE target_id = ? AND target_type = ?",
@@ -2395,6 +2462,124 @@ def sign_client_to_new_club(
     }
 
 
+@mcp.tool()
+def toggle_target_watchlist(
+    target_id: int,
+    target_type: str = "PLAYER",
+    action: str | None = None,
+) -> dict[str, Any]:
+    """선수 또는 감독을 에이전시 영입 관심 리스트(Watchlist)에 등록하거나 해제합니다.
+    5대 리그 전체 탐색(2,758명 선수 & 100+명 감독)에서 관심 인물 등록 시 자동으로 agency_recruitment_targets에 추가됩니다.
+    """
+    clean_type = "MANAGER" if target_type.upper().startswith("M") else "PLAYER"
+    conn = _get_conn()
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute(
+            """
+            SELECT id, target_id, target_type, name, name_ko, scouting_status, category
+            FROM agency_recruitment_targets
+            WHERE target_id = ? AND target_type = ?
+            """,
+            (target_id, clean_type),
+        )
+        row = cursor.fetchone()
+
+        if row:
+            current_status = row["scouting_status"]
+            name = row["name_ko"] or row["name"]
+            if action == "TARGET":
+                new_status = "TARGETED"
+            elif action == "UNWATCH":
+                new_status = "SCOUTED"
+            else:
+                new_status = "SCOUTED" if current_status == "TARGETED" else "TARGETED"
+
+            cursor.execute(
+                "UPDATE agency_recruitment_targets SET scouting_status = ? WHERE id = ?",
+                (new_status, row["id"]),
+            )
+            conn.commit()
+            in_watchlist = (new_status == "TARGETED")
+            return {
+                "status": "success",
+                "target_id": target_id,
+                "target_type": clean_type,
+                "target_name": name,
+                "in_watchlist": in_watchlist,
+                "scouting_status": new_status,
+                "message": f"'{name}' 관심 타깃 {'등록 완료' if in_watchlist else '해제 완료'}"
+            }
+        else:
+            if clean_type == "MANAGER":
+                cursor.execute("SELECT manager_id, name, name_ko, current_club, nationality, tactical_style FROM managers WHERE manager_id = ?", (target_id,))
+                mgr = cursor.fetchone()
+                if not mgr:
+                    return {"status": "error", "message": f"ID {target_id} 감독을 찾을 수 없습니다."}
+                name = mgr["name"]
+                name_ko = mgr["name_ko"] or mgr["name"]
+                notes = f"5대 리그 스카우팅 로스터에서 관심 타깃 등록. 클럽: {mgr['current_club'] or 'FA'}, 전술: {mgr['tactical_style'] or 'N/A'}"
+            else:
+                cursor.execute("SELECT player_id, name, name_ko, current_club, nationality, position FROM players WHERE player_id = ?", (target_id,))
+                ply = cursor.fetchone()
+                if not ply:
+                    return {"status": "error", "message": f"ID {target_id} 선수를 찾을 수 없습니다."}
+                name = ply["name"]
+                name_ko = ply["name_ko"] or ply["name"]
+                notes = f"5대 리그 스카우팅 로스터에서 관심 타깃 등록. 클럽: {ply['current_club']}, 포지션: {ply['position']}"
+
+            new_status = "TARGETED"
+            cursor.execute(
+                """
+                INSERT INTO agency_recruitment_targets
+                (target_id, target_type, name, name_ko, category, current_agency, scouting_status, priority_score, notes, is_virtual)
+                VALUES (?, ?, ?, ?, 'SCOUTING_WATCHLIST', '미상/타사', ?, 80, ?, 0)
+                """,
+                (target_id, clean_type, name, name_ko, new_status, notes),
+            )
+            conn.commit()
+            return {
+                "status": "success",
+                "target_id": target_id,
+                "target_type": clean_type,
+                "target_name": name_ko,
+                "in_watchlist": True,
+                "scouting_status": new_status,
+                "message": f"'{name_ko}' 5대 리그 스카우팅 관심 타깃 등록 완료"
+            }
+    finally:
+        conn.close()
+
+
+@mcp.tool()
+def check_target_watchlist(
+    target_id: int,
+    target_type: str = "PLAYER",
+) -> dict[str, Any]:
+    """선수 또는 감독이 현재 에이전시 영입 관심 리스트(Watchlist)에 등록되어 있는지 확인합니다."""
+    clean_type = "MANAGER" if target_type.upper().startswith("M") else "PLAYER"
+    conn = _get_conn()
+    cursor = conn.cursor()
+    try:
+        cursor.execute(
+            """
+            SELECT id, scouting_status
+            FROM agency_recruitment_targets
+            WHERE target_id = ? AND target_type = ? AND scouting_status = 'TARGETED'
+            """,
+            (target_id, clean_type),
+        )
+        row = cursor.fetchone()
+        return {
+            "in_watchlist": row is not None,
+            "target_id": target_id,
+            "target_type": clean_type,
+        }
+    finally:
+        conn.close()
+
+
 HERMES_MCP_TOOLS = {
     "get_player_complete_data": get_player_complete_data,
     "find_matching_clubs_for_transfer": find_matching_clubs_for_transfer,
@@ -2420,6 +2605,8 @@ HERMES_MCP_TOOLS = {
     "negotiate_client_club_renewal": negotiate_client_club_renewal,
     "negotiate_client_club_transfer": negotiate_client_club_transfer,
     "sign_client_to_new_club": sign_client_to_new_club,
+    "toggle_target_watchlist": toggle_target_watchlist,
+    "check_target_watchlist": check_target_watchlist,
 }
 
 if __name__ == "__main__":
