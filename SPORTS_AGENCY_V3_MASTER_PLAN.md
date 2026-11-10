@@ -1,4 +1,4 @@
-
+                                        
 # ⚽ AI 축구 에이전시 통합 워크스페이스 (Football Agency Enterprise Desk) — 신규 마스터 기획안 (v3.0)
 > **기획 목적**: 본 문서는 기존 [`SPORTS_AGENCY_HYBRID_PLAN.md`](file:///c:/Users/DJ/Documents/ai_google/sports_agency/SPORTS_AGENCY_HYBRID_PLAN.md)(v2.0)의 기술 자산을 계승하면서, [`football_agency_guide.md`](file:///c:/Users/DJ/Documents/ai_google/sports_agency/football_agency_guide.md)에 정의된 **축구 에이전시의 핵심 업무 1~5번(① 계약·협상, ② 이적 관리, ③ 선수 발굴·스카우팅, ④ 가치·시장 분석, ⑤ 장기 커리어 관리)** 및 **7~8번(국제 이적 규정·세제/재무 지원)**을 **‘에이전시 내부 실무자(스카우터 · 데이터 분석가 · 수석 에이전트)의 실제 업무 파이프라인’**에 맞춰 유기적으로 재설계한 마스터 기획안입니다. *(코드 미적용 · 순수 기획 설계서)*
 

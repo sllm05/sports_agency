@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "qa.md",
+                "file": "SPORTS_AGENCY_V3_MASTER_PLAN.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "qa"
+              "title": "SPORTS_AGENCY_V3_MASTER_PLAN"
             }
           }
         ]
@@ -190,17 +190,29 @@
   },
   "active": "bf761550caf7c1d6",
   "lastOpenFiles": [
-    "data/agency_checkpoints.db-shm",
-    "data/agency_checkpoints.db-wal",
-    "data/agency_desk.db-shm",
     "data/agency_desk.db-wal",
-    "tests/test_modular_agents.py",
-    "src/sports_agency/agents/__pycache__/supervisor.cpython-311.pyc",
-    "src/sports_agency/agents/__pycache__/scouting_analyst.cpython-311.pyc",
-    "src/sports_agency/agents/__pycache__/renewal_analyst.cpython-311.pyc",
-    "src/sports_agency/agents/__pycache__/negotiation_sparring.cpython-311.pyc",
-    "src/sports_agency/agents/__pycache__/legal_compliance.cpython-311.pyc",
-    "src/sports_agency/agents/__pycache__/document_writer.cpython-311.pyc",
+    "data/agency_desk.db-shm",
+    "outputs/recruitment_pitch_Adrien_Thomasson.md",
+    "scratch/print_scout_top.py",
+    "scratch/print_470.py",
+    "scratch/find_strat_btn.py",
+    "scratch/search_watchlist_btn.py",
+    "scratch/debug_html_btn.py",
+    "scratch/check_btn_in_html.py",
+    "scratch/find_static_dir.py",
+    "scratch/check_static_dir.py",
+    "outputs/recruitment_pitch_Kevin_Yoon.md",
+    "outputs/recruitment_pitch_Jin-hyuk_Kim.md",
+    "outputs/recruitment_pitch_Leo_Park.md",
+    "outputs/recruitment_pitch_Lamine_Yamal.md",
+    "SPORTS_AGENCY_OPERATIONAL_AUDIT.md",
+    "outputs/Erling_Haaland_pitch_deck.md",
+    "outputs/Erling_Haaland_deal_prep.md",
+    "outputs/Erling_Haaland_career_report.md",
+    "outputs/Erling_Haaland/3_club_pitch_deck.md",
+    "outputs/Erling_Haaland/2_dual_track_deal_prep.md",
+    "outputs/Erling_Haaland/1_career_valuation_report.md",
+    "qa.md",
     "SPORTS_AGENCY_V3_MASTER_PLAN.md",
     "SPORTS_AGENCY_PLAN.md",
     "outputs/Min-Jae_Kim_pitch_deck.md",
@@ -212,18 +224,6 @@
     "SPORTS_AGENCY_HYBRID_PLAN.md",
     "football_agency_guide.md",
     "outputs/Heung-min_Son_pitch_deck.md",
-    "outputs/Heung-min_Son_deal_prep.md",
-    "outputs/Heung-min_Son_career_report.md",
-    "outputs/Heung-min_Son/1_career_valuation_report.md",
-    "outputs/Heung-min_Son/3_club_pitch_deck.md",
-    "outputs/Heung-min_Son/2_dual_track_deal_prep.md",
-    "SPORTS_AGENCY_V3_PROPOSAL.md",
-    "outputs/yang_min-hyeok_club_pitch_deck.md",
-    "outputs/yang_min-hyeok_deal_prep_sheet.md",
-    "outputs/son_heung-min_club_pitch_deck.md",
-    "outputs/son_heung-min_deal_prep_sheet.md",
-    "outputs/seol_young-woo_deal_prep_sheet.md",
-    "outputs/seol_young-woo_club_pitch_deck.md",
-    "data/docs/regulations.md"
+    "outputs/Heung-min_Son_deal_prep.md"
   ]
 }

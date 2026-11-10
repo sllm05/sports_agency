@@ -471,6 +471,11 @@
                 </div>
                 <div id="sp-gbe-mini" class="text-xs text-zinc-300 bg-[#0e1117] p-2.5 rounded-lg border border-white/[0.04] leading-relaxed"></div>
                 <div class="space-y-1.5 pt-1">
+                  <button id="btn-scouting-watchlist" onclick="toggleCurrentPlayerWatchlist()"
+                    class="w-full py-2 px-3 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/40 font-semibold text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
+                    <span id="scouting-watchlist-icon">⭐</span>
+                    <span id="scouting-watchlist-label">영입 관심 타깃 등록 (Watchlist)</span>
+                  </button>
                   <button onclick="showPage('page-strategy')"
                     class="w-full py-2 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition flex items-center justify-center gap-1.5">
                     <span>이 선수로 협상 전략 수립하기 →</span>
@@ -1439,6 +1444,250 @@
 
     </div>
 
+
+    <!-- ======================================================================= -->
+    <!-- PAGE: AGENCY PORTFOLIO (소속 선수 및 감독 포트폴리오) -->
+    <!-- ======================================================================= -->
+    <div id="page-portfolio" class="page-view hidden space-y-6">
+
+      <!-- Header & FIFA FFAR Compliance Banner -->
+      <div class="ui-card p-6 border-white/[0.08] relative overflow-hidden">
+        <div class="absolute -right-10 -bottom-10 w-72 h-72 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                FIFA Football Agent #FIFA-2024-KOR-8821
+              </span>
+              <span class="text-xs text-zinc-400">FFAR 규정 24개월 전속 대리 계약 및 이적·재계약 라이프사이클 관리</span>
+            </div>
+            <h2 class="text-2xl font-bold text-white tracking-tight mt-1.5 flex items-center gap-2">
+              <span>Antigravity Sports 포트폴리오</span>
+              <span class="text-xs font-normal text-zinc-400 font-mono">(Active Roster)</span>
+            </h2>
+            <p class="text-xs text-zinc-400 mt-1">
+              에이전시와 전속 계약 체결된 고객들의 구단 재계약, 5대 리그 이적, 무소속(FA) 입단 및 전속 해지를 원클릭으로 실행합니다.
+            </p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="showPage('page-recruitment')"
+              class="px-3.5 py-2 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-xs font-semibold transition flex items-center gap-1.5 border border-amber-500/30 shadow-lg shadow-amber-950/20">
+              <span>⭐ 영입 관심 리스트 (Watchlist) 보기</span>
+              <span id="portfolio-header-rec-count" class="px-1.5 py-0.2 rounded-full text-[10px] bg-amber-500/30 text-amber-200 font-mono">13</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Metric KPI Cards -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 pt-5 mt-5 border-t border-white/[0.06]">
+          <div class="p-3.5 rounded-xl bg-[#0e1117] border border-white/[0.04]">
+            <div class="text-[11px] text-zinc-500 uppercase font-semibold">총 포트폴리오 가치</div>
+            <div id="portfolio-total-val" class="text-xl font-bold text-emerald-400 font-mono mt-1">€0.0M</div>
+            <div class="text-[10px] text-zinc-400 mt-0.5">선수 이적료 시장가치 합산</div>
+          </div>
+          <div class="p-3.5 rounded-xl bg-[#0e1117] border border-white/[0.04]">
+            <div class="text-[11px] text-zinc-500 uppercase font-semibold">전속 대리 고객 수</div>
+            <div id="portfolio-total-count" class="text-xl font-bold text-white font-mono mt-1">0인</div>
+            <div class="text-[10px] text-zinc-400 mt-0.5">선수 및 감독 실시간 전속 계약 현황</div>
+          </div>
+          <div class="p-3.5 rounded-xl bg-[#0e1117] border border-white/[0.04]">
+            <div class="text-[11px] text-zinc-500 uppercase font-semibold">총 주급 / 연봉 규모</div>
+            <div id="portfolio-wages-val" class="text-xl font-bold text-amber-300 font-mono mt-1">€0K / 주</div>
+            <div class="text-[10px] text-zinc-400 mt-0.5">소속 고객 주급 총합계</div>
+          </div>
+          <div class="p-3.5 rounded-xl bg-[#0e1117] border border-white/[0.04]">
+            <div class="text-[11px] text-zinc-500 uppercase font-semibold">연간 에이전시 예상 수수료</div>
+            <div id="portfolio-fee-val" class="text-xl font-bold text-sky-400 font-mono mt-1">€0.0M / 년</div>
+            <div class="text-[10px] text-zinc-400 mt-0.5">FFAR Cap 5~10% 법정 요율</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter Controls & Client Search -->
+      <div class="flex flex-wrap items-center justify-between gap-3 bg-[#11141a] p-3 rounded-xl border border-white/[0.06]">
+        <div class="flex flex-wrap items-center gap-1.5" id="portfolio-filter-tabs">
+          <button onclick="filterPortfolio('ALL')" id="pf-btn-all" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 text-white transition">전체</button>
+          <button onclick="filterPortfolio('PLAYER')" id="pf-btn-player" class="px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800 transition">선수</button>
+          <button onclick="filterPortfolio('MANAGER')" id="pf-btn-manager" class="px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800 transition">감독</button>
+          <button onclick="filterPortfolio('VIRTUAL')" id="pf-btn-virtual" class="px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800 transition">🧪 가상 인물</button>
+          <button onclick="filterPortfolio('REAL')" id="pf-btn-real" class="px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800 transition">⭐ 실제 발굴 고객</button>
+        </div>
+        <div class="flex items-center gap-2">
+          <input type="text" id="portfolio-search-input" oninput="handlePortfolioSearch(this.value)" placeholder="고객명/구단/국적 검색..."
+            class="bg-[#0e1117] text-xs px-3 py-1.5 rounded-lg border border-white/[0.08] text-white placeholder-zinc-500 focus:outline-none focus:border-emerald-500/50 w-52">
+        </div>
+      </div>
+
+      <!-- Portfolio Grid Cards Container -->
+      <div id="portfolio-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Rendered dynamically via renderPortfolioCards() -->
+      </div>
+    </div>
+
+
+    <!-- ======================================================================= -->
+    <!-- PAGE: RECRUITMENT WATCHLIST (영입 관심 리스트 및 피치덱 센터) -->
+    <!-- ======================================================================= -->
+    <div id="page-recruitment" class="page-view hidden space-y-6">
+
+      <!-- Header Banner -->
+      <div class="ui-card p-6 border-white/[0.08] relative overflow-hidden">
+        <div class="absolute -right-10 -bottom-10 w-72 h-72 bg-amber-500/5 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-amber-500/10 text-amber-300 border border-amber-500/20">
+                ⭐ Agency Recruitment Watchlist
+              </span>
+              <span class="text-xs text-zinc-400">잠재력 · 스타성 4D 입체 분석 & 대리권 전속 유치</span>
+            </div>
+            <h2 class="text-2xl font-bold text-white tracking-tight mt-1.5 flex items-center gap-2">
+              <span>영입 관심 리스트</span>
+              <span class="text-xs font-normal text-zinc-400 font-mono">(Watchlist Radar)</span>
+            </h2>
+            <p class="text-xs text-zinc-400 mt-1">
+              스카우팅에서 관심 타깃으로 등록한 선수·감독 및 가상 테스트 풀을 관리하며, 1-Page 제안서 생성과 전속 계약 체결을 지원합니다.
+            </p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="showPage('page-scouting')"
+              class="px-3.5 py-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-semibold transition flex items-center gap-1.5">
+              <span>← 스카우팅 로스터로 이동</span>
+            </button>
+            <button onclick="showPage('page-portfolio')"
+              class="px-3.5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition flex items-center gap-1.5 shadow-md shadow-emerald-950/30">
+              <span>소속 포트폴리오 보기 →</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 4 Recruitment Categories Pills -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 pt-5 mt-5 border-t border-white/[0.06]">
+          <div onclick="filterRecruitmentTargets('UNREPRESENTED')" id="rec-cat-UNREPRESENTED" class="cursor-pointer p-3 rounded-xl bg-[#0e1117] border border-white/[0.04] hover:border-emerald-500/30 transition">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-emerald-400">💎 무소속 / FA 원석</span>
+              <span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-1.5 py-0.5 rounded">즉시협상</span>
+            </div>
+            <p class="text-[11px] text-zinc-400 mt-1">가족 대리인 체제 탈피 및 전문 에이전시 론칭 타깃</p>
+          </div>
+          <div onclick="filterRecruitmentTargets('EXPIRING_D6')" id="rec-cat-EXPIRING_D6" class="cursor-pointer p-3 rounded-xl bg-[#0e1117] border border-white/[0.04] hover:border-amber-500/30 transition">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-amber-300">⏳ 대리계약 만료 임박 (D-6)</span>
+              <span class="text-[10px] bg-amber-500/10 text-amber-300 px-1.5 py-0.5 rounded">FFAR 합법 접촉</span>
+            </div>
+            <p class="text-[11px] text-zinc-400 mt-1">기존 대리 계약 2개월 미만 잔여 선수 선점 접촉</p>
+          </div>
+          <div onclick="filterRecruitmentTargets('TIER2_STEPUP')" id="rec-cat-TIER2_STEPUP" class="cursor-pointer p-3 rounded-xl bg-[#0e1117] border border-white/[0.04] hover:border-sky-500/30 transition">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-sky-400">🚀 메가에이전시 스텝업</span>
+              <span class="text-[10px] bg-sky-500/10 text-sky-400 px-1.5 py-0.5 rounded">글로벌 확장</span>
+            </div>
+            <p class="text-[11px] text-zinc-400 mt-1">현 소속사 케어 한계 극복 및 빅클럽 이적 희망</p>
+          </div>
+          <div onclick="filterRecruitmentTargets('ELITE_MANAGER')" id="rec-cat-ELITE_MANAGER" class="cursor-pointer p-3 rounded-xl bg-[#0e1117] border border-white/[0.04] hover:border-purple-500/30 transition">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-purple-400">👔 차세대 명장 유치 타깃</span>
+              <span class="text-[10px] bg-purple-500/10 text-purple-400 px-1.5 py-0.5 rounded">사령탑 확보</span>
+            </div>
+            <p class="text-[11px] text-zinc-400 mt-1">빅클럽 차기 감독 선임 및 바이아웃 협상 대행</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter Controls & Target Search -->
+      <div class="flex flex-wrap items-center justify-between gap-3 bg-[#11141a] p-3 rounded-xl border border-white/[0.06]">
+        <div class="flex flex-wrap items-center gap-1.5" id="recruitment-filter-tabs">
+          <button onclick="filterRecruitmentTargets('ALL')" id="rec-tab-ALL" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 text-white transition">
+            <span>전체</span>
+            <span id="rec-count-all" class="ml-1 px-1.5 py-0.2 rounded-full text-[10px] bg-white/20 font-mono">13</span>
+          </button>
+          <button onclick="filterRecruitmentTargets('PLAYER')" id="rec-tab-PLAYER" class="px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800 transition">
+            <span>선수</span>
+            <span id="rec-count-player" class="ml-1 px-1.5 py-0.2 rounded-full text-[10px] bg-zinc-800 font-mono">10</span>
+          </button>
+          <button onclick="filterRecruitmentTargets('MANAGER')" id="rec-tab-MANAGER" class="px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800 transition">
+            <span>감독</span>
+            <span id="rec-count-manager" class="ml-1 px-1.5 py-0.2 rounded-full text-[10px] bg-zinc-800 font-mono">3</span>
+          </button>
+          <button onclick="filterRecruitmentTargets('VIRTUAL')" id="rec-tab-VIRTUAL" class="px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800 transition">
+            <span>🧪 가상 테스트 풀</span>
+            <span id="rec-count-virtual" class="ml-1 px-1.5 py-0.2 rounded-full text-[10px] bg-zinc-800 font-mono">13</span>
+          </button>
+          <button onclick="filterRecruitmentTargets('SCOUTED')" id="rec-tab-SCOUTED" class="px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800 transition">
+            <span>⭐ 스카우팅 발굴 관심</span>
+            <span id="rec-count-scouted" class="ml-1 px-1.5 py-0.2 rounded-full text-[10px] bg-zinc-800 font-mono">0</span>
+          </button>
+        </div>
+        <div class="flex items-center gap-2">
+          <input type="text" id="recruitment-search-input" oninput="handleRecruitmentSearch(this.value)" placeholder="타깃명/구단/포지션 검색..."
+            class="bg-[#0e1117] text-xs px-3 py-1.5 rounded-lg border border-white/[0.08] text-white placeholder-zinc-500 focus:outline-none focus:border-amber-500/50 w-52">
+        </div>
+      </div>
+
+      <!-- Recruitment Target Cards Grid -->
+      <div id="recruitment-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Rendered dynamically via renderRecruitmentCards() -->
+      </div>
+    </div>
+
+
+    <!-- ======================================================================= -->
+    <!-- PAGE: ADMIN CONSOLE (관리자 감사 및 가입 승인 콘솔) -->
+    <!-- ======================================================================= -->
+    <div id="page-admin" class="page-view hidden space-y-6">
+
+      <!-- Header -->
+      <div class="ui-card p-6 border-white/[0.08] bg-[#11141a]">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-500/10 text-purple-400 border border-purple-500/20">
+                ADMIN ACCESS ONLY
+              </span>
+              <span class="text-xs text-zinc-400">에이전시 내부통제 & 보안 감사 콘솔</span>
+            </div>
+            <h2 class="text-2xl font-bold text-white tracking-tight mt-1.5">대표 관리자 전용 대시보드</h2>
+            <p class="text-xs text-zinc-400 mt-1">
+              신규 에이전트 직원 승인, 실시간 권한 감사, 전체 계약 건에 대한 시스템 감사 기록을 조회합니다.
+            </p>
+          </div>
+          <button onclick="loadAdminDashboard()"
+            class="px-3.5 py-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-semibold transition flex items-center gap-1.5">
+            <span>🔄 새로고침</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Pending Staff Approvals -->
+      <div class="ui-card p-5 border-white/[0.08] bg-[#11141a] space-y-4">
+        <div class="flex items-center justify-between">
+          <h3 class="text-sm font-bold text-white flex items-center gap-2">
+            <span>🛡️ 에이전시 직원 가입 승인 대기 목록</span>
+            <span id="admin-pending-count" class="px-2 py-0.5 rounded-full text-xs font-mono bg-amber-500/20 text-amber-300">0명</span>
+          </h3>
+          <span class="text-[11px] text-zinc-400">승인 즉시 시스템 접근 권한이 활성화됩니다</span>
+        </div>
+
+        <div id="admin-pending-users-list" class="space-y-2">
+          <!-- Rendered via loadAdminDashboard() -->
+        </div>
+      </div>
+
+      <!-- Approved Staff Roster -->
+      <div class="ui-card p-5 border-white/[0.08] bg-[#11141a] space-y-4">
+        <div class="flex items-center justify-between">
+          <h3 class="text-sm font-bold text-white flex items-center gap-2">
+            <span>👥 승인 완료된 에이전시 임직원 현황</span>
+            <span id="admin-approved-count" class="px-2 py-0.5 rounded-full text-xs font-mono bg-emerald-500/20 text-emerald-400">0명</span>
+          </h3>
+        </div>
+
+        <div id="admin-approved-users-list" class="space-y-2">
+          <!-- Rendered via loadAdminDashboard() -->
+        </div>
+      </div>
+    </div>
+
   </main>
 
   <!-- ========================================================================= -->
@@ -1458,6 +1707,16 @@
     // Single-Page View Routing Controller
     // -------------------------------------------------------------------------
     function showPage(pageId) {
+      if (pageId === 'page-admin') {
+        const isAdmin = currentAuthUser && (currentAuthUser.email === 'admin@agent.com' || currentAuthUser.role === 'ADMIN' || currentAuthUser.is_admin);
+        if (!isAdmin) {
+          alert('⚠️ 대표 관리자(admin@agent.com) 전용 페이지입니다. 관리자 계정으로 로그인해주세요.');
+          openAuthModal('login');
+          fillAdminCredentials();
+          return;
+        }
+      }
+
       activePageId = pageId;
       document.querySelectorAll('.page-view').forEach(p => p.classList.add('hidden'));
 
@@ -1468,6 +1727,11 @@
       }
 
       updateNavState(pageId);
+
+      // Lazy load tab data
+      if (pageId === 'page-portfolio') loadAgencyPortfolio();
+      if (pageId === 'page-recruitment') loadAgencyRecruitmentTargets();
+      if (pageId === 'page-admin') loadAdminDashboard();
 
       if (pageId === 'page-scouting' && selectedPlayer) {
         updateRadarChart(selectedPlayer);
@@ -1486,12 +1750,15 @@
       const navKey = pageId.replace('page-', '');
       const buttons = [
         { id: 'nav-btn-home', key: 'home' },
+        { id: 'nav-btn-portfolio', key: 'portfolio' },
+        { id: 'nav-btn-recruitment', key: 'recruitment' },
         { id: 'nav-btn-scouting', key: 'scouting' },
         { id: 'nav-btn-strategy', key: 'strategy' },
         { id: 'nav-btn-tactics', key: 'tactics' },
         { id: 'nav-btn-documents', key: 'documents' },
         { id: 'nav-btn-finance', key: 'finance' },
         { id: 'nav-btn-regulations', key: 'regulations' },
+        { id: 'nav-btn-admin-console', key: 'admin' },
       ];
 
       buttons.forEach(b => {
@@ -1512,13 +1779,16 @@
       const hash = window.location.hash.replace('#', '');
       const initialPage = hash ? `page-${hash}` : 'page-home';
 
+      initAuth();
       await Promise.all([
         loadSystemStatus(),
         loadQuotaStatus(),
         loadPlayers(),
         loadBosmanRadar(),
         loadUndervaluedProspects(),
-        runStandalonePsrCalc()
+        runStandalonePsrCalc(),
+        loadAgencyPortfolio(),
+        loadAgencyRecruitmentTargets(),
       ]);
 
       showPage(initialPage);
@@ -1817,6 +2087,10 @@
 
     function selectPlayer(p) {
       selectedPlayer = p;
+      const targetType = (p.position === 'MGR') ? 'MANAGER' : 'PLAYER';
+      if (typeof updateScoutingWatchlistButton === 'function') {
+        updateScoutingWatchlistButton(p.player_id, targetType);
+      }
       document.querySelectorAll('.player-card').forEach(el => {
         el.className = 'player-card text-left p-2.5 rounded-lg border border-white/[0.06] bg-[#0e1117] hover:border-zinc-600 transition flex flex-col justify-between';
       });
@@ -5351,7 +5625,1430 @@
       }
     });
 
+
+    // =========================================================================
+    // STATE FOR PORTFOLIO, WATCHLIST & AUTHENTICATION
+    // =========================================================================
+    let cachedPortfolioData = null;
+    let cachedRecruitmentData = null;
+    let portfolioFilter = 'ALL';
+    let portfolioSearchQuery = '';
+    let currentRecCategory = 'ALL';
+    let recruitmentSearchQuery = '';
+    let currentAuthUser = null;
+    let currentPitchMarkdown = '';
+    let currentPitchTarget = '';
+
+    // =========================================================================
+    // AUTHENTICATION & ADMIN CONSOLE CONTROLLER
+    // =========================================================================
+    function initAuth() {
+      const saved = localStorage.getItem('fc_agency_auth_user');
+      if (saved) {
+        try {
+          currentAuthUser = JSON.parse(saved);
+          updateAuthBadgeUI();
+        } catch (e) {
+          localStorage.removeItem('fc_agency_auth_user');
+        }
+      }
+      if (!currentAuthUser) {
+        // Default to admin for seamless experience
+        currentAuthUser = {
+          email: 'admin@agent.com',
+          full_name: '김대표 Agent (대표 관리자)',
+          department: '에이전시 대표실',
+          role: 'ADMIN',
+          is_admin: true
+        };
+        updateAuthBadgeUI();
+      }
+    }
+
+    function updateAuthBadgeUI() {
+      const textEl = document.getElementById('nav-auth-text');
+      const badgeEl = document.getElementById('nav-auth-badge');
+      if (!textEl || !badgeEl) return;
+
+      if (currentAuthUser) {
+        textEl.textContent = `인증: ${currentAuthUser.email}`;
+        badgeEl.className = 'cursor-pointer text-xs px-2.5 py-1 rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-300 hover:border-emerald-400 transition flex items-center gap-1.5';
+      } else {
+        textEl.textContent = '에이전시 로그인';
+        badgeEl.className = 'cursor-pointer text-xs px-2.5 py-1 rounded-lg border border-white/[0.08] bg-[#12151c] text-zinc-400 hover:text-white transition flex items-center gap-1.5';
+      }
+    }
+
+    function openAuthModal(defaultTab) {
+      const modal = document.getElementById('modal-auth');
+      if (!modal) return;
+      modal.classList.remove('hidden');
+      if (defaultTab) switchAuthTab(defaultTab);
+    }
+
+    function closeAuthModal() {
+      const modal = document.getElementById('modal-auth');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function switchAuthTab(tab) {
+      const btnLogin = document.getElementById('auth-tab-btn-login');
+      const btnSignup = document.getElementById('auth-tab-btn-signup');
+      const formLogin = document.getElementById('form-auth-login');
+      const formSignup = document.getElementById('form-auth-signup');
+      const alertBox = document.getElementById('auth-alert-box');
+      if (alertBox) alertBox.classList.add('hidden');
+
+      if (tab === 'login') {
+        btnLogin.className = 'flex-1 pb-2 text-xs font-bold text-emerald-400 border-b-2 border-emerald-400 transition text-center';
+        btnSignup.className = 'flex-1 pb-2 text-xs font-medium text-zinc-400 hover:text-zinc-200 transition text-center';
+        formLogin.classList.remove('hidden');
+        formSignup.classList.add('hidden');
+      } else {
+        btnSignup.className = 'flex-1 pb-2 text-xs font-bold text-sky-400 border-b-2 border-sky-400 transition text-center';
+        btnLogin.className = 'flex-1 pb-2 text-xs font-medium text-zinc-400 hover:text-zinc-200 transition text-center';
+        formSignup.classList.remove('hidden');
+        formLogin.classList.add('hidden');
+      }
+    }
+
+    function fillAdminCredentials() {
+      const emailInput = document.getElementById('login-email');
+      const pwInput = document.getElementById('login-password');
+      if (emailInput) emailInput.value = 'admin@agent.com';
+      if (pwInput) pwInput.value = 'password1234';
+      switchAuthTab('login');
+    }
+
+    async function submitLoginForm(e) {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value.trim();
+      const pw = document.getElementById('login-password').value;
+      const alertBox = document.getElementById('auth-alert-box');
+
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email, password: pw })
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          alertBox.className = 'mb-3 p-2.5 rounded-lg text-xs bg-rose-500/10 text-rose-300 border border-rose-500/20';
+          alertBox.textContent = data.detail || '로그인에 실패했습니다.';
+          alertBox.classList.remove('hidden');
+          return;
+        }
+
+        currentAuthUser = data.user;
+        localStorage.setItem('fc_agency_auth_user', JSON.stringify(currentAuthUser));
+        updateAuthBadgeUI();
+        closeAuthModal();
+        alert(`환영합니다, ${currentAuthUser.full_name || currentAuthUser.email} 님!`);
+      } catch (err) {
+        alert('로그인 통신 오류: ' + err.message);
+      }
+    }
+
+    async function submitSignupForm(e) {
+      e.preventDefault();
+      const name = document.getElementById('signup-name').value.trim();
+      const email = document.getElementById('signup-email').value.trim();
+      const dept = document.getElementById('signup-department').value;
+      const pw = document.getElementById('signup-password').value;
+      const alertBox = document.getElementById('auth-alert-box');
+
+      try {
+        const res = await fetch('/api/auth/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ full_name: name, email: email, department: dept, password: pw })
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          alertBox.className = 'mb-3 p-2.5 rounded-lg text-xs bg-rose-500/10 text-rose-300 border border-rose-500/20';
+          alertBox.textContent = data.detail || '가입 신청에 실패했습니다.';
+          alertBox.classList.remove('hidden');
+          return;
+        }
+
+        alertBox.className = 'mb-3 p-2.5 rounded-lg text-xs bg-emerald-500/10 text-emerald-300 border border-emerald-500/20';
+        alertBox.textContent = data.message || '가입 신청이 완료되었습니다. 관리자 승인 후 로그인 가능합니다.';
+        alertBox.classList.remove('hidden');
+      } catch (err) {
+        alert('가입 신청 통신 오류: ' + err.message);
+      }
+    }
+
+    async function loadAdminDashboard() {
+      try {
+        const res = await fetch('/api/admin/users');
+        if (!res.ok) throw new Error('관리자 데이터 조회 권한이 없습니다.');
+        const data = await res.json();
+
+        const pendingList = document.getElementById('admin-pending-users-list');
+        const approvedList = document.getElementById('admin-approved-users-list');
+        const pendingCount = document.getElementById('admin-pending-count');
+        const approvedCount = document.getElementById('admin-approved-count');
+
+        const pending = data.pending_users || [];
+        const approved = data.approved_users || [];
+
+        if (pendingCount) pendingCount.textContent = `${pending.length}명`;
+        if (approvedCount) approvedCount.textContent = `${approved.length}명`;
+
+        if (pendingList) {
+          if (pending.length === 0) {
+            pendingList.innerHTML = `<div class="p-4 text-center text-zinc-500 text-xs">현재 승인 대기 중인 직원이 없습니다.</div>`;
+          } else {
+            pendingList.innerHTML = pending.map(u => `
+              <div class="p-3 rounded-lg bg-[#0e1117] border border-white/[0.04] flex items-center justify-between">
+                <div>
+                  <div class="text-xs font-bold text-white">${u.full_name || u.email}</div>
+                  <div class="text-[10px] text-zinc-400 font-mono">${u.email} · ${u.department || '미배치'}</div>
+                </div>
+                <button onclick="approvePendingUser(${u.id}, '${u.email}')"
+                  class="px-2.5 py-1 rounded bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition shadow-sm">
+                  승인 처리
+                </button>
+              </div>
+            `).join('');
+          }
+        }
+
+        if (approvedList) {
+          if (approved.length === 0) {
+            approvedList.innerHTML = `<div class="p-4 text-center text-zinc-500 text-xs">등록된 임직원이 없습니다.</div>`;
+          } else {
+            approvedList.innerHTML = approved.map(u => `
+              <div class="p-3 rounded-lg bg-[#0e1117] border border-white/[0.04] flex items-center justify-between">
+                <div>
+                  <div class="text-xs font-bold text-white flex items-center gap-2">
+                    <span>${u.full_name || u.email}</span>
+                    <span class="px-1.5 py-0.2 rounded text-[10px] ${u.role === 'ADMIN' ? 'bg-amber-500/10 text-amber-300' : 'bg-emerald-500/10 text-emerald-400'}">${u.role || 'AGENT'}</span>
+                  </div>
+                  <div class="text-[10px] text-zinc-400 font-mono">${u.email} · ${u.department || '일반직'}</div>
+                </div>
+                <span class="text-[10px] text-emerald-400 font-medium">활동중 (ACTIVE)</span>
+              </div>
+            `).join('');
+          }
+        }
+      } catch (err) {
+        console.error('loadAdminDashboard error:', err);
+      }
+    }
+
+    async function approvePendingUser(userId, email) {
+      if (!confirm(`[${email}] 직원의 가입을 승인하시겠습니까?`)) return;
+      try {
+        const res = await fetch('/api/admin/approve-user', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user_id: userId, role: 'AGENT' })
+        });
+        const data = await res.json();
+        alert(data.message || '승인이 완료되었습니다.');
+        loadAdminDashboard();
+      } catch (err) {
+        alert('승인 처리 통신 오류: ' + err.message);
+      }
+    }
+
+    // =========================================================================
+    // WATCHLIST CONTROLLER (스카우팅 -> 영입 관심 리스트 연동)
+    // =========================================================================
+    async function updateScoutingWatchlistButton(targetId, targetType) {
+      const btn = document.getElementById('btn-scouting-watchlist');
+      const icon = document.getElementById('scouting-watchlist-icon');
+      const label = document.getElementById('scouting-watchlist-label');
+      if (!btn || !icon || !label) return;
+
+      try {
+        const res = await fetch(`/api/agency/watchlist/check?target_id=${targetId}&target_type=${targetType}`);
+        const data = await res.json();
+        if (data.in_watchlist) {
+          icon.textContent = '★';
+          label.textContent = '영입 관심 해제 (Watchlist 등록됨)';
+          btn.className = 'w-full py-2 px-3 rounded-lg bg-amber-500 text-black border border-amber-400 font-bold text-xs transition flex items-center justify-center gap-1.5 shadow-md shadow-amber-950/30';
+        } else {
+          icon.textContent = '⭐';
+          label.textContent = '영입 관심 타깃 등록 (Watchlist)';
+          btn.className = 'w-full py-2 px-3 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/40 font-semibold text-xs transition flex items-center justify-center gap-1.5 shadow-sm';
+        }
+      } catch (err) {
+        console.error('check_watchlist error:', err);
+      }
+    }
+
+    async function toggleCurrentPlayerWatchlist() {
+      if (!selectedPlayer) {
+        alert('먼저 스카우팅 로스터에서 선수 또는 감독을 선택해주세요.');
+        return;
+      }
+
+      const targetId = selectedPlayer.player_id;
+      const targetType = (selectedPlayer.position === 'MGR') ? 'MANAGER' : 'PLAYER';
+      const targetName = selectedPlayer.name_ko || selectedPlayer.name;
+
+      try {
+        const res = await fetch('/api/agency/watchlist/toggle', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ target_id: targetId, target_type: targetType })
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          alert('영입 관심 타깃 변경 실패: ' + (data.detail || '오류'));
+          return;
+        }
+
+        // Update button state
+        await updateScoutingWatchlistButton(targetId, targetType);
+
+        // Reload recruitment targets and update counters
+        loadAgencyRecruitmentTargets();
+
+        alert(data.message || (data.in_watchlist ? `'${targetName}' 님이 영입 관심 리스트에 등록되었습니다!` : `'${targetName}' 님이 영입 관심 리스트에서 제외되었습니다.`));
+      } catch (err) {
+        alert('영입 관심 등록 통신 오류: ' + err.message);
+      }
+    }
+
+    async function removeTargetFromWatchlist(targetId, targetType, targetName) {
+      if (!confirm(`'${targetName}' 님을 영입 관심 리스트에서 제외하시겠습니까?`)) return;
+
+      try {
+        const res = await fetch('/api/agency/watchlist/toggle', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ target_id: targetId, target_type: targetType })
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          alert('관심 제외 실패: ' + (data.detail || '오류'));
+          return;
+        }
+
+        // Refresh targets
+        loadAgencyRecruitmentTargets();
+        if (selectedPlayer && selectedPlayer.player_id === targetId) {
+          updateScoutingWatchlistButton(targetId, targetType);
+        }
+      } catch (err) {
+        alert('관심 제외 통신 오류: ' + err.message);
+      }
+    }
+
+    // =========================================================================
+    // TALENT & MANAGER RECRUITMENT WATCHLIST CONTROLLER (PILLAR 2)
+    // =========================================================================
+    async function loadAgencyRecruitmentTargets() {
+      try {
+        const res = await fetch('/api/agency/recruitment-targets');
+        if (!res.ok) throw new Error('Failed to fetch recruitment targets');
+        cachedRecruitmentData = await res.json();
+
+        const targets = cachedRecruitmentData.targets || [];
+        const virtualCount = targets.filter(t => t.is_virtual).length;
+        const scoutedCount = targets.filter(t => !t.is_virtual || t.category === 'SCOUTED_TARGET').length;
+        const playerCount = targets.filter(t => t.target_type === 'PLAYER').length;
+        const managerCount = targets.filter(t => t.target_type === 'MANAGER').length;
+
+        // Update counters on page & header badges
+        const countAllEl = document.getElementById('rec-count-all');
+        const countPlayerEl = document.getElementById('rec-count-player');
+        const countMgrEl = document.getElementById('rec-count-manager');
+        const countVirtEl = document.getElementById('rec-count-virtual');
+        const countScoutEl = document.getElementById('rec-count-scouted');
+
+        if (countAllEl) countAllEl.textContent = targets.length;
+        if (countPlayerEl) countPlayerEl.textContent = playerCount;
+        if (countMgrEl) countMgrEl.textContent = managerCount;
+        if (countVirtEl) countVirtEl.textContent = virtualCount;
+        if (countScoutEl) countScoutEl.textContent = scoutedCount;
+
+        const navWatchlistBadge = document.getElementById('nav-watchlist-count');
+        if (navWatchlistBadge) navWatchlistBadge.textContent = targets.length;
+
+        const bannerWatchlistBadge = document.getElementById('scouting-banner-watchlist-count');
+        if (bannerWatchlistBadge) bannerWatchlistBadge.textContent = targets.length;
+
+        const pfRecBadge = document.getElementById('portfolio-header-rec-count');
+        if (pfRecBadge) pfRecBadge.textContent = targets.length;
+
+        renderRecruitmentCards();
+      } catch (err) {
+        console.error('loadAgencyRecruitmentTargets error:', err);
+      }
+    }
+
+    function filterRecruitmentTargets(cat) {
+      currentRecCategory = cat;
+      ['ALL', 'PLAYER', 'MANAGER', 'VIRTUAL', 'SCOUTED', 'UNREPRESENTED', 'EXPIRING_D6', 'TIER2_STEPUP', 'ELITE_MANAGER'].forEach(c => {
+        const tab = document.getElementById(`rec-tab-${c}`);
+        if (tab) {
+          if (c === cat) {
+            tab.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-500 text-black transition shadow-sm';
+          } else {
+            tab.className = 'px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800 transition';
+          }
+        }
+      });
+      renderRecruitmentCards();
+    }
+
+    function handleRecruitmentSearch(q) {
+      recruitmentSearchQuery = (q || '').toLowerCase();
+      renderRecruitmentCards();
+    }
+
+    function renderRecruitmentCards() {
+      const grid = document.getElementById('recruitment-cards-grid');
+      if (!grid || !cachedRecruitmentData) return;
+
+      let targets = cachedRecruitmentData.targets || [];
+
+      // Filter by Category Tab
+      if (currentRecCategory === 'PLAYER') {
+        targets = targets.filter(t => t.target_type === 'PLAYER');
+      } else if (currentRecCategory === 'MANAGER') {
+        targets = targets.filter(t => t.target_type === 'MANAGER');
+      } else if (currentRecCategory === 'VIRTUAL') {
+        targets = targets.filter(t => t.is_virtual);
+      } else if (currentRecCategory === 'SCOUTED') {
+        targets = targets.filter(t => !t.is_virtual || t.category === 'SCOUTED_TARGET');
+      } else if (['UNREPRESENTED', 'EXPIRING_D6', 'TIER2_STEPUP', 'ELITE_MANAGER'].includes(currentRecCategory)) {
+        targets = targets.filter(t => t.category === currentRecCategory);
+      }
+
+      // Filter by Search Query
+      if (recruitmentSearchQuery) {
+        targets = targets.filter(t => {
+          const matchName = (t.name || '').toLowerCase().includes(recruitmentSearchQuery);
+          const matchKo = (t.name_ko || '').toLowerCase().includes(recruitmentSearchQuery);
+          const matchClub = (t.current_club || '').toLowerCase().includes(recruitmentSearchQuery);
+          const matchNat = (t.player_nat || '').toLowerCase().includes(recruitmentSearchQuery);
+          return matchName || matchKo || matchClub || matchNat;
+        });
+      }
+
+      if (targets.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full py-16 text-center text-zinc-500 text-sm ui-card bg-[#11141a]">
+            선택한 조건의 영입 관심 타깃이 없습니다. 스카우팅 로스터에서 선수·감독을 발굴해 <strong>[⭐ 영입 관심 타깃 등록]</strong>을 눌러보세요.
+          </div>
+        `;
+        return;
+      }
+
+      const catBadges = {
+        'UNREPRESENTED': { label: '💎 무소속 원석', style: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' },
+        'EXPIRING_D6': { label: '⏳ 대리계약 만료 임박 D-6', style: 'bg-amber-500/10 text-amber-300 border-amber-500/20' },
+        'TIER2_STEPUP': { label: '🚀 메가에이전시 희망', style: 'bg-sky-500/10 text-sky-400 border-sky-500/20' },
+        'ELITE_MANAGER': { label: '👔 차세대 명장 타깃', style: 'bg-purple-500/10 text-purple-400 border-purple-500/20' },
+        'SCOUTED_TARGET': { label: '⭐ 스카우팅 발굴 관심', style: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' }
+      };
+
+      grid.innerHTML = targets.map(target => {
+        const catInfo = catBadges[target.category] || { label: target.category, style: 'bg-zinc-800 text-zinc-300 border-zinc-700' };
+        const isPlayer = target.target_type === 'PLAYER';
+        const isVirtual = target.is_virtual;
+        const marketValStr = target.market_value_eur ? `€${(target.market_value_eur/1000000).toFixed(0)}M` : '-';
+        const projValStr = target.projected_5yr_valuation_eur ? `€${(target.projected_5yr_valuation_eur/1000000).toFixed(0)}M` : '-';
+        const roiStr = target.projected_agency_roi_eur ? `€${(target.projected_agency_roi_eur/1000000).toFixed(1)}M` : '-';
+        const roleLabel = isPlayer ? (target.position || 'FW') : `감독 (${target.preferred_formation || '4-3-3'})`;
+
+        return `
+          <div class="ui-card p-5 border-white/[0.08] hover:border-amber-500/40 transition flex flex-col justify-between space-y-4 bg-[#11141a]">
+            <div>
+              <!-- Category Pill & Virtual Pool Badge -->
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-1.5">
+                  <span class="px-2 py-0.5 rounded text-[10px] font-bold border ${catInfo.style}">
+                    ${catInfo.label}
+                  </span>
+                  ${isVirtual ? '<span class="px-1.5 py-0.2 rounded text-[9px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">🧪 가상 풀</span>' : '<span class="px-1.5 py-0.2 rounded text-[9px] font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30">⭐ 실제 발굴</span>'}
+                </div>
+                <button onclick="removeTargetFromWatchlist(${target.target_id}, '${target.target_type}', '${target.name_ko}')"
+                  class="text-zinc-500 hover:text-rose-400 text-xs px-1.5 py-0.5 rounded hover:bg-zinc-800 transition" title="관심 리스트에서 제외">
+                  ✕ 관심 해제
+                </button>
+              </div>
+
+              <!-- Header Info -->
+              <div class="flex items-start justify-between gap-3 mt-3">
+                <div>
+                  <h4 class="text-base font-bold text-white tracking-tight flex items-center gap-1.5">
+                    <span>${target.name_ko}</span>
+                    <span class="text-xs font-normal text-zinc-400 font-mono">${target.name}</span>
+                  </h4>
+                  <p class="text-xs text-zinc-400 mt-0.5">
+                    <span class="text-zinc-200 font-medium">${target.current_club || '무소속 (FA)'}</span>
+                    <span class="text-zinc-600">·</span>
+                    <span>${target.league || '가상 리그'}</span>
+                    <span class="text-zinc-600">·</span>
+                    <span class="text-amber-400 font-mono font-medium">${roleLabel}</span>
+                  </p>
+                </div>
+                <div class="text-right">
+                  <div class="text-[10px] text-zinc-500 uppercase font-semibold">현재 시장가치</div>
+                  <div class="text-sm font-bold text-white font-mono">${marketValStr}</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 4D Potential & Stardom Score Board -->
+            <div class="grid grid-cols-3 gap-2 p-3 rounded-lg bg-[#0e1117] border border-white/[0.04] text-center">
+              <div>
+                <div class="text-[10px] text-zinc-500">잠재력 포텐셜</div>
+                <div class="text-base font-bold text-emerald-400 font-mono mt-0.5">${target.potential_ceiling_score || 95}점</div>
+              </div>
+              <div>
+                <div class="text-[10px] text-zinc-500">스타성·마케팅</div>
+                <div class="text-base font-bold text-amber-300 font-mono mt-0.5">${target.stardom_commercial_score || 90}점</div>
+              </div>
+              <div>
+                <div class="text-[10px] text-zinc-500">에이전시 적합도</div>
+                <div class="text-base font-bold text-sky-400 font-mono mt-0.5">${target.agency_fit_score || 90}점</div>
+              </div>
+            </div>
+
+            <!-- Valuation & Agency Projected ROI -->
+            <div class="flex items-center justify-between text-xs px-3 py-2 rounded-lg bg-amber-950/20 border border-amber-500/20">
+              <div>
+                <span class="text-zinc-400 text-[11px]">5개년 예상 가치: </span>
+                <span class="font-bold text-white font-mono">${projValStr}</span>
+              </div>
+              <div>
+                <span class="text-amber-300 text-[11px]">에이전시 기대수익: </span>
+                <span class="font-bold text-amber-400 font-mono">${roiStr}</span>
+              </div>
+            </div>
+
+            <!-- Scouting Rationale Preview -->
+            <p class="text-xs text-zinc-400 leading-relaxed line-clamp-3 bg-[#0e1117] p-2.5 rounded-lg border border-white/[0.04]">
+              ${target.recruitment_pitch_rationale || '글로벌 브랜드 및 스폰서십 연계와 빅클럽 이적 프로젝트를 대행합니다.'}
+            </p>
+
+            <!-- Actions -->
+            <div class="grid grid-cols-2 gap-2 pt-1">
+              <button onclick="generateRecruitmentPitch(${target.target_id}, '${target.target_type}', '${target.name_ko}')"
+                class="px-3 py-2 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-semibold text-xs transition flex items-center justify-center gap-1.5 shadow-md shadow-sky-950/30">
+                <span>📊 1-Page 제안서 생성</span>
+              </button>
+              <button onclick="enrollRecruitmentTarget(${target.target_id}, '${target.target_type}', '${target.name_ko}')"
+                class="px-3 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition flex items-center justify-center gap-1.5 shadow-md shadow-emerald-950/30">
+                <span>✍️ 전속 계약 체결</span>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function generateRecruitmentPitch(targetId, targetType, targetName) {
+      try {
+        const titleEl = document.getElementById('pitch-modal-title');
+        const bodyEl = document.getElementById('pitch-modal-body');
+        const enrollBtn = document.getElementById('btn-pitch-enroll-action');
+        const modal = document.getElementById('modal-pitch-viewer');
+
+        if (titleEl) titleEl.textContent = `[${targetName}] 1-Page Client Acquisition Pitch Deck`;
+        if (bodyEl) bodyEl.innerHTML = `<div class="py-16 text-center text-zinc-400 text-sm">🔄 AI 에이전트가 4D 잠재력 지표 및 FIFA FFAR 맞춤 피치덱을 합성 중입니다...</div>`;
+        if (enrollBtn) enrollBtn.onclick = () => enrollRecruitmentTarget(targetId, targetType, targetName);
+        if (modal) modal.classList.remove('hidden');
+
+        const res = await fetch('/api/agency/recruitment-pitch', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ target_id: targetId, target_type: targetType })
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          if (bodyEl) bodyEl.innerHTML = `<div class="p-4 bg-rose-500/10 text-rose-400 rounded-lg">피치덱 생성 실패: ${data.detail || '오류'}</div>`;
+          return;
+        }
+
+        currentPitchMarkdown = data.pitch_deck_markdown || data.markdown_content || '';
+        currentPitchTarget = targetName;
+        if (bodyEl && typeof marked !== 'undefined') {
+          bodyEl.innerHTML = marked.parse(currentPitchMarkdown);
+        } else if (bodyEl) {
+          bodyEl.innerHTML = `<pre class="whitespace-pre-wrap text-xs text-zinc-300 font-mono">${currentPitchMarkdown}</pre>`;
+        }
+      } catch (err) {
+        alert('피치덱 생성 통신 오류: ' + err.message);
+      }
+    }
+
+    function closePitchModal() {
+      const modal = document.getElementById('modal-pitch-viewer');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function downloadPitchMarkdown() {
+      if (!currentPitchMarkdown) return;
+      const blob = new Blob([currentPitchMarkdown], { type: 'text/markdown;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `Pitch_Deck_${currentPitchTarget || 'Client'}.md`;
+      link.click();
+      URL.revokeObjectURL(url);
+    }
+
+    async function enrollRecruitmentTarget(targetId, targetType, targetName) {
+      const agentName = prompt(`[${targetName}] 전속 대리 계약을 체결하시겠습니까?
+담당 리드 에이전트 성함을 입력해주세요:`, currentAuthUser?.full_name || '김대표 Agent');
+      if (!agentName) return;
+
+      const commRateStr = prompt('계약 수수료율(%)을 입력해주세요 (FIFA FFAR 표준: 5~10%):', '5.0');
+      const commissionPct = parseFloat(commRateStr) || 5.0;
+
+      try {
+        const res = await fetch('/api/agency/enroll-client', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            target_id: targetId,
+            target_type: targetType,
+            lead_agent: agentName,
+            commission_pct: commissionPct
+          })
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          alert('소속 계약 체결 실패: ' + (data.detail || '오류'));
+          return;
+        }
+
+        alert(data.message || `축하합니다! ${targetName} 님이 Antigravity Sports 전속 고객으로 등록되었습니다.`);
+        closePitchModal();
+        showPage('page-portfolio');
+        loadAgencyPortfolio();
+        loadAgencyRecruitmentTargets();
+      } catch (err) {
+        alert('계약 등록 통신 오류: ' + err.message);
+      }
+    }
+
+    // =========================================================================
+    // ACTIVE PORTFOLIO CONTROLLER & AGENCY BUSINESS LIFECYCLE (PILLAR 1)
+    // =========================================================================
+    async function loadAgencyPortfolio() {
+      try {
+        const res = await fetch('/api/agency/portfolio');
+        if (!res.ok) throw new Error('Failed to fetch agency portfolio');
+        cachedPortfolioData = await res.json();
+
+        // Update KPI counters
+        const summary = cachedPortfolioData.summary || {};
+        const totalValEl = document.getElementById('portfolio-total-val');
+        const totalCountEl = document.getElementById('portfolio-total-count');
+        const wagesValEl = document.getElementById('portfolio-wages-val');
+        const feeValEl = document.getElementById('portfolio-fee-val');
+        const navPortCount = document.getElementById('nav-portfolio-count');
+
+        const totalClients = summary.total_clients || 0;
+        if (totalValEl) totalValEl.textContent = `€${((summary.total_portfolio_value_eur || 0) / 1000000).toFixed(1)}M`;
+        if (totalCountEl) totalCountEl.textContent = `${totalClients}인`;
+        if (wagesValEl) wagesValEl.textContent = `€${((summary.total_weekly_wages_eur || 0) / 1000).toFixed(0)}K / 주`;
+        if (feeValEl) feeValEl.textContent = `€${((summary.annual_commission_potential_eur || 0) / 1000000).toFixed(2)}M / 년`;
+
+        if (navPortCount) {
+          navPortCount.textContent = totalClients;
+          if (totalClients > 0) navPortCount.classList.remove('hidden');
+          else navPortCount.classList.add('hidden');
+        }
+
+        renderPortfolioCards();
+      } catch (err) {
+        console.error('loadAgencyPortfolio error:', err);
+      }
+    }
+
+    function filterPortfolio(filter) {
+      portfolioFilter = filter;
+      ['ALL', 'PLAYER', 'MANAGER', 'VIRTUAL', 'REAL'].forEach(f => {
+        const btn = document.getElementById(`pf-btn-${f.toLowerCase()}`);
+        if (btn) {
+          if (f === filter) {
+            btn.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 text-white transition';
+          } else {
+            btn.className = 'px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800 transition';
+          }
+        }
+      });
+      renderPortfolioCards();
+    }
+
+    function handlePortfolioSearch(q) {
+      portfolioSearchQuery = (q || '').toLowerCase();
+      renderPortfolioCards();
+    }
+
+    function renderPortfolioCards() {
+      const grid = document.getElementById('portfolio-cards-grid');
+      if (!grid || !cachedPortfolioData) return;
+
+      const players = (cachedPortfolioData.players || []).map(p => ({ ...p, type: 'PLAYER' }));
+      const managers = (cachedPortfolioData.managers || []).map(m => ({ ...m, type: 'MANAGER' }));
+      let all = [...players, ...managers];
+
+      // Apply Filter
+      if (portfolioFilter === 'PLAYER') all = all.filter(c => c.type === 'PLAYER');
+      if (portfolioFilter === 'MANAGER') all = all.filter(c => c.type === 'MANAGER');
+      if (portfolioFilter === 'VIRTUAL') all = all.filter(c => (c.client_id >= 90000) || (c.player_id >= 90000) || (c.manager_id >= 90000));
+      if (portfolioFilter === 'REAL') all = all.filter(c => !((c.client_id >= 90000) || (c.player_id >= 90000) || (c.manager_id >= 90000)));
+
+      // Apply Search Query
+      if (portfolioSearchQuery) {
+        all = all.filter(c => {
+          const matchName = (c.client_name || '').toLowerCase().includes(portfolioSearchQuery);
+          const matchKo = (c.client_name_ko || '').toLowerCase().includes(portfolioSearchQuery);
+          const matchClub = (c.current_club || '').toLowerCase().includes(portfolioSearchQuery);
+          return matchName || matchKo || matchClub;
+        });
+      }
+
+      if (all.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full py-16 text-center text-zinc-500 text-sm ui-card bg-[#11141a]">
+            현재 등록된 소속 전속 고객이 없습니다. <br>
+            <button onclick="showPage('page-recruitment')" class="mt-3 px-3.5 py-2 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 font-semibold text-xs transition">
+              ⭐ 영입 관심 리스트에서 신규 고객 계약 체결하기 →
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = all.map(client => {
+        const isPlayer = client.type === 'PLAYER';
+        const clientId = client.client_id || (isPlayer ? client.player_id : client.manager_id);
+        const nameKo = client.client_name_ko || client.client_name;
+        const nameEn = client.client_name;
+        const currentClub = client.current_club || '무소속 (FA)';
+        const isFA = !currentClub || currentClub.includes('무직') || currentClub.includes('무소속') || currentClub.includes('자유계약') || currentClub === 'FA';
+        const isVirtual = Boolean((clientId >= 90000) || (client.player_id >= 90000) || (client.manager_id >= 90000));
+
+        const marketVal = client.market_value_eur ? `€${(client.market_value_eur / 1000000).toFixed(1)}M` : (client.estimated_buyout_eur ? `바이아웃 €${(client.estimated_buyout_eur/1000000).toFixed(0)}M` : 'N/A');
+        const wage = client.weekly_wage_eur ? `€${Math.round(client.weekly_wage_eur / 1000)}K/주` : '-';
+        const dDayStr = client.contract_expires ? `${client.contract_expires} 만료` : '2026.06.30 만료 (D-597)';
+
+        return `
+          <div class="ui-card p-5 border-white/[0.08] hover:border-emerald-500/40 transition flex flex-col justify-between space-y-4 bg-[#11141a]">
+            <!-- Top Row: Badge & Type -->
+            <div>
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-1.5">
+                  <span class="px-2 py-0.5 rounded text-[10px] font-bold ${isPlayer ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-purple-500/10 text-purple-400 border border-purple-500/20'}">
+                    ${isPlayer ? `선수 (${client.position || 'FW'})` : '감독 (Manager)'}
+                  </span>
+                  ${isVirtual ? '<span class="px-1.5 py-0.2 rounded text-[9px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">🧪 가상 인물</span>' : '<span class="px-1.5 py-0.2 rounded text-[9px] font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30">⭐ 실제 고객</span>'}
+                </div>
+                <button onclick="terminateClientContract(${clientId}, '${client.type}', '${nameKo}')"
+                  class="text-[10px] text-zinc-500 hover:text-rose-400 px-1.5 py-0.5 rounded hover:bg-zinc-800 transition" title="전속 대리 계약 해지">
+                  ✕ 전속해지
+                </button>
+              </div>
+
+              <!-- Client Header -->
+              <div class="flex items-start justify-between gap-3 mt-3">
+                <div>
+                  <h4 class="text-base font-bold text-white tracking-tight flex items-center gap-1.5">
+                    <span>${nameKo}</span>
+                    <span class="text-xs font-normal text-zinc-400 font-mono">${nameEn}</span>
+                  </h4>
+                  <p class="text-xs text-zinc-400 mt-0.5 flex items-center gap-1">
+                    <span class="text-zinc-200 font-medium">${currentClub}</span>
+                    <span class="text-zinc-600">·</span>
+                    <span>${client.league || '글로벌 리그'}</span>
+                  </p>
+                </div>
+                <div class="text-right">
+                  <div class="text-xs font-bold text-emerald-400 font-mono">${marketVal}</div>
+                  <div class="text-[10px] text-zinc-400 font-mono">${wage}</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Representation Agreement Status Box -->
+            <div class="p-3 rounded-lg bg-[#0e1117] border border-white/[0.04] space-y-1.5 text-xs">
+              <div class="flex items-center justify-between">
+                <span class="text-zinc-400 text-[11px]">계약 상태 / 만료</span>
+                <span class="font-mono text-amber-300 text-[11px] font-semibold">${dDayStr}</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-zinc-400 text-[11px]">담당 리드 에이전트</span>
+                <span class="text-zinc-200 text-[11px] font-medium">${client.lead_agent_name || '김대표 Agent'}</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-zinc-400 text-[11px]">법정 수수료율</span>
+                <span class="font-mono text-emerald-400 text-[11px] font-semibold">${client.commission_rate_pct || 5.0}% (FFAR Cap)</span>
+              </div>
+            </div>
+
+            <!-- Agency Core Business Lifecycle Actions -->
+            <div class="space-y-1.5 pt-1">
+              ${isFA ? `
+                <button onclick="openClientSignClubModal(${clientId}, '${client.type}', '${nameKo}')"
+                  class="w-full py-2 px-3 rounded-lg bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs transition flex items-center justify-center gap-1.5 shadow-md shadow-amber-950/30">
+                  <span>🟡 새 구단 입단 계약 체결 (FA)</span>
+                </button>
+              ` : `
+                <div class="grid grid-cols-2 gap-2">
+                  <button onclick="openClientRenewalModal(${clientId}, '${client.type}', '${nameKo}', '${currentClub}', ${client.weekly_wage_eur || 50000})"
+                    class="py-2 px-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition flex items-center justify-center gap-1 shadow-md shadow-emerald-950/30">
+                    <span>🔄 소속팀 재계약</span>
+                  </button>
+                  <button onclick="openClientTransferModal(${clientId}, '${client.type}', '${nameKo}', '${currentClub}', ${client.market_value_eur || 30000000}, ${client.weekly_wage_eur || 50000})"
+                    class="py-2 px-2.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-semibold text-xs transition flex items-center justify-center gap-1 shadow-md shadow-sky-950/30">
+                    <span>🚀 5대 리그 이적</span>
+                  </button>
+                </div>
+              `}
+              <div class="grid grid-cols-2 gap-2 pt-0.5">
+                <button onclick="selectClientForStrategy('${nameKo}')"
+                  class="px-2 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-[11px] font-medium transition text-center">
+                  ⚡ 협상 전략
+                </button>
+                <button onclick="selectClientForDocs('${nameKo}')"
+                  class="px-2 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-[11px] font-medium transition text-center">
+                  📄 공식 문서
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function selectClientForStrategy(name) {
+      if (typeof selectPlayer === 'function') {
+        const found = (allPlayers || []).find(p => (p.name_ko === name || p.name === name));
+        if (found) selectPlayer(found);
+      }
+      showPage('page-strategy');
+    }
+
+    function selectClientForDocs(name) {
+      if (typeof selectPlayer === 'function') {
+        const found = (allPlayers || []).find(p => (p.name_ko === name || p.name === name));
+        if (found) selectPlayer(found);
+      }
+      showPage('page-documents');
+    }
+
+    // =========================================================================
+    // MODAL HANDLERS FOR RENEWAL, TRANSFER, FA SIGNING & TERMINATION
+    // =========================================================================
+    function openClientRenewalModal(clientId, clientType, clientName, currentClub, currentWage) {
+      const modal = document.getElementById('modal-client-renewal');
+      if (!modal) return;
+
+      document.getElementById('renewal-client-id').value = clientId;
+      document.getElementById('renewal-client-type').value = clientType;
+      document.getElementById('renewal-modal-title').textContent = `[${clientName}] 소속팀 재계약 협상`;
+      document.getElementById('renewal-current-club').textContent = currentClub;
+      document.getElementById('renewal-current-wage').textContent = `€${Math.round((currentWage || 50000)/1000)}K / 주`;
+      document.getElementById('renewal-wage-input').value = Math.round((currentWage || 50000) * 1.2);
+
+      modal.classList.remove('hidden');
+    }
+
+    function closeClientRenewalModal() {
+      const modal = document.getElementById('modal-client-renewal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    async function submitClientRenewal(e) {
+      e.preventDefault();
+      const clientId = parseInt(document.getElementById('renewal-client-id').value, 10);
+      const clientType = document.getElementById('renewal-client-type').value;
+      const newWage = parseFloat(document.getElementById('renewal-wage-input').value);
+      const years = parseInt(document.getElementById('renewal-years-select').value, 10);
+      const buyout = parseFloat(document.getElementById('renewal-buyout-input').value) || null;
+      const bonus = parseFloat(document.getElementById('renewal-bonus-input').value) || null;
+
+      try {
+        const res = await fetch('/api/agency/client/renew', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            client_id: clientId,
+            client_type: clientType,
+            new_weekly_wage_eur: newWage,
+            contract_years: years,
+            new_buyout_eur: buyout,
+            signing_bonus_eur: bonus
+          })
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          alert('재계약 체결 실패: ' + (data.detail || '오류'));
+          return;
+        }
+
+        alert(data.message || '재계약이 성공적으로 체결되었습니다!');
+        closeClientRenewalModal();
+        loadAgencyPortfolio();
+      } catch (err) {
+        alert('재계약 통신 오류: ' + err.message);
+      }
+    }
+
+    function openClientTransferModal(clientId, clientType, clientName, currentClub, currentVal, currentWage) {
+      const modal = document.getElementById('modal-client-transfer');
+      if (!modal) return;
+
+      document.getElementById('transfer-client-id').value = clientId;
+      document.getElementById('transfer-client-type').value = clientType;
+      document.getElementById('transfer-modal-title').textContent = `[${clientName}] 구단 이적 협상`;
+      document.getElementById('transfer-current-club').textContent = currentClub;
+      document.getElementById('transfer-current-val').textContent = `€${((currentVal || 30000000)/1000000).toFixed(1)}M`;
+      document.getElementById('transfer-fee-input').value = Math.round((currentVal || 30000000) * 1.1);
+      document.getElementById('transfer-wage-input').value = Math.round((currentWage || 60000) * 1.3);
+
+      modal.classList.remove('hidden');
+    }
+
+    function closeClientTransferModal() {
+      const modal = document.getElementById('modal-client-transfer');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    async function submitClientTransfer(e) {
+      e.preventDefault();
+      const clientId = parseInt(document.getElementById('transfer-client-id').value, 10);
+      const clientType = document.getElementById('transfer-client-type').value;
+      const club = document.getElementById('transfer-club-input').value.trim();
+      const league = document.getElementById('transfer-league-select').value;
+      const fee = parseFloat(document.getElementById('transfer-fee-input').value);
+      const wage = parseFloat(document.getElementById('transfer-wage-input').value);
+      const years = parseInt(document.getElementById('transfer-years-select').value, 10);
+
+      try {
+        const res = await fetch('/api/agency/client/transfer', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            client_id: clientId,
+            client_type: clientType,
+            destination_club: club,
+            destination_league: league,
+            transfer_fee_eur: fee,
+            new_weekly_wage_eur: wage,
+            contract_years: years
+          })
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          alert('이적 협상 실패: ' + (data.detail || '오류'));
+          return;
+        }
+
+        alert(data.message || '이적이 성공적으로 완료되었습니다!');
+        closeClientTransferModal();
+        loadAgencyPortfolio();
+      } catch (err) {
+        alert('이적 통신 오류: ' + err.message);
+      }
+    }
+
+    function openClientSignClubModal(clientId, clientType, clientName) {
+      const modal = document.getElementById('modal-client-sign-club');
+      if (!modal) return;
+
+      document.getElementById('fa-client-id').value = clientId;
+      document.getElementById('fa-client-type').value = clientType;
+      document.getElementById('sign-club-modal-title').textContent = `[${clientName}] 새 구단 입단 계약 (FA)`;
+      document.getElementById('fa-wage-input').value = 45000;
+
+      modal.classList.remove('hidden');
+    }
+
+    function closeClientSignClubModal() {
+      const modal = document.getElementById('modal-client-sign-club');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    async function submitClientSignClub(e) {
+      e.preventDefault();
+      const clientId = parseInt(document.getElementById('fa-client-id').value, 10);
+      const clientType = document.getElementById('fa-client-type').value;
+      const club = document.getElementById('fa-club-input').value.trim();
+      const league = document.getElementById('fa-league-select').value;
+      const wage = parseFloat(document.getElementById('fa-wage-input').value);
+      const years = parseInt(document.getElementById('fa-years-select').value, 10);
+
+      try {
+        const res = await fetch('/api/agency/client/sign-club', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            client_id: clientId,
+            client_type: clientType,
+            destination_club: club,
+            destination_league: league,
+            weekly_wage_eur: wage,
+            contract_years: years
+          })
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          alert('입단 계약 실패: ' + (data.detail || '오류'));
+          return;
+        }
+
+        alert(data.message || '입단 계약이 체결되었습니다!');
+        closeClientSignClubModal();
+        loadAgencyPortfolio();
+      } catch (err) {
+        alert('입단 계약 통신 오류: ' + err.message);
+      }
+    }
+
+    async function terminateClientContract(clientId, clientType, clientName) {
+      const reason = prompt(`[${clientName}] 전속 계약을 해지하시겠습니까?
+해지 사유를 입력해주세요 (예: 선수 요청, 계약 만료, 상호 합의):`, '상호 합의 계약 해지');
+      if (!reason) return;
+
+      try {
+        const res = await fetch('/api/agency/terminate-contract', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            client_id: clientId,
+            client_type: clientType,
+            reason: reason
+          })
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          alert('계약 해지 실패: ' + (data.detail || '오류'));
+          return;
+        }
+
+        alert(data.message || `'${clientName}' 전속 계약이 해지되었으며, 영입 관심 풀로 복귀되었습니다.`);
+        loadAgencyPortfolio();
+        loadAgencyRecruitmentTargets();
+      } catch (err) {
+        alert('계약 해지 통신 오류: ' + err.message);
+      }
+    }
+
+
     window.addEventListener('DOMContentLoaded', initDashboard);
   </script>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: AUTHENTICATION (Firebase / Agency Login & Signup) -->
+  <!-- ========================================================================= -->
+  <div id="modal-auth" class="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm hidden">
+    <div class="ui-card w-full max-w-md p-6 border-white/[0.12] bg-[#12151c] shadow-2xl relative">
+      <!-- Close Button -->
+      <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-white transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+
+      <!-- Modal Title -->
+      <div class="flex items-center gap-2 mb-4">
+        <div class="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold text-xs">
+          FC
+        </div>
+        <div>
+          <h3 class="text-base font-bold text-white tracking-tight">Antigravity Sports OS</h3>
+          <p class="text-[11px] text-zinc-400">FIFA 공인 에이전시 업무 포털 인증</p>
+        </div>
+      </div>
+
+      <!-- Quick Admin Auto-fill Button -->
+      <div class="mb-4 p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-between">
+        <div>
+          <div class="text-[11px] font-bold text-amber-300">👑 대표 관리자 1초 로그인</div>
+          <div class="text-[10px] text-zinc-400 font-mono">admin@agent.com / password1234</div>
+        </div>
+        <button onclick="fillAdminCredentials()"
+          class="px-2.5 py-1 rounded bg-amber-500 hover:bg-amber-400 text-black text-xs font-bold transition">
+          자동입력
+        </button>
+      </div>
+
+      <!-- Tabs: Login vs Signup -->
+      <div class="flex border-b border-white/[0.08] mb-4">
+        <button id="auth-tab-btn-login" onclick="switchAuthTab('login')"
+          class="flex-1 pb-2 text-xs font-bold text-emerald-400 border-b-2 border-emerald-400 transition text-center">
+          로그인
+        </button>
+        <button id="auth-tab-btn-signup" onclick="switchAuthTab('signup')"
+          class="flex-1 pb-2 text-xs font-medium text-zinc-400 hover:text-zinc-200 transition text-center">
+          직원 회원가입 신청
+        </button>
+      </div>
+
+      <!-- Alert Box -->
+      <div id="auth-alert-box" class="hidden mb-3 p-2.5 rounded-lg text-xs leading-relaxed"></div>
+
+      <!-- Login Form -->
+      <form id="form-auth-login" onsubmit="submitLoginForm(event)" class="space-y-3">
+        <div>
+          <label class="block text-[11px] font-medium text-zinc-400 mb-1">이메일 계정</label>
+          <input type="email" id="login-email" required placeholder="admin@agent.com"
+            class="w-full bg-[#0e1117] text-xs px-3 py-2 rounded-lg border border-white/[0.08] text-white focus:outline-none focus:border-emerald-500">
+        </div>
+        <div>
+          <label class="block text-[11px] font-medium text-zinc-400 mb-1">비밀번호</label>
+          <input type="password" id="login-password" required placeholder="••••••••"
+            class="w-full bg-[#0e1117] text-xs px-3 py-2 rounded-lg border border-white/[0.08] text-white focus:outline-none focus:border-emerald-500">
+        </div>
+        <div class="pt-2">
+          <button type="submit" id="btn-submit-login"
+            class="w-full py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition shadow-lg shadow-emerald-950/40">
+            에이전시 시스템 로그인
+          </button>
+        </div>
+      </form>
+
+      <!-- Signup Form -->
+      <form id="form-auth-signup" onsubmit="submitSignupForm(event)" class="space-y-3 hidden">
+        <div>
+          <label class="block text-[11px] font-medium text-zinc-400 mb-1">성명 (실명)</label>
+          <input type="text" id="signup-name" required placeholder="홍길동 수석에이전트"
+            class="w-full bg-[#0e1117] text-xs px-3 py-2 rounded-lg border border-white/[0.08] text-white focus:outline-none focus:border-emerald-500">
+        </div>
+        <div>
+          <label class="block text-[11px] font-medium text-zinc-400 mb-1">이메일 계정</label>
+          <input type="email" id="signup-email" required placeholder="agent@agency.com"
+            class="w-full bg-[#0e1117] text-xs px-3 py-2 rounded-lg border border-white/[0.08] text-white focus:outline-none focus:border-emerald-500">
+        </div>
+        <div>
+          <label class="block text-[11px] font-medium text-zinc-400 mb-1">소속 부서</label>
+          <select id="signup-department" class="w-full bg-[#0e1117] text-xs px-3 py-2 rounded-lg border border-white/[0.08] text-white focus:outline-none focus:border-emerald-500">
+            <option value="선수영입1팀">선수영입1팀</option>
+            <option value="선수영입2팀">선수영입2팀</option>
+            <option value="법무계약팀">법무계약팀</option>
+            <option value="전술데이터팀">전술데이터팀</option>
+            <option value="재무전략팀">재무전략팀</option>
+            <option value="글로벌마케팅팀">글로벌마케팅팀</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-[11px] font-medium text-zinc-400 mb-1">비밀번호 (6자 이상)</label>
+          <input type="password" id="signup-password" minlength="6" required placeholder="••••••••"
+            class="w-full bg-[#0e1117] text-xs px-3 py-2 rounded-lg border border-white/[0.08] text-white focus:outline-none focus:border-emerald-500">
+        </div>
+        <p class="text-[10px] text-zinc-400 leading-tight">
+          ※ 에이전시 보안 규정에 따라 가입 즉시 <strong class="text-amber-300">승인 대기(PENDING)</strong> 상태가 되며, 대표 관리자(admin@agent.com)의 승인 후 로그인이 활성화됩니다.
+        </p>
+        <div class="pt-2">
+          <button type="submit" id="btn-submit-signup"
+            class="w-full py-2.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-semibold text-xs transition shadow-lg shadow-sky-950/40">
+            회원가입 신청서 제출
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: RECRUITMENT PITCH DECK VIEWER -->
+  <!-- ========================================================================= -->
+  <div id="modal-pitch-viewer" class="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md hidden p-4">
+    <div class="ui-card w-full max-w-4xl max-h-[90vh] flex flex-col border-white/[0.12] bg-[#11141a] shadow-2xl relative overflow-hidden">
+      <!-- Modal Header -->
+      <div class="px-6 py-4 border-b border-white/[0.08] flex items-center justify-between bg-[#161a22]">
+        <div class="flex items-center gap-2.5">
+          <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+            ⭐ 1-PAGE PITCH DECK
+          </span>
+          <h3 id="pitch-modal-title" class="text-base font-bold text-white tracking-tight">영입 제안서 뷰어</h3>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="window.print()" class="px-3 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-medium transition flex items-center gap-1">
+            <span>🖨️ 인쇄 / PDF</span>
+          </button>
+          <button onclick="downloadPitchMarkdown()" class="px-3 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-medium transition flex items-center gap-1">
+            <span>📥 마크다운</span>
+          </button>
+          <button onclick="closePitchModal()" class="text-zinc-400 hover:text-white p-1 ml-1 transition">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Pitch Deck Markdown Scrollable Content -->
+      <div class="flex-1 overflow-y-auto p-6 space-y-4">
+        <div id="pitch-modal-body" class="markdown-body">
+          <!-- Rendered marked.js output with inline SVGs -->
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="px-6 py-3 border-t border-white/[0.08] flex items-center justify-between bg-[#161a22]">
+        <div class="text-[11px] text-zinc-400">
+          FIFA Football Agent Regulations (Article 12/13) 표준 전속 제안서
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="btn-pitch-enroll-action" onclick=""
+            class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition flex items-center gap-1.5 shadow-md">
+            <span>✍️ 전속 대리 계약 체결 (소속 등록)</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: CLIENT CONTRACT RENEWAL (소속팀 재계약) -->
+  <!-- ========================================================================= -->
+  <div id="modal-client-renewal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm hidden p-4">
+    <div class="ui-card w-full max-w-lg p-6 border-white/[0.12] bg-[#12151c] shadow-2xl relative">
+      <button onclick="closeClientRenewalModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-white transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+      </button>
+
+      <div class="flex items-center gap-2 mb-4">
+        <span class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold text-sm">🔄</span>
+        <div>
+          <h3 id="renewal-modal-title" class="text-base font-bold text-white tracking-tight">소속팀 재계약 협상</h3>
+          <p id="renewal-modal-subtitle" class="text-xs text-zinc-400">현재 소속 구단과의 계약 연장 및 주급 인상 협상</p>
+        </div>
+      </div>
+
+      <form onsubmit="submitClientRenewal(event)" class="space-y-4">
+        <input type="hidden" id="renewal-client-id">
+        <input type="hidden" id="renewal-client-type" value="PLAYER">
+
+        <div class="grid grid-cols-2 gap-3 p-3 rounded-lg bg-[#0e1117] border border-white/[0.04] text-xs">
+          <div>
+            <span class="text-zinc-500">현재 구단:</span>
+            <span id="renewal-current-club" class="font-bold text-white ml-1">-</span>
+          </div>
+          <div>
+            <span class="text-zinc-500">현재 주급:</span>
+            <span id="renewal-current-wage" class="font-mono font-bold text-amber-300 ml-1">-</span>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-zinc-300 mb-1">희망 주급 (€ / Week)</label>
+          <input type="number" id="renewal-wage-input" required min="1000" step="1000"
+            class="w-full bg-[#0e1117] text-xs px-3 py-2 rounded-lg border border-white/[0.08] text-white focus:outline-none focus:border-emerald-500 font-mono">
+          <p class="text-[10px] text-zinc-500 mt-1">※ 기본 권장: 현 주급 대비 15~25% 인상안</p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-medium text-zinc-300 mb-1">계약 연장 기간</label>
+            <select id="renewal-years-select" class="w-full bg-[#0e1117] text-xs px-3 py-2 rounded-lg border border-white/[0.08] text-white focus:outline-none focus:border-emerald-500">
+              <option value="1">1년 연장</option>
+              <option value="2">2년 연장</option>
+              <option value="3" selected>3년 연장 (표준)</option>
+              <option value="4">4년 연장</option>
+              <option value="5">5년 장기계약</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-zinc-300 mb-1">재계약 보너스 (€)</label>
+            <input type="number" id="renewal-bonus-input" placeholder="선택사항 (예: 2000000)" min="0" step="50000"
+              class="w-full bg-[#0e1117] text-xs px-3 py-2 rounded-lg border border-white/[0.08] text-white focus:outline-none focus:border-emerald-500 font-mono">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-zinc-300 mb-1">신규 바이아웃 조항 (€ - 선택사항)</label>
+          <input type="number" id="renewal-buyout-input" placeholder="미설정 시 구단 방침 준용" min="0" step="1000000"
+            class="w-full bg-[#0e1117] text-xs px-3 py-2 rounded-lg border border-white/[0.08] text-white focus:outline-none focus:border-emerald-500 font-mono">
+        </div>
+
+        <div class="pt-2 flex items-center justify-end gap-2">
+          <button type="button" onclick="closeClientRenewalModal()"
+            class="px-3.5 py-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs font-medium transition">
+            취소
+          </button>
+          <button type="submit"
+            class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition shadow-md shadow-emerald-950/40">
+            재계약 체결 실행
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: CLIENT TRANSFER (5대 리그 구단 이적) -->
+  <!-- ========================================================================= -->
+  <div id="modal-client-transfer" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm hidden p-4">
+    <div class="ui-card w-full max-w-lg p-6 border-white/[0.12] bg-[#12151c] shadow-2xl relative">
+      <button onclick="closeClientTransferModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-white transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+      </button>
+
+      <div class="flex items-center gap-2 mb-4">
+        <span class="w-8 h-8 rounded-lg bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-400 font-bold text-sm">🚀</span>
+        <div>
+          <h3 id="transfer-modal-title" class="text-base font-bold text-white tracking-tight">구단 이적 협상</h3>
+          <p id="transfer-modal-subtitle" class="text-xs text-zinc-400">새로운 구단으로의 이적 계약 및 연봉 협상</p>
+        </div>
+      </div>
+
+      <form onsubmit="submitClientTransfer(event)" class="space-y-4">
+        <input type="hidden" id="transfer-client-id">
+        <input type="hidden" id="transfer-client-type" value="PLAYER">
+
+        <div class="grid grid-cols-2 gap-3 p-3 rounded-lg bg-[#0e1117] border border-white/[0.04] text-xs">
+          <div>
+            <span class="text-zinc-500">현재 구단:</span>
+            <span id="transfer-current-club" class="font-bold text-white ml-1">-</span>
+          </div>
+          <div>
+            <span class="text-zinc-500">현재 시장가치:</span>
+            <span id="transfer-current-val" class="font-mono font-bold text-emerald-400 ml-1">-</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-medium text-zinc-300 mb-1">이적 목적지 구단명</label>
+            <input type="text" id="transfer-club-input" required placeholder="예: Real Madrid, Arsenal"
+              class="w-full bg-[#0e1117] text-xs px-3 py-2 rounded-lg border border-white/[0.08] text-white focus:outline-none focus:border-sky-500">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-zinc-300 mb-1">소속 리그</label>
+            <select id="transfer-league-select" class="w-full bg-[#0e1117] text-xs px-3 py-2 rounded-lg border border-white/[0.08] text-white focus:outline-none focus:border-sky-500">
+              <option value="Premier League">Premier League (EPL)</option>
+              <option value="La Liga">La Liga</option>
+              <option value="Bundesliga">Bundesliga</option>
+              <option value="Serie A">Serie A</option>
+              <option value="Ligue 1">Ligue 1</option>
+              <option value="기타 글로벌 리그">기타 글로벌 리그</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-medium text-zinc-300 mb-1">최종 이적료 (€)</label>
+            <input type="number" id="transfer-fee-input" required min="100000" step="500000"
+              class="w-full bg-[#0e1117] text-xs px-3 py-2 rounded-lg border border-white/[0.08] text-white focus:outline-none focus:border-sky-500 font-mono">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-zinc-300 mb-1">신규 주급 (€ / Week)</label>
+            <input type="number" id="transfer-wage-input" required min="1000" step="1000"
+              class="w-full bg-[#0e1117] text-xs px-3 py-2 rounded-lg border border-white/[0.08] text-white focus:outline-none focus:border-sky-500 font-mono">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-zinc-300 mb-1">계약 기간</label>
+          <select id="transfer-years-select" class="w-full bg-[#0e1117] text-xs px-3 py-2 rounded-lg border border-white/[0.08] text-white focus:outline-none focus:border-sky-500">
+            <option value="2">2년 계약</option>
+            <option value="3">3년 계약</option>
+            <option value="4" selected>4년 계약 (표준)</option>
+            <option value="5">5년 계약</option>
+          </select>
+        </div>
+
+        <div class="pt-2 flex items-center justify-end gap-2">
+          <button type="button" onclick="closeClientTransferModal()"
+            class="px-3.5 py-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs font-medium transition">
+            취소
+          </button>
+          <button type="submit"
+            class="px-4 py-2 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-semibold text-xs transition shadow-md shadow-sky-950/40">
+            이적 계약 완료
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: CLIENT SIGN NEW CLUB (FA 입단 계약) -->
+  <!-- ========================================================================= -->
+  <div id="modal-client-sign-club" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm hidden p-4">
+    <div class="ui-card w-full max-w-lg p-6 border-white/[0.12] bg-[#12151c] shadow-2xl relative">
+      <button onclick="closeClientSignClubModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-white transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+      </button>
+
+      <div class="flex items-center gap-2 mb-4">
+        <span class="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-300 font-bold text-sm">🟡</span>
+        <div>
+          <h3 id="sign-club-modal-title" class="text-base font-bold text-white tracking-tight">새 구단 입단 계약 (FA)</h3>
+          <p id="sign-club-modal-subtitle" class="text-xs text-zinc-400">무소속(FA) 상태 고객의 신규 구단 입단 계약 체결</p>
+        </div>
+      </div>
+
+      <form onsubmit="submitClientSignClub(event)" class="space-y-4">
+        <input type="hidden" id="fa-client-id">
+        <input type="hidden" id="fa-client-type" value="PLAYER">
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-medium text-zinc-300 mb-1">입단 구단명</label>
+            <input type="text" id="fa-club-input" required placeholder="예: Tottenham Hotspur, FC Seoul"
+              class="w-full bg-[#0e1117] text-xs px-3 py-2 rounded-lg border border-white/[0.08] text-white focus:outline-none focus:border-amber-500">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-zinc-300 mb-1">소속 리그</label>
+            <select id="fa-league-select" class="w-full bg-[#0e1117] text-xs px-3 py-2 rounded-lg border border-white/[0.08] text-white focus:outline-none focus:border-amber-500">
+              <option value="Premier League">Premier League (EPL)</option>
+              <option value="La Liga">La Liga</option>
+              <option value="Bundesliga">Bundesliga</option>
+              <option value="Serie A">Serie A</option>
+              <option value="Ligue 1">Ligue 1</option>
+              <option value="기타 글로벌 리그">기타 글로벌 리그</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-medium text-zinc-300 mb-1">주급 (€ / Week)</label>
+            <input type="number" id="fa-wage-input" required min="1000" step="1000"
+              class="w-full bg-[#0e1117] text-xs px-3 py-2 rounded-lg border border-white/[0.08] text-white focus:outline-none focus:border-amber-500 font-mono">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-zinc-300 mb-1">계약 기간</label>
+            <select id="fa-years-select" class="w-full bg-[#0e1117] text-xs px-3 py-2 rounded-lg border border-white/[0.08] text-white focus:outline-none focus:border-amber-500">
+              <option value="1">1년 계약</option>
+              <option value="2">2년 계약</option>
+              <option value="3" selected>3년 계약</option>
+              <option value="4">4년 계약</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="pt-2 flex items-center justify-end gap-2">
+          <button type="button" onclick="closeClientSignClubModal()"
+            class="px-3.5 py-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs font-medium transition">
+            취소
+          </button>
+          <button type="submit"
+            class="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-black font-semibold text-xs transition shadow-md shadow-amber-950/40">
+            입단 계약 체결 완료
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
 </body>
 </html>

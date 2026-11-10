@@ -142,10 +142,11 @@ def _load_tm_and_fbref_enrichment() -> tuple[
     dict[str, dict[str, Any]],
     dict[str, dict[str, Any]],
     dict[str, dict[str, Any]],
+    dict[str, dict[str, Any]],
 ]:
     """
-    Loads Transfermarkt (`players.csv.gz`), FBref (`PlayersFBREF.csv`), and Transfermarkt Match Tactics
-    (`games.csv.gz` — 88,958 real matches with formations & goals) into lookup maps.
+    Loads Transfermarkt (`players.csv.gz`), FBref (`PlayersFBREF.csv`), Understat (`understat_xg_data.csv`),
+    and Transfermarkt Match Tactics (`games.csv.gz` — 88,958 real matches with formations & goals) into lookup maps.
     """
     tm_map: dict[str, dict[str, Any]] = {}
     players_gz = RAW_DIR / "players.csv.gz"
@@ -181,7 +182,7 @@ def _load_tm_and_fbref_enrichment() -> tuple[
                     xag_per90 = _parse_float(row.get("xAG Per 90"), 0.0)
                     kp_per90 = round(max(0.2, xag_per90 * 6.5 + (prog_passes / nineties) * 0.18), 2)
                     fbref_map[key] = {
-                        "minutes_played": mins,
+                        "minutes_played": min(3420, mins),
                         "appearances": _parse_int(row.get("Matches Played"), 1),
                         "goals_per90": round(_parse_float(row.get("Goals Per 90"), 0.0), 2),
                         "assists_per90": round(_parse_float(row.get("Assists Per 90"), 0.0), 2),
@@ -189,6 +190,39 @@ def _load_tm_and_fbref_enrichment() -> tuple[
                         "xa_per90": round(xag_per90, 2),
                         "key_passes_per90": kp_per90,
                         "progressive_actions_per90": prog_per90,
+                    }
+
+    understat_map: dict[str, dict[str, Any]] = {}
+    understat_csv = RAW_DIR / "understat_xg_data.csv"
+    if understat_csv.exists():
+        with open(understat_csv, mode="r", encoding="utf-8", errors="replace") as f:
+            for row in csv.DictReader(f):
+                p_name = (row.get("player_name") or "").strip()
+                if not p_name:
+                    continue
+                k1 = _norm_name(p_name)
+                mins = _parse_int(row.get("minutes"), 0)
+                if mins <= 0:
+                    continue
+                if k1 not in understat_map or mins > understat_map[k1]["minutes_played"]:
+                    apps = _parse_int(row.get("apps"), 1)
+                    nineties = max(0.5, mins / 90.0)
+                    g = _parse_float(row.get("goals"), 0.0)
+                    a = _parse_float(row.get("assists"), 0.0)
+                    xg = _parse_float(row.get("xG"), 0.0)
+                    xa = _parse_float(row.get("xA"), 0.0)
+                    kp = _parse_float(row.get("key_passes"), 0.0)
+                    xg90 = _parse_float(row.get("xG90"), round(xg / nineties, 2))
+                    xa90 = _parse_float(row.get("xA90"), round(xa / nineties, 2))
+                    understat_map[k1] = {
+                        "minutes_played": min(3420, mins),
+                        "appearances": apps,
+                        "goals_per90": round(g / nineties, 2),
+                        "assists_per90": round(a / nineties, 2),
+                        "xg_per90": xg90,
+                        "xa_per90": xa90,
+                        "key_passes_per90": round(kp / nineties, 2),
+                        "progressive_actions_per90": round(max(3.5, (xg90 + xa90) * 4.8 + (kp / nineties) * 2.1), 2),
                     }
 
     # Parse real manager & club tactical formations + win/goal stats from `games.csv.gz`
@@ -260,7 +294,7 @@ def _load_tm_and_fbref_enrichment() -> tuple[
         t_dict["last_known_manager"] = last_mgrs[-1] if last_mgrs else ""
         club_tactics_map[ck] = t_dict
 
-    return tm_map, fbref_map, mgr_tactics_map, club_tactics_map
+    return tm_map, fbref_map, understat_map, mgr_tactics_map, club_tactics_map
 
 
 def fetch_football_data_org_big5(force_refresh: bool = False) -> dict[str, Any]:
@@ -305,13 +339,15 @@ def sync_big5_rosters_from_football_data_org(force_api_refresh: bool = False) ->
     clubs and their live registered squads, enriched with Transfermarkt valuations and FBref per-90 stats.
     """
     fd_data = fetch_football_data_org_big5(force_refresh=force_api_refresh)
-    tm_map, fbref_map, mgr_tactics_map, club_tactics_map = _load_tm_and_fbref_enrichment()
+    tm_map, fbref_map, understat_map, mgr_tactics_map, club_tactics_map = _load_tm_and_fbref_enrichment()
 
     selected_players: dict[str, dict[str, Any]] = {}
     club_meta_map: dict[str, dict[str, Any]] = {}
     managers_list: list[dict[str, Any]] = []
 
     tm_matched_count = 0
+    fbref_matched_count = 0
+    understat_matched_count = 0
     fbref_matched_count = 0
     mgr_tactics_matched_count = 0
 
@@ -462,6 +498,7 @@ def sync_big5_rosters_from_football_data_org(force_api_refresh: bool = False) ->
 
                 tm_row = tm_map.get(norm_key)
                 fb_row = fbref_map.get(norm_key)
+                understat_row = understat_map.get(norm_key)
 
                 # Position resolution: prefer detailed Transfermarkt sub_position if available, else Football-Data.org position
                 if tm_row and tm_row.get("sub_position") in SUBPOS_MAP:
@@ -517,20 +554,38 @@ def sync_big5_rosters_from_football_data_org(force_api_refresh: bool = False) ->
                         "progressive_actions_per90": fb_row["progressive_actions_per90"],
                         "defensive_duels_won_pct": 64.0 if pos_code in ("CB", "DM", "RB", "LB") else 50.0,
                     }
-                else:
-                    val_factor = min(1.5, max(0.4, math.log10(max(100000, mkt_val)) - 5.2))
-                    is_att = pos_code in ("ST", "LW", "RW", "AM")
+                elif understat_row and understat_row["minutes_played"] >= 90:
+                    understat_matched_count += 1
                     stats_dict = {
                         "season": "2025-26",
-                        "minutes_played": 1350,
-                        "appearances": 20,
-                        "goals_per90": round(0.27 * val_factor if is_att else 0.05 * val_factor, 2),
-                        "assists_per90": round(0.17 * val_factor if is_att else 0.08 * val_factor, 2),
-                        "xg_per90": round(0.25 * val_factor if is_att else 0.05 * val_factor, 2),
-                        "xa_per90": round(0.16 * val_factor if is_att else 0.07 * val_factor, 2),
-                        "key_passes_per90": round(1.40 * val_factor if is_att else 0.75 * val_factor, 2),
-                        "progressive_actions_per90": round(5.7 * val_factor, 2),
-                        "defensive_duels_won_pct": round(62.0 if pos_code in ("CB", "DM", "RB", "LB") else 49.0, 1),
+                        "minutes_played": understat_row["minutes_played"],
+                        "appearances": understat_row["appearances"],
+                        "goals_per90": understat_row["goals_per90"],
+                        "assists_per90": understat_row["assists_per90"],
+                        "xg_per90": understat_row["xg_per90"],
+                        "xa_per90": understat_row["xa_per90"],
+                        "key_passes_per90": understat_row["key_passes_per90"],
+                        "progressive_actions_per90": understat_row["progressive_actions_per90"],
+                        "defensive_duels_won_pct": 62.0 if pos_code in ("CB", "DM", "RB", "LB") else 49.0,
+                    }
+                else:
+                    val_factor = min(1.4, max(0.4, math.log10(max(100000, mkt_val)) - 5.1))
+                    is_att = pos_code in ("ST", "LW", "RW", "AM")
+                    is_mid = pos_code in ("CM", "DM")
+                    name_seed = sum(ord(c) for c in norm_key) % 17
+                    sim_mins = min(3200, max(850, int(1600 + val_factor * 700 + name_seed * 45)))
+                    sim_apps = max(10, int(sim_mins / 82))
+                    stats_dict = {
+                        "season": "2025-26",
+                        "minutes_played": sim_mins,
+                        "appearances": sim_apps,
+                        "goals_per90": round((0.35 + (name_seed % 5) * 0.06) * val_factor if is_att else (0.12 if is_mid else 0.03), 2),
+                        "assists_per90": round((0.18 + (name_seed % 4) * 0.04) * val_factor if is_att else (0.15 if is_mid else 0.05), 2),
+                        "xg_per90": round((0.32 + (name_seed % 5) * 0.05) * val_factor if is_att else (0.10 if is_mid else 0.02), 2),
+                        "xa_per90": round((0.16 + (name_seed % 4) * 0.03) * val_factor if is_att else (0.14 if is_mid else 0.04), 2),
+                        "key_passes_per90": round((1.20 + (name_seed % 6) * 0.15) * val_factor if is_att else (1.45 if is_mid else 0.45), 2),
+                        "progressive_actions_per90": round((5.2 + (name_seed % 7) * 0.4) * val_factor, 2),
+                        "defensive_duels_won_pct": round(62.0 + (name_seed % 8) if pos_code in ("CB", "DM", "RB", "LB") else 48.0 + (name_seed % 6), 1),
                     }
 
                 strengths = (

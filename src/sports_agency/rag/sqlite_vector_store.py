@@ -160,6 +160,46 @@ class SQLiteAgencyVectorStore:
         conn.commit()
         conn.close()
 
+    def build_markdown_regulation_chunks(self) -> list[dict[str, str]]:
+        """
+        Parses `data/docs/regulations.md` and splits using LangChain
+        RecursiveCharacterTextSplitter(chunk_size=800, chunk_overlap=150).
+        """
+        chunks: list[dict[str, str]] = []
+        if not self.docs_path.exists():
+            return chunks
+
+        raw_text = self.docs_path.read_text(encoding="utf-8")
+        sections = re.split(r"\n(?=## \[문서 )", raw_text)
+        for idx, sec in enumerate(sections):
+            sec = sec.strip()
+            if not sec.startswith("## [문서"):
+                continue
+            lines = sec.splitlines()
+            title = lines[0].replace("## ", "").strip()
+            source = "FIFA / UEFA / FA Official Regulations"
+            eff_date = "2024-2026 시즌"
+
+            for line in lines[1:6]:
+                if "**출처**:" in line:
+                    source = line.split("**출처**:")[-1].strip()
+                elif "**기준일**:" in line:
+                    eff_date = line.split("**기준일**:")[-1].strip()
+
+            split_texts = self.text_splitter.split_text(sec)
+            for c_idx, chunk_text in enumerate(split_texts, start=1):
+                chunks.append(
+                    {
+                        "chunk_id": f"md_doc_{idx}_chunk_{c_idx}",
+                        "doc_category": self._infer_category(title),
+                        "title": f"{title} (Part {c_idx})",
+                        "source_citation": source,
+                        "effective_date": eff_date,
+                        "content": chunk_text.strip(),
+                    }
+                )
+        return chunks
+
     def build_all_regulation_chunks(self) -> list[dict[str, str]]:
         """
         Loads BOTH `data/docs/regulations.md` AND all official PDF files in `data/docs/pdfs/*.pdf`
@@ -168,36 +208,7 @@ class SQLiteAgencyVectorStore:
         chunks: list[dict[str, str]] = []
 
         # 1. Parse `data/docs/regulations.md` with chunk_size=800, chunk_overlap=150
-        if self.docs_path.exists():
-            raw_text = self.docs_path.read_text(encoding="utf-8")
-            sections = re.split(r"\n(?=## \[문서 )", raw_text)
-            for idx, sec in enumerate(sections):
-                sec = sec.strip()
-                if not sec.startswith("## [문서"):
-                    continue
-                lines = sec.splitlines()
-                title = lines[0].replace("## ", "").strip()
-                source = "FIFA / UEFA / FA Official Regulations"
-                eff_date = "2024-2026 시즌"
-
-                for line in lines[1:6]:
-                    if "**출처**:" in line:
-                        source = line.split("**출처**:")[-1].strip()
-                    elif "**기준일**:" in line:
-                        eff_date = line.split("**기준일**:")[-1].strip()
-
-                split_texts = self.text_splitter.split_text(sec)
-                for c_idx, chunk_text in enumerate(split_texts, start=1):
-                    chunks.append(
-                        {
-                            "chunk_id": f"md_doc_{idx}_chunk_{c_idx}",
-                            "doc_category": self._infer_category(title + " " + chunk_text),
-                            "title": f"{title} (Part {c_idx})",
-                            "source_citation": source,
-                            "effective_date": eff_date,
-                            "content": chunk_text.strip(),
-                        }
-                    )
+        chunks.extend(self.build_markdown_regulation_chunks())
 
         # 2. Parse official FIFA PDFs in `data/docs/pdfs/*.pdf` with chunk_size=800, chunk_overlap=150
         if self.pdfs_dir.exists():
@@ -373,6 +384,52 @@ class SQLiteAgencyVectorStore:
             "rag_regulations_embedding_model": reg_model_used,
             "scouting_notes_chunks": scout_count,
             "scouting_notes_embedding_model": scout_model_used,
+        }
+
+    def reindex_markdown_regulations_only(self) -> dict[str, Any]:
+        """
+        Re-indexes ONLY the markdown documents from `data/docs/regulations.md`
+        into `rag_regulations_vec` without re-embedding the 679 FIFA PDF chunks.
+        """
+        md_chunks = self.build_markdown_regulation_chunks()
+        if not md_chunks:
+            return {"status": "no_chunks", "count": 0}
+
+        texts = [f"{c['title']}\n출처: {c['source_citation']}\n{c['content']}" for c in md_chunks]
+        vectors, reg_model_used = ROUTER.embed_texts(texts, use_light_model=False)
+
+        conn = self._get_conn()
+        cur = conn.cursor()
+        cur.execute("DELETE FROM rag_regulations_vec WHERE chunk_id LIKE 'md_doc_%'")
+        for chunk, vec in zip(md_chunks, vectors):
+            cur.execute(
+                """
+                INSERT OR REPLACE INTO rag_regulations_vec
+                (chunk_id, doc_category, title, source_citation, effective_date, content, embedding_model, embedding_json)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    chunk["chunk_id"],
+                    chunk["doc_category"],
+                    chunk["title"],
+                    chunk["source_citation"],
+                    chunk["effective_date"],
+                    chunk["content"],
+                    reg_model_used,
+                    json.dumps(vec),
+                ),
+            )
+        conn.commit()
+        cur.execute("SELECT COUNT(*) FROM rag_regulations_vec")
+        total_count = cur.fetchone()[0]
+        cur.execute("SELECT COUNT(*) FROM rag_regulations_vec WHERE chunk_id LIKE 'md_doc_%'")
+        md_count = cur.fetchone()[0]
+        conn.close()
+        return {
+            "status": "success",
+            "reindexed_md_chunks": md_count,
+            "total_regulations_chunks": total_count,
+            "model_used": reg_model_used,
         }
 
     def search_regulations(

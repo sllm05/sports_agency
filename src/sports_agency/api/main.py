@@ -25,13 +25,31 @@ from pydantic import BaseModel, Field
 from mcp_server.football_mcp_server import (
     analyze_career_timing_and_path,
     calculate_psr_and_tax_breakdown,
+    compare_datamb_peer_matrix,
     discover_undervalued_prospects,
+    enroll_target_as_agency_client,
+    generate_client_recruitment_pitch_deck,
     get_agency_deep_analytics_overview,
+    get_agency_portfolio_overview,
     get_player_complete_data,
     list_agency_managers,
     list_agency_players,
+    list_agency_recruitment_targets,
+    list_agency_teams,
     register_custom_external_client,
     scan_bosman_and_replacement_targets,
+    terminate_agency_client_contract,
+    negotiate_client_club_renewal,
+    negotiate_client_club_transfer,
+    sign_client_to_new_club,
+    toggle_target_watchlist,
+    check_target_watchlist,
+)
+from sports_agency.auth_service import (
+    authenticate_user,
+    get_admin_dashboard_users,
+    register_user,
+    update_user_status,
 )
 from sports_agency.config import CONFIG, PROJECT_ROOT, ROUTER
 from sports_agency.graph.agency_workflow import WORKFLOW_MANAGER
@@ -166,9 +184,115 @@ class FootballDataSyncRequest(BaseModel):
     force_api_refresh: bool = Field(False, description="True일 경우 Football-Data.org v4 API를 새로 호출하여 96개 구단 스쿼드 전체 갱신")
 
 
+class RecruitmentPitchRequest(BaseModel):
+    target_id: int = Field(..., description="영입 타깃 ID (선수 ID 또는 감독 ID)")
+    target_type: str = Field("PLAYER", description="PLAYER 또는 MANAGER")
+
+
+class EnrollClientRequest(BaseModel):
+    target_id: int = Field(..., description="영입 타깃 ID")
+    target_type: str = Field("PLAYER", description="PLAYER 또는 MANAGER")
+    lead_agent: str = Field("Daniel Kim (FIFA Licensed)", description="전담 수석 에이전트 이름")
+    commission_pct: float = Field(7.0, ge=1.0, le=15.0, description="대리 수수료율(%)")
+
+
+class TerminateContractRequest(BaseModel):
+    client_id: int = Field(..., description="해지 대상 고객 ID")
+    client_type: str = Field("PLAYER", description="PLAYER 또는 MANAGER")
+    reason: str = Field("상호 합의 계약 해지", description="해지 사유")
+
+
+class ClientRenewalRequest(BaseModel):
+    client_id: int = Field(..., description="재계약 대상 고객 ID")
+    client_type: str = Field("PLAYER", description="PLAYER 또는 MANAGER")
+    new_weekly_wage_eur: int = Field(100000, description="재계약 합의 주급 (EUR)")
+    contract_years: int = Field(3, ge=1, le=6, description="계약 연장 기간 (년)")
+    new_buyout_eur: int | None = Field(None, description="신설/인상 바이아웃 금액 (EUR)")
+    signing_bonus_eur: int = Field(0, description="계약금/서명 보너스 (EUR)")
+
+
+class ClientTransferRequest(BaseModel):
+    client_id: int = Field(..., description="이적 대상 고객 ID")
+    client_type: str = Field("PLAYER", description="PLAYER 또는 MANAGER")
+    destination_club: str = Field("토트넘 홋스퍼 FC", description="이적할 신규 구단명")
+    destination_league: str = Field("Premier League", description="이적 구단 리그명")
+    transfer_fee_eur: int = Field(35000000, description="합의 이적료 (EUR)")
+    new_weekly_wage_eur: int = Field(150000, description="신규 주급 (EUR)")
+    contract_years: int = Field(4, ge=1, le=6, description="신규 계약 기간 (년)")
+
+
+class ClientSignClubRequest(BaseModel):
+    client_id: int = Field(..., description="입단 대상 고객 ID (FA)")
+    client_type: str = Field("PLAYER", description="PLAYER 또는 MANAGER")
+    destination_club: str = Field("FC 메트로폴리스", description="입단할 구단명")
+    destination_league: str = Field("가상 슈퍼리그", description="입단 구단 리그명")
+    weekly_wage_eur: int = Field(80000, description="합의 주급 (EUR)")
+    contract_years: int = Field(2, ge=1, le=5, description="계약 기간 (년)")
+
+
+class WatchlistToggleRequest(BaseModel):
+    target_id: int = Field(..., description="관심 등록/해제 대상 선수 또는 감독 ID")
+    target_type: str = Field("PLAYER", description="PLAYER 또는 MANAGER")
+
+
+class AuthLoginRequest(BaseModel):
+    email: str = Field(..., description="로그인 이메일 (예: admin@agent.com)")
+    password: str = Field(..., description="비밀번호 (예: password1234)")
+
+
+class AuthSignupRequest(BaseModel):
+    email: str = Field(..., description="직원 등록 이메일")
+    password: str = Field(..., description="비밀번호")
+    full_name: str = Field(..., description="직원 성명")
+    department: str = Field("선수스카우팅팀", description="소속 부서 (선수스카우팅팀, 법무계약팀, 재무전략팀, 전술데이터팀)")
+
+
+class AdminApproveRequest(BaseModel):
+    user_id: int = Field(..., description="승인/반려할 대상 회원 ID")
+    action: str = Field("APPROVE", description="APPROVE 또는 REJECT")
+    approver_email: str = Field("admin@agent.com")
+
+
 # ============================================================================
 # Endpoints
 # ============================================================================
+@app.post("/api/auth/login")
+def api_auth_login(req: AuthLoginRequest) -> dict[str, Any]:
+    """Firebase/Local Auth Login: Verifies credentials & checks admin approval status."""
+    res = authenticate_user(email=req.email, password=req.password)
+    if not res.get("success"):
+        status_code = 403 if res.get("status") in ("PENDING", "REJECTED") else 401
+        raise HTTPException(status_code=status_code, detail=res.get("error", "로그인 실패"))
+    return res
+
+
+@app.post("/api/auth/signup")
+def api_auth_signup(req: AuthSignupRequest) -> dict[str, Any]:
+    """Staff Self-Registration: Registers staff with status='PENDING' awaiting Admin approval."""
+    res = register_user(
+        email=req.email,
+        password=req.password,
+        full_name=req.full_name,
+        department=req.department,
+    )
+    if not res.get("success"):
+        raise HTTPException(status_code=400, detail=res.get("error", "회원가입 실패"))
+    return res
+
+
+@app.get("/api/admin/users")
+def api_get_admin_users() -> dict[str, Any]:
+    """Admin Console: Returns today's pending/new signups and approved agency staff roster."""
+    return get_admin_dashboard_users()
+
+
+@app.post("/api/admin/approve-user")
+def api_approve_user(req: AdminApproveRequest) -> dict[str, Any]:
+    """Admin Console: Approves or rejects staff member account."""
+    res = update_user_status(user_id=req.user_id, action=req.action, approver_email=req.approver_email)
+    if not res.get("success"):
+        raise HTTPException(status_code=400, detail=res.get("error", "승인 처리 실패"))
+    return res
 @app.get("/", response_class=HTMLResponse)
 def serve_dashboard() -> HTMLResponse:
     index_file = STATIC_DIR / "index.html"
@@ -246,21 +370,35 @@ def api_list_players() -> dict[str, Any]:
     players = list_agency_players()
     korean_players = [p for p in players if p.get("nationality") == "South Korea"]
     peer_players = [p for p in players if p.get("nationality") != "South Korea"]
+    agency_clients = [p for p in players if p.get("is_agency_client") == 1]
     return {
         "total_count": len(players),
         "korean_roster": korean_players,
         "european_peers": peer_players,
+        "agency_clients": agency_clients,
         "all_players": players,
     }
 
 
 @app.get("/api/managers")
 def api_list_managers() -> dict[str, Any]:
-    """Returns all 96 Big 5 League club head coaches and their real match formations/win-rate tactics."""
+    """Returns head coaches and their tactical profiles."""
     managers = list_agency_managers()
+    agency_managers = [m for m in managers if m.get("manager_id", 0) >= 90000]
     return {
         "total_count": len(managers),
+        "agency_managers": agency_managers,
         "managers": managers,
+    }
+
+
+@app.get("/api/teams")
+def api_list_teams() -> dict[str, Any]:
+    """Returns all 96 Big 5 League clubs and their DataMB 7-axis team metrics."""
+    teams = list_agency_teams()
+    return {
+        "total_count": len(teams),
+        "teams": teams,
     }
 
 
@@ -268,6 +406,124 @@ def api_list_managers() -> dict[str, Any]:
 def api_get_analytics_overview(comp: str = "PL") -> dict[str, Any]:
     """Returns League/UCL standings, club finances, top scorers, global agency market share, and manager profiles."""
     return get_agency_deep_analytics_overview(competition_code=comp)
+
+
+@app.get("/api/agency/portfolio")
+def api_get_agency_portfolio() -> dict[str, Any]:
+    """[Pillar 1: Active Portfolio] Returns all signed players and managers in Antigravity Sports portfolio."""
+    return get_agency_portfolio_overview()
+
+
+@app.get("/api/agency/recruitment-targets")
+def api_list_recruitment_targets(
+    category: str = "ALL",
+    target_type: str = "ALL",
+) -> dict[str, Any]:
+    """[Pillar 2: Recruitment Targets] Returns candidates categorized by UNREPRESENTED, EXPIRING_D6, TIER2_STEPUP, ELITE_MANAGER."""
+    return list_agency_recruitment_targets(category=category, target_type=target_type)
+
+
+@app.post("/api/agency/recruitment-pitch")
+def api_generate_recruitment_pitch(req: RecruitmentPitchRequest) -> dict[str, Any]:
+    """[Pillar 2: Pitch Deck] Synthesizes a 1-Page Client Acquisition Pitch Deck with inline SVGs for player/family or manager."""
+    res = generate_client_recruitment_pitch_deck(target_id=req.target_id, target_type=req.target_type)
+    if "error" in res:
+        raise HTTPException(status_code=404, detail=res["error"])
+    # Ensure both key aliases are present
+    if "markdown_content" in res and "pitch_deck_markdown" not in res:
+        res["pitch_deck_markdown"] = res["markdown_content"]
+    return res
+
+
+@app.post("/api/agency/enroll-client")
+def api_enroll_client(req: EnrollClientRequest) -> dict[str, Any]:
+    """[Pillar 2 -> Pillar 1] Signs and enrolls a recruitment target into Antigravity Sports active portfolio."""
+    res = enroll_target_as_agency_client(
+        target_id=req.target_id,
+        target_type=req.target_type,
+        lead_agent=req.lead_agent,
+        commission_pct=req.commission_pct,
+    )
+    if "error" in res:
+        raise HTTPException(status_code=400, detail=res["error"])
+    return res
+
+
+@app.post("/api/agency/terminate-contract")
+def api_terminate_contract(req: TerminateContractRequest) -> dict[str, Any]:
+    """[Pillar 1 -> Pillar 2] Releases a client from active agency portfolio back to recruitment targets."""
+    res = terminate_agency_client_contract(
+        client_id=req.client_id,
+        client_type=req.client_type,
+        reason=req.reason,
+    )
+    if "error" in res:
+        raise HTTPException(status_code=400, detail=res["error"])
+    return res
+
+
+@app.post("/api/agency/client/renew")
+def api_client_renew_contract(req: ClientRenewalRequest) -> dict[str, Any]:
+    """[Pillar 1: Contract Renewal] Negotiates renewal terms with client's current club."""
+    res = negotiate_client_club_renewal(
+        client_id=req.client_id,
+        client_type=req.client_type,
+        new_weekly_wage_eur=req.new_weekly_wage_eur,
+        contract_years=req.contract_years,
+        new_buyout_eur=req.new_buyout_eur,
+        signing_bonus_eur=req.signing_bonus_eur,
+    )
+    if "error" in res:
+        raise HTTPException(status_code=400, detail=res["error"])
+    return res
+
+
+@app.post("/api/agency/client/transfer")
+def api_client_transfer(req: ClientTransferRequest) -> dict[str, Any]:
+    """[Pillar 1: Club Transfer] Executes transfer for client to a new club."""
+    res = negotiate_client_club_transfer(
+        client_id=req.client_id,
+        client_type=req.client_type,
+        destination_club=req.destination_club,
+        destination_league=req.destination_league,
+        transfer_fee_eur=req.transfer_fee_eur,
+        new_weekly_wage_eur=req.new_weekly_wage_eur,
+        contract_years=req.contract_years,
+    )
+    if "error" in res:
+        raise HTTPException(status_code=400, detail=res["error"])
+    return res
+
+
+@app.post("/api/agency/client/sign-club")
+def api_client_sign_club(req: ClientSignClubRequest) -> dict[str, Any]:
+    """[Pillar 1: FA Signing] Signs an unemployed FA client to a new club."""
+    res = sign_client_to_new_club(
+        client_id=req.client_id,
+        client_type=req.client_type,
+        destination_club=req.destination_club,
+        destination_league=req.destination_league,
+        weekly_wage_eur=req.weekly_wage_eur,
+        contract_years=req.contract_years,
+    )
+    if "error" in res:
+        raise HTTPException(status_code=400, detail=res["error"])
+    return res
+
+
+@app.post("/api/agency/watchlist/toggle")
+def api_toggle_watchlist(req: WatchlistToggleRequest) -> dict[str, Any]:
+    """[Pillar 2: Watchlist Toggle] Toggles candidate into/out of agency recruitment watchlist."""
+    res = toggle_target_watchlist(target_id=req.target_id, target_type=req.target_type)
+    if "error" in res:
+        raise HTTPException(status_code=400, detail=res["error"])
+    return res
+
+
+@app.get("/api/agency/watchlist/check")
+def api_check_watchlist(target_id: int, target_type: str = "PLAYER") -> dict[str, Any]:
+    """[Pillar 2: Watchlist Check] Returns whether a candidate is currently in the active recruitment watchlist."""
+    return check_target_watchlist(target_id=target_id, target_type=target_type)
 
 
 @app.get("/api/players/{player_name}")
@@ -431,6 +687,22 @@ def api_discover_prospects(
         limit=limit,
     )
     return {"count": len(prospects), "prospects": prospects}
+
+
+class DataMBCompareRequest(BaseModel):
+    player_names: list[str] = Field(default_factory=lambda: ["Pedri", "Declan Rice"])
+    position_category: str = "AUTO"
+    season: str = "25/26"
+
+
+@app.post("/api/scout/datamb-compare")
+def api_scout_datamb_compare(req: DataMBCompareRequest) -> dict[str, Any]:
+    """[Scouting Agent Endpoint] Evaluates up to 4 players via DataMB 7-axis percentile radar & generates an AI briefing."""
+    return compare_datamb_peer_matrix(
+        player_names=req.player_names,
+        position_category=req.position_category,
+        season=req.season,
+    )
 
 
 class PrecisionCheckRequest(BaseModel):

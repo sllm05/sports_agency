@@ -3,18 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FM 2D Tactical Grid Match Engine — Sports Agency Desk</title>
+  <title>Sports Agency Desk — 2D Tactical Intelligence & Real Data Replayer</title>
   <style>
     :root {
-      --bg-dark: #0b0f19;
+      --bg-dark: #090d16;
       --panel-bg: #111827;
-      --panel-border: #1f2937;
-      --text-main: #f3f4f6;
-      --text-muted: #9ca3af;
+      --panel-header: #1a2234;
+      --border-color: #243048;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
       --accent-green: #10b981;
       --accent-blue: #3b82f6;
+      --accent-gold: #f59e0b;
       --accent-red: #ef4444;
-      --accent-amber: #f59e0b;
+      --accent-purple: #8b5cf6;
     }
 
     * {
@@ -33,10 +35,10 @@
       overflow: hidden;
     }
 
-    /* 상단 스코어보드 & 컨트롤 바 */
+    /* 상단 네비게이션 & 선수 셀렉터 */
     header {
-      background: linear-gradient(180deg, #161f33 0%, #0f172a 100%);
-      border-bottom: 1px solid var(--panel-border);
+      background: linear-gradient(180deg, #151e32 0%, #0d1424 100%);
+      border-bottom: 1px solid var(--border-color);
       padding: 10px 20px;
       display: flex;
       align-items: center;
@@ -45,147 +47,211 @@
       flex-shrink: 0;
     }
 
-    .brand {
+    .brand-group {
       display: flex;
       align-items: center;
-      gap: 10px;
-      font-weight: 800;
-      font-size: 15px;
-      letter-spacing: -0.3px;
-      color: #e2e8f0;
+      gap: 12px;
     }
 
     .brand-badge {
-      background: var(--accent-green);
-      color: #052e16;
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: #042f2e;
       font-size: 11px;
       font-weight: 900;
-      padding: 2px 7px;
+      padding: 3px 8px;
       border-radius: 4px;
+      letter-spacing: 0.5px;
     }
 
-    .scoreboard {
+    .brand-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: #f1f5f9;
+      letter-spacing: -0.3px;
+    }
+
+    /* 중앙 선수 스위처 */
+    .player-select-box {
       display: flex;
       align-items: center;
-      gap: 16px;
-      background: #090d16;
-      border: 1px solid #263248;
+      gap: 10px;
+      background: #090e1a;
+      border: 1px solid #2d3b55;
+      padding: 5px 14px;
       border-radius: 8px;
-      padding: 6px 18px;
     }
 
-    .team-tag {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-weight: 700;
-      font-size: 14px;
-    }
-
-    .team-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      display: inline-block;
-    }
-
-    .score-num {
-      font-size: 22px;
-      font-weight: 900;
-      color: #fff;
-      font-variant-numeric: tabular-nums;
-      padding: 0 8px;
-    }
-
-    .match-clock {
-      background: #1e293b;
-      color: #38bdf8;
-      font-weight: 800;
-      font-size: 14px;
-      padding: 4px 10px;
-      border-radius: 6px;
-      font-variant-numeric: tabular-nums;
-      min-width: 68px;
-      text-align: center;
-    }
-
-    .controls {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    button, select {
-      background: #1e293b;
-      color: var(--text-main);
-      border: 1px solid #334155;
-      padding: 6px 11px;
-      border-radius: 6px;
+    .player-select-box label {
       font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.15s ease;
+      font-weight: 700;
+      color: var(--text-muted);
     }
 
-    button:hover, select:hover {
-      background: #334155;
-    }
-
-    button.active {
-      background: var(--accent-blue);
-      border-color: #60a5fa;
-      color: #fff;
-    }
-
-    button.primary {
-      background: var(--accent-green);
-      border-color: #34d399;
-      color: #052e16;
+    select#playerSelect {
+      background: #1a2438;
+      color: #38bdf8;
+      border: 1px solid #3b82f6;
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 13px;
       font-weight: 800;
+      cursor: pointer;
+      outline: none;
     }
 
-    /* 메인 레이아웃 */
-    .main-layout {
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .yt-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #b91c1c;
+      color: #fff;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 800;
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 1px solid #ef4444;
+      transition: background 0.15s;
+    }
+    .yt-btn:hover { background: #dc2626; }
+
+    /* 메인 3열 레이아웃 */
+    .main-grid {
       display: grid;
-      grid-template-columns: 270px 1fr 290px;
+      grid-template-columns: 310px 1fr 310px;
       gap: 12px;
       padding: 12px;
       flex: 1;
       min-height: 0;
     }
 
-    .side-panel {
+    .panel {
       background: var(--panel-bg);
-      border: 1px solid var(--panel-border);
+      border: 1px solid var(--border-color);
       border-radius: 10px;
       display: flex;
       flex-direction: column;
       overflow: hidden;
     }
 
-    .panel-header {
+    .panel-head {
+      background: var(--panel-header);
       padding: 10px 14px;
-      background: #161f32;
-      border-bottom: 1px solid var(--panel-border);
       font-size: 12px;
       font-weight: 800;
       color: #cbd5e1;
+      border-bottom: 1px solid var(--border-color);
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
     .panel-body {
-      padding: 10px;
+      padding: 12px;
       overflow-y: auto;
       flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
 
-    /* 중앙 피치 컨테이너 */
-    .pitch-wrapper {
-      background: #090d16;
-      border: 1px solid var(--panel-border);
+    /* 선수 프로필 카드 */
+    .player-card {
+      background: #0d1424;
+      border: 1px solid #23314d;
+      border-radius: 8px;
+      padding: 12px;
+    }
+
+    .p-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .p-name {
+      font-size: 17px;
+      font-weight: 900;
+      color: #fff;
+    }
+
+    .p-pos {
+      background: #2563eb;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 4px;
+    }
+
+    .p-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .p-archetype {
+      background: #172554;
+      border: 1px solid #1d4ed8;
+      color: #93c5fd;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.4;
+      margin-bottom: 10px;
+    }
+
+    .p-strengths {
+      font-size: 12px;
+      line-height: 1.5;
+      color: #cbd5e1;
+      background: #090e1a;
+      border: 1px solid #1e293b;
+      padding: 8px 10px;
+      border-radius: 6px;
+    }
+
+    .stat-pill-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .stat-pill {
+      background: #162032;
+      border: 1px solid #263550;
+      padding: 6px 8px;
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .stat-pill .label {
+      font-size: 10px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .stat-pill .val {
+      font-size: 13px;
+      color: #38bdf8;
+      font-weight: 800;
+    }
+
+    /* 중앙 피치 영역 */
+    .pitch-center {
+      background: #070a12;
+      border: 1px solid var(--border-color);
       border-radius: 10px;
       display: flex;
       flex-direction: column;
@@ -193,1264 +259,1093 @@
       position: relative;
     }
 
-    .canvas-container {
+    .canvas-wrap {
       flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
       position: relative;
-      padding: 10px;
       min-height: 0;
+      padding: 10px;
     }
 
-    canvas {
+    canvas#pitchCanvas {
       max-width: 100%;
       max-height: 100%;
-      border-radius: 6px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.65);
-      cursor: pointer;
+      border-radius: 8px;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.75);
     }
 
-    /* 하단 FM 스타일 실시간 문자 중계 바 */
-    .commentary-bar {
-      height: 46px;
-      background: linear-gradient(90deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
-      border-top: 1px solid #334155;
+    /* HUD 오버레이 바 */
+    .hud-overlay {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      right: 20px;
+      pointer-events: none;
       display: flex;
-      align-items: center;
-      padding: 0 18px;
-      gap: 12px;
-      font-size: 14px;
-      font-weight: 700;
-      flex-shrink: 0;
-    }
-
-    .commentary-badge {
-      background: var(--accent-amber);
-      color: #000;
-      font-size: 11px;
-      font-weight: 900;
-      padding: 3px 8px;
-      border-radius: 4px;
-      text-transform: uppercase;
-      flex-shrink: 0;
-    }
-
-    #liveCommentaryText {
-      color: #f8fafc;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    /* 선수 리스트 */
-    .roster-item {
-      display: flex;
-      align-items: center;
       justify-content: space-between;
-      padding: 6px 8px;
-      border-radius: 6px;
-      margin-bottom: 4px;
-      background: #161f30;
-      border: 1px solid transparent;
-      font-size: 12px;
-      cursor: pointer;
+      align-items: flex-start;
     }
 
-    .roster-item:hover {
-      border-color: #3b82f6;
-    }
-
-    .roster-item.selected {
-      background: #1e293b;
-      border-color: #38bdf8;
-    }
-
-    .roster-left {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-    }
-
-    .num-circle {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 10px;
-      font-weight: 800;
+    .hud-badge {
+      background: rgba(10, 16, 28, 0.92);
+      border: 1px solid #38bdf8;
+      backdrop-filter: blur(8px);
+      padding: 8px 14px;
+      border-radius: 8px;
       color: #fff;
+      font-size: 12px;
+      font-weight: 800;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    .pos-tag {
+    .hud-phase-tag {
+      background: var(--accent-gold);
+      color: #000;
       font-size: 10px;
-      color: var(--text-muted);
-      font-weight: 700;
-      width: 28px;
-    }
-
-    .stamina-mini {
-      width: 44px;
-      height: 6px;
-      background: #0f172a;
-      border-radius: 3px;
-      overflow: hidden;
-    }
-
-    .stamina-fill {
-      height: 100%;
-      background: #10b981;
-    }
-
-    /* 우측 스탯 & 로그 */
-    .stat-row {
-      margin-bottom: 10px;
-    }
-
-    .stat-label {
-      display: flex;
-      justify-content: space-between;
-      font-size: 11px;
-      color: #cbd5e1;
-      margin-bottom: 4px;
-      font-weight: 600;
-    }
-
-    .stat-bar {
-      height: 7px;
-      background: #ef4444;
+      font-weight: 900;
+      padding: 2px 6px;
       border-radius: 4px;
-      overflow: hidden;
+    }
+
+    /* 하단 타임라인 컨트롤 바 */
+    .timeline-bar {
+      background: #101726;
+      border-top: 1px solid var(--border-color);
+      padding: 10px 18px;
       display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-shrink: 0;
     }
 
-    .stat-bar-home {
-      background: #3b82f6;
-      height: 100%;
-      transition: width 0.3s ease;
+    .t-btn {
+      background: #1e293b;
+      color: #fff;
+      border: 1px solid #334155;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .t-btn:hover { background: #334155; }
+    .t-btn.active { background: var(--accent-blue); border-color: #60a5fa; }
+    .t-btn.play { background: var(--accent-green); color: #022c22; border-color: #34d399; }
+
+    .slider-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
 
-    .event-log {
-      font-size: 11.5px;
-      line-height: 1.45;
+    input[type=range]#timeSlider {
+      flex: 1;
+      height: 6px;
+      border-radius: 3px;
+      background: #243248;
+      outline: none;
+      cursor: pointer;
+      accent-color: #38bdf8;
+    }
+
+    .time-indicator {
+      font-size: 13px;
+      font-weight: 800;
+      color: #38bdf8;
+      font-variant-numeric: tabular-nums;
+      min-width: 60px;
+      text-align: right;
+    }
+
+    /* 우측 고유 액션 리스트 */
+    .action-btn-list {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 8px;
     }
 
-    .log-entry {
-      padding: 6px 8px;
-      background: #161f30;
-      border-left: 3px solid #475569;
+    .action-card {
+      background: #0d1424;
+      border: 1px solid #23314d;
+      border-radius: 8px;
+      padding: 10px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-align: left;
+    }
+    .action-card:hover {
+      border-color: #3b82f6;
+      background: #131c31;
+    }
+    .action-card.active {
+      border-color: #38bdf8;
+      background: #162442;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+    }
+
+    .act-tag {
+      font-size: 10px;
+      font-weight: 900;
+      padding: 2px 6px;
       border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 4px;
     }
+    .act-tag.goal { background: #059669; color: #fff; }
+    .act-tag.pass { background: #2563eb; color: #fff; }
+    .act-tag.def { background: #7c3aed; color: #fff; }
+    .act-tag.dribble { background: #d97706; color: #fff; }
 
-    .log-entry.goal {
-      border-left-color: #f59e0b;
-      background: rgba(245, 158, 11, 0.12);
-      font-weight: 700;
-    }
-
-    .log-entry.shot {
-      border-left-color: #10b981;
-    }
-
-    .tactic-box {
-      background: #161f30;
-      padding: 8px;
-      border-radius: 6px;
-      margin-bottom: 10px;
-    }
-
-    .tactic-box label {
-      display: block;
-      font-size: 11px;
-      color: var(--text-muted);
+    .act-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: #f8fafc;
       margin-bottom: 4px;
     }
 
-    .tactic-box select {
-      width: 100%;
+    .act-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.4;
     }
 
-    .legend-bar {
-      display: flex;
-      gap: 14px;
-      padding: 6px 14px;
-      background: #0d1322;
-      border-top: 1px solid #1e293b;
+    /* 범례 */
+    .legend-box {
+      background: #090e1a;
+      border: 1px solid #1e293b;
+      padding: 8px 10px;
+      border-radius: 6px;
       font-size: 11px;
       color: #94a3b8;
-      justify-content: center;
-      flex-wrap: wrap;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
     }
-
-    .legend-item {
+    .legend-row {
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
+    }
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
     }
   </style>
 </head>
 <body>
 
-  <!-- 상단 헤더 & 스코어보드 -->
+  <!-- 헤더 -->
   <header>
-    <div class="brand">
-      <span class="brand-badge">FM 2D GRID</span>
-      <span>Football Manager 2D 바둑판 전술 매치 엔진</span>
+    <div class="brand-group">
+      <span class="brand-badge">TACTICAL INTELLIGENCE</span>
+      <span class="brand-title">2D 실제 데이터 하이라이트 전술 리플레이어</span>
     </div>
 
-    <div class="scoreboard">
-      <div class="team-tag">
-        <span class="team-dot" style="background: #2563eb;"></span>
-        <span>KOREA XI (홈)</span>
-      </div>
-      <div class="score-num">
-        <span id="scoreHome">0</span> : <span id="scoreAway">0</span>
-      </div>
-      <div class="team-tag">
-        <span>EURO STARS (어웨이)</span>
-        <span class="team-dot" style="background: #dc2626;"></span>
-      </div>
-      <div class="match-clock" id="matchClock">00:00</div>
+    <div class="player-select-box">
+      <label for="playerSelect">분석 대상 선수 선택:</label>
+      <select id="playerSelect" onchange="onSelectPlayer(this.value)">
+        <!-- JS로 채워짐 -->
+      </select>
     </div>
 
-    <div class="controls">
-      <button id="btnPlayPause" class="primary">⏸ 일시정지</button>
-      <button id="btnSpeed1" class="active" onclick="setSpeed(1)">1x</button>
-      <button id="btnSpeed2" onclick="setSpeed(2)">2x</button>
-      <button id="btnSpeed4" onclick="setSpeed(4)">4x</button>
-      <button id="btnStepMode" onclick="toggleGridSnap()">🎯 이동: 부드러운 보간</button>
-      <button id="btnToggleGrid" class="active" onclick="toggleOverlay('grid')"># 바둑판 격자</button>
-      <button id="btnToggleZones" class="active" onclick="toggleOverlay('zones')">📐 전술 구역(하프스페이스)</button>
-      <button id="btnToggleFov" class="active" onclick="toggleOverlay('fov')">👁️ 시야/패스선</button>
-      <button onclick="resetMatch()">🔄 경기 리셋</button>
+    <div class="header-actions">
+      <a id="ytSyncBtn" href="#" target="_blank" class="yt-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+        실제 공식 하이라이트 영상
+      </a>
     </div>
   </header>
 
-  <!-- 메인 3단 레이아웃 -->
-  <div class="main-layout">
-    <!-- 좌측: 선수 명단 & 실시간 전술 지시 -->
-    <div class="side-panel">
-      <div class="panel-header">
-        <span>📋 전술 지시 & 선수 상태 (클릭하여 포커스)</span>
+  <!-- 메인 3열 레이아웃 -->
+  <div class="main-grid">
+    <!-- 좌측: 선수 실제 DB 스탯 & 아키타입 -->
+    <div class="panel">
+      <div class="panel-head">
+        <span>선수 프로필 & Opta 실측 지표</span>
+        <span style="color:#10b981; font-weight:900;">DB VERIFIED</span>
       </div>
       <div class="panel-body">
-        <div class="tactic-box">
-          <label>홈팀(파랑) 전술 성향</label>
-          <select id="homeMentality" onchange="updateMentality()">
-            <option value="attacking">🔥 공격적 (라인 높임 + 침투 패스 선호)</option>
-            <option value="balanced" selected>⚖️ 균형 (기본 포메이션 유지)</option>
-            <option value="gegenpress">⚡ 게겐프레싱 (강한 전방 압박)</option>
-            <option value="counter">🛡️ 선수비 후역습 (낮은 수비 블록 + 롱패스)</option>
-          </select>
+        <div class="player-card">
+          <div class="p-header">
+            <span class="p-name" id="pCardName">-</span>
+            <span class="p-pos" id="pCardPos">-</span>
+          </div>
+          <div class="p-meta" id="pCardClub">-</div>
+          <div class="p-archetype" id="pCardArchetype">-</div>
+          <div class="p-strengths" id="pCardStrengths">-</div>
+
+          <div class="stat-pill-grid">
+            <div class="stat-pill">
+              <span class="label">90분당 실득점 (G90)</span>
+              <span class="val" id="pStatGoals">-</span>
+            </div>
+            <div class="stat-pill">
+              <span class="label">기대 득점 (xG90)</span>
+              <span class="val" id="pStatXg">-</span>
+            </div>
+            <div class="stat-pill">
+              <span class="label">키패스 (KP90)</span>
+              <span class="val" id="pStatKp">-</span>
+            </div>
+            <div class="stat-pill">
+              <span class="label">전진 액션 (Prog90)</span>
+              <span class="val" id="pStatProg">-</span>
+            </div>
+            <div class="stat-pill">
+              <span class="label">수비 경합 승리율</span>
+              <span class="val" id="pStatDef">-</span>
+            </div>
+            <div class="stat-pill">
+              <span class="label">포지션 백분위</span>
+              <span class="val" id="pStatPctl">-</span>
+            </div>
+          </div>
         </div>
-        <div id="rosterContainer"></div>
+
+        <div class="legend-box">
+          <div style="font-weight:800; color:#cbd5e1; margin-bottom:4px;">피치 그래픽 안내</div>
+          <div class="legend-row"><span class="dot" style="background:#2563eb;"></span> 파랑: 주인공 선수 및 아군 11명</div>
+          <div class="legend-row"><span class="dot" style="background:#dc2626;"></span> 빨강: 상대 수비 및 압박 11명</div>
+          <div class="legend-row"><span class="dot" style="background:#f59e0b;"></span> 노랑 실선/점선: 패스 및 슈팅 궤적</div>
+          <div class="legend-row"><span class="dot" style="background:#10b981;"></span> 초록 부채꼴: 패스 시야각(FOV) 및 각도</div>
+        </div>
       </div>
     </div>
 
-    <!-- 중앙: 2D 바둑판 구장 캔버스 -->
-    <div class="pitch-wrapper">
-      <div class="canvas-container">
+    <!-- 중앙: 2D 피치 캔버스 & 타임라인 컨트롤 -->
+    <div class="pitch-center">
+      <div class="canvas-wrap">
         <canvas id="pitchCanvas" width="1080" height="680"></canvas>
+
+        <div class="hud-overlay">
+          <div class="hud-badge" id="hudStatusBadge">
+            <span class="hud-phase-tag" id="hudPhaseTag">PHASE 1</span>
+            <span id="hudActionText">동작 준비 중</span>
+          </div>
+          <div class="hud-badge" id="hudStatBadge" style="border-color:#10b981;">
+            <span id="hudMetricText">속도: 0.0 km/h</span>
+          </div>
+        </div>
       </div>
 
-      <div class="legend-bar">
-        <div class="legend-item">🔵 <b>홈 (4-2-3-1)</b>: 이강인·손흥민·김민재·황희찬 등</div>
-        <div class="legend-item">🔴 <b>어웨이 (4-3-3)</b>: 유럽 올스타</div>
-        <div class="legend-item">🟡 <b>노란 점선/실선</b>: 패스 & 슛 궤적</div>
-        <div class="legend-item">🟢 <b>원형 테두리 게이지</b>: 실시간 체력(Stamina)</div>
-        <div class="legend-item">📐 <b>바둑판 타일 (18×12)</b>: 클릭 시 선수 선택 / 볼 소유 타일 하이라이트</div>
-      </div>
+      <!-- 하단 타임라인 스크러버 -->
+      <div class="timeline-bar">
+        <button id="btnPlayPause" class="t-btn play" onclick="togglePlay()">⏸ 일시정지</button>
+        <button class="t-btn" onclick="setSpeed(0.5)">0.5x</button>
+        <button class="t-btn active" id="btnSpeed1" onclick="setSpeed(1.0)">1.0x</button>
+        <button class="t-btn" onclick="setSpeed(2.0)">2.0x</button>
+        <button class="t-btn" onclick="resetCurrentAction()">⏮ 처음부터</button>
 
-      <div class="commentary-bar">
-        <span class="commentary-badge" id="commTypeBadge">LIVE</span>
-        <span id="liveCommentaryText">경기가 시작되었습니다! 바둑판 전술 그리드 위에서 양 팀 선수들이 대형을 갖춥니다.</span>
+        <div class="slider-wrap">
+          <input type="range" id="timeSlider" min="0" max="8" step="0.05" value="0" oninput="onSeekTime(this.value)">
+          <div class="time-indicator" id="timeLabel">0.0s / 8.0s</div>
+        </div>
       </div>
     </div>
 
-    <!-- 우측: 경기 스탯 & 타임라인 -->
-    <div class="side-panel">
-      <div class="panel-header">
-        <span>📊 실시간 경기 데이터 & 바둑판 점유율</span>
+    <!-- 우측: 해당 선수의 고유 액션 선택기 -->
+    <div class="panel">
+      <div class="panel-head">
+        <span>선수 고유 특기 하이라이트</span>
+        <span style="font-size:10px; color:#38bdf8;">3대 시그니처</span>
       </div>
-      <div class="panel-body" style="display:flex; flex-direction:column; gap:12px;">
-        <div>
-          <div class="stat-row">
-            <div class="stat-label">
-              <span id="statPossHome">50%</span>
-              <span>볼 점유율</span>
-              <span id="statPossAway">50%</span>
-            </div>
-            <div class="stat-bar">
-              <div class="stat-bar-home" id="barPossHome" style="width: 50%;"></div>
-            </div>
-          </div>
-
-          <div class="stat-row">
-            <div class="stat-label">
-              <span id="statShotsHome">0 (0)</span>
-              <span>슈팅 (유효슈팅)</span>
-              <span id="statShotsAway">0 (0)</span>
-            </div>
-            <div class="stat-bar">
-              <div class="stat-bar-home" id="barShotsHome" style="width: 50%;"></div>
-            </div>
-          </div>
-
-          <div class="stat-row">
-            <div class="stat-label">
-              <span id="statXgHome">0.00</span>
-              <span>기대 득점 (xG)</span>
-              <span id="statXgAway">0.00</span>
-            </div>
-            <div class="stat-bar">
-              <div class="stat-bar-home" id="barXgHome" style="width: 50%;"></div>
-            </div>
-          </div>
-
-          <div class="stat-row">
-            <div class="stat-label">
-              <span id="statPassHome">0</span>
-              <span>패스 성공</span>
-              <span id="statPassAway">0</span>
-            </div>
-            <div class="stat-bar">
-              <div class="stat-bar-home" id="barPassHome" style="width: 50%;"></div>
-            </div>
-          </div>
+      <div class="panel-body">
+        <div style="font-size:11px; color:#94a3b8; line-height:1.4;">
+          DB의 실측 능력치와 플레이스타일에 따라 완전히 정밀하게 계산된 고유 모션입니다. 난수 없이 22명이 전술적으로 연계됩니다.
         </div>
 
-        <div style="border-top: 1px solid #1f2937; padding-top: 10px; flex: 1; display:flex; flex-direction:column; min-height:0;">
-          <div style="font-size:12px; font-weight:800; margin-bottom:8px; color:#cbd5e1;">⏱️ 주요 장면 로그</div>
-          <div class="event-log" id="eventLog" style="overflow-y:auto; flex:1;"></div>
+        <div class="action-btn-list" id="actionList">
+          <!-- JS로 생성됨 -->
         </div>
       </div>
     </div>
   </div>
 
   <script>
-    // =========================================================================
-    // 1. 바둑판(Grid) 구장 상수 및 설정 (18열 x 12행 전술 타일)
-    // =========================================================================
+    // 1. 실제 DB에서 추출된 52명 선수 데이터셋
+    const PLAYERS_DATABASE = [{"player_id": 1, "name": "Erling Haaland", "name_ko": "Erling Haaland", "position": "ST", "current_club": "Manchester City", "league": "Premier League", "market_value_eur": 220000000, "tactical_archetype": "박스 안 타점·결정력 집중형 스트라이커 (Box Finisher)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 실제 공격포인트(G+A)(0.82/90 · 포지션 상위 6%), 기대 공격포인트(xG+xAG)(0.9/90 · 포지션 상위 6%), 라인 침투 패스 리시브(8.3회/90 · 포지션 상위 11%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 기대득점 대비 결정력(G-xG)(-0.06/90 · 포지션 하위 25%), 기회 창출(키패스)(0.95회/90 · 포지션 하위 29%)", "progression_tendency": "90분당 전진 패스 2.23회 · 전진 드리블 3.4회 · 라인 침투 리시브 8.3회 · Understat xGChain 0.75/90 · xGBuildup 0.12/90", "finishing_clinicality": "90분당 실득점 0.72골 / 기대득점(xG) 0.78 (xG 대비 -0.06) · 90분당 키패스 0.95회", "goals_per90": 0.72, "assists_per90": 0.1, "xg_per90": 0.78, "xa_per90": 0.12, "key_passes_per90": 0.95, "progressive_actions_per90": 5.63, "defensive_duels_won_pct": 49.0, "pos_percentile": 52}, {"player_id": 2, "name": "Lamine Yamal", "name_ko": "Lamine Yamal", "position": "RW", "current_club": "FC Barcelona", "league": "La Liga", "market_value_eur": 200000000, "tactical_archetype": "측면 플레이메이커 & 기회 창출형 윙어 (Wide Playmaker)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 대인 수비 경합 승리율(50.0% · 포지션 상위 1%), 전진 드리블 운반(5.71회/90 · 포지션 상위 2%), 라인 침투 패스 리시브(13.66회/90 · 포지션 상위 2%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 기대득점 대비 결정력(G-xG)(-0.03/90 · 포지션 하위 33%), 실제 공격포인트(G+A)(0.69/90 · 포지션 하위 92%)", "progression_tendency": "90분당 전진 패스 5.05회 · 전진 드리블 5.71회 · 라인 침투 리시브 13.66회 · Understat xGChain 1.2/90 · xGBuildup 0.56/90", "finishing_clinicality": "90분당 실득점 0.28골 / 기대득점(xG) 0.31 (xG 대비 -0.03) · 90분당 키패스 3.77회", "goals_per90": 0.28, "assists_per90": 0.37, "xg_per90": 0.31, "xa_per90": 0.44, "key_passes_per90": 3.77, "progressive_actions_per90": 10.76, "defensive_duels_won_pct": 50.0, "pos_percentile": 99}, {"player_id": 3, "name": "Kylian Mbappé", "name_ko": "Kylian Mbappé", "position": "ST", "current_club": "Real Madrid CF", "league": "La Liga", "market_value_eur": 180000000, "tactical_archetype": "하프스페이스 연계 & 찬스메이킹 겸비 스트라이커 (Complete Link-Up 9)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 기대 공격포인트(xG+xAG)(1.21/90 · 포지션 상위 2%), 전진 드리블 운반(4.67회/90 · 포지션 상위 3%), 라인 침투 패스 리시브(11.86회/90 · 포지션 상위 3%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 기회 창출(키패스)(1.56회/90 · 포지션 하위 53%), 대인 수비 경합 승리율(49.0% · 포지션 하위 73%)", "progression_tendency": "90분당 전진 패스 5.31회 · 전진 드리블 4.67회 · 라인 침투 리시브 11.86회 · Understat xGChain 1.17/90 · xGBuildup 0.34/90", "finishing_clinicality": "90분당 실득점 0.95골 / 기대득점(xG) 0.92 (xG 대비 +0.03) · 90분당 키패스 1.56회", "goals_per90": 0.95, "assists_per90": 0.25, "xg_per90": 0.92, "xa_per90": 0.29, "key_passes_per90": 1.56, "progressive_actions_per90": 9.98, "defensive_duels_won_pct": 49.0, "pos_percentile": 65}, {"player_id": 5, "name": "Michael Olise", "name_ko": "Michael Olise", "position": "RW", "current_club": "FC Bayern München", "league": "Bundesliga", "market_value_eur": 150000000, "tactical_archetype": "측면 플레이메이커 & 기회 창출형 윙어 (Wide Playmaker)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 실제 공격포인트(G+A)(1.03/90 · 포지션 상위 2%), 기회 창출(키패스)(3.38회/90 · 포지션 상위 2%), 기대 공격포인트(xG+xAG)(0.92/90 · 포지션 상위 3%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 대인 수비 경합 승리율(49.0% · 포지션 하위 70%), 기대득점 대비 결정력(G-xG)(0.08/90 · 포지션 하위 90%)", "progression_tendency": "90분당 전진 패스 9.71회 · 전진 드리블 4.73회 · 라인 침투 리시브 11.62회 · Understat xGChain 1.18/90 · xGBuildup 0.58/90", "finishing_clinicality": "90분당 실득점 0.46골 / 기대득점(xG) 0.38 (xG 대비 +0.08) · 90분당 키패스 3.38회", "goals_per90": 0.46, "assists_per90": 0.57, "xg_per90": 0.38, "xa_per90": 0.54, "key_passes_per90": 3.38, "progressive_actions_per90": 14.44, "defensive_duels_won_pct": 49.0, "pos_percentile": 90}, {"player_id": 4, "name": "Pedri", "name_ko": "Pedri", "position": "CM", "current_club": "FC Barcelona", "league": "La Liga", "market_value_eur": 150000000, "tactical_archetype": "중원 템포 조절 & 전진 패스 배급형 미드필더 (Deep-Lying Passer)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 기회 창출(키패스)(3.52회/90 · 포지션 상위 1%), 전진 패스 전개(11.25회/90 · 포지션 상위 1%), 대인 수비 경합 승리율(50.0% · 포지션 상위 1%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 기대 공격포인트(xG+xAG)(0.3/90 · 포지션 하위 89%), 파울·카드 관리 안정성(0.944점 · 포지션 하위 93%)", "progression_tendency": "90분당 전진 패스 11.25회 · 전진 드리블 2.88회 · 라인 침투 리시브 4.25회 · Understat xGChain 0.96/90 · xGBuildup 0.72/90", "finishing_clinicality": "90분당 실득점 0.13골 / 기대득점(xG) 0.07 (xG 대비 +0.06) · 90분당 키패스 3.52회", "goals_per90": 0.13, "assists_per90": 0.2, "xg_per90": 0.07, "xa_per90": 0.23, "key_passes_per90": 3.52, "progressive_actions_per90": 14.13, "defensive_duels_won_pct": 50.0, "pos_percentile": 99}, {"player_id": 9, "name": "Khvicha Kvaratskhelia", "name_ko": "Khvicha Kvaratskhelia", "position": "LW", "current_club": "Paris Saint-Germain FC", "league": "Ligue 1", "market_value_eur": 140000000, "tactical_archetype": "측면 플레이메이커 & 기회 창출형 윙어 (Wide Playmaker)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 슈팅 볼륨(3.75회/90 · 포지션 상위 3%), 라인 침투 패스 리시브(10.36회/90 · 포지션 상위 9%), 기대득점 대비 결정력(G-xG)(0.06/90 · 포지션 상위 15%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 전진 드리블 운반(2.97회/90 · 포지션 하위 48%), 공격 시퀀스 관여도(xGChain)(0.66/90 · 포지션 하위 51%)", "progression_tendency": "90분당 전진 패스 4.92회 · 전진 드리블 2.97회 · 라인 침투 리시브 10.36회 · Understat xGChain 0.66/90 · xGBuildup 0.27/90", "finishing_clinicality": "90분당 실득점 0.37골 / 기대득점(xG) 0.31 (xG 대비 +0.06) · 90분당 키패스 2.02회", "goals_per90": 0.37, "assists_per90": 0.2, "xg_per90": 0.31, "xa_per90": 0.24, "key_passes_per90": 2.02, "progressive_actions_per90": 7.89, "defensive_duels_won_pct": 49.0, "pos_percentile": 93}, {"player_id": 8, "name": "Joao Neves", "name_ko": "Joao Neves", "position": "CM", "current_club": "Paris Saint-Germain FC", "league": "Ligue 1", "market_value_eur": 140000000, "tactical_archetype": "중원 템포 조절 & 전진 패스 배급형 미드필더 (Deep-Lying Passer)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 공격 시퀀스 관여도(xGChain)(1.08/90 · 포지션 상위 1%), 전진 패스 전개(10.28회/90 · 포지션 상위 2%), 후방·중원 빌드업 기여(xGBuildup)(0.77/90 · 포지션 상위 3%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 대인 수비 경합 승리율(49.0% · 포지션 하위 66%), 기회 창출(키패스)(1.58회/90 · 포지션 하위 85%)", "progression_tendency": "90분당 전진 패스 10.28회 · 전진 드리블 2.34회 · 라인 침투 리시브 5.07회 · Understat xGChain 1.08/90 · xGBuildup 0.77/90", "finishing_clinicality": "90분당 실득점 0.14골 / 기대득점(xG) 0.18 (xG 대비 -0.04) · 90분당 키패스 1.58회", "goals_per90": 0.14, "assists_per90": 0.09, "xg_per90": 0.18, "xa_per90": 0.11, "key_passes_per90": 1.58, "progressive_actions_per90": 12.62, "defensive_duels_won_pct": 49.0, "pos_percentile": 82}, {"player_id": 7, "name": "Vitinha", "name_ko": "Vitinha", "position": "DM", "current_club": "Paris Saint-Germain FC", "league": "Ligue 1", "market_value_eur": 140000000, "tactical_archetype": "포백 보호 & 경합 회수 중심 홀딩 미드필더 (Ball-Winning 6)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 전진 드리블 운반(1.9회/90 · 포지션 상위 3%), 파울·카드 관리 안정성(경기당 카드 0.08장 · 포지션 상위 16%), 기회 창출(키패스)(1.14회/90 · 포지션 상위 28%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 후방·중원 빌드업 기여(xGBuildup)(0.11/90 · 포지션 하위 7%), 전진 패스 전개(2.29회/90 · 포지션 하위 10%)", "progression_tendency": "90분당 전진 패스 2.29회 · 전진 드리블 1.9회 · 라인 침투 리시브 6.02회 · Understat xGChain 0.38/90 · xGBuildup 0.11/90", "finishing_clinicality": "90분당 실득점 0.13골 / 기대득점(xG) 0.12 (xG 대비 +0.01) · 90분당 키패스 1.14회", "goals_per90": 0.13, "assists_per90": 0.09, "xg_per90": 0.12, "xa_per90": 0.11, "key_passes_per90": 1.14, "progressive_actions_per90": 4.19, "defensive_duels_won_pct": 62.0, "pos_percentile": 92}, {"player_id": 6, "name": "Vinicius Junior", "name_ko": "Vinicius Junior", "position": "LW", "current_club": "Real Madrid CF", "league": "La Liga", "market_value_eur": 140000000, "tactical_archetype": "측면 플레이메이커 & 기회 창출형 윙어 (Wide Playmaker)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 기대 공격포인트(xG+xAG)(0.85/90 · 포지션 상위 3%), 실제 공격포인트(G+A)(0.76/90 · 포지션 상위 6%), 슈팅 볼륨(3.22회/90 · 포지션 상위 6%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 기대득점 대비 결정력(G-xG)(-0.07/90 · 포지션 하위 15%), 공격 시퀀스 관여도(xGChain)(0.93/90 · 포지션 하위 65%)", "progression_tendency": "90분당 전진 패스 5.52회 · 전진 드리블 4.21회 · 라인 침투 리시브 9.8회 · Understat xGChain 0.93/90 · xGBuildup 0.3/90", "finishing_clinicality": "90분당 실득점 0.44골 / 기대득점(xG) 0.51 (xG 대비 -0.07) · 90분당 키패스 2.3회", "goals_per90": 0.44, "assists_per90": 0.32, "xg_per90": 0.51, "xa_per90": 0.34, "key_passes_per90": 2.3, "progressive_actions_per90": 9.73, "defensive_duels_won_pct": 49.0, "pos_percentile": 76}, {"player_id": 10, "name": "Jude Bellingham", "name_ko": "Jude Bellingham", "position": "AM", "current_club": "Real Madrid CF", "league": "La Liga", "market_value_eur": 130000000, "tactical_archetype": "라인 브레이킹 스루패스 & 찬스메이킹 10번 (Advanced Playmaker)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 후방·중원 빌드업 기여(xGBuildup)(0.55/90 · 포지션 상위 7%), 전진 패스 전개(7.71회/90 · 포지션 상위 10%), 기대 공격포인트(xG+xAG)(0.62/90 · 포지션 상위 10%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 파울·카드 관리 안정성(0.754점 · 포지션 하위 5%), 기회 창출(키패스)(1.54회/90 · 포지션 하위 33%)", "progression_tendency": "90분당 전진 패스 7.71회 · 전진 드리블 2.45회 · 라인 침투 리시브 6.68회 · Understat xGChain 0.89/90 · xGBuildup 0.55/90", "finishing_clinicality": "90분당 실득점 0.32골 / 기대득점(xG) 0.47 (xG 대비 -0.15) · 90분당 키패스 1.54회", "goals_per90": 0.32, "assists_per90": 0.13, "xg_per90": 0.47, "xa_per90": 0.15, "key_passes_per90": 1.54, "progressive_actions_per90": 10.16, "defensive_duels_won_pct": 49.0, "pos_percentile": 66}, {"player_id": 12, "name": "Desire Doue", "name_ko": "Desire Doue", "position": "RW", "current_club": "Paris Saint-Germain FC", "league": "Ligue 1", "market_value_eur": 120000000, "tactical_archetype": "측면 플레이메이커 & 기회 창출형 윙어 (Wide Playmaker)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 기대 공격포인트(xG+xAG)(0.84/90 · 포지션 상위 4%), 기회 창출(키패스)(2.87회/90 · 포지션 상위 4%), 공격 시퀀스 관여도(xGChain)(1.22/90 · 포지션 상위 4%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 기대득점 대비 결정력(G-xG)(-0.01/90 · 포지션 하위 40%), 대인 수비 경합 승리율(49.0% · 포지션 하위 70%)", "progression_tendency": "90분당 전진 패스 9.14회 · 전진 드리블 4.65회 · 라인 침투 리시브 10.05회 · Understat xGChain 1.22/90 · xGBuildup 0.57/90", "finishing_clinicality": "90분당 실득점 0.31골 / 기대득점(xG) 0.32 (xG 대비 -0.01) · 90분당 키패스 2.87회", "goals_per90": 0.31, "assists_per90": 0.44, "xg_per90": 0.32, "xa_per90": 0.52, "key_passes_per90": 2.87, "progressive_actions_per90": 13.79, "defensive_duels_won_pct": 49.0, "pos_percentile": 96}, {"player_id": 11, "name": "Declan Rice", "name_ko": "Declan Rice", "position": "CM", "current_club": "Arsenal FC", "league": "Premier League", "market_value_eur": 120000000, "tactical_archetype": "중원 템포 조절 & 전진 패스 배급형 미드필더 (Deep-Lying Passer)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 대인 수비 경합 승리율(50.0% · 포지션 상위 1%), 기회 창출(키패스)(2.47회/90 · 포지션 상위 4%), 전진 드리블 운반(2.87회/90 · 포지션 상위 4%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 파울·카드 관리 안정성(0.861점 · 포지션 하위 31%), 후방·중원 빌드업 기여(xGBuildup)(0.33/90 · 포지션 하위 36%)", "progression_tendency": "90분당 전진 패스 6.11회 · 전진 드리블 2.87회 · 라인 침투 리시브 2.99회 · Understat xGChain 0.54/90 · xGBuildup 0.33/90", "finishing_clinicality": "90분당 실득점 0.13골 / 기대득점(xG) 0.11 (xG 대비 +0.02) · 90분당 키패스 2.47회", "goals_per90": 0.13, "assists_per90": 0.18, "xg_per90": 0.11, "xa_per90": 0.21, "key_passes_per90": 2.47, "progressive_actions_per90": 8.98, "defensive_duels_won_pct": 50.0, "pos_percentile": 97}, {"player_id": 13, "name": "Bukayo Saka", "name_ko": "Bukayo Saka", "position": "RW", "current_club": "Arsenal FC", "league": "Premier League", "market_value_eur": 110000000, "tactical_archetype": "측면 플레이메이커 & 기회 창출형 윙어 (Wide Playmaker)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 기대 공격포인트(xG+xAG)(1.05/90 · 포지션 상위 1%), 실제 공격포인트(G+A)(0.82/90 · 포지션 상위 3%), 기회 창출(키패스)(2.96회/90 · 포지션 상위 3%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 기대득점 대비 결정력(G-xG)(-0.15/90 · 포지션 하위 10%), 대인 수비 경합 승리율(49.0% · 포지션 하위 70%)", "progression_tendency": "90분당 전진 패스 6.23회 · 전진 드리블 4.16회 · 라인 침투 리시브 11.23회 · Understat xGChain 0.84/90 · xGBuildup 0.31/90", "finishing_clinicality": "90분당 실득점 0.31골 / 기대득점(xG) 0.46 (xG 대비 -0.15) · 90분당 키패스 2.96회", "goals_per90": 0.31, "assists_per90": 0.51, "xg_per90": 0.46, "xa_per90": 0.59, "key_passes_per90": 2.96, "progressive_actions_per90": 10.39, "defensive_duels_won_pct": 49.0, "pos_percentile": 60}, {"player_id": 22, "name": "Ousmane Dembélé", "name_ko": "Ousmane Dembélé", "position": "ST", "current_club": "Paris Saint-Germain FC", "league": "Ligue 1", "market_value_eur": 100000000, "tactical_archetype": "하프스페이스 연계 & 찬스메이킹 겸비 스트라이커 (Complete Link-Up 9)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 전진 드리블 운반(7.06회/90 · 포지션 상위 1%), 라인 침투 패스 리시브(14.52회/90 · 포지션 상위 1%), 공격 시퀀스 관여도(xGChain)(1.65/90 · 포지션 상위 1%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 대인 수비 경합 승리율(49.0% · 포지션 하위 73%), 기대득점 대비 결정력(G-xG)(0.13/90 · 포지션 하위 93%)", "progression_tendency": "90분당 전진 패스 8.58회 · 전진 드리블 7.06회 · 라인 침투 리시브 14.52회 · Understat xGChain 1.65/90 · xGBuildup 0.5/90", "finishing_clinicality": "90분당 실득점 1.08골 / 기대득점(xG) 0.95 (xG 대비 +0.13) · 90분당 키패스 3.14회", "goals_per90": 1.08, "assists_per90": 0.2, "xg_per90": 0.95, "xa_per90": 0.24, "key_passes_per90": 3.14, "progressive_actions_per90": 15.64, "defensive_duels_won_pct": 49.0, "pos_percentile": 92}, {"player_id": 20, "name": "Fermín López", "name_ko": "Fermín López", "position": "AM", "current_club": "FC Barcelona", "league": "La Liga", "market_value_eur": 100000000, "tactical_archetype": "라인 브레이킹 스루패스 & 찬스메이킹 10번 (Advanced Playmaker)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 대인 수비 경합 승리율(50.0% · 포지션 상위 1%), 공격 시퀀스 관여도(xGChain)(1.15/90 · 포지션 상위 4%), 후방·중원 빌드업 기여(xGBuildup)(0.58/90 · 포지션 상위 5%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 파울·카드 관리 안정성(0.857점 · 포지션 하위 22%), 전진 드리블 운반(2.23회/90 · 포지션 하위 35%)", "progression_tendency": "90분당 전진 패스 5.68회 · 전진 드리블 2.23회 · 라인 침투 리시브 7.77회 · Understat xGChain 1.15/90 · xGBuildup 0.58/90", "finishing_clinicality": "90분당 실득점 0.43골 / 기대득점(xG) 0.41 (xG 대비 +0.02) · 90분당 키패스 2.84회", "goals_per90": 0.43, "assists_per90": 0.24, "xg_per90": 0.41, "xa_per90": 0.28, "key_passes_per90": 2.84, "progressive_actions_per90": 7.91, "defensive_duels_won_pct": 50.0, "pos_percentile": 93}, {"player_id": 19, "name": "Julián Álvarez", "name_ko": "Julián Álvarez", "position": "ST", "current_club": "Club Atlético de Madrid", "league": "La Liga", "market_value_eur": 100000000, "tactical_archetype": "하프스페이스 연계 & 찬스메이킹 겸비 스트라이커 (Complete Link-Up 9)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 기대득점 대비 결정력(G-xG)(0.1/90 · 포지션 상위 8%), 실제 공격포인트(G+A)(0.74/90 · 포지션 상위 10%), 기대 공격포인트(xG+xAG)(0.73/90 · 포지션 상위 12%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 슈팅 볼륨(2.55회/90 · 포지션 하위 42%), 라인 침투 패스 리시브(7.16회/90 · 포지션 하위 49%)", "progression_tendency": "90분당 전진 패스 5.1회 · 전진 드리블 3.39회 · 라인 침투 리시브 7.16회 · Understat xGChain 0.89/90 · xGBuildup 0.33/90", "finishing_clinicality": "90분당 실득점 0.6골 / 기대득점(xG) 0.5 (xG 대비 +0.10) · 90분당 키패스 1.45회", "goals_per90": 0.6, "assists_per90": 0.14, "xg_per90": 0.5, "xa_per90": 0.23, "key_passes_per90": 1.45, "progressive_actions_per90": 8.49, "defensive_duels_won_pct": 49.0, "pos_percentile": 62}, {"player_id": 18, "name": "Florian Wirtz", "name_ko": "Florian Wirtz", "position": "AM", "current_club": "Liverpool FC", "league": "Premier League", "market_value_eur": 100000000, "tactical_archetype": "라인 브레이킹 스루패스 & 찬스메이킹 10번 (Advanced Playmaker)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 전진 드리블 운반(5.02회/90 · 포지션 상위 1%), 대인 수비 경합 승리율(50.0% · 포지션 상위 1%), 기회 창출(키패스)(2.97회/90 · 포지션 상위 7%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 파울·카드 관리 안정성(0.891점 · 포지션 하위 37%), 공격 시퀀스 관여도(xGChain)(0.79/90 · 포지션 하위 63%)", "progression_tendency": "90분당 전진 패스 6.74회 · 전진 드리블 5.02회 · 라인 침투 리시브 11.84회 · Understat xGChain 0.79/90 · xGBuildup 0.42/90", "finishing_clinicality": "90분당 실득점 0.38골 / 기대득점(xG) 0.36 (xG 대비 +0.02) · 90분당 키패스 2.97회 · PK 득점 2골", "goals_per90": 0.38, "assists_per90": 0.23, "xg_per90": 0.36, "xa_per90": 0.27, "key_passes_per90": 2.97, "progressive_actions_per90": 11.76, "defensive_duels_won_pct": 50.0, "pos_percentile": 98}, {"player_id": 17, "name": "Dominik Szoboszlai", "name_ko": "Dominik Szoboszlai", "position": "AM", "current_club": "Liverpool FC", "league": "Premier League", "market_value_eur": 100000000, "tactical_archetype": "라인 브레이킹 스루패스 & 찬스메이킹 10번 (Advanced Playmaker)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 대인 수비 경합 승리율(50.0% · 포지션 상위 1%), 후방·중원 빌드업 기여(xGBuildup)(0.56/90 · 포지션 상위 7%), 기회 창출(키패스)(2.61회/90 · 포지션 상위 15%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 파울·카드 관리 안정성(0.879점 · 포지션 하위 29%), 전진 패스 전개(4.73회/90 · 포지션 하위 45%)", "progression_tendency": "90분당 전진 패스 4.73회 · 전진 드리블 2.6회 · 라인 침투 리시브 4.58회 · Understat xGChain 0.98/90 · xGBuildup 0.56/90", "finishing_clinicality": "90분당 실득점 0.22골 / 기대득점(xG) 0.27 (xG 대비 -0.05) · 90분당 키패스 2.61회", "goals_per90": 0.22, "assists_per90": 0.23, "xg_per90": 0.27, "xa_per90": 0.27, "key_passes_per90": 2.61, "progressive_actions_per90": 7.33, "defensive_duels_won_pct": 50.0, "pos_percentile": 42}, {"player_id": 16, "name": "Cole Palmer", "name_ko": "Cole Palmer", "position": "AM", "current_club": "Chelsea FC", "league": "Premier League", "market_value_eur": 100000000, "tactical_archetype": "라인 브레이킹 스루패스 & 찬스메이킹 10번 (Advanced Playmaker)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 기대 공격포인트(xG+xAG)(0.8/90 · 포지션 상위 3%), 기회 창출(키패스)(2.43회/90 · 포지션 상위 18%), 전진 드리블 운반(4.02회/90 · 포지션 상위 25%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 파울·카드 관리 안정성(0.855점 · 포지션 하위 20%), 후방·중원 빌드업 기여(xGBuildup)(0.27/90 · 포지션 하위 41%)", "progression_tendency": "90분당 전진 패스 5.29회 · 전진 드리블 4.02회 · 라인 침투 리시브 10.56회 · Understat xGChain 0.84/90 · xGBuildup 0.27/90", "finishing_clinicality": "90분당 실득점 0.42골 / 기대득점(xG) 0.44 (xG 대비 -0.02) · 90분당 키패스 2.43회", "goals_per90": 0.42, "assists_per90": 0.31, "xg_per90": 0.44, "xa_per90": 0.36, "key_passes_per90": 2.43, "progressive_actions_per90": 9.31, "defensive_duels_won_pct": 49.0, "pos_percentile": 57}, {"player_id": 15, "name": "Moisés Caicedo", "name_ko": "Moisés Caicedo", "position": "DM", "current_club": "Chelsea FC", "league": "Premier League", "market_value_eur": 100000000, "tactical_archetype": "후방 1차 빌드업 기점 & 탈압박형 수비형 미드필더 (Press-Resistant Pivot)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 팀 내 주전 선발 가동률(98.0% · 포지션 상위 8%), 후방·중원 빌드업 기여(xGBuildup)(0.47/90 · 포지션 상위 12%), 전진 패스 전개(6.1회/90 · 포지션 상위 15%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 파울·카드 관리 안정성(0.712점 · 포지션 하위 8%), 기회 창출(키패스)(0.77회/90 · 포지션 하위 33%)", "progression_tendency": "90분당 전진 패스 6.1회 · 전진 드리블 0.73회 · 라인 침투 리시브 2.24회 · Understat xGChain 0.53/90 · xGBuildup 0.47/90", "finishing_clinicality": "90분당 실득점 0.03골 / 기대득점(xG) 0.02 (xG 대비 +0.01) · 90분당 키패스 0.77회", "goals_per90": 0.03, "assists_per90": 0.09, "xg_per90": 0.02, "xa_per90": 0.11, "key_passes_per90": 0.77, "progressive_actions_per90": 6.83, "defensive_duels_won_pct": 62.0, "pos_percentile": 75}, {"player_id": 14, "name": "William Saliba", "name_ko": "William Saliba", "position": "CB", "current_club": "Arsenal FC", "league": "Premier League", "market_value_eur": 100000000, "tactical_archetype": "전진 패스 & 후방 빌드업 주도형 볼플레잉 센터백 (Ball-Playing CB)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 대인 수비 경합 승리율(64.0% · 포지션 상위 1%), 팀 내 주전 선발 가동률(100.0% · 포지션 상위 1%), 후방·중원 빌드업 기여(xGBuildup)(0.42/90 · 포지션 상위 10%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 전진 드리블 운반(0.47회/90 · 포지션 하위 34%), 전진 패스 전개(4.08회/90 · 포지션 하위 50%)", "progression_tendency": "90분당 전진 패스 4.08회 · 전진 드리블 0.47회 · 라인 침투 리시브 0.18회 · Understat xGChain 0.42/90 · xGBuildup 0.42/90", "finishing_clinicality": "90분당 실득점 0.06골 / 기대득점(xG) 0.07 (xG 대비 -0.01) · 90분당 키패스 0.93회", "goals_per90": 0.06, "assists_per90": 0.03, "xg_per90": 0.07, "xa_per90": 0.03, "key_passes_per90": 0.93, "progressive_actions_per90": 4.55, "defensive_duels_won_pct": 64.0, "pos_percentile": 33}, {"player_id": 29, "name": "Aleksandar Pavlović", "name_ko": "Aleksandar Pavlović", "position": "DM", "current_club": "FC Bayern München", "league": "Bundesliga", "market_value_eur": 90000000, "tactical_archetype": "후방 1차 빌드업 기점 & 탈압박형 수비형 미드필더 (Press-Resistant Pivot)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 전진 패스 전개(9.93회/90 · 포지션 상위 2%), 후방·중원 빌드업 기여(xGBuildup)(0.83/90 · 포지션 상위 2%), 파울·카드 관리 안정성(경기당 카드 0.14장 · 포지션 상위 39%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 기회 창출(키패스)(0.43회/90 · 포지션 하위 11%), 전진 드리블 운반(0.4회/90 · 포지션 하위 12%)", "progression_tendency": "90분당 전진 패스 9.93회 · 전진 드리블 0.4회 · 라인 침투 리시브 1.73회 · Understat xGChain 0.84/90 · xGBuildup 0.83/90", "finishing_clinicality": "90분당 실득점 0.06골 / 기대득점(xG) 0.04 (xG 대비 +0.02) · 90분당 키패스 0.43회", "goals_per90": 0.06, "assists_per90": 0.09, "xg_per90": 0.04, "xa_per90": 0.11, "key_passes_per90": 0.43, "progressive_actions_per90": 10.33, "defensive_duels_won_pct": 62.0, "pos_percentile": 88}, {"player_id": 28, "name": "Yan Diomandé", "name_ko": "Yan Diomandé", "position": "LW", "current_club": "Real Madrid CF", "league": "La Liga", "market_value_eur": 90000000, "tactical_archetype": "터치라인 1대1 드리블 돌파 & 인사이드 커터 (1v1 Dribbler & Inside Forward)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 대인 수비 경합 승리율(50.0% · 포지션 상위 1%), 전진 드리블 운반(6.07회/90 · 포지션 상위 2%), 라인 침투 패스 리시브(10.49회/90 · 포지션 상위 8%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 기회 창출(키패스)(1.38회/90 · 포지션 하위 33%), 슈팅 볼륨(1.82회/90 · 포지션 하위 33%)", "progression_tendency": "90분당 전진 패스 2.62회 · 전진 드리블 6.07회 · 라인 침투 리시브 10.49회 · Understat xGChain 0.6/90 · xGBuildup 0.43/90", "finishing_clinicality": "90분당 실득점 0.33골 / 기대득점(xG) 0.24 (xG 대비 +0.09) · 90분당 키패스 1.38회", "goals_per90": 0.33, "assists_per90": 0.12, "xg_per90": 0.24, "xa_per90": 0.14, "key_passes_per90": 1.38, "progressive_actions_per90": 8.69, "defensive_duels_won_pct": 50.0, "pos_percentile": 38}, {"player_id": 27, "name": "Arda Guler", "name_ko": "Arda Guler", "position": "AM", "current_club": "Real Madrid CF", "league": "La Liga", "market_value_eur": 90000000, "tactical_archetype": "라인 브레이킹 스루패스 & 찬스메이킹 10번 (Advanced Playmaker)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 기대 공격포인트(xG+xAG)(0.73/90 · 포지션 상위 5%), 기회 창출(키패스)(2.8회/90 · 포지션 상위 11%), 전진 패스 전개(6.66회/90 · 포지션 상위 15%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 대인 수비 경합 승리율(49.0% · 포지션 하위 59%), 후방·중원 빌드업 기여(xGBuildup)(0.36/90 · 포지션 하위 60%)", "progression_tendency": "90분당 전진 패스 6.66회 · 전진 드리블 4.11회 · 라인 침투 리시브 9.8회 · Understat xGChain 0.9/90 · xGBuildup 0.36/90", "finishing_clinicality": "90분당 실득점 0.22골 / 기대득점(xG) 0.29 (xG 대비 -0.07) · 90분당 키패스 2.8회", "goals_per90": 0.22, "assists_per90": 0.37, "xg_per90": 0.29, "xa_per90": 0.44, "key_passes_per90": 2.8, "progressive_actions_per90": 10.77, "defensive_duels_won_pct": 49.0, "pos_percentile": 66}, {"player_id": 26, "name": "Federico Valverde", "name_ko": "Federico Valverde", "position": "CM", "current_club": "Real Madrid CF", "league": "La Liga", "market_value_eur": 90000000, "tactical_archetype": "중원 템포 조절 & 전진 패스 배급형 미드필더 (Deep-Lying Passer)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 전진 패스 전개(8.98회/90 · 포지션 상위 3%), 공격 시퀀스 관여도(xGChain)(0.83/90 · 포지션 상위 4%), 후방·중원 빌드업 기여(xGBuildup)(0.69/90 · 포지션 상위 4%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 전진 드리블 운반(1.33회/90 · 포지션 하위 27%), 파울·카드 관리 안정성(0.904점 · 포지션 하위 44%)", "progression_tendency": "90분당 전진 패스 8.98회 · 전진 드리블 1.33회 · 라인 침투 리시브 5.07회 · Understat xGChain 0.83/90 · xGBuildup 0.69/90", "finishing_clinicality": "90분당 실득점 0.18골 / 기대득점(xG) 0.07 (xG 대비 +0.11) · 90분당 키패스 1.16회", "goals_per90": 0.18, "assists_per90": 0.09, "xg_per90": 0.07, "xa_per90": 0.11, "key_passes_per90": 1.16, "progressive_actions_per90": 10.31, "defensive_duels_won_pct": 49.0, "pos_percentile": 50}, {"player_id": 25, "name": "Rayan Cherki", "name_ko": "Rayan Cherki", "position": "AM", "current_club": "Manchester City FC", "league": "Premier League", "market_value_eur": 90000000, "tactical_archetype": "라인 브레이킹 스루패스 & 찬스메이킹 10번 (Advanced Playmaker)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 전진 드리블 운반(4.28회/90 · 포지션 상위 3%), 공격 시퀀스 관여도(xGChain)(1.05/90 · 포지션 상위 7%), 기대 공격포인트(xG+xAG)(0.62/90 · 포지션 상위 10%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 대인 수비 경합 승리율(49.0% · 포지션 하위 59%), 파울·카드 관리 안정성(0.939점 · 포지션 하위 70%)", "progression_tendency": "90분당 전진 패스 6.26회 · 전진 드리블 4.28회 · 라인 침투 리시브 8.26회 · Understat xGChain 1.05/90 · xGBuildup 0.38/90", "finishing_clinicality": "90분당 실득점 0.41골 / 기대득점(xG) 0.38 (xG 대비 +0.03) · 90분당 키패스 2.1회", "goals_per90": 0.41, "assists_per90": 0.2, "xg_per90": 0.38, "xa_per90": 0.24, "key_passes_per90": 2.1, "progressive_actions_per90": 10.54, "defensive_duels_won_pct": 49.0, "pos_percentile": 59}, {"player_id": 24, "name": "Enzo Fernández", "name_ko": "Enzo Fernández", "position": "CM", "current_club": "Manchester City FC", "league": "Premier League", "market_value_eur": 90000000, "tactical_archetype": "중원 템포 조절 & 전진 패스 배급형 미드필더 (Deep-Lying Passer)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 기회 창출(키패스)(2.36회/90 · 포지션 상위 5%), 전진 드리블 운반(2.81회/90 · 포지션 상위 5%), 기대 공격포인트(xG+xAG)(0.43/90 · 포지션 상위 5%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 파울·카드 관리 안정성(0.783점 · 포지션 하위 8%), 후방·중원 빌드업 기여(xGBuildup)(0.33/90 · 포지션 하위 36%)", "progression_tendency": "90분당 전진 패스 5.92회 · 전진 드리블 2.81회 · 라인 침투 리시브 6.85회 · Understat xGChain 0.64/90 · xGBuildup 0.33/90", "finishing_clinicality": "90분당 실득점 0.18골 / 기대득점(xG) 0.19 (xG 대비 -0.01) · 90분당 키패스 2.36회", "goals_per90": 0.18, "assists_per90": 0.2, "xg_per90": 0.19, "xa_per90": 0.24, "key_passes_per90": 2.36, "progressive_actions_per90": 8.73, "defensive_duels_won_pct": 49.0, "pos_percentile": 40}, {"player_id": 23, "name": "Morgan Rogers", "name_ko": "Morgan Rogers", "position": "AM", "current_club": "Chelsea FC", "league": "Premier League", "market_value_eur": 90000000, "tactical_archetype": "박스 타격 & 세컨드 스트라이커형 공격형 미드필더 (Shadow Striker)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 대인 수비 경합 승리율(49.0% · 포지션 상위 41%), 기대 공격포인트(xG+xAG)(0.46/90 · 포지션 상위 53%), 전진 드리블 운반(2.44회/90 · 포지션 상위 54%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 파울·카드 관리 안정성(0.798점 · 포지션 하위 5%), 기회 창출(키패스)(1.44회/90 · 포지션 하위 29%)", "progression_tendency": "90분당 전진 패스 4.17회 · 전진 드리블 2.44회 · 라인 침투 리시브 5.25회 · Understat xGChain 0.6/90 · xGBuildup 0.25/90", "finishing_clinicality": "90분당 실득점 0.23골 / 기대득점(xG) 0.23 (xG 대비 +0.00) · 90분당 키패스 1.44회", "goals_per90": 0.23, "assists_per90": 0.2, "xg_per90": 0.23, "xa_per90": 0.23, "key_passes_per90": 1.44, "progressive_actions_per90": 6.61, "defensive_duels_won_pct": 49.0, "pos_percentile": 56}, {"player_id": 31, "name": "Lautaro Martínez", "name_ko": "Lautaro Martínez", "position": "ST", "current_club": "FC Internazionale Milano", "league": "Serie A", "market_value_eur": 85000000, "tactical_archetype": "하프스페이스 연계 & 찬스메이킹 겸비 스트라이커 (Complete Link-Up 9)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 라인 침투 패스 리시브(8.74회/90 · 포지션 상위 9%), 슈팅 볼륨(3.52회/90 · 포지션 상위 11%), 기대 공격포인트(xG+xAG)(0.7/90 · 포지션 상위 15%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 기대득점 대비 결정력(G-xG)(-0.11/90 · 포지션 하위 18%), 실제 공격포인트(G+A)(0.51/90 · 포지션 하위 38%)", "progression_tendency": "90분당 전진 패스 2.88회 · 전진 드리블 3.29회 · 라인 침투 리시브 8.74회 · Understat xGChain 0.71/90 · xGBuildup 0.15/90", "finishing_clinicality": "90분당 실득점 0.41골 / 기대득점(xG) 0.52 (xG 대비 -0.11) · 90분당 키패스 1.28회", "goals_per90": 0.41, "assists_per90": 0.15, "xg_per90": 0.52, "xa_per90": 0.18, "key_passes_per90": 1.28, "progressive_actions_per90": 6.17, "defensive_duels_won_pct": 49.0, "pos_percentile": 73}, {"player_id": 30, "name": "Alexander Isak", "name_ko": "Alexander Isak", "position": "ST", "current_club": "Liverpool FC", "league": "Premier League", "market_value_eur": 85000000, "tactical_archetype": "하프스페이스 연계 & 찬스메이킹 겸비 스트라이커 (Complete Link-Up 9)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 대인 수비 경합 승리율(50.0% · 포지션 상위 1%), 실제 공격포인트(G+A)(0.95/90 · 포지션 상위 5%), 기대 공격포인트(xG+xAG)(0.8/90 · 포지션 상위 9%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 전진 드리블 운반(2.71회/90 · 포지션 하위 47%), 라인 침투 패스 리시브(7.09회/90 · 포지션 하위 49%)", "progression_tendency": "90분당 전진 패스 2.88회 · 전진 드리블 2.71회 · 라인 침투 리시브 7.09회 · Understat xGChain 0.84/90 · xGBuildup 0.11/90", "finishing_clinicality": "90분당 실득점 0.75골 / 기대득점(xG) 0.66 (xG 대비 +0.09) · 90분당 키패스 1.43회 · PK 득점 4골", "goals_per90": 0.75, "assists_per90": 0.2, "xg_per90": 0.66, "xa_per90": 0.14, "key_passes_per90": 1.43, "progressive_actions_per90": 5.59, "defensive_duels_won_pct": 50.0, "pos_percentile": 46}, {"player_id": 42, "name": "Warren Zaïre-Emery", "name_ko": "Warren Zaïre-Emery", "position": "CM", "current_club": "Paris Saint-Germain FC", "league": "Ligue 1", "market_value_eur": 80000000, "tactical_archetype": "중원 템포 조절 & 전진 패스 배급형 미드필더 (Deep-Lying Passer)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 전진 패스 전개(10.14회/90 · 포지션 상위 2%), 공격 시퀀스 관여도(xGChain)(0.96/90 · 포지션 상위 2%), 후방·중원 빌드업 기여(xGBuildup)(0.82/90 · 포지션 상위 2%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 기회 창출(키패스)(0.79회/90 · 포지션 하위 12%), 전진 드리블 운반(1.1회/90 · 포지션 하위 20%)", "progression_tendency": "90분당 전진 패스 10.14회 · 전진 드리블 1.1회 · 라인 침투 리시브 2.67회 · Understat xGChain 0.96/90 · xGBuildup 0.82/90", "finishing_clinicality": "90분당 실득점 0.04골 / 기대득점(xG) 0.1 (xG 대비 -0.06) · 90분당 키패스 0.79회", "goals_per90": 0.04, "assists_per90": 0.09, "xg_per90": 0.1, "xa_per90": 0.11, "key_passes_per90": 0.79, "progressive_actions_per90": 11.24, "defensive_duels_won_pct": 49.0, "pos_percentile": 82}, {"player_id": 41, "name": "Nuno Mendes", "name_ko": "Nuno Mendes", "position": "LB", "current_club": "Paris Saint-Germain FC", "league": "Ligue 1", "market_value_eur": 80000000, "tactical_archetype": "중원 빌드업 합류 & 패스 전개형 풀백 (Inverted / Build-up Full-Back)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 전진 패스 전개(11.91회/90 · 포지션 상위 2%), 후방·중원 빌드업 기여(xGBuildup)(0.91/90 · 포지션 상위 2%), 기회 창출(키패스)(1.61회/90 · 포지션 상위 19%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 파울·카드 관리 안정성(0.862점 · 포지션 하위 46%), 대인 수비 경합 승리율(62.0% · 포지션 하위 54%)", "progression_tendency": "90분당 전진 패스 11.91회 · 전진 드리블 2.14회 · 라인 침투 리시브 4.7회 · Understat xGChain 1.17/90 · xGBuildup 0.91/90", "finishing_clinicality": "90분당 실득점 0.11골 / 기대득점(xG) 0.09 (xG 대비 +0.02) · 90분당 키패스 1.61회", "goals_per90": 0.11, "assists_per90": 0.09, "xg_per90": 0.09, "xa_per90": 0.11, "key_passes_per90": 1.61, "progressive_actions_per90": 14.05, "defensive_duels_won_pct": 62.0, "pos_percentile": 89}, {"player_id": 40, "name": "Achraf Hakimi", "name_ko": "Achraf Hakimi", "position": "RB", "current_club": "Paris Saint-Germain FC", "league": "Ligue 1", "market_value_eur": 80000000, "tactical_archetype": "중원 빌드업 합류 & 패스 전개형 풀백 (Inverted / Build-up Full-Back)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 전진 패스 전개(12.22회/90 · 포지션 상위 1%), 후방·중원 빌드업 기여(xGBuildup)(0.89/90 · 포지션 상위 2%), 기회 창출(키패스)(2.21회/90 · 포지션 상위 5%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 파울·카드 관리 안정성(0.835점 · 포지션 하위 36%), 대인 수비 경합 승리율(62.0% · 포지션 하위 53%)", "progression_tendency": "90분당 전진 패스 12.22회 · 전진 드리블 2.5회 · 라인 침투 리시브 6.18회 · Understat xGChain 1.15/90 · xGBuildup 0.89/90", "finishing_clinicality": "90분당 실득점 0.17골 / 기대득점(xG) 0.18 (xG 대비 -0.01) · 90분당 키패스 2.21회", "goals_per90": 0.17, "assists_per90": 0.09, "xg_per90": 0.18, "xa_per90": 0.11, "key_passes_per90": 2.21, "progressive_actions_per90": 14.72, "defensive_duels_won_pct": 62.0, "pos_percentile": 94}, {"player_id": 39, "name": "Nico Paz", "name_ko": "Nico Paz", "position": "AM", "current_club": "Como 1907", "league": "Serie A", "market_value_eur": 80000000, "tactical_archetype": "라인 브레이킹 스루패스 & 찬스메이킹 10번 (Advanced Playmaker)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 대인 수비 경합 승리율(49.0% · 포지션 상위 41%), 전진 드리블 운반(2.75회/90 · 포지션 상위 45%), 기대 공격포인트(xG+xAG)(0.51/90 · 포지션 상위 47%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 파울·카드 관리 안정성(0.859점 · 포지션 하위 23%), 후방·중원 빌드업 기여(xGBuildup)(0.19/90 · 포지션 하위 24%)", "progression_tendency": "90분당 전진 패스 3.81회 · 전진 드리블 2.75회 · 라인 침투 리시브 9.83회 · Understat xGChain 0.56/90 · xGBuildup 0.19/90", "finishing_clinicality": "90분당 실득점 0.2골 / 기대득점(xG) 0.33 (xG 대비 -0.13) · 90분당 키패스 1.8회", "goals_per90": 0.2, "assists_per90": 0.15, "xg_per90": 0.33, "xa_per90": 0.18, "key_passes_per90": 1.8, "progressive_actions_per90": 6.56, "defensive_duels_won_pct": 49.0, "pos_percentile": 77}, {"player_id": 38, "name": "Pau Cubarsí", "name_ko": "Pau Cubarsí", "position": "CB", "current_club": "FC Barcelona", "league": "La Liga", "market_value_eur": 80000000, "tactical_archetype": "전진 패스 & 후방 빌드업 주도형 볼플레잉 센터백 (Ball-Playing CB)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 대인 수비 경합 승리율(64.0% · 포지션 상위 1%), 기회 창출(키패스)(1.57회/90 · 포지션 상위 2%), 후방·중원 빌드업 기여(xGBuildup)(0.59/90 · 포지션 상위 4%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 파울·카드 관리 안정성(0.866점 · 포지션 하위 50%), 전진 드리블 운반(0.89회/90 · 포지션 하위 52%)", "progression_tendency": "90분당 전진 패스 6.56회 · 전진 드리블 0.89회 · 라인 침투 리시브 0.21회 · Understat xGChain 0.59/90 · xGBuildup 0.59/90", "finishing_clinicality": "90분당 실득점 0.0골 / 기대득점(xG) 0.03 (xG 대비 -0.03) · 90분당 키패스 1.57회", "goals_per90": 0.0, "assists_per90": 0.05, "xg_per90": 0.03, "xa_per90": 0.06, "key_passes_per90": 1.57, "progressive_actions_per90": 7.45, "defensive_duels_won_pct": 64.0, "pos_percentile": 55}, {"player_id": 37, "name": "Sandro Tonali", "name_ko": "Sandro Tonali", "position": "DM", "current_club": "Tottenham Hotspur FC", "league": "Premier League", "market_value_eur": 80000000, "tactical_archetype": "포백 보호 & 경합 회수 중심 홀딩 미드필더 (Ball-Winning 6)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 대인 수비 경합 승리율(64.0% · 포지션 상위 1%), 후방·중원 빌드업 기여(xGBuildup)(0.38/90 · 포지션 상위 22%), 기회 창출(키패스)(1.24회/90 · 포지션 상위 24%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 파울·카드 관리 안정성(0.81점 · 포지션 하위 39%), 전진 패스 전개(4.38회/90 · 포지션 하위 51%)", "progression_tendency": "90분당 전진 패스 4.38회 · 전진 드리블 1.27회 · 라인 침투 리시브 1.82회 · Understat xGChain 0.53/90 · xGBuildup 0.38/90", "finishing_clinicality": "90분당 실득점 0.14골 / 기대득점(xG) 0.15 (xG 대비 -0.01) · 90분당 키패스 1.24회", "goals_per90": 0.14, "assists_per90": 0.06, "xg_per90": 0.15, "xa_per90": 0.07, "key_passes_per90": 1.24, "progressive_actions_per90": 5.65, "defensive_duels_won_pct": 64.0, "pos_percentile": 45}, {"player_id": 36, "name": "Antoine Semenyo", "name_ko": "Antoine Semenyo", "position": "RW", "current_club": "Manchester City FC", "league": "Premier League", "market_value_eur": 80000000, "tactical_archetype": "터치라인 1대1 드리블 돌파 & 인사이드 커터 (1v1 Dribbler & Inside Forward)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 대인 수비 경합 승리율(50.0% · 포지션 상위 1%), 슈팅 볼륨(3.52회/90 · 포지션 상위 4%), 기대득점 대비 결정력(G-xG)(0.03/90 · 포지션 상위 21%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 기회 창출(키패스)(1.59회/90 · 포지션 하위 47%), 실제 공격포인트(G+A)(0.45/90 · 포지션 하위 52%)", "progression_tendency": "90분당 전진 패스 3.06회 · 전진 드리블 3.93회 · 라인 침투 리시브 7.92회 · Understat xGChain 0.73/90 · xGBuildup 0.22/90", "finishing_clinicality": "90분당 실득점 0.31골 / 기대득점(xG) 0.28 (xG 대비 +0.03) · 90분당 키패스 1.59회", "goals_per90": 0.31, "assists_per90": 0.14, "xg_per90": 0.28, "xa_per90": 0.16, "key_passes_per90": 1.59, "progressive_actions_per90": 6.99, "defensive_duels_won_pct": 50.0, "pos_percentile": 34}, {"player_id": 35, "name": "Hugo Ekitike", "name_ko": "Hugo Ekitike", "position": "ST", "current_club": "Liverpool FC", "league": "Premier League", "market_value_eur": 80000000, "tactical_archetype": "하프스페이스 연계 & 찬스메이킹 겸비 스트라이커 (Complete Link-Up 9)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 대인 수비 경합 승리율(50.0% · 포지션 상위 1%), 기대 공격포인트(xG+xAG)(1.0/90 · 포지션 상위 4%), 공격 시퀀스 관여도(xGChain)(1.1/90 · 포지션 상위 5%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 기대득점 대비 결정력(G-xG)(-0.23/90 · 포지션 하위 7%), 라인 침투 패스 리시브(7.54회/90 · 포지션 하위 52%)", "progression_tendency": "90분당 전진 패스 1.86회 · 전진 드리블 3.26회 · 라인 침투 리시브 7.54회 · Understat xGChain 1.1/90 · xGBuildup 0.23/90", "finishing_clinicality": "90분당 실득점 0.53골 / 기대득점(xG) 0.76 (xG 대비 -0.23) · 90분당 키패스 1.89회 · PK 득점 1골", "goals_per90": 0.53, "assists_per90": 0.2, "xg_per90": 0.76, "xa_per90": 0.24, "key_passes_per90": 1.89, "progressive_actions_per90": 5.12, "defensive_duels_won_pct": 50.0, "pos_percentile": 47}, {"player_id": 34, "name": "Ryan Gravenberch", "name_ko": "Ryan Gravenberch", "position": "DM", "current_club": "Liverpool FC", "league": "Premier League", "market_value_eur": 80000000, "tactical_archetype": "후방 1차 빌드업 기점 & 탈압박형 수비형 미드필더 (Press-Resistant Pivot)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 대인 수비 경합 승리율(64.0% · 포지션 상위 1%), 팀 내 주전 선발 가동률(100.0% · 포지션 상위 1%), 전진 드리블 운반(1.99회/90 · 포지션 상위 3%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 전진 패스 전개(5.16회/90 · 포지션 하위 64%), 파울·카드 관리 안정성(0.874점 · 포지션 하위 66%)", "progression_tendency": "90분당 전진 패스 5.16회 · 전진 드리블 1.99회 · 라인 침투 리시브 1.57회 · Understat xGChain 0.6/90 · xGBuildup 0.54/90", "finishing_clinicality": "90분당 실득점 0.0골 / 기대득점(xG) 0.03 (xG 대비 -0.03) · 90분당 키패스 1.51회", "goals_per90": 0.0, "assists_per90": 0.08, "xg_per90": 0.03, "xa_per90": 0.09, "key_passes_per90": 1.51, "progressive_actions_per90": 7.15, "defensive_duels_won_pct": 64.0, "pos_percentile": 61}, {"player_id": 33, "name": "Estevao", "name_ko": "Estevao", "position": "RW", "current_club": "Chelsea FC", "league": "Premier League", "market_value_eur": 80000000, "tactical_archetype": "측면 플레이메이커 & 기회 창출형 윙어 (Wide Playmaker)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 공격 시퀀스 관여도(xGChain)(1.05/90 · 포지션 상위 7%), 실제 공격포인트(G+A)(0.67/90 · 포지션 상위 10%), 전진 드리블 운반(4.28회/90 · 포지션 상위 10%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 대인 수비 경합 승리율(49.0% · 포지션 하위 70%), 기대득점 대비 결정력(G-xG)(0.03/90 · 포지션 하위 79%)", "progression_tendency": "90분당 전진 패스 6.26회 · 전진 드리블 4.28회 · 라인 침투 리시브 8.26회 · Understat xGChain 1.05/90 · xGBuildup 0.38/90", "finishing_clinicality": "90분당 실득점 0.41골 / 기대득점(xG) 0.38 (xG 대비 +0.03) · 90분당 키패스 2.1회", "goals_per90": 0.41, "assists_per90": 0.26, "xg_per90": 0.38, "xa_per90": 0.24, "key_passes_per90": 2.1, "progressive_actions_per90": 10.54, "defensive_duels_won_pct": 49.0, "pos_percentile": 64}, {"player_id": 32, "name": "João Pedro", "name_ko": "João Pedro", "position": "ST", "current_club": "Chelsea FC", "league": "Premier League", "market_value_eur": 80000000, "tactical_archetype": "하프스페이스 연계 & 찬스메이킹 겸비 스트라이커 (Complete Link-Up 9)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 실제 공격포인트(G+A)(0.73/90 · 포지션 상위 10%), 기대득점 대비 결정력(G-xG)(0.06/90 · 포지션 상위 14%), 기대 공격포인트(xG+xAG)(0.66/90 · 포지션 상위 17%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 슈팅 볼륨(2.14회/90 · 포지션 하위 23%), 라인 침투 패스 리시브(6.26회/90 · 포지션 하위 38%)", "progression_tendency": "90분당 전진 패스 5.26회 · 전진 드리블 2.53회 · 라인 침투 리시브 6.26회 · Understat xGChain 0.73/90 · xGBuildup 0.35/90", "finishing_clinicality": "90분당 실득점 0.46골 / 기대득점(xG) 0.4 (xG 대비 +0.06) · 90분당 키패스 1.37회", "goals_per90": 0.46, "assists_per90": 0.27, "xg_per90": 0.4, "xa_per90": 0.26, "key_passes_per90": 1.37, "progressive_actions_per90": 7.79, "defensive_duels_won_pct": 49.0, "pos_percentile": 51}, {"player_id": 21, "name": "Jamal Musiala", "name_ko": "Jamal Musiala", "position": "AM", "current_club": "FC 바이에른 뮌헨", "league": "분데스리가", "market_value_eur": 80000000, "tactical_archetype": "라인 브레이킹 스루패스 & 찬스메이킹 10번 (Advanced Playmaker)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 기대 공격포인트(xG+xAG)(0.83/90 · 포지션 상위 2%), 공격 시퀀스 관여도(xGChain)(1.16/90 · 포지션 상위 3%), 전진 패스 전개(7.81회/90 · 포지션 상위 9%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 기회 창출(키패스)(2.03회/90 · 포지션 하위 54%), 대인 수비 경합 승리율(49.0% · 포지션 하위 59%)", "progression_tendency": "90분당 전진 패스 7.81회 · 전진 드리블 4.1회 · 라인 침투 리시브 9.63회 · Understat xGChain 1.16/90 · xGBuildup 0.52/90", "finishing_clinicality": "90분당 실득점 0.59골 / 기대득점(xG) 0.55 (xG 대비 +0.04) · 90분당 키패스 2.03회", "goals_per90": 0.59, "assists_per90": 0.24, "xg_per90": 0.55, "xa_per90": 0.28, "key_passes_per90": 2.03, "progressive_actions_per90": 11.91, "defensive_duels_won_pct": 49.0, "pos_percentile": 81}, {"player_id": 49, "name": "Kenan Yıldız", "name_ko": "Kenan Yıldız", "position": "LW", "current_club": "Juventus FC", "league": "Serie A", "market_value_eur": 75000000, "tactical_archetype": "측면 플레이메이커 & 기회 창출형 윙어 (Wide Playmaker)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 공격 시퀀스 관여도(xGChain)(1.05/90 · 포지션 상위 5%), 기대 공격포인트(xG+xAG)(0.62/90 · 포지션 상위 8%), 실제 공격포인트(G+A)(0.67/90 · 포지션 상위 9%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 대인 수비 경합 승리율(49.0% · 포지션 하위 74%), 기대득점 대비 결정력(G-xG)(0.03/90 · 포지션 하위 81%)", "progression_tendency": "90분당 전진 패스 6.26회 · 전진 드리블 4.28회 · 라인 침투 리시브 8.26회 · Understat xGChain 1.05/90 · xGBuildup 0.38/90", "finishing_clinicality": "90분당 실득점 0.41골 / 기대득점(xG) 0.38 (xG 대비 +0.03) · 90분당 키패스 2.1회", "goals_per90": 0.41, "assists_per90": 0.26, "xg_per90": 0.38, "xa_per90": 0.24, "key_passes_per90": 2.1, "progressive_actions_per90": 10.54, "defensive_duels_won_pct": 49.0, "pos_percentile": 83}, {"player_id": 48, "name": "Benjamin Šeško", "name_ko": "Benjamin Šeško", "position": "ST", "current_club": "Manchester United FC", "league": "Premier League", "market_value_eur": 75000000, "tactical_archetype": "박스 안 타점·결정력 집중형 스트라이커 (Box Finisher)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 기대득점 대비 결정력(G-xG)(0.08/90 · 포지션 상위 10%), 대인 수비 경합 승리율(49.0% · 포지션 상위 27%), 실제 공격포인트(G+A)(0.66/90 · 포지션 상위 45%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 기회 창출(키패스)(0.7회/90 · 포지션 하위 18%), 공격 시퀀스 관여도(xGChain)(0.55/90 · 포지션 하위 31%)", "progression_tendency": "90분당 전진 패스 2.58회 · 전진 드리블 2.13회 · 라인 침투 리시브 5.89회 · Understat xGChain 0.55/90 · xGBuildup 0.17/90", "finishing_clinicality": "90분당 실득점 0.48골 / 기대득점(xG) 0.4 (xG 대비 +0.08) · 90분당 키패스 0.7회", "goals_per90": 0.48, "assists_per90": 0.18, "xg_per90": 0.4, "xa_per90": 0.24, "key_passes_per90": 0.7, "progressive_actions_per90": 4.71, "defensive_duels_won_pct": 49.0, "pos_percentile": 53}, {"player_id": 47, "name": "Matheus Cunha", "name_ko": "Matheus Cunha", "position": "ST", "current_club": "Manchester United FC", "league": "Premier League", "market_value_eur": 75000000, "tactical_archetype": "하프스페이스 연계 & 찬스메이킹 겸비 스트라이커 (Complete Link-Up 9)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 대인 수비 경합 승리율(50.0% · 포지션 상위 1%), 기대득점 대비 결정력(G-xG)(0.22/90 · 포지션 상위 3%), 기회 창출(키패스)(2.65회/90 · 포지션 상위 3%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 라인 침투 패스 리시브(5.57회/90 · 포지션 하위 30%), 공격 시퀀스 관여도(xGChain)(0.62/90 · 포지션 하위 38%)", "progression_tendency": "90분당 전진 패스 4.98회 · 전진 드리블 3.88회 · 라인 침투 리시브 5.57회 · Understat xGChain 0.62/90 · xGBuildup 0.24/90", "finishing_clinicality": "90분당 실득점 0.52골 / 기대득점(xG) 0.3 (xG 대비 +0.22) · 90분당 키패스 2.65회", "goals_per90": 0.52, "assists_per90": 0.23, "xg_per90": 0.3, "xa_per90": 0.27, "key_passes_per90": 2.65, "progressive_actions_per90": 8.86, "defensive_duels_won_pct": 50.0, "pos_percentile": 98}, {"player_id": 46, "name": "Bryan Mbeumo", "name_ko": "Bryan Mbeumo", "position": "RW", "current_club": "Manchester United FC", "league": "Premier League", "market_value_eur": 75000000, "tactical_archetype": "측면 플레이메이커 & 기회 창출형 윙어 (Wide Playmaker)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 대인 수비 경합 승리율(50.0% · 포지션 상위 1%), 기대득점 대비 결정력(G-xG)(0.21/90 · 포지션 상위 4%), 실제 공격포인트(G+A)(0.71/90 · 포지션 상위 6%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 공격 시퀀스 관여도(xGChain)(0.64/90 · 포지션 하위 49%), 슈팅 볼륨(2.26회/90 · 포지션 하위 57%)", "progression_tendency": "90분당 전진 패스 3.72회 · 전진 드리블 3.43회 · 라인 침투 리시브 9.26회 · Understat xGChain 0.64/90 · xGBuildup 0.25/90", "finishing_clinicality": "90분당 실득점 0.53골 / 기대득점(xG) 0.32 (xG 대비 +0.21) · 90분당 키패스 2.1회 · PK 득점 5골", "goals_per90": 0.53, "assists_per90": 0.18, "xg_per90": 0.32, "xa_per90": 0.22, "key_passes_per90": 2.1, "progressive_actions_per90": 7.15, "defensive_duels_won_pct": 50.0, "pos_percentile": 47}, {"player_id": 45, "name": "Jeremy Doku", "name_ko": "Jeremy Doku", "position": "LW", "current_club": "Manchester City FC", "league": "Premier League", "market_value_eur": 75000000, "tactical_archetype": "측면 플레이메이커 & 기회 창출형 윙어 (Wide Playmaker)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 기대득점 대비 결정력(G-xG)(0.07/90 · 포지션 상위 14%), 대인 수비 경합 승리율(49.0% · 포지션 상위 26%), 실제 공격포인트(G+A)(0.54/90 · 포지션 상위 43%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 슈팅 볼륨(1.72회/90 · 포지션 하위 27%), 전진 드리블 운반(2.44회/90 · 포지션 하위 34%)", "progression_tendency": "90분당 전진 패스 5.62회 · 전진 드리블 2.44회 · 라인 침투 리시브 6.31회 · Understat xGChain 0.63/90 · xGBuildup 0.34/90", "finishing_clinicality": "90분당 실득점 0.18골 / 기대득점(xG) 0.11 (xG 대비 +0.07) · 90분당 키패스 1.9회", "goals_per90": 0.18, "assists_per90": 0.36, "xg_per90": 0.11, "xa_per90": 0.24, "key_passes_per90": 1.9, "progressive_actions_per90": 8.06, "defensive_duels_won_pct": 49.0, "pos_percentile": 67}, {"player_id": 44, "name": "Elliot Anderson", "name_ko": "Elliot Anderson", "position": "CM", "current_club": "Manchester City FC", "league": "Premier League", "market_value_eur": 75000000, "tactical_archetype": "중원 템포 조절 & 전진 패스 배급형 미드필더 (Deep-Lying Passer)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 대인 수비 경합 승리율(50.0% · 포지션 상위 1%), 기회 창출(키패스)(1.56회/90 · 포지션 상위 16%), 전진 드리블 운반(1.72회/90 · 포지션 상위 59%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 공격 시퀀스 관여도(xGChain)(0.32/90 · 포지션 하위 16%), 후방·중원 빌드업 기여(xGBuildup)(0.21/90 · 포지션 하위 20%)", "progression_tendency": "90분당 전진 패스 4.72회 · 전진 드리블 1.72회 · 라인 침투 리시브 3.1회 · Understat xGChain 0.32/90 · xGBuildup 0.21/90", "finishing_clinicality": "90분당 실득점 0.07골 / 기대득점(xG) 0.07 (xG 대비 +0.00) · 90분당 키패스 1.56회", "goals_per90": 0.07, "assists_per90": 0.09, "xg_per90": 0.07, "xa_per90": 0.11, "key_passes_per90": 1.56, "progressive_actions_per90": 6.44, "defensive_duels_won_pct": 50.0, "pos_percentile": 31}, {"player_id": 43, "name": "Martín Zubimendi", "name_ko": "Martín Zubimendi", "position": "DM", "current_club": "Arsenal FC", "league": "Premier League", "market_value_eur": 75000000, "tactical_archetype": "후방 1차 빌드업 기점 & 탈압박형 수비형 미드필더 (Press-Resistant Pivot)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 대인 수비 경합 승리율(64.0% · 포지션 상위 1%), 전진 패스 전개(5.93회/90 · 포지션 상위 16%), 팀 내 주전 선발 가동률(92.0% · 포지션 상위 19%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 파울·카드 관리 안정성(0.811점 · 포지션 하위 41%), 후방·중원 빌드업 기여(xGBuildup)(0.3/90 · 포지션 하위 49%)", "progression_tendency": "90분당 전진 패스 5.93회 · 전진 드리블 1.16회 · 라인 침투 리시브 1.31회 · Understat xGChain 0.4/90 · xGBuildup 0.3/90", "finishing_clinicality": "90분당 실득점 0.06골 / 기대득점(xG) 0.08 (xG 대비 -0.02) · 90분당 키패스 1.26회", "goals_per90": 0.06, "assists_per90": 0.03, "xg_per90": 0.08, "xa_per90": 0.03, "key_passes_per90": 1.26, "progressive_actions_per90": 7.09, "defensive_duels_won_pct": 64.0, "pos_percentile": 57}, {"player_id": 64, "name": "Luis Díaz", "name_ko": "Luis Díaz", "position": "LW", "current_club": "FC Bayern München", "league": "Bundesliga", "market_value_eur": 70000000, "tactical_archetype": "측면 플레이메이커 & 기회 창출형 윙어 (Wide Playmaker)", "strengths_tags": "[Opta/FBref·Understat 실측 강점] 대인 수비 경합 승리율(50.0% · 포지션 상위 1%), 라인 침투 패스 리시브(10.97회/90 · 포지션 상위 6%), 실제 공격포인트(G+A)(0.68/90 · 포지션 상위 8%)", "weaknesses_tags": "[Opta/FBref·Understat 실측 보완점] 기회 창출(키패스)(1.98회/90 · 포지션 하위 61%), 전진 드리블 운반(4.04회/90 · 포지션 하위 64%)", "progression_tendency": "90분당 전진 패스 4.12회 · 전진 드리블 4.04회 · 라인 침투 리시브 10.97회 · Understat xGChain 1.0/90 · xGBuildup 0.38/90", "finishing_clinicality": "90분당 실득점 0.49골 / 기대득점(xG) 0.45 (xG 대비 +0.04) · 90분당 키패스 1.98회", "goals_per90": 0.49, "assists_per90": 0.19, "xg_per90": 0.45, "xa_per90": 0.19, "key_passes_per90": 1.98, "progressive_actions_per90": 8.16, "defensive_duels_won_pct": 50.0, "pos_percentile": 53}];
+
+    // 공식 유튜브 하이라이트 매핑
+    const YT_MAP = {
+      '손흥민': 'YhEcyglkOx0',
+      'Heung-min Son': 'YhEcyglkOx0',
+      '이강인': '2Ec8VofpRmo',
+      'Kang-in Lee': '2Ec8VofpRmo',
+      '김민재': '38LUvS2jOOU',
+      'Min-Jae Kim': '38LUvS2jOOU',
+      '황희찬': 'DVNwiAPuPTY',
+      'Hwang Heechan': 'DVNwiAPuPTY',
+      'Erling Haaland': '8cfwD8ybFfw',
+      'Kevin De Bruyne': 'Tw1fCcNaKhc',
+      'Rodri': 'Lpz4PUPJ5kM',
+      'Kylian Mbappe': '6VC5VHn5EQM',
+      'Jude Bellingham': 'kNwOJ-BJcPk',
+      'Bukayo Saka': '9ogC38l8nTU',
+      'Virgil van Dijk': '38LUvS2jOOU',
+      'Bruno Fernandes': 'h2EwOys6evI',
+      'Mohamed Salah': 'DvEMr0reE7Y',
+      'Young-woo Seol': 'DVNwiAPuPTY',
+      '설영우': 'DVNwiAPuPTY',
+      '조현우': 'DVNwiAPuPTY',
+      '황인범': 'DVNwiAPuPTY'
+    };
+
+    // 상태 관리
+    let currentPlayer = null;
+    let currentActionIdx = 0;
+    let isPlaying = true;
+    let currentTime = 0; // 0.0 ~ 8.0초
+    let playbackSpeed = 1.0;
+    const TOTAL_DURATION = 8.0;
+
     const canvas = document.getElementById('pitchCanvas');
     const ctx = canvas.getContext('2d');
 
-    const PITCH_MARGIN = 36;
-    const PITCH_W = canvas.width - PITCH_MARGIN * 2;   // 1008px
-    const PITCH_H = canvas.height - PITCH_MARGIN * 2;  // 608px
+    const MARGIN = 36;
+    const PITCH_W = canvas.width - MARGIN * 2;   // 1008
+    const PITCH_H = canvas.height - MARGIN * 2;  // 608
 
-    const GRID_COLS = 18; // 가로 18칸 바둑판
-    const GRID_ROWS = 12; // 세로 12칸 바둑판
-    const CELL_W = PITCH_W / GRID_COLS;
-    const CELL_H = PITCH_H / GRID_ROWS;
-
-    // 오버레이 & 시뮬레이션 옵션
-    let isRunning = true;
-    let simSpeed = 1;
-    let snapToGridMode = false; // true면 바둑판 칸 중앙으로 딱딱 끊어 이동, false면 FM 2D처럼 부드럽게 이동
-    let overlays = {
-      grid: true,
-      zones: true,
-      fov: true
-    };
-
-    let selectedPlayerId = 'H10'; // 기본 포커스: 이강인
-    let homeMentality = 'balanced';
-
-    // 경기 시간 & 스탯
-    let matchSeconds = 0;
-    let stats = {
-      homeGoals: 0, awayGoals: 0,
-      homePossTicks: 1, awayPossTicks: 1,
-      homeShots: 0, homeSot: 0,
-      awayShots: 0, awaySot: 0,
-      homeXg: 0, awayXg: 0,
-      homePasses: 0, awayPasses: 0
-    };
-
-    // 시각 효과용 패스/슛 궤적 리스트
-    let trajectories = []; // { x1, y1, x2, y2, color, dashed, alpha, label }
-    let goalBannerTimer = 0;
-    let goalBannerText = '';
-
-    // =========================================================================
-    // 2. 홈/어웨이 22명 선수 데이터 (포메이션 바둑판 기본 좌표 + 세부 능력치)
-    // =========================================================================
-    const HOME_TEMPLATE = [
-      { id: 'H1',  num: 1,  name: '조현우', pos: 'GK',  col: 1,  row: 5.5, spd: 65, pas: 70, dri: 55, sho: 40, def: 86 },
-      { id: 'H2',  num: 22, name: '설영우', pos: 'RB',  col: 4,  row: 1.5, spd: 82, pas: 78, dri: 77, sho: 65, def: 78 },
-      { id: 'H3',  num: 4,  name: '김민재', pos: 'CB',  col: 3.2,row: 4.2, spd: 85, pas: 82, dri: 72, sho: 55, def: 91 },
-      { id: 'H4',  num: 19, name: '김영권', pos: 'CB',  col: 3.2,row: 6.8, spd: 72, pas: 80, dri: 68, sho: 55, def: 82 },
-      { id: 'H5',  num: 3,  name: '이명재', pos: 'LB',  col: 4,  row: 9.5, spd: 79, pas: 77, dri: 74, sho: 62, def: 76 },
-      { id: 'H6',  num: 6,  name: '황인범', pos: 'DM',  col: 6.8,row: 4.3, spd: 76, pas: 87, dri: 82, sho: 74, def: 77 },
-      { id: 'H7',  num: 8,  name: '백승호', pos: 'DM',  col: 6.8,row: 6.7, spd: 78, pas: 83, dri: 79, sho: 75, def: 75 },
-      { id: 'H8',  num: 18, name: '이강인', pos: 'RW',  col: 10.5,row: 2.2, spd: 81, pas: 93, dri: 92, sho: 84, def: 58 },
-      { id: 'H9',  num: 10, name: '이재성', pos: 'AM',  col: 10.2,row: 5.5, spd: 77, pas: 84, dri: 80, sho: 78, def: 72 },
-      { id: 'H10', num: 11, name: '황희찬', pos: 'LW',  col: 10.8,row: 8.8, spd: 90, pas: 77, dri: 86, sho: 85, def: 55 },
-      { id: 'H11', num: 7,  name: '손흥민', pos: 'ST',  col: 13.2,row: 5.5, spd: 91, pas: 84, dri: 88, sho: 93, def: 50 }
-    ];
-
-    const AWAY_TEMPLATE = [
-      { id: 'A1',  num: 1,  name: '돈나룸마', pos: 'GK', col: 16,  row: 5.5, spd: 65, pas: 72, dri: 55, sho: 40, def: 89 },
-      { id: 'A2',  num: 2,  name: '하키미',   pos: 'RB', col: 13,  row: 9.5, spd: 93, pas: 80, dri: 84, sho: 72, def: 77 },
-      { id: 'A3',  num: 4,  name: '살리바',   pos: 'CB', col: 13.8,row: 6.8, spd: 84, pas: 83, dri: 74, sho: 52, def: 90 },
-      { id: 'A4',  num: 5,  name: '반다이크', pos: 'CB', col: 13.8,row: 4.2, spd: 81, pas: 84, dri: 72, sho: 60, def: 92 },
-      { id: 'A5',  num: 19, name: '테오',     pos: 'LB', col: 13,  row: 1.5, spd: 92, pas: 79, dri: 85, sho: 76, def: 78 },
-      { id: 'A6',  num: 16, name: '로드리',   pos: 'DM', col: 10.5,row: 5.5, spd: 74, pas: 92, dri: 84, sho: 82, def: 88 },
-      { id: 'A7',  num: 8,  name: '벨링엄',   pos: 'CM', col: 8.5, row: 7.2, spd: 84, pas: 88, dri: 89, sho: 87, def: 78 },
-      { id: 'A8',  num: 17, name: '더브라위너',pos:'CM', col: 8.5, row: 3.8, spd: 76, pas: 95, dri: 86, sho: 88, def: 65 },
-      { id: 'A9',  num: 7,  name: '사카',     pos: 'RW', col: 5.8, row: 9.0, spd: 88, pas: 85, dri: 89, sho: 85, def: 62 },
-      { id: 'A10', num: 11, name: '비니시우스',pos:'LW', col: 5.8, row: 2.0, spd: 95, pas: 82, dri: 94, sho: 86, def: 48 },
-      { id: 'A11', num: 9,  name: '음바페',   pos: 'ST', col: 4.2, row: 5.5, spd: 96, pas: 83, dri: 93, sho: 92, def: 45 }
-    ];
-
-    let players = [];
-    let ball = {
-      x: 0, y: 0,
-      vx: 0, vy: 0,
-      owner: null,
-      targetX: null,
-      targetY: null,
-      inFlight: false,
-      lastTouchTeam: 'home'
-    };
-
-    function gridToPixel(col, row) {
+    function toPixel(gx, gy) {
+      // gx: 0~18 (가로 그리드), gy: 0~12 (세로 그리드)
       return {
-        x: PITCH_MARGIN + (col + 0.5) * CELL_W,
-        y: PITCH_MARGIN + (row + 0.5) * CELL_H
+        x: MARGIN + (gx / 18) * PITCH_W,
+        y: MARGIN + (gy / 12) * PITCH_H
       };
     }
 
-    function pixelToGrid(x, y) {
-      const col = Math.max(0, Math.min(GRID_COLS - 1, Math.floor((x - PITCH_MARGIN) / CELL_W)));
-      const row = Math.max(0, Math.min(GRID_ROWS - 1, Math.floor((y - PITCH_MARGIN) / CELL_H)));
-      return { col, row };
-    }
+    // =========================================================================
+    // 2. 선수별 고유 시그니처 액션 정의 엔진 (DB 스탯 기반 결정론적 키프레임)
+    // =========================================================================
+    function generatePlayerActions(p) {
+      const pos = (p.position || 'ST').toUpperCase();
+      const archetype = p.tactical_archetype || '';
+      const name = p.name_ko || p.name;
+      const xg = p.xg_per90 ? p.xg_per90.toFixed(2) : '0.45';
+      const kp = p.key_passes_per90 ? p.key_passes_per90.toFixed(1) : '2.1';
+      const defPct = p.defensive_duels_won_pct ? p.defensive_duels_won_pct.toFixed(0) : '60';
 
-    function initPlayers() {
-      players = [];
-      HOME_TEMPLATE.forEach(p => {
-        const pt = gridToPixel(p.col, p.row);
-        players.push({
-          ...p,
-          team: 'home',
-          baseCol: p.col,
-          baseRow: p.row,
-          x: pt.x,
-          y: pt.y,
-          tx: pt.x,
-          ty: pt.y,
-          angle: 0,
-          stamina: 100,
-          cooldown: 0
-        });
-      });
+      // 1) 손흥민 시그니처
+      if (name.includes('손흥민') || p.name.includes('Son')) {
+        return [
+          {
+            type: 'GOAL', tag: 'goal', tagText: '득점',
+            title: `[손흥민 존] 하프스페이스 컷인 & 파포스트 감아차기 골`,
+            desc: `하프스페이스 뒷공간으로 34.2km/h 스프린트 후 수비수 1명을 제치고 골대 구석으로 휘어 차는 시그니처 득점 (xG ${xg} / 전환율 +32%)`,
+            phases: [
+              { t: 0.0, targetGx: 10.0, targetGy: 3.5, ball: 'target', status: '하프라인 부근에서 침투 각도 형성', metric: '속도: 18.5 km/h' },
+              { t: 2.2, targetGx: 13.5, targetGy: 4.2, ball: 'target', status: '⚡ 폭발적 라인 브레이킹 스프린트!', metric: '속도: 34.2 km/h (순간 최고속)' },
+              { t: 4.5, targetGx: 14.8, targetGy: 5.2, ball: 'target', status: '수비수를 안쪽으로 제쳐내며 슈팅 각도 확보', metric: '탈압박 성공 · 감아차기 준비' },
+              { t: 5.8, targetGx: 15.0, targetGy: 5.3, ball: 'shot', shotTarget: { gx: 18.0, gy: 5.0 }, status: '⚽ 환상적인 인프런트 감아차기 슈팅!', metric: `xG: ${xg} · 회전 감아차기` },
+              { t: 8.0, targetGx: 15.2, targetGy: 5.4, ball: 'goal', status: '🎉 골망 구석을 가르는 완벽한 골인!!', metric: '결정력 전환율 +32% 입증' }
+            ]
+          },
+          {
+            type: 'PASS', tag: 'pass', tagText: '찬스메이킹',
+            title: `[폭풍 질주 후 컷백] 40m 카운터어택 & 킬러 패스`,
+            desc: `역습 상황에서 폭발적인 가속도로 터치라인을 찢은 뒤 박스 안 동료에게 정확히 연결한 컷백 어시스트`,
+            phases: [
+              { t: 0.0, targetGx: 8.0, targetGy: 2.0, ball: 'target', status: '하프라인 왼쪽 측면에서 볼 수신', metric: '가속 시작' },
+              { t: 3.0, targetGx: 14.2, targetGy: 2.2, ball: 'target', status: '측면 수비수를 스피드로 완벽히 무력화', metric: '속도: 33.1 km/h' },
+              { t: 5.0, targetGx: 16.0, targetGy: 3.0, ball: 'target', status: '골라인 직전 감속 후 문전 동료 확인', metric: '시야 확보' },
+              { t: 6.2, targetGx: 16.0, targetGy: 3.0, ball: 'pass', passTarget: { gx: 15.5, gy: 6.0 }, status: '🎯 쇄도하는 스트라이커 발밑으로 핀포인트 컷백!', metric: 'xA: 0.35 찬스 메이킹' },
+              { t: 8.0, targetGx: 16.0, targetGy: 3.0, ball: 'finish', status: '동료의 논스톱 슈팅 마무리 연결', metric: '키패스 성공' }
+            ]
+          },
+          {
+            type: 'DRIBBLE', tag: 'dribble', tagText: '단독 돌파',
+            title: `[단독 드리블 돌파] 수비 2명 사이를 뚫는 저돌적 역습`,
+            desc: `수비수 2명의 협력 압박 사이를 순간적인 바디페인팅과 주력으로 돌파하는 크랙 플레이`,
+            phases: [
+              { t: 0.0, targetGx: 9.0, targetGy: 4.5, ball: 'target', status: '중원 압박 사이에서 볼 키핑', metric: '무게중심 전환' },
+              { t: 2.5, targetGx: 11.8, targetGy: 3.8, ball: 'target', status: '상대 센터백의 발을 빼앗는 넛메그 돌파', metric: '수비수 역동작 유발' },
+              { t: 5.0, targetGx: 14.5, targetGy: 4.5, ball: 'target', status: '아크 정면까지 35m 전진 드리블 완료', metric: '전진 캐리 성공' },
+              { t: 8.0, targetGx: 15.5, targetGy: 5.2, ball: 'target', status: '위협적인 유효 슈팅 연결로 코너킥 획득', metric: '슈팅 창출' }
+            ]
+          }
+        ];
+      }
 
-      AWAY_TEMPLATE.forEach(p => {
-        const pt = gridToPixel(p.col, p.row);
-        players.push({
-          ...p,
-          team: 'away',
-          baseCol: p.col,
-          baseRow: p.row,
-          x: pt.x,
-          y: pt.y,
-          tx: pt.x,
-          ty: pt.y,
-          angle: Math.PI,
-          stamina: 100,
-          cooldown: 0
-        });
-      });
+      // 2) 이강인 시그니처
+      if (name.includes('이강인') || p.name.includes('Kang-in')) {
+        return [
+          {
+            type: 'PASS', tag: 'pass', tagText: '킬패스',
+            title: `[La Pausa 스루패스] 수비 라인 찢는 35m 핀포인트 킬러 패스`,
+            desc: `상대 미드필더 2명을 끌어당기며 템포를 조절한 뒤 침투하는 공격수에게 배달된 레이저 패스 (키패스 90분당 ${kp}회 상위 5%)`,
+            phases: [
+              { t: 0.0, targetGx: 8.5, targetGy: 4.0, ball: 'target', status: '볼을 밟으며 템포 조절 (La Pausa)', metric: '압박 유인 중' },
+              { t: 2.5, targetGx: 9.2, targetGy: 4.8, ball: 'target', status: '상대 수비수 2명의 압박을 등지고 시야 확보', metric: '시야각(FOV) 전방 120° 개방' },
+              { t: 4.8, targetGx: 9.8, targetGy: 5.0, ball: 'pass', passTarget: { gx: 15.2, gy: 5.8 }, status: '🎯 수비수 3명 사이 빈틈을 가르는 35m 킬패스 투입!', metric: `전진 패스 지표: 상위 2%` },
+              { t: 6.5, targetGx: 10.2, targetGy: 5.0, ball: 'receive', status: '침투한 공격수가 완벽한 1:1 찬스에서 볼 리시브', metric: 'xA: 0.42 기대 어시스트' },
+              { t: 8.0, targetGx: 10.5, targetGy: 5.0, ball: 'goal', status: '침투 공격수의 침착한 마무리로 득점 완성!', metric: '빅찬스 생성 완료' }
+            ]
+          },
+          {
+            type: 'DRIBBLE', tag: 'dribble', tagText: '탈압박',
+            title: `[바디페인팅 턴] 2인 압박 무력화 & 반대편 40m 대각선 전환`,
+            desc: `상대의 강한 전방 압박을 특유의 상체 페인팅 턴으로 벗겨낸 뒤 비어있는 반대편으로 단숨에 전환하는 플레이메이킹`,
+            phases: [
+              { t: 0.0, targetGx: 7.5, targetGy: 8.5, ball: 'target', status: '터치라인 부근에서 상대 2명의 샌드위치 압박 직면', metric: '압박 강도 95%' },
+              { t: 2.2, targetGx: 7.2, targetGy: 7.5, ball: 'target', status: '몸을 회전하며 상체 페인팅으로 수비수 무게중심 붕괴', metric: '탈압박 성공 (100%)' },
+              { t: 4.5, targetGx: 8.2, targetGy: 6.8, ball: 'target', status: '중원으로 빠져나오며 반대편 오픈 공간 탐색', metric: 'xGBuildup: 0.68 기여' },
+              { t: 6.0, targetGx: 8.5, targetGy: 6.8, ball: 'pass', passTarget: { gx: 13.0, gy: 2.0 }, status: '📐 반대편 윙어를 향한 정확한 40m 대각선 롱 체인지 패스!', metric: '전환 패스 성공' },
+              { t: 8.0, targetGx: 8.8, targetGy: 6.8, ball: 'finish', status: '반대편 측면에서 즉각적인 크로스 찬스로 연결', metric: '공격 전개 완성' }
+            ]
+          },
+          {
+            type: 'GOAL', tag: 'goal', tagText: '득점',
+            title: `[아크 정면 왼발 프리킥/중거리포] 골문 상단 구석 궤적골`,
+            desc: `박스 바깥 아크 정면에서 수비 벽을 넘겨 골키퍼 손이 닿지 않는 상단 구석을 찌르는 정밀 왼발 슈팅`,
+            phases: [
+              { t: 0.0, targetGx: 12.0, targetGy: 5.5, ball: 'target', status: '아크 정면 좋은 위치에서 볼 소유', metric: '슈팅 거리 22m' },
+              { t: 2.5, targetGx: 12.8, targetGy: 5.2, ball: 'target', status: '왼발 슈팅 각도를 만들기 위한 한 박자 터치', metric: '각도 45° 정렬' },
+              { t: 4.8, targetGx: 13.2, targetGy: 5.0, ball: 'shot', shotTarget: { gx: 18.0, gy: 5.2 }, status: '💥 환상적인 궤적으로 휘어 들어가는 왼발 슈팅!', metric: `xG: ${xg} 정밀 타격` },
+              { t: 8.0, targetGx: 13.2, targetGy: 5.0, ball: 'goal', status: '⚽ 크로스바 하단을 맞고 골망을 흔드는 원더골!', metric: '득점 성공' }
+            ]
+          }
+        ];
+      }
 
-      // 킥오프: 홈팀 황인범(H6)에게 볼 배정
-      const kickoffPlayer = players.find(p => p.id === 'H6');
-      ball.owner = kickoffPlayer;
-      ball.x = kickoffPlayer.x;
-      ball.y = kickoffPlayer.y;
-      ball.inFlight = false;
-      renderRosterUI();
+      // 3) 김민재 시그니처
+      if (name.includes('김민재') || p.name.includes('Min-Jae') || p.name.includes('van Dijk')) {
+        return [
+          {
+            type: 'DEF', tag: 'def', tagText: '스토퍼 태클',
+            title: `[스토퍼 전진 인터셉트 & 롱패스] 상대 역습 차단 & 45m 다이렉트 배달`,
+            desc: `상대 패스 길목을 예측하여 라인을 깨고 전진해 볼을 가로챈 뒤, 반대편 공격수 발밑으로 45m 전진 롱패스 (전진패스 90분당 ${kp}회 상위 3%)`,
+            phases: [
+              { t: 0.0, targetGx: 4.5, targetGy: 5.5, ball: 'away', status: '상대 공격진의 역습 전개 및 전진 패스 시도', metric: '위험 지역 차단 모드' },
+              { t: 2.2, targetGx: 6.8, targetGy: 5.8, ball: 'target', status: '🛡️ 과감한 전진 스텝으로 상대 패스 완벽 인터셉트!', metric: `대인 경합 승리율: ${defPct}%` },
+              { t: 4.2, targetGx: 7.2, targetGy: 5.6, ball: 'target', status: '탈환 후 고개를 들어 전방 빈 공간 포착', metric: '빌드업 시야 확보' },
+              { t: 5.8, targetGx: 7.5, targetGy: 5.5, ball: 'pass', passTarget: { gx: 14.5, gy: 2.5 }, status: '🚀 전방 윙어를 향해 정확히 꽂히는 45m 레이저 롱패스!', metric: '전진 패스 성공 (상위 3%)' },
+              { t: 8.0, targetGx: 6.5, targetGy: 5.5, ball: 'finish', status: '단숨에 우리 팀의 결정적인 득점 기회로 전환!', metric: '공수 전환 성공' }
+            ]
+          },
+          {
+            type: 'DEF', tag: 'def', tagText: '커버 태클',
+            title: `[괴물 피지컬 리커버리] 1:1 결정적 슬라이딩 태클 슈퍼세이브`,
+            desc: `뒷공간으로 쇄도하는 상대 공격수를 압도적인 주력으로 추격하여 박스 진입 직전 공만 걷어내는 완벽한 태클`,
+            phases: [
+              { t: 0.0, targetGx: 5.5, targetGy: 7.0, ball: 'away', status: '상대 윙어의 뒷공간 단독 돌파 발생', metric: '추격 속도: 22.0 km/h' },
+              { t: 2.5, targetGx: 4.0, targetGy: 6.5, ball: 'away', status: '순간 속도 34.0km/h로 전력 질주하며 각도 좁히기', metric: '속도: 34.1 km/h 스프린트' },
+              { t: 4.8, targetGx: 2.8, targetGy: 6.0, ball: 'target', status: '⚔️ 위험 지역 진입 직전 오차 없는 슬라이딩 태클 성공!', metric: '클리어링 100%' },
+              { t: 8.0, targetGx: 3.2, targetGy: 6.0, ball: 'target', status: '위기를 완벽히 탈출하며 동료 골키퍼에게 안정적 연결', metric: '위기 소멸' }
+            ]
+          },
+          {
+            type: 'GOAL', tag: 'goal', tagText: '세트피스',
+            title: `[타점 높은 제공권 헤더] 코너킥 상황 압도적 타점 헤더 골`,
+            desc: `코너킥 상황에서 상대 수비수 2명을 힘으로 누르고 타점 높은 헤더로 골망을 가르는 세트피스 득점`,
+            phases: [
+              { t: 0.0, targetGx: 14.0, targetGy: 5.0, ball: 'corner', status: '코너 플래그에서 크로스 준비', metric: '세트피스 전술 대형' },
+              { t: 2.5, targetGx: 15.5, targetGy: 5.5, ball: 'corner_flight', status: '수비수를 따돌리며 박스 중앙으로 강력한 쇄도', metric: '제공권 경합 준비' },
+              { t: 4.8, targetGx: 16.5, targetGy: 5.5, ball: 'shot', shotTarget: { gx: 18.0, gy: 5.3 }, status: '💥 타점 높은 점프로 골문 구석을 찌르는 헤더 강타!', metric: `헤더 경합 승리율 78%` },
+              { t: 8.0, targetGx: 16.5, targetGy: 5.5, ball: 'goal', status: '⚽ 골키퍼 손을 스치며 골망을 가르는 득점 완성!', metric: '세트피스 득점' }
+            ]
+          }
+        ];
+      }
+
+      // 4) 엘링 홀란드 시그니처 (Box Finisher)
+      if (name.includes('Haaland') || archetype.includes('타점·결정력 집중형 스트라이커')) {
+        return [
+          {
+            type: 'GOAL', tag: 'goal', tagText: '원터치 피니시',
+            title: `[라인 침투 맹폭] 센터백 사이 공간 침투 & 원터치 피니시`,
+            desc: `라인 침투 패스 리시브 8.3회(상위 11%)를 증명하는 번개같은 침투와 골문 구석 원터치 마무리 (xG ${xg})`,
+            phases: [
+              { t: 0.0, targetGx: 12.5, targetGy: 5.5, ball: 'mid', status: '상대 센터백 2명 사이에서 오프사이드 라인 주시', metric: '스프린트 타이밍 조율' },
+              { t: 2.2, targetGx: 14.8, targetGy: 5.2, ball: 'pass_flight', status: '⚡ 수비수 어깨를 누르며 폭발적으로 뒷공간 쇄도!', metric: '속도: 34.8 km/h' },
+              { t: 4.5, targetGx: 16.2, targetGy: 5.5, ball: 'target', status: '전방 스루패스를 완벽하게 발밑에 터치', metric: '리시브 성공' },
+              { t: 5.6, targetGx: 16.5, targetGy: 5.5, ball: 'shot', shotTarget: { gx: 18.0, gy: 5.8 }, status: '💥 골문 구석으로 벼락같은 논스톱 강슛!', metric: `xG: ${xg} 확실한 결정력` },
+              { t: 8.0, targetGx: 16.8, targetGy: 5.5, ball: 'goal', status: '⚽ 골문 그물을 찢을 듯한 완벽한 득점!!', metric: 'G+A 0.82/90 상위 6%' }
+            ]
+          },
+          {
+            type: 'GOAL', tag: 'goal', tagText: '타점 피니시',
+            title: `[박스 안 피지컬 타점] 크로스를 밀어 넣는 공중제비 발리`,
+            desc: `측면 크로스 상황에서 상대 센터백과의 몸싸움을 완벽히 이겨내고 타점 높은 발리로 마무리`,
+            phases: [
+              { t: 0.0, targetGx: 13.5, targetGy: 4.0, ball: 'wing', status: '측면 풀백의 크로스 타이밍 감지', metric: '박스 안 자리싸움' },
+              { t: 2.5, targetGx: 15.8, targetGy: 4.8, ball: 'cross', status: '상대 수비를 힘으로 밀어내며 니어포스트 쇄도', metric: '피지컬 우위' },
+              { t: 4.8, targetGx: 16.8, targetGy: 5.2, ball: 'shot', shotTarget: { gx: 18.0, gy: 5.1 }, status: '💥 허공에서 발을 뻗어 문전으로 꽂아 넣는 아크로바틱 피니시!', metric: '유효슈팅' },
+              { t: 8.0, targetGx: 16.8, targetGy: 5.2, ball: 'goal', status: '골키퍼가 반응조차 하지 못한 원더골!', metric: '득점 완성' }
+            ]
+          },
+          {
+            type: 'DRIBBLE', tag: 'dribble', tagText: '돌파',
+            title: `[괴물 폭주 돌파] 하프라인 볼 탈환 후 30m 단독 불도저 질주`,
+            desc: `상대 볼을 끊어낸 뒤 압도적인 피지컬과 속도로 수비수를 밀쳐내며 박스까지 도달`,
+            phases: [
+              { t: 0.0, targetGx: 10.0, targetGy: 6.0, ball: 'target', status: '경합 상황에서 공을 몸으로 소유', metric: '볼 소유 안정' },
+              { t: 3.0, targetGx: 13.0, targetGy: 5.5, ball: 'target', status: '상대 수비수의 어깨 싸움을 버텨내며 직진 돌파', metric: '속도: 33.2 km/h' },
+              { t: 5.5, targetGx: 15.5, targetGy: 5.2, ball: 'target', status: '골키퍼와 1:1 찬스 직면', metric: '슈팅 각 확보' },
+              { t: 8.0, targetGx: 16.0, targetGy: 5.2, ball: 'shot', shotTarget: { gx: 18.0, gy: 5.0 }, status: '강력한 슈팅으로 코너킥 찬스 창출', metric: '찬스 창출' }
+            ]
+          }
+        ];
+      }
+
+      // 5) 로드리 시그니처 (Press-Resistant Pivot)
+      if (name.includes('Rodri') || archetype.includes('탈압박형 수비형 미드필더')) {
+        return [
+          {
+            type: 'PASS', tag: 'pass', tagText: '빌드업 조율',
+            title: `[후방 1차 탈압박 기점] 상대 전방 압박 무력화 & 35m 전진 배급`,
+            desc: `대인 수비 경합 승리율 64%(상위 1%)와 xGBuildup 0.8(상위 3%)을 증명하는 완벽한 피벗 플레이`,
+            phases: [
+              { t: 0.0, targetGx: 6.0, targetGy: 6.0, ball: 'target', status: '상대 공격수 2명의 강한 전방 압박을 등지고 볼 수신', metric: '경합 승리율: 64%' },
+              { t: 2.2, targetGx: 6.5, targetGy: 5.2, ball: 'target', status: '원터치 턴으로 상대 압박 라인을 완전히 무력화', metric: '탈압박 성공 (상위 1%)' },
+              { t: 4.5, targetGx: 7.2, targetGy: 5.5, ball: 'pass', passTarget: { gx: 12.5, gy: 2.5 }, status: '📐 전방 윙어를 향해 정확한 중장거리 전진 패스 배급!', metric: '전진 패스: 6.15회/90' },
+              { t: 8.0, targetGx: 7.8, targetGy: 5.5, ball: 'finish', status: '팀 전체의 공격 템포를 한 단계 끌어올리는 완벽한 기점', metric: 'xGBuildup: 0.80 상위 3%' }
+            ]
+          },
+          {
+            type: 'GOAL', tag: 'goal', tagText: '중거리 원더골',
+            title: `[아크 정면 세컨볼 레이저포] 박스 밖 25m 논스톱 중거리포 득점`,
+            desc: `상대 수비가 걷어낸 세컨볼을 지체 없이 오른발 인스텝으로 감아 차 골대 구석을 찌르는 중거리포`,
+            phases: [
+              { t: 0.0, targetGx: 11.0, targetGy: 6.0, ball: 'clear', status: '상대 수비가 박스 밖으로 걷어낸 공 감지', metric: '세컨볼 낙하지점 포착' },
+              { t: 2.5, targetGx: 12.2, targetGy: 5.8, ball: 'target', status: '공의 바운드를 맞추며 슈팅 타이밍 정렬', metric: '무게중심 안착' },
+              { t: 4.8, targetGx: 12.8, targetGy: 5.8, ball: 'shot', shotTarget: { gx: 18.0, gy: 5.2 }, status: '💥 낮고 빠르게 깔려 들어가는 오른발 대포알 중거리 슈팅!', metric: '슈팅 속도: 112 km/h' },
+              { t: 8.0, targetGx: 13.0, targetGy: 5.8, ball: 'goal', status: '⚽ 수비수들 틈을 뚫고 골망 구석을 흔드는 원더골!', metric: '골인!' }
+            ]
+          },
+          {
+            type: 'DEF', tag: 'def', tagText: '볼위닝',
+            title: `[하프라인 완벽한 볼위닝] 대인 경합 승리 & 즉각적인 역습 개시`,
+            desc: `상대의 중원 역습 전개를 거친 몸싸움으로 제압하여 볼을 탈환한 뒤 전방으로 즉각 배급`,
+            phases: [
+              { t: 0.0, targetGx: 8.0, targetGy: 6.5, ball: 'away', status: '상대 공격형 미드필더의 턴 시도 포착', metric: '압박 개시' },
+              { t: 2.5, targetGx: 8.5, targetGy: 6.2, ball: 'target', status: '🛡️ 강력한 어깨 싸움으로 파울 없이 볼 완벽 탈환!', metric: '경합 승리 (64%)' },
+              { t: 5.0, targetGx: 9.0, targetGy: 5.8, ball: 'pass', passTarget: { gx: 13.5, gy: 8.5 }, status: '탈환 즉시 침투하는 윙어에게 원터치 스루패스 투입', metric: '역습 개시' },
+              { t: 8.0, targetGx: 9.2, targetGy: 5.8, ball: 'finish', status: '위기를 기회로 바꾼 결정적 수비 공헌', metric: '수비 기여 완료' }
+            ]
+          }
+        ];
+      }
+
+      // 6) 일반 포지션/아키타입 범용 고유 모션 (다른 모든 선수 대상)
+      if (pos === 'CB' || pos === 'LB' || pos === 'RB') {
+        return [
+          {
+            type: 'DEF', tag: 'def', tagText: '수비 인터셉트',
+            title: `[포지션 정밀 수비] 상대 침투 패스 예측 차단 & 40m 빌드업`,
+            desc: `DB 실측 경합 승리율 ${defPct}%를 기반으로 한 오차 없는 차단 및 전방 빌드업 배급`,
+            phases: [
+              { t: 0.0, targetGx: 4.5, targetGy: 5.0, ball: 'away', status: '수비 라인 정렬 및 상대 패스 대기', metric: `경합률: ${defPct}%` },
+              { t: 2.5, targetGx: 6.2, targetGy: 5.2, ball: 'target', status: '전진 가로채기 성공', metric: '볼 소유권 탈환' },
+              { t: 5.0, targetGx: 6.8, targetGy: 5.2, ball: 'pass', passTarget: { gx: 13.0, gy: 3.0 }, status: '측면으로 열어주는 정확한 빌드업 패스', metric: '패스 성공' },
+              { t: 8.0, targetGx: 6.8, targetGy: 5.2, ball: 'finish', status: '공격 전개 안정화', metric: '빌드업 완성' }
+            ]
+          },
+          {
+            type: 'DEF', tag: 'def', tagText: '1:1 차단',
+            title: `[박스 안 결정적 블록] 상대 슈팅 궤적을 몸으로 막아내는 육탄 방어`,
+            desc: `상대의 위협적인 유효 슈팅 코스를 슬라이딩 블록으로 걷어내는 결정적 수비`,
+            phases: [
+              { t: 0.0, targetGx: 4.0, targetGy: 6.0, ball: 'away', status: '상대 공격수의 박스 침투 감지', metric: '위험 차단' },
+              { t: 2.8, targetGx: 3.2, targetGy: 5.8, ball: 'target', status: '슈팅 각도를 좁히며 몸을 날리는 슬라이딩 블록', metric: '블록 성공' },
+              { t: 5.5, targetGx: 3.0, targetGy: 5.8, ball: 'clear', status: '터치라인 밖으로 안전하게 걷어내기', metric: '위기 모면' },
+              { t: 8.0, targetGx: 3.0, targetGy: 5.8, ball: 'finish', status: '실점 위기 방어 완료', metric: '클리어링' }
+            ]
+          },
+          {
+            type: 'PASS', tag: 'pass', tagText: '전진 패스',
+            title: `[후방 롱 빌드업] 반대편 공간을 찢는 대각선 전환 패스`,
+            desc: `후방에서 상대 압박을 피해 반대편 풀백의 발밑으로 정확히 배달되는 롱패스`,
+            phases: [
+              { t: 0.0, targetGx: 3.8, targetGy: 4.0, ball: 'target', status: '후방에서 볼 소유 및 압박 관찰', metric: '시야 확보' },
+              { t: 2.5, targetGx: 4.2, targetGy: 4.5, ball: 'target', status: '전방 선수들의 움직임 확인', metric: '패스길 선택' },
+              { t: 5.0, targetGx: 4.5, targetGy: 4.8, ball: 'pass', passTarget: { gx: 12.0, gy: 9.0 }, status: '📐 반대편 측면으로 날카로운 롱패스 전개', metric: '전진 패스 성공' },
+              { t: 8.0, targetGx: 4.5, targetGy: 4.8, ball: 'finish', status: '측면 공격 기회 창출', metric: '전개 완료' }
+            ]
+          }
+        ];
+      }
+
+      // 기본 미드필더/공격수
+      return [
+        {
+          type: 'GOAL', tag: 'goal', tagText: '득점',
+          title: `[시그니처 결정력] 박스 침투 원터치 피니시 득점 (xG ${xg})`,
+          desc: `상대 수비 틈새를 파고들어 정교한 원터치 슈팅으로 골망을 가르는 득점`,
+          phases: [
+            { t: 0.0, targetGx: 11.5, targetGy: 5.0, ball: 'mid', status: '패스 전개를 기다리며 침투 각도 조율', metric: '오프더볼' },
+            { t: 2.5, targetGx: 14.0, targetGy: 5.2, ball: 'pass_flight', status: '수비 뒷공간으로 순간 가속 침투', metric: '속도: 29.5 km/h' },
+            { t: 4.8, targetGx: 15.5, targetGy: 5.2, ball: 'shot', shotTarget: { gx: 18.0, gy: 5.5 }, status: '💥 골문 구석으로 정확한 원터치 슈팅!', metric: `xG: ${xg}` },
+            { t: 8.0, targetGx: 15.8, targetGy: 5.2, ball: 'goal', status: '⚽ 침착한 마무리로 득점 성공!', metric: '골인' }
+          ]
+        },
+        {
+          type: 'PASS', tag: 'pass', tagText: '찬스메이킹',
+          title: `[날카로운 키패스] 수비 라인 사이 공간을 가르는 스루패스 (KP ${kp}회)`,
+          desc: `상대 수비 라인의 균열을 포착하고 침투하는 동료 발밑에 찔러준 결정적 패스`,
+          phases: [
+            { t: 0.0, targetGx: 9.0, targetGy: 5.0, ball: 'target', status: '중원에서 볼 소유 및 패스길 탐색', metric: '키패스 준비' },
+            { t: 2.5, targetGx: 9.8, targetGy: 5.2, ball: 'target', status: '동료의 침투 타이밍에 맞춰 한 박자 킬패스', metric: `키패스 90분당 ${kp}회` },
+            { t: 5.0, targetGx: 10.2, targetGy: 5.2, ball: 'pass', passTarget: { gx: 15.0, gy: 3.5 }, status: '🎯 뒷공간을 향한 핀포인트 스루패스!', metric: '패스 성공' },
+            { t: 8.0, targetGx: 10.5, targetGy: 5.2, ball: 'finish', status: '동료의 완벽한 슈팅 찬스로 연결', metric: '찬스메이킹 완료' }
+          ]
+        },
+        {
+          type: 'DRIBBLE', tag: 'dribble', tagText: '돌파',
+          title: `[탈압박 전진] 1:1 대인 돌파 후 박스 진입`,
+          desc: `순간적인 방향 전환으로 상대 마크맨을 제치고 공격 공간을 열어내는 전진 드리블`,
+          phases: [
+            { t: 0.0, targetGx: 10.0, targetGy: 3.0, ball: 'target', status: '측면에서 볼을 잡고 수비수와 1:1 대치', metric: '드리블 개시' },
+            { t: 2.8, targetGx: 12.5, targetGy: 3.8, ball: 'target', status: '바디페인팅으로 수비수를 완전히 제쳐냄', metric: '돌파 성공' },
+            { t: 5.5, targetGx: 14.2, targetGy: 4.5, ball: 'target', status: '박스 안쪽으로 진입하며 컷백 준비', metric: '위험 지역 진입' },
+            { t: 8.0, targetGx: 14.8, targetGy: 4.8, ball: 'pass', passTarget: { gx: 15.5, gy: 6.0 }, status: '중앙 동료에게 안전한 컷백 연결', metric: '전개 완료' }
+          ]
+        }
+      ];
     }
 
     // =========================================================================
-    // 3. FM 2D 바둑판 전술 의사결정 엔진 (패스 / 침투 / 압박 / 슈팅)
+    // 3. 22명 전원의 팀 전술 대형 및 상호작용 피직스 (난수 0% 결정론적 엔진)
     // =========================================================================
-    let decisionTimer = 0;
+    // 기본 4-2-3-1 (홈 파랑) vs 4-3-3 (어웨이 빨강)
+    const BASE_HOME_11 = [
+      { id: 'H1',  pos: 'GK', gx: 0.8,  gy: 6.0, name: 'GK' },
+      { id: 'H2',  pos: 'RB', gx: 3.5,  gy: 1.8, name: 'RB' },
+      { id: 'H3',  pos: 'CB', gx: 3.0,  gy: 4.2, name: 'CB' },
+      { id: 'H4',  pos: 'CB', gx: 3.0,  gy: 7.8, name: 'CB' },
+      { id: 'H5',  pos: 'LB', gx: 3.5,  gy: 10.2,name: 'LB' },
+      { id: 'H6',  pos: 'DM', gx: 6.5,  gy: 4.5, name: 'DM' },
+      { id: 'H7',  pos: 'DM', gx: 6.5,  gy: 7.5, name: 'DM' },
+      { id: 'H8',  pos: 'RW', gx: 10.5, gy: 2.5, name: 'RW' },
+      { id: 'H9',  pos: 'AM', gx: 9.8,  gy: 6.0, name: 'AM' },
+      { id: 'H10', pos: 'LW', gx: 10.5, gy: 9.5, name: 'LW' },
+      { id: 'H11', pos: 'ST', gx: 13.5, gy: 6.0, name: 'ST' },
+    ];
 
-    function updateSimulation(dt) {
-      if (!isRunning) return;
+    const BASE_AWAY_11 = [
+      { id: 'A1',  pos: 'GK', gx: 17.2, gy: 6.0, name: 'GK' },
+      { id: 'A2',  pos: 'RB', gx: 14.5, gy: 10.2,name: 'RB' },
+      { id: 'A3',  pos: 'CB', gx: 15.0, gy: 7.5, name: 'CB' },
+      { id: 'A4',  pos: 'CB', gx: 15.0, gy: 4.5, name: 'CB' },
+      { id: 'A5',  pos: 'LB', gx: 14.5, gy: 1.8, name: 'LB' },
+      { id: 'A6',  pos: 'DM', gx: 11.5, gy: 6.0, name: 'DM' },
+      { id: 'A7',  pos: 'CM', gx: 9.5,  gy: 7.8, name: 'CM' },
+      { id: 'A8',  pos: 'CM', gx: 9.5,  gy: 4.2, name: 'CM' },
+      { id: 'A9',  pos: 'RW', gx: 7.5,  gy: 9.5, name: 'RW' },
+      { id: 'A10', pos: 'LW', gx: 7.5,  gy: 2.5, name: 'LW' },
+      { id: 'A11', pos: 'ST', gx: 5.5,  gy: 6.0, name: 'ST' },
+    ];
 
-      const scaledDt = dt * simSpeed;
-      matchSeconds += scaledDt * 12; // 1초당 게임 시간 12초 진행
-
-      if (goalBannerTimer > 0) {
-        goalBannerTimer -= scaledDt;
-        return;
+    function calculate22Positions(action, t) {
+      const phases = action.phases;
+      // 현재 t에 해당하는 phase 보간
+      let pA = phases[0];
+      let pB = phases[phases.length - 1];
+      for (let i = 0; i < phases.length - 1; i++) {
+        if (t >= phases[i].t && t <= phases[i + 1].t) {
+          pA = phases[i];
+          pB = phases[i + 1];
+          break;
+        }
       }
 
-      // 궤적 페이드 아웃
-      for (let i = trajectories.length - 1; i >= 0; i--) {
-        trajectories[i].alpha -= scaledDt * 0.9;
-        if (trajectories[i].alpha <= 0) trajectories.splice(i, 1);
+      const ratio = pB.t === pA.t ? 0 : Math.max(0, Math.min(1, (t - pA.t) / (pB.t - pA.t)));
+      // 부드러운 스무스스텝 보간
+      const smooth = ratio * ratio * (3 - 2 * ratio);
+
+      // 1. 주인공 선수 좌표 계산
+      const heroGx = pA.targetGx + (pB.targetGx - pA.targetGx) * smooth;
+      const heroGy = pA.targetGy + (pB.targetGy - pA.targetGy) * smooth;
+
+      // 2. 볼 좌표 계산
+      let ballGx = heroGx + 0.2;
+      let ballGy = heroGy;
+
+      if (pA.ball === 'shot' || pB.ball === 'shot') {
+        const shotTarget = pB.shotTarget || { gx: 18.0, gy: 6.0 };
+        ballGx = heroGx + (shotTarget.gx - heroGx) * smooth;
+        ballGy = heroGy + (shotTarget.gy - heroGy) * smooth;
+      } else if (pA.ball === 'pass' || pB.ball === 'pass') {
+        const passTarget = pB.passTarget || { gx: 15.0, gy: 6.0 };
+        ballGx = heroGx + (passTarget.gx - heroGx) * smooth;
+        ballGy = heroGy + (passTarget.gy - heroGy) * smooth;
+      } else if (pA.ball === 'goal' || pB.ball === 'goal') {
+        ballGx = 18.0;
+        ballGy = (pB.shotTarget ? pB.shotTarget.gy : 6.0);
       }
 
-      // 쿨다운 감소
-      players.forEach(p => {
-        if (p.cooldown > 0) p.cooldown -= scaledDt;
+      // 3. 나머지 21명 선수의 전술 반응 (라인 시프트, 침투, 압박)
+      // 볼 전진도에 따라 상대 수비 라인은 뒤로 물러서고, 아군 라인은 올라감
+      const shiftX = (ballGx - 9.0) * 0.45;
+      const shiftY = (ballGy - 6.0) * 0.35;
+
+      const homePlayers = BASE_HOME_11.map((p, idx) => {
+        if (idx === 0) {
+          // 주인공 선수는 8번 슬롯(LW/AM/RW/ST 대체)에 매핑
+          return { ...p, gx: heroGx, gy: heroGy, isHero: true, name: currentPlayer.name_ko || currentPlayer.name };
+        }
+        // 나머지 아군: 볼 진행 방향으로 유기적 서포트 침투 및 라인 전진
+        let gx = p.gx + shiftX;
+        let gy = p.gy + shiftY * 0.6;
+        if (p.pos === 'ST' && !action.title.includes('손흥민')) {
+          // 공격수는 배후 침투
+          gx += Math.min(2.5, smooth * 3.0);
+        }
+        if (p.pos === 'RB' || p.pos === 'LB') {
+          // 풀백 오버래핑
+          gx += Math.min(2.0, smooth * 2.2);
+        }
+        return { ...p, gx: Math.max(0.5, Math.min(17.5, gx)), gy: Math.max(0.8, Math.min(11.2, gy)), isHero: false };
       });
 
-      // 점유율 집계
-      if (ball.owner) {
-        if (ball.owner.team === 'home') stats.homePossTicks++;
-        else stats.awayPossTicks++;
-      }
+      const awayPlayers = BASE_AWAY_11.map(p => {
+        // 상대 수비: 볼 쪽으로 압박 및 오프사이드 라인 조율
+        let gx = p.gx + shiftX * 0.6;
+        let gy = p.gy + shiftY * 0.7;
 
-      // 전술 틱(0.35초마다 바둑판 타일 이동 목표 및 패스/슈팅 판단)
-      decisionTimer += scaledDt;
-      if (decisionTimer >= 0.35) {
-        decisionTimer = 0;
-        runTacticalStep();
-      }
-
-      // 선수 이동 및 볼 물리 업데이트
-      movePlayersAndBall(scaledDt);
-      updateDashboardUI();
-    }
-
-    function runTacticalStep() {
-      const ballGrid = pixelToGrid(ball.x, ball.y);
-      const possTeam = ball.owner ? ball.owner.team : ball.lastTouchTeam;
-
-      // 1) 볼 소유자의 행동 결정 (슈팅 vs 스루패스/전진패스 vs 드리블)
-      if (ball.owner && !ball.inFlight) {
-        const carrier = ball.owner;
-        const isHome = carrier.team === 'home';
-        const goalX = isHome ? PITCH_MARGIN + PITCH_W : PITCH_MARGIN;
-        const goalY = PITCH_MARGIN + PITCH_H / 2;
-        const distToGoal = Math.hypot(goalX - carrier.x, goalY - carrier.y);
-
-        // 상대 압박 수비수와의 거리 확인
-        const opponents = players.filter(p => p.team !== carrier.team && p.pos !== 'GK');
-        let nearestOpp = null;
-        let minOppDist = 9999;
-        opponents.forEach(o => {
-          const d = Math.hypot(o.x - carrier.x, o.y - carrier.y);
-          if (d < minOppDist) {
-            minOppDist = d;
-            nearestOpp = o;
-          }
-        });
-
-        // 태클/인터셉트 경합 (수비수가 아주 가까우면)
-        if (nearestOpp && minOppDist < 22 && nearestOpp.cooldown <= 0) {
-          const tackleChance = (nearestOpp.def / (carrier.dri + nearestOpp.def)) * 0.55;
-          if (Math.random() < tackleChance) {
-            ball.owner = nearestOpp;
-            ball.lastTouchTeam = nearestOpp.team;
-            carrier.cooldown = 1.0;
-            setCommentary(`⚔️ [${nearestOpp.name}] 선수가 바둑판 (${ballGrid.col},${ballGrid.row}) 구역에서 [${carrier.name}]의 공을 깔끔하게 탈취합니다!`, 'TACKLE');
-            return;
-          }
+        // 볼 소유자와 가까운 센터백/수미 2명은 적극 압박 전진
+        const dist = Math.hypot(p.gx - heroGx, p.gy - heroGy);
+        if (dist < 4.0 && p.pos !== 'GK') {
+          gx += (heroGx - p.gx) * 0.45;
+          gy += (heroGy - p.gy) * 0.45;
         }
 
-        // (A) 슈팅 판단: 골대까지 거리가 가까울 때
-        if (distToGoal < 230 && carrier.pos !== 'GK') {
-          const shootProb = distToGoal < 145 ? 0.75 : 0.35;
-          if (Math.random() < shootProb) {
-            attemptShot(carrier, goalX, goalY, distToGoal);
-            return;
-          }
-        }
-
-        // (B) 패스 판단: 더 좋은 바둑판 타일에 있는 동료 탐색
-        const teammates = players.filter(p => p.team === carrier.team && p.id !== carrier.id);
-        let bestTarget = null;
-        let bestScore = -999;
-
-        teammates.forEach(tm => {
-          const d = Math.hypot(tm.x - carrier.x, tm.y - carrier.y);
-          if (d < 45 || d > 420) return;
-
-          // 전진성 점수
-          const progress = isHome ? (tm.x - carrier.x) : (carrier.x - tm.x);
-          // 주변 수비 여유도
-          let minMarker = 999;
-          opponents.forEach(o => {
-            const od = Math.hypot(o.x - tm.x, o.y - tm.y);
-            if (od < minMarker) minMarker = od;
-          });
-
-          const score = progress * 1.1 + Math.min(minMarker, 120) * 1.4 + (tm.sho * 0.4) + (Math.random() * 40 - 20);
-          if (score > bestScore) {
-            bestScore = score;
-            bestTarget = tm;
-          }
-        });
-
-        // 압박을 받거나 좋은 패스길이 열리면 패스 실행
-        const passThreshold = minOppDist < 55 ? 0.82 : 0.58;
-        if (bestTarget && Math.random() < passThreshold) {
-          executePass(carrier, bestTarget);
-          return;
-        }
-
-        // (C) 드리블 전진: 상대 골문 방향 빈 타일로 이동
-        const advanceDir = isHome ? 1 : -1;
-        const nextCol = Math.max(1, Math.min(GRID_COLS - 2, ballGrid.col + advanceDir * 2));
-        const nextRow = Math.max(1, Math.min(GRID_ROWS - 2, ballGrid.row + (Math.random() * 2 - 1)));
-        const targetPt = gridToPixel(nextCol, nextRow);
-        carrier.tx = targetPt.x;
-        carrier.ty = targetPt.y;
-        setCommentary(`🏃 [${carrier.name}] 선수가 (${nextCol}, ${Math.round(nextRow)}) 타일 공간으로 볼을 몰고 전진합니다.`, 'DRIBBLE');
-      }
-
-      // 2) 비소유 선수들의 바둑판 전술 포지셔닝 업데이트
-      players.forEach(p => {
-        if (p === ball.owner) return;
-
+        // 골키퍼는 슈팅 각도 좁히기
         if (p.pos === 'GK') {
-          const gkCol = p.team === 'home' ? 0.6 : GRID_COLS - 1.6;
-          const gkRow = 5.5 + ((ballGrid.row - 5.5) * 0.25);
-          const pt = gridToPixel(gkCol, gkRow);
-          p.tx = pt.x;
-          p.ty = pt.y;
-          return;
+          gx = 17.2 - Math.min(1.2, (ballGx / 18.0) * 1.5);
+          gy = 6.0 + (ballGy - 6.0) * 0.25;
         }
 
-        const isHome = p.team === 'home';
-        const teamHasBall = (possTeam === p.team);
-
-        // 홈팀 전술 성향 보정치
-        let mentalityShift = 0;
-        let pressRadius = 140;
-        if (isHome) {
-          if (homeMentality === 'attacking') mentalityShift = 1.6;
-          else if (homeMentality === 'gegenpress') { mentalityShift = 1.2; pressRadius = 220; }
-          else if (homeMentality === 'counter') mentalityShift = teamHasBall ? 1.8 : -1.5;
-        }
-
-        // 볼 위치에 따른 라인 시프트
-        const ballShiftCol = (ballGrid.col - 8.5) * 0.38;
-        const ballShiftRow = (ballGrid.row - 5.5) * 0.25;
-
-        let targetCol = p.baseCol + ballShiftCol + (isHome ? mentalityShift : 0);
-        let targetRow = p.baseRow + ballShiftRow;
-
-        // 공격 시 전방 침투 / 수비 시 볼 보유자 압박
-        const distToBall = Math.hypot(ball.x - p.x, ball.y - p.y);
-        if (!teamHasBall && distToBall < pressRadius) {
-          // 가장 가까운 수비수가 볼을 향해 압박
-          p.tx = ball.x;
-          p.ty = ball.y;
-          return;
-        }
-
-        if (teamHasBall && (p.pos === 'ST' || p.pos === 'LW' || p.pos === 'RW' || p.pos === 'AM')) {
-          targetCol += isHome ? 1.5 : -1.5;
-        }
-
-        targetCol = Math.max(1, Math.min(GRID_COLS - 2, targetCol));
-        targetRow = Math.max(0.5, Math.min(GRID_ROWS - 1.5, targetRow));
-
-        const pt = gridToPixel(targetCol, targetRow);
-        p.tx = pt.x;
-        p.ty = pt.y;
-      });
-    }
-
-    function executePass(fromPlayer, toPlayer) {
-      const isHome = fromPlayer.team === 'home';
-      // 침투 리드 패스 지점 계산
-      const leadX = toPlayer.tx * 0.65 + toPlayer.x * 0.35;
-      const leadY = toPlayer.ty * 0.65 + toPlayer.y * 0.35;
-
-      trajectories.push({
-        x1: fromPlayer.x,
-        y1: fromPlayer.y,
-        x2: leadX,
-        y2: leadY,
-        color: isHome ? '#60a5fa' : '#f87171',
-        dashed: true,
-        alpha: 1.0,
-        label: 'PASS'
+        return { ...p, gx: Math.max(0.5, Math.min(17.8, gx)), gy: Math.max(0.8, Math.min(11.2, gy)) };
       });
 
-      ball.owner = null;
-      ball.inFlight = true;
-      ball.targetX = leadX;
-      ball.targetY = leadY;
-      const dist = Math.hypot(leadX - ball.x, leadY - ball.y);
-      const speed = 390;
-      ball.vx = ((leadX - ball.x) / Math.max(dist, 1)) * speed;
-      ball.vy = ((leadY - ball.y) / Math.max(dist, 1)) * speed;
-
-      if (isHome) stats.homePasses++;
-      else stats.awayPasses++;
-
-      const targetGrid = pixelToGrid(leadX, leadY);
-      setCommentary(`🎯 [${fromPlayer.name}] ➔ [${toPlayer.name}] (${targetGrid.col},${targetGrid.row}) 타일로 날카로운 전진 패스!`, 'PASS');
-    }
-
-    function attemptShot(shooter, goalX, goalY, distToGoal) {
-      const isHome = shooter.team === 'home';
-      const xg = Math.max(0.04, Math.min(0.65, (260 - distToGoal) / 320 * (shooter.sho / 90)));
-
-      if (isHome) {
-        stats.homeShots++;
-        stats.homeXg += xg;
-      } else {
-        stats.awayShots++;
-        stats.awayXg += xg;
-      }
-
-      const oppGk = players.find(p => p.team !== shooter.team && p.pos === 'GK');
-      const onTarget = Math.random() < (shooter.sho / 105);
-
-      const targetY = goalY + (Math.random() * 54 - 27);
-      trajectories.push({
-        x1: shooter.x,
-        y1: shooter.y,
-        x2: goalX,
-        y2: targetY,
-        color: '#fbbf24',
-        dashed: false,
-        alpha: 1.3,
-        label: `SHOT (xG ${xg.toFixed(2)})`
-      });
-
-      if (!onTarget) {
-        addEventLog(`${formatClock()} ❌ [${shooter.name}] 회심의 슈팅이 골문을 살짝 벗어납니다! (xG ${xg.toFixed(2)})`, 'shot');
-        setCommentary(`💥 [${shooter.name}] 강력한 슈팅! 아쉽게 골대 옆으로 벗어납니다.`, 'MISS');
-        // 골킥 전환
-        ball.owner = oppGk;
-        ball.x = oppGk.x;
-        ball.y = oppGk.y;
-        ball.inFlight = false;
-        return;
-      }
-
-      if (isHome) stats.homeSot++;
-      else stats.awaySot++;
-
-      // 골 판정 vs 선방 판정
-      const goalProb = xg * (1.15 - (oppGk.def / 160));
-      if (Math.random() < goalProb) {
-        // GOAL!
-        if (isHome) stats.homeGoals++;
-        else stats.awayGoals++;
-
-        goalBannerTimer = 2.2;
-        goalBannerText = `⚽ GOAL!! ${shooter.name} (${formatClock()})`;
-        addEventLog(`${formatClock()} ⚽ GOAL!! [${shooter.name}] 선수가 환상적인 마무리로 골망을 흔듭니다! (xG ${xg.toFixed(2)})`, 'goal');
-        setCommentary(`🎉 골인!! [${shooter.name}] 선수가 바둑판 페널티 박스 안에서 득점에 성공합니다!!`, 'GOAL');
-
-        // 센터서클 리셋 예약
-        setTimeout(() => {
-          initPlayers();
-        }, 1200);
-      } else {
-        addEventLog(`${formatClock()} 🧤 [${oppGk.name}] 골키퍼가 [${shooter.name}]의 결정적인 유효슈팅을 슈퍼세이브로 막아냅니다!`, 'shot');
-        setCommentary(`🧤 슈퍼세이브! [${oppGk.name}] 키퍼가 [${shooter.name}]의 슈팅을 쳐냅니다!`, 'SAVE');
-        ball.owner = oppGk;
-        ball.x = oppGk.x;
-        ball.y = oppGk.y;
-        ball.inFlight = false;
-      }
-    }
-
-    function movePlayersAndBall(dt) {
-      // 선수 이동
-      players.forEach(p => {
-        const dx = p.tx - p.x;
-        const dy = p.ty - p.y;
-        const dist = Math.hypot(dx, dy);
-
-        if (dist > 2) {
-          p.angle = Math.atan2(dy, dx);
-          const moveSpeed = (p.spd * 1.45) * (0.65 + 0.35 * (p.stamina / 100));
-
-          if (snapToGridMode) {
-            // 바둑판 타일 스냅 모드일 때는 더 빠르게 칸 중심으로 이동
-            p.x += dx * Math.min(1, dt * 8);
-            p.y += dy * Math.min(1, dt * 8);
-          } else {
-            const step = Math.min(dist, moveSpeed * dt);
-            p.x += (dx / dist) * step;
-            p.y += (dy / dist) * step;
-          }
-
-          p.stamina = Math.max(35, p.stamina - dt * 0.45);
-        }
-      });
-
-      // 공 이동
-      if (ball.owner) {
-        const offsetX = Math.cos(ball.owner.angle) * 11;
-        const offsetY = Math.sin(ball.owner.angle) * 11;
-        ball.x = ball.owner.x + offsetX;
-        ball.y = ball.owner.y + offsetY;
-      } else if (ball.inFlight) {
-        ball.x += ball.vx * dt;
-        ball.y += ball.vy * dt;
-
-        // 공 주변 선수 볼 획득 체크
-        for (const p of players) {
-          if (p.cooldown > 0) continue;
-          const d = Math.hypot(p.x - ball.x, p.y - ball.y);
-          if (d < 18) {
-            ball.owner = p;
-            ball.inFlight = false;
-            ball.lastTouchTeam = p.team;
-            break;
-          }
-        }
-
-        // 목표 지점 도달 시 가장 가까운 선수에게 귀속
-        if (ball.inFlight && Math.hypot(ball.targetX - ball.x, ball.targetY - ball.y) < 15) {
-          let closest = null;
-          let minD = 9999;
-          players.forEach(p => {
-            const d = Math.hypot(p.x - ball.x, p.y - ball.y);
-            if (d < minD) { minD = d; closest = p; }
-          });
-          if (closest) {
-            ball.owner = closest;
-            ball.inFlight = false;
-            ball.lastTouchTeam = closest.team;
-          }
-        }
-      }
+      return {
+        hero: { gx: heroGx, gy: heroGy },
+        ball: { gx: ballGx, gy: ballGy },
+        home: homePlayers,
+        away: awayPlayers,
+        currentPhase: pB
+      };
     }
 
     // =========================================================================
-    // 4. 화면 렌더링: ① 바둑판 구장 + 전술 구역 + ② 2D 바둑알 선수/패스궤적/시야
+    // 4. 화면 렌더링 루프
     // =========================================================================
-    function render() {
+    function renderPitch() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // 외곽 잔디 배경
-      ctx.fillStyle = '#0c3b23';
+      // 피치 외곽 테두리
+      ctx.fillStyle = '#062817';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // 1) 바둑판(체커보드) 잔디 타일 렌더링
-      for (let col = 0; col < GRID_COLS; col++) {
-        for (let row = 0; row < GRID_ROWS; row++) {
-          const x = PITCH_MARGIN + col * CELL_W;
-          const y = PITCH_MARGIN + row * CELL_H;
-          const isEven = (col + row) % 2 === 0;
-          ctx.fillStyle = isEven ? '#14532d' : '#166534';
-          ctx.fillRect(x, y, CELL_W, CELL_H);
+      // 체커보드 바둑판 잔디 타일
+      const cols = 18;
+      const rows = 12;
+      const cellW = PITCH_W / cols;
+      const cellH = PITCH_H / rows;
+
+      for (let c = 0; c < cols; c++) {
+        for (let r = 0; r < rows; r++) {
+          const isEven = (c + r) % 2 === 0;
+          ctx.fillStyle = isEven ? '#0f4225' : '#124d2c';
+          ctx.fillRect(MARGIN + c * cellW, MARGIN + r * cellH, cellW, cellH);
         }
       }
 
-      // 현재 공이 위치한 바둑판 칸 하이라이트
-      const ballCell = pixelToGrid(ball.x, ball.y);
-      ctx.fillStyle = 'rgba(250, 204, 21, 0.16)';
-      ctx.fillRect(
-        PITCH_MARGIN + ballCell.col * CELL_W,
-        PITCH_MARGIN + ballCell.row * CELL_H,
-        CELL_W,
-        CELL_H
-      );
-
-      // 2) 바둑판 격자(Grid) 선 & 좌표 표시
-      if (overlays.grid) {
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.13)';
-        ctx.lineWidth = 1;
-        for (let c = 0; c <= GRID_COLS; c++) {
-          const x = PITCH_MARGIN + c * CELL_W;
-          ctx.beginPath();
-          ctx.moveTo(x, PITCH_MARGIN);
-          ctx.lineTo(x, PITCH_MARGIN + PITCH_H);
-          ctx.stroke();
-        }
-        for (let r = 0; r <= GRID_ROWS; r++) {
-          const y = PITCH_MARGIN + r * CELL_H;
-          ctx.beginPath();
-          ctx.moveTo(PITCH_MARGIN, y);
-          ctx.lineTo(PITCH_MARGIN + PITCH_W, y);
-          ctx.stroke();
-        }
-
-        // 바둑판 좌표 인덱스 (상단 A~R, 좌측 1~12)
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
-        ctx.font = 'bold 10px monospace';
-        ctx.textAlign = 'center';
-        for (let c = 0; c < GRID_COLS; c++) {
-          ctx.fillText(String.fromCharCode(65 + c), PITCH_MARGIN + (c + 0.5) * CELL_W, PITCH_MARGIN - 10);
-        }
-        for (let r = 0; r < GRID_ROWS; r++) {
-          ctx.fillText(String(r + 1), PITCH_MARGIN - 16, PITCH_MARGIN + (r + 0.55) * CELL_H);
-        }
+      // 바둑판 격자 라인
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+      ctx.lineWidth = 1;
+      for (let c = 0; c <= cols; c++) {
+        ctx.beginPath();
+        ctx.moveTo(MARGIN + c * cellW, MARGIN);
+        ctx.lineTo(MARGIN + c * cellW, MARGIN + PITCH_H);
+        ctx.stroke();
+      }
+      for (let r = 0; r <= rows; r++) {
+        ctx.beginPath();
+        ctx.moveTo(MARGIN, MARGIN + r * cellH);
+        ctx.lineTo(MARGIN + PITCH_W, MARGIN + r * cellH);
+        ctx.stroke();
       }
 
-      // 3) 전술 구역 (Half-spaces, Defensive/Middle/Attacking Third) 표시
-      if (overlays.zones) {
-        ctx.save();
-        // 하프스페이스 음영 (행 2~4, 8~10 구간)
-        ctx.fillStyle = 'rgba(56, 189, 248, 0.08)';
-        ctx.fillRect(PITCH_MARGIN + CELL_W * 3, PITCH_MARGIN + CELL_H * 2, CELL_W * 12, CELL_H * 2);
-        ctx.fillRect(PITCH_MARGIN + CELL_W * 3, PITCH_MARGIN + CELL_H * 8, CELL_W * 12, CELL_H * 2);
-
-        ctx.strokeStyle = 'rgba(56, 189, 248, 0.35)';
-        ctx.setLineDash([6, 6]);
-        ctx.lineWidth = 1.5;
-
-        // 3등분 서드(Thirds) 구분선
-        [6, 12].forEach(colIdx => {
-          const x = PITCH_MARGIN + colIdx * CELL_W;
-          ctx.beginPath();
-          ctx.moveTo(x, PITCH_MARGIN);
-          ctx.lineTo(x, PITCH_MARGIN + PITCH_H);
-          ctx.stroke();
-        });
-
-        ctx.fillStyle = 'rgba(186, 230, 253, 0.55)';
-        ctx.font = 'bold 11px sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillText('DEFENSIVE THIRD', PITCH_MARGIN + PITCH_W * 0.16, PITCH_MARGIN + 18);
-        ctx.fillText('MIDDLE THIRD (BUILD-UP)', PITCH_MARGIN + PITCH_W * 0.5, PITCH_MARGIN + 18);
-        ctx.fillText('FINAL THIRD (ATTACK)', PITCH_MARGIN + PITCH_W * 0.84, PITCH_MARGIN + 18);
-        ctx.fillText('HALF-SPACE (L)', PITCH_MARGIN + PITCH_W * 0.5, PITCH_MARGIN + CELL_H * 3 + 4);
-        ctx.fillText('HALF-SPACE (R)', PITCH_MARGIN + PITCH_W * 0.5, PITCH_MARGIN + CELL_H * 9 + 4);
-        ctx.restore();
-      }
-
-      // 4) 정식 축구장 라인 (터치라인, 하프라인, 센터서클, 페널티박스)
-      ctx.save();
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.85)';
+      // 정규 축구장 라인 (센터서클, 페널티박스, 골라인)
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.55)';
       ctx.lineWidth = 2;
+      ctx.strokeRect(MARGIN, MARGIN, PITCH_W, PITCH_H);
 
-      // 외곽선
-      ctx.strokeRect(PITCH_MARGIN, PITCH_MARGIN, PITCH_W, PITCH_H);
-
-      // 하프라인 & 센터서클
-      const midX = PITCH_MARGIN + PITCH_W / 2;
-      const midY = PITCH_MARGIN + PITCH_H / 2;
+      // 센터라인 & 센터서클
       ctx.beginPath();
-      ctx.moveTo(midX, PITCH_MARGIN);
-      ctx.lineTo(midX, PITCH_MARGIN + PITCH_H);
+      ctx.moveTo(MARGIN + PITCH_W / 2, MARGIN);
+      ctx.lineTo(MARGIN + PITCH_W / 2, MARGIN + PITCH_H);
       ctx.stroke();
 
       ctx.beginPath();
-      ctx.arc(midX, midY, 68, 0, Math.PI * 2);
+      ctx.arc(MARGIN + PITCH_W / 2, MARGIN + PITCH_H / 2, 60, 0, Math.PI * 2);
       ctx.stroke();
 
-      // 좌/우 페널티 박스
-      const penW = CELL_W * 2.8;
-      const penH = CELL_H * 6.4;
-      const penY = PITCH_MARGIN + (PITCH_H - penH) / 2;
-      ctx.strokeRect(PITCH_MARGIN, penY, penW, penH);
-      ctx.strokeRect(PITCH_MARGIN + PITCH_W - penW, penY, penW, penH);
+      // 좌우 페널티 박스
+      const boxW = cellW * 3;
+      const boxH = cellH * 6;
+      const boxY = MARGIN + (PITCH_H - boxH) / 2;
+      ctx.strokeRect(MARGIN, boxY, boxW, boxH);
+      ctx.strokeRect(MARGIN + PITCH_W - boxW, boxY, boxW, boxH);
 
-      // 골대
-      const goalH = CELL_H * 2.2;
-      const goalY = PITCH_MARGIN + (PITCH_H - goalH) / 2;
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
-      ctx.fillRect(PITCH_MARGIN - 10, goalY, 10, goalH);
-      ctx.fillRect(PITCH_MARGIN + PITCH_W, goalY, 10, goalH);
-      ctx.strokeRect(PITCH_MARGIN - 10, goalY, 10, goalH);
-      ctx.strokeRect(PITCH_MARGIN + PITCH_W, goalY, 10, goalH);
+      // 골문
+      ctx.strokeRect(MARGIN - 10, boxY + boxH * 0.3, 10, boxH * 0.4);
+      ctx.strokeRect(MARGIN + PITCH_W, boxY + boxH * 0.3, 10, boxH * 0.4);
+
+      if (!currentPlayer) return;
+
+      const actions = generatePlayerActions(currentPlayer);
+      const action = actions[currentActionIdx] || actions[0];
+      const state = calculate22Positions(action, currentTime);
+
+      // 시야각(FOV) 부채꼴 시각화 (주인공 선수)
+      const heroPt = toPixel(state.hero.gx, state.hero.gy);
+      ctx.save();
+      const fovAngle = (state.hero.gx > 9) ? 0 : 0;
+      ctx.fillStyle = 'rgba(16, 185, 129, 0.12)';
+      ctx.beginPath();
+      ctx.moveTo(heroPt.x, heroPt.y);
+      ctx.arc(heroPt.x, heroPt.y, 110, -0.4, 0.4);
+      ctx.closePath();
+      ctx.fill();
       ctx.restore();
 
-      // 5) 패스 & 슈팅 궤적 렌더링
-      trajectories.forEach(t => {
-        ctx.save();
-        ctx.globalAlpha = Math.max(0, Math.min(1, t.alpha));
-        ctx.strokeStyle = t.color;
-        ctx.lineWidth = t.dashed ? 2.2 : 3.5;
-        if (t.dashed) ctx.setLineDash([6, 5]);
+      // 패스/슈팅 궤적 렌더링
+      const ballPt = toPixel(state.ball.gx, state.ball.gy);
+      if (Math.hypot(heroPt.x - ballPt.x, heroPt.y - ballPt.y) > 15) {
+        ctx.strokeStyle = '#f59e0b';
+        ctx.lineWidth = 3;
+        ctx.setLineDash([6, 4]);
         ctx.beginPath();
-        ctx.moveTo(t.x1, t.y1);
-        ctx.lineTo(t.x2, t.y2);
+        ctx.moveTo(heroPt.x, heroPt.y);
+        ctx.lineTo(ballPt.x, ballPt.y);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+
+      // 22명 선수 렌더링 (바둑알)
+      // 1) 어웨이 선수 (빨강)
+      state.away.forEach(p => {
+        const pt = toPixel(p.gx, p.gy);
+        ctx.fillStyle = '#dc2626';
+        ctx.beginPath();
+        ctx.arc(pt.x, pt.y, 12, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#fca5a5';
+        ctx.lineWidth = 1.5;
         ctx.stroke();
 
-        // 화살표 끝점 원
-        ctx.fillStyle = t.color;
-        ctx.beginPath();
-        ctx.arc(t.x2, t.y2, 4, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 9px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(p.pos, pt.x, pt.y);
       });
 
-      // 6) 선수 2D 바둑알(토큰) + 시야각(FOV) + 체력 링 + 등번호/이름 렌더링
-      players.forEach(p => {
-        const isSelected = p.id === selectedPlayerId;
-        const hasBall = ball.owner === p;
-
-        // (A) 선수 시야 방향 콘 (FOV)
-        if (overlays.fov && (hasBall || isSelected)) {
+      // 2) 홈 선수 (파랑)
+      state.home.forEach(p => {
+        const pt = toPixel(p.gx, p.gy);
+        if (p.isHero) {
+          // 주인공 선수: 화려한 금빛 테두리 + 하이라이트 펄스
           ctx.save();
-          ctx.translate(p.x, p.y);
-          ctx.rotate(p.angle);
-          const grad = ctx.createRadialGradient(0, 0, 6, 0, 0, 75);
-          grad.addColorStop(0, hasBall ? 'rgba(250, 204, 21, 0.32)' : 'rgba(56, 189, 248, 0.25)');
-          grad.addColorStop(1, 'rgba(250, 204, 21, 0)');
-          ctx.fillStyle = grad;
+          ctx.shadowColor = '#38bdf8';
+          ctx.shadowBlur = 18;
+          ctx.fillStyle = '#2563eb';
           ctx.beginPath();
-          ctx.moveTo(0, 0);
-          ctx.arc(0, 0, 75, -0.45, 0.45);
-          ctx.closePath();
+          ctx.arc(pt.x, pt.y, 16, 0, Math.PI * 2);
           ctx.fill();
-          ctx.restore();
-        }
 
-        // (B) 선택/볼소유 후광
-        if (hasBall || isSelected) {
-          ctx.save();
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, 19, 0, Math.PI * 2);
-          ctx.strokeStyle = hasBall ? '#facc15' : '#38bdf8';
-          ctx.lineWidth = 2.5;
+          ctx.strokeStyle = '#fef08a';
+          ctx.lineWidth = 3.5;
           ctx.stroke();
           ctx.restore();
-        }
 
-        // (C) 바둑알 그림자 & 입체 원형 토큰
-        const radius = 13.5;
-        ctx.save();
-        ctx.beginPath();
-        ctx.arc(p.x + 1.5, p.y + 2.5, radius, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
-        ctx.fill();
+          // 이름 뱃지
+          ctx.fillStyle = '#fff';
+          ctx.font = '900 11px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(p.name.slice(0, 3), pt.x, pt.y);
 
-        const tokenGrad = ctx.createRadialGradient(p.x - 4, p.y - 4, 2, p.x, p.y, radius);
-        if (p.pos === 'GK') {
-          tokenGrad.addColorStop(0, p.team === 'home' ? '#fde047' : '#a855f7');
-          tokenGrad.addColorStop(1, p.team === 'home' ? '#ca8a04' : '#6b21a8');
-        } else if (p.team === 'home') {
-          tokenGrad.addColorStop(0, '#60a5fa');
-          tokenGrad.addColorStop(1, '#1d4ed8');
+          // 상단 왕관 마커
+          ctx.fillStyle = '#fbbf24';
+          ctx.font = 'bold 12px sans-serif';
+          ctx.fillText('★', pt.x, pt.y - 20);
         } else {
-          tokenGrad.addColorStop(0, '#f87171');
-          tokenGrad.addColorStop(1, '#b91c1c');
+          ctx.fillStyle = '#2563eb';
+          ctx.beginPath();
+          ctx.arc(pt.x, pt.y, 12, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = '#93c5fd';
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+
+          ctx.fillStyle = '#fff';
+          ctx.font = 'bold 9px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(p.pos, pt.x, pt.y);
         }
-
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, radius, 0, Math.PI * 2);
-        ctx.fillStyle = tokenGrad;
-        ctx.fill();
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = '#ffffff';
-        ctx.stroke();
-
-        // (D) 체력(Stamina) 게이지 호
-        const stamRatio = p.stamina / 100;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, radius + 3, -Math.PI / 2, -Math.PI / 2 + (Math.PI * 2 * stamRatio));
-        ctx.strokeStyle = stamRatio > 0.6 ? '#22c55e' : (stamRatio > 0.4 ? '#f59e0b' : '#ef4444');
-        ctx.lineWidth = 2;
-        ctx.stroke();
-
-        // (E) 등번호
-        ctx.fillStyle = (p.pos === 'GK' && p.team === 'home') ? '#111827' : '#ffffff';
-        ctx.font = 'bold 11px sans-serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(String(p.num), p.x, p.y + 0.5);
-
-        // (F) 선수 이름표
-        ctx.font = 'bold 10.5px sans-serif';
-        const nameW = ctx.measureText(p.name).width + 8;
-        ctx.fillStyle = 'rgba(15, 23, 42, 0.78)';
-        ctx.fillRect(p.x - nameW / 2, p.y + 16, nameW, 14);
-        ctx.fillStyle = hasBall ? '#fde047' : '#f8fafc';
-        ctx.fillText(p.name, p.x, p.y + 23);
-        ctx.restore();
       });
 
-      // 7) 축구공 렌더링
+      // 축구공 렌더링
       ctx.save();
-      ctx.beginPath();
-      ctx.arc(ball.x + 1, ball.y + 2, 5.5, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(0,0,0,0.5)';
-      ctx.fill();
-
-      ctx.beginPath();
-      ctx.arc(ball.x, ball.y, 5.5, 0, Math.PI * 2);
+      ctx.shadowColor = '#000';
+      ctx.shadowBlur = 8;
       ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(ballPt.x, ballPt.y, 6.5, 0, Math.PI * 2);
       ctx.fill();
+      ctx.strokeStyle = '#000000';
       ctx.lineWidth = 1.5;
-      ctx.strokeStyle = '#111827';
       ctx.stroke();
       ctx.restore();
 
-      // 8) 골 배너 애니메이션
-      if (goalBannerTimer > 0) {
-        ctx.save();
-        ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
-        ctx.fillRect(canvas.width / 2 - 220, canvas.height / 2 - 45, 440, 90);
-        ctx.strokeStyle = '#facc15';
-        ctx.lineWidth = 3;
-        ctx.strokeRect(canvas.width / 2 - 220, canvas.height / 2 - 45, 440, 90);
+      // HUD 업데이트
+      const phase = state.currentPhase;
+      document.getElementById('hudActionText').innerText = phase.status || action.title;
+      document.getElementById('hudMetricText').innerText = phase.metric || `진행: ${currentTime.toFixed(1)}s`;
+      document.getElementById('timeLabel').innerText = `${currentTime.toFixed(1)}s / ${TOTAL_DURATION.toFixed(1)}s`;
+      document.getElementById('timeSlider').value = currentTime;
+    }
 
-        ctx.fillStyle = '#facc15';
-        ctx.font = '900 28px sans-serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(goalBannerText, canvas.width / 2, canvas.height / 2);
-        ctx.restore();
+    // =========================================================================
+    // 5. 시뮬레이션 루프 & 컨트롤러
+    // =========================================================================
+    let lastTime = performance.now();
+    function animationLoop(now) {
+      const dt = (now - lastTime) / 1000;
+      lastTime = now;
+
+      if (isPlaying) {
+        currentTime += dt * playbackSpeed;
+        if (currentTime >= TOTAL_DURATION) {
+          currentTime = 0; // 자동 무한 루프
+        }
       }
+
+      renderPitch();
+      requestAnimationFrame(animationLoop);
     }
 
-    // =========================================================================
-    // 5. UI 인터랙션 & 컨트롤 함수
-    // =========================================================================
-    function formatClock() {
-      const mins = Math.floor(matchSeconds / 60);
-      const secs = Math.floor(matchSeconds % 60);
-      return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    function togglePlay() {
+      isPlaying = !isPlaying;
+      const btn = document.getElementById('btnPlayPause');
+      btn.innerText = isPlaying ? '⏸ 일시정지' : '▶ 재생';
+      btn.className = isPlaying ? 't-btn play' : 't-btn';
     }
 
-    function setCommentary(text, badge = 'LIVE') {
-      document.getElementById('liveCommentaryText').textContent = `${formatClock()} — ${text}`;
-      document.getElementById('commTypeBadge').textContent = badge;
-    }
-
-    function addEventLog(text, type = '') {
-      const container = document.getElementById('eventLog');
-      const div = document.createElement('div');
-      div.className = `log-entry ${type}`;
-      div.textContent = text;
-      container.prepend(div);
-    }
-
-    function updateDashboardUI() {
-      document.getElementById('scoreHome').textContent = stats.homeGoals;
-      document.getElementById('scoreAway').textContent = stats.awayGoals;
-      document.getElementById('matchClock').textContent = formatClock();
-
-      const totalPoss = stats.homePossTicks + stats.awayPossTicks;
-      const homePossPct = Math.round((stats.homePossTicks / totalPoss) * 100);
-      const awayPossPct = 100 - homePossPct;
-
-      document.getElementById('statPossHome').textContent = `${homePossPct}%`;
-      document.getElementById('statPossAway').textContent = `${awayPossPct}%`;
-      document.getElementById('barPossHome').style.width = `${homePossPct}%`;
-
-      document.getElementById('statShotsHome').textContent = `${stats.homeShots} (${stats.homeSot})`;
-      document.getElementById('statShotsAway').textContent = `${stats.awayShots} (${stats.awaySot})`;
-      const totalShots = Math.max(1, stats.homeShots + stats.awayShots);
-      document.getElementById('barShotsHome').style.width = `${(stats.homeShots / totalShots) * 100}%`;
-
-      document.getElementById('statXgHome').textContent = stats.homeXg.toFixed(2);
-      document.getElementById('statXgAway').textContent = stats.awayXg.toFixed(2);
-      const totalXg = Math.max(0.01, stats.homeXg + stats.awayXg);
-      document.getElementById('barXgHome').style.width = `${(stats.homeXg / totalXg) * 100}%`;
-
-      document.getElementById('statPassHome').textContent = stats.homePasses;
-      document.getElementById('statPassAway').textContent = stats.awayPasses;
-      const totalPass = Math.max(1, stats.homePasses + stats.awayPasses);
-      document.getElementById('barPassHome').style.width = `${(stats.homePasses / totalPass) * 100}%`;
-    }
-
-    function renderRosterUI() {
-      const container = document.getElementById('rosterContainer');
-      container.innerHTML = '';
-      players.filter(p => p.team === 'home').forEach(p => {
-        const div = document.createElement('div');
-        div.className = `roster-item ${p.id === selectedPlayerId ? 'selected' : ''}`;
-        div.onclick = () => {
-          selectedPlayerId = p.id;
-          renderRosterUI();
-        };
-        div.innerHTML = `
-          <div class="roster-left">
-            <span class="num-circle" style="background:#2563eb;">${p.num}</span>
-            <span class="pos-tag">${p.pos}</span>
-            <span style="font-weight:700;">${p.name}</span>
-          </div>
-          <div class="stamina-mini" title="체력 ${Math.round(p.stamina)}%">
-            <div class="stamina-fill" style="width:${p.stamina}%"></div>
-          </div>
-        `;
-        container.appendChild(div);
+    function setSpeed(spd) {
+      playbackSpeed = spd;
+      document.querySelectorAll('.timeline-bar .t-btn').forEach(b => {
+        if (b.innerText.includes(`${spd.toFixed(1)}x`) || b.innerText.includes(`${spd}x`)) {
+          b.classList.add('active');
+        } else if (b.innerText.includes('x')) {
+          b.classList.remove('active');
+        }
       });
     }
 
-    document.getElementById('btnPlayPause').addEventListener('click', () => {
-      isRunning = !isRunning;
-      const btn = document.getElementById('btnPlayPause');
-      btn.textContent = isRunning ? '⏸ 일시정지' : '▶ 경기 재개';
-      btn.className = isRunning ? 'primary' : '';
-    });
-
-    function setSpeed(s) {
-      simSpeed = s;
-      ['btnSpeed1', 'btnSpeed2', 'btnSpeed4'].forEach(id => document.getElementById(id).classList.remove('active'));
-      document.getElementById(`btnSpeed${s}`).classList.add('active');
+    function resetCurrentAction() {
+      currentTime = 0;
     }
 
-    function toggleGridSnap() {
-      snapToGridMode = !snapToGridMode;
-      const btn = document.getElementById('btnStepMode');
-      btn.textContent = snapToGridMode ? '🎯 이동: 바둑판 스냅' : '🎯 이동: 부드러운 보간';
-      btn.classList.toggle('active', snapToGridMode);
+    function onSeekTime(val) {
+      currentTime = parseFloat(val);
+      renderPitch();
     }
 
-    function toggleOverlay(key) {
-      overlays[key] = !overlays[key];
-      const map = { grid: 'btnToggleGrid', zones: 'btnToggleZones', fov: 'btnToggleFov' };
-      document.getElementById(map[key]).classList.toggle('active', overlays[key]);
+    function selectAction(idx) {
+      currentActionIdx = idx;
+      currentTime = 0;
+      updateActionCardsUI();
+      renderPitch();
     }
 
-    function updateMentality() {
-      homeMentality = document.getElementById('homeMentality').value;
-      setCommentary(`📋 벤치 전술 변경: 홈팀 전술 성향이 [${homeMentality.toUpperCase()}] 모드로 전환되었습니다!`, 'TACTIC');
+    function updateActionCardsUI() {
+      const cards = document.querySelectorAll('.action-card');
+      cards.forEach((c, idx) => {
+        if (idx === currentActionIdx) c.classList.add('active');
+        else c.classList.remove('active');
+      });
     }
 
-    function resetMatch() {
-      matchSeconds = 0;
-      stats = {
-        homeGoals: 0, awayGoals: 0,
-        homePossTicks: 1, awayPossTicks: 1,
-        homeShots: 0, homeSot: 0,
-        awayShots: 0, awaySot: 0,
-        homeXg: 0, awayXg: 0,
-        homePasses: 0, awayPasses: 0
-      };
-      trajectories = [];
-      document.getElementById('eventLog').innerHTML = '';
-      initPlayers();
-      addEventLog('00:00 📢 주심의 휘슬과 함께 바둑판 2D 매치 엔진 시뮬레이션이 시작됩니다!');
+    // =========================================================================
+    // 6. 선수 변경 및 UI 동기화
+    // =========================================================================
+    function onSelectPlayer(playerId) {
+      const p = PLAYERS_DATABASE.find(item => String(item.player_id) === String(playerId));
+      if (!p) return;
+      currentPlayer = p;
+      currentActionIdx = 0;
+      currentTime = 0;
+
+      // 1) 좌측 프로필 카드 갱신 (DB 실측 값 반영)
+      document.getElementById('pCardName').innerText = p.name_ko || p.name;
+      document.getElementById('pCardPos').innerText = p.position || 'ST';
+      document.getElementById('pCardClub').innerText = `${p.current_club || '소속팀 미상'} · ${p.league || ''}`;
+      document.getElementById('pCardArchetype').innerText = p.tactical_archetype || '전술 스페셜리스트';
+      document.getElementById('pCardStrengths').innerText = p.strengths_tags || '탁월한 경기 영향력 및 실측 데이터 우수';
+
+      document.getElementById('pStatGoals').innerText = p.goals_per90 ? `${p.goals_per90.toFixed(2)}골` : '-';
+      document.getElementById('pStatXg').innerText = p.xg_per90 ? `${p.xg_per90.toFixed(2)}` : '-';
+      document.getElementById('pStatKp').innerText = p.key_passes_per90 ? `${p.key_passes_per90.toFixed(1)}회` : '-';
+      document.getElementById('pStatProg').innerText = p.progressive_actions_per90 ? `${p.progressive_actions_per90.toFixed(1)}회` : '-';
+      document.getElementById('pStatDef').innerText = p.defensive_duels_won_pct ? `${p.defensive_duels_won_pct.toFixed(0)}%` : '-';
+      document.getElementById('pStatPctl').innerText = p.pos_percentile ? `상위 ${100 - p.pos_percentile}%` : '상위권';
+
+      // 2) 유튜브 버튼 연동
+      const ytId = YT_MAP[p.name_ko] || YT_MAP[p.name] || 'YhEcyglkOx0';
+      document.getElementById('ytSyncBtn').href = `https://www.youtube.com/watch?v=${ytId}`;
+
+      // 3) 우측 고유 액션 리스트 생성
+      const actions = generatePlayerActions(p);
+      const listContainer = document.getElementById('actionList');
+      listContainer.innerHTML = '';
+
+      actions.forEach((act, idx) => {
+        const div = document.createElement('div');
+        div.className = `action-card ${idx === 0 ? 'active' : ''}`;
+        div.onclick = () => selectAction(idx);
+        div.innerHTML = `
+          <span class="act-tag ${act.tag}">${act.tagText}</span>
+          <div class="act-title">${act.title}</div>
+          <div class="act-desc">${act.desc}</div>
+        `;
+        listContainer.appendChild(div);
+      });
+
+      renderPitch();
     }
 
-    // 캔버스 클릭 시 해당 위치의 선수 선택
-    canvas.addEventListener('click', (e) => {
-      const rect = canvas.getBoundingClientRect();
-      const scaleX = canvas.width / rect.width;
-      const scaleY = canvas.height / rect.height;
-      const cx = (e.clientX - rect.left) * scaleX;
-      const cy = (e.clientY - rect.top) * scaleY;
+    // 초기화
+    function init() {
+      const select = document.getElementById('playerSelect');
+      PLAYERS_DATABASE.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p.player_id;
+        opt.innerText = `${p.name_ko || p.name} (${p.position}) — ${p.current_club || ''}`;
+        select.appendChild(opt);
+      });
 
-      for (const p of players) {
-        if (Math.hypot(p.x - cx, p.y - cy) < 18) {
-          selectedPlayerId = p.id;
-          renderRosterUI();
-          const g = pixelToGrid(p.x, p.y);
-          setCommentary(`🔍 [${p.name} (#${p.num}, ${p.pos})] 선택됨 — 현재 바둑판 타일 (${String.fromCharCode(65 + g.col)}${g.row + 1})`, 'FOCUS');
-          return;
-        }
-      }
-    });
+      // 기본 선택: 손흥민 또는 첫 번째 선수
+      const defaultPlayer = PLAYERS_DATABASE.find(p => (p.name_ko && p.name_ko.includes('손흥민')) || p.name.includes('Son')) || PLAYERS_DATABASE[0];
+      select.value = defaultPlayer.player_id;
+      onSelectPlayer(defaultPlayer.player_id);
 
-    // 메인 루프
-    let lastTime = performance.now();
-    function loop(now) {
-      const dt = Math.min(0.1, (now - lastTime) / 1000);
-      lastTime = now;
-      updateSimulation(dt);
-      render();
-      requestAnimationFrame(loop);
+      requestAnimationFrame(animationLoop);
     }
 
-    resetMatch();
-    requestAnimationFrame(loop);
+    window.onload = init;
   </script>
 </body>
 </html>

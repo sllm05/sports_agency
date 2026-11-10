@@ -1146,6 +1146,17 @@ def build_all_agency_analytics() -> dict[str, Any]:
             "mandatory_release_clause": 0,
             "tax_regime_note": "프랑스 리그 1: 세전 월급(Gross Monthly) 기준 협상 관행, 프랑스 사회보장 분담금(Cotisations Sociales) 비중이 높아 해외 영입 선수 대상 패트리아트(Impatriate Tax Regime, 최대 30% 비과세) 절세 설계 필수, 공식 바이아웃 조항 금지(LFP 규정상 사적 신사협정만 가능)",
         },
+        {
+            "league": "K League 1",
+            "country": "South Korea",
+            "negotiation_basis": "NET_ANNUAL",
+            "top_income_tax_rate_pct": 45.0,
+            "employer_social_rate_pct": 10.0,
+            "max_amortization_years": 5,
+            "psr_squad_cost_cap_pct": 70.0,
+            "mandatory_release_clause": 0,
+            "tax_regime_note": "대한민국 K리그1: 세후 연봉(Net Annual) 협상 관행, 소득세 최고 45% + 지방소득세 4.5% = 49.5%, 외국인 쿼터 (국적 무관 5명 + AFC 1명 = 총 6명 등록), U-22 의무 출전 규정, 군 복무(김천 상무 지원 자격 만 27세 이하) 연계 필수",
+        },
     ]
     cur.executemany(
         """

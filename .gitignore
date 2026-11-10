@@ -26,3 +26,5 @@ build/
 # Runtime checkpoints / temp
 *.db-shm
 *.db-wal
+
+firebase-credentials.json
