@@ -152,7 +152,7 @@
         <div id="nav-active-player" onclick="showPage('page-scouting')" title="클릭하여 선수 상세 정보로 이동"
           class="cursor-pointer text-xs px-2.5 py-1 rounded-lg border border-white/[0.08] bg-[#12151c] text-zinc-300 hover:border-zinc-600 transition flex items-center gap-1.5">
           <span class="text-zinc-500 text-[11px]">선택:</span>
-          <span id="nav-player-name" class="font-medium text-white truncate max-w-[110px]">손흥민</span>
+          <span id="nav-player-name" class="font-medium text-white truncate max-w-[140px]">Heung-min Son (손흥민)</span>
         </div>
         <!-- API-Football 100-Quota Realtime Tracker & Auto-Fallback Badge -->
         <div id="api-quota-badge" onclick="loadQuotaStatus()" title="API-Football 무료 100회 한도 추적 (소진 시 Football-Data.org 자동 백업)"
@@ -168,6 +168,66 @@
       </div>
     </div>
   </header>
+
+  <!-- ========================================================================= -->
+  <!-- Top Global Live Intelligence & Injury Ticker Bar (Sticky across all views) -->
+  <!-- ========================================================================= -->
+  <div id="global-ticker-bar" class="no-print sticky top-[53px] z-30 border-b border-amber-500/20 bg-[#0c0e14]/95 backdrop-blur-md shadow-sm transition-all">
+    <div class="max-w-7xl mx-auto px-4 py-1.5 flex items-center justify-between gap-3 text-xs">
+      
+      <!-- Left Pill: Live Feed Status -->
+      <div class="flex items-center gap-2 shrink-0">
+        <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-rose-500/15 border border-rose-500/30 text-rose-400 font-semibold text-[11px] tracking-wide">
+          <span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></span>
+          LIVE FEED
+        </span>
+        <span class="text-zinc-500 text-[11px] hidden md:inline">유럽 5대 리그 속보</span>
+      </div>
+
+      <!-- Center: Rotating Headline & Category -->
+      <div class="flex-1 min-w-0 flex items-center gap-2 overflow-hidden cursor-pointer" onclick="openBriefingModal()" title="클릭하여 실시간 이적·부상 브리핑 센터 열기">
+        <span id="ticker-category-badge" class="shrink-0 px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-500/15 text-amber-400 border border-amber-500/30">
+          [이적 루머]
+        </span>
+        <p id="ticker-headline-text" class="text-zinc-200 truncate font-medium hover:text-white transition">
+          실시간 이적 시장 루머 및 훈련 부상 속보를 동기화 중입니다...
+        </p>
+        <span id="ticker-source-text" class="shrink-0 text-[10px] text-zinc-500 font-mono hidden lg:inline">
+          출처: Official Desk
+        </span>
+      </div>
+
+      <!-- Right: Action Buttons & Navigation -->
+      <div class="flex items-center gap-1.5 shrink-0">
+        <!-- Prev/Next Mini Buttons -->
+        <div class="flex items-center border border-white/[0.08] rounded-lg overflow-hidden bg-[#12151c]">
+          <button onclick="prevTickerItem()" class="px-1.5 py-1 text-zinc-400 hover:text-white hover:bg-zinc-800 transition" title="이전 뉴스">
+            ‹
+          </button>
+          <button onclick="nextTickerItem()" class="px-1.5 py-1 text-zinc-400 hover:text-white hover:bg-zinc-800 transition" title="다음 뉴스">
+            ›
+          </button>
+        </div>
+
+        <!-- Briefing Center Modal Button -->
+        <button onclick="openBriefingModal()"
+          class="px-2 py-1 rounded-lg border border-white/[0.08] bg-[#12151c] hover:border-amber-500/40 text-zinc-300 hover:text-white text-[11px] font-medium transition flex items-center gap-1 shadow-sm"
+          title="유럽 5대 리그 부상자 명단 및 최신 이적 루머 전체 보기">
+          <span>브리핑 센터</span>
+          <span class="text-[10px] text-amber-400">↗</span>
+        </button>
+
+        <!-- Quick Sync Button -->
+        <button id="btn-ticker-sync" onclick="syncDailyInjuriesAndRumors()"
+          class="px-2.5 py-1 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-400 hover:text-amber-300 text-[11px] font-semibold transition flex items-center gap-1 shadow-sm"
+          title="오늘자 5대 리그 경기·훈련 부상자 및 최신 이적 루머 즉시 갱신 (무료 쿼터 무손실)">
+          <span id="ticker-sync-icon" class="inline-block transition-transform duration-500">🔄</span>
+          <span class="hidden sm:inline">즉시 갱신</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
 
   <main class="max-w-7xl mx-auto px-4 pt-6">
 
@@ -514,10 +574,11 @@
                 <option value="Serie A">Serie A</option>
                 <option value="Bundesliga">Bundesliga</option>
                 <option value="Ligue 1">Ligue 1</option>
+                <option value="TEST_LEAGUE">🧪 테스트 리그 (Test League)</option>
               </select>
               <select id="club-filter-select" onchange="applyRosterFilters()"
                 class="bg-[#0e1117] border border-white/[0.08] rounded-lg px-2 py-1.5 text-[11px] text-white focus:outline-none focus:border-zinc-500">
-                <option value="ALL">전체 96개 구단</option>
+                <option value="ALL">전체 구단 (96개)</option>
               </select>
               <select id="pos-filter-select" onchange="applyRosterFilters()"
                 class="bg-[#0e1117] border border-white/[0.08] rounded-lg px-2 py-1.5 text-[11px] text-white focus:outline-none focus:border-zinc-500">
@@ -599,6 +660,16 @@
                 <div id="sp-val" class="text-lg font-bold text-emerald-400"></div>
                 <div id="sp-wage" class="text-xs text-zinc-300"></div>
               </div>
+            </div>
+
+            <!-- Injury Alert Banner (Active when player is currently injured) -->
+            <div id="sp-injury-box" class="hidden p-3 rounded-lg bg-rose-500/10 border border-rose-500/25 flex items-center justify-between text-xs">
+              <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
+                <span class="font-bold text-rose-400">부상 주의보:</span>
+                <span id="sp-injury-detail" class="text-zinc-200"></span>
+              </div>
+              <span id="sp-injury-return" class="text-[11px] font-mono text-zinc-400"></span>
             </div>
 
             <p id="sp-strengths" class="text-xs text-zinc-300 bg-[#0e1117] p-3 rounded-lg border border-white/[0.04]"></p>
@@ -1852,6 +1923,7 @@
       await Promise.all([
         loadSystemStatus(),
         loadQuotaStatus(),
+        loadTickerRumors(),
         loadPlayers(),
         loadBosmanRadar(),
         loadUndervaluedProspects(),
@@ -2005,6 +2077,43 @@
     let currentDisplayLimit = 80;
     let onlyKoreanMode = false;
 
+    const BIG_5_LEAGUES = ['Premier League', 'La Liga', 'Serie A', 'Bundesliga', 'Ligue 1'];
+    const VIRTUAL_LEAGUES = ['TEST_LEAGUE', '테스트 리그 (Test League)', 'TEST', '테스트 리그', 'VIRTUAL_LEAGUE', '테스트/가상 리그 (Virtual League)', 'VIRTUAL', '테스트/가상 리그'];
+    const VIRTUAL_CLUBS = [
+      '네오 뮌헨 FC',
+      '메트로폴리스 FC',
+      '솔라리스 시티 FC',
+      '루미나르 SC',
+      '아발론 유나이티드',
+      '아틀라스 FC',
+      '한양 시티 FC',
+      '호라이즌 로버스'
+    ];
+
+    function formatPlayerName(p) {
+      if (!p) return '';
+      const isKorean = p.nationality === 'South Korea' || p.nationality === '대한민국' || p.is_korean;
+      if (isKorean) {
+        const en = p.name || '';
+        const ko = p.name_ko || '';
+        if (ko && ko !== en) {
+          if (en.includes('(')) return en;
+          return `${en} (${ko})`;
+        }
+        return en || ko;
+      }
+      // Foreign player: English name only!
+      return p.name || p.name_ko || '';
+    }
+
+    function isVirtualPlayer(p) {
+      if (!p) return false;
+      if (p.player_id >= 90000 && p.player_id <= 90200) return true;
+      if (VIRTUAL_CLUBS.includes(p.current_club)) return true;
+      if (p.league && (p.league.includes('테스트') || p.league.includes('가상') || p.league.includes('Virtual'))) return true;
+      return false;
+    }
+
     async function loadPlayers() {
       const res = await fetch('/api/players');
       const data = await res.json();
@@ -2013,18 +2122,20 @@
       filteredPlayersList = allPlayers;
 
       populateClubDropdown('ALL');
-      updateRosterCountText(allPlayers.length);
-      renderPlayerGrid(filteredPlayersList, true);
+      applyRosterFilters();
     }
 
     function updateRosterCountText(filteredLen) {
-      const total = allPlayers.length;
+      const lg = document.getElementById('league-filter-select')?.value;
       const el = document.getElementById('roster-count');
       if (!el) return;
-      if (filteredLen === total) {
-        el.textContent = `${total.toLocaleString()}명 (96개 구단)`;
+
+      if (VIRTUAL_LEAGUES.includes(lg)) {
+        el.textContent = `${filteredLen.toLocaleString()}명 (8개 테스트 구단)`;
+      } else if (lg === 'ALL') {
+        el.textContent = `${filteredLen.toLocaleString()}명 (유럽 5대 리그 96개 구단)`;
       } else {
-        el.textContent = `${filteredLen.toLocaleString()}명 / 전체 ${total.toLocaleString()}명`;
+        el.textContent = `${filteredLen.toLocaleString()}명 / 전체 ${allPlayers.length.toLocaleString()}명`;
       }
     }
 
@@ -2032,13 +2143,31 @@
       const clubSelect = document.getElementById('club-filter-select');
       if (!clubSelect) return;
       const clubsSet = new Set();
+
+      if (VIRTUAL_LEAGUES.includes(leagueFilter)) {
+        VIRTUAL_CLUBS.forEach(c => clubsSet.add(c));
+        const clubs = Array.from(clubsSet).sort();
+        clubSelect.innerHTML = `<option value="ALL">전체 테스트 구단 (${clubs.length}개)</option>` +
+          clubs.map(c => `<option value="${c}">${c}</option>`).join('');
+        return;
+      }
+
       allPlayers.forEach(p => {
-        if (leagueFilter === 'ALL' || p.league === leagueFilter) {
+        if (isVirtualPlayer(p)) return;
+        if (p.nationality !== 'South Korea' && !BIG_5_LEAGUES.includes(p.league)) return;
+
+        if (leagueFilter === 'ALL') {
+          if (BIG_5_LEAGUES.includes(p.league)) {
+            clubsSet.add(p.current_club);
+          }
+        } else if (p.league === leagueFilter) {
           clubsSet.add(p.current_club);
         }
       });
+
       const clubs = Array.from(clubsSet).sort();
-      clubSelect.innerHTML = `<option value="ALL">전체 구단 (${clubs.length}개)</option>` +
+      const label = (leagueFilter === 'ALL') ? `전체 구단 (${clubs.length}개)` : `${leagueFilter} (${clubs.length}개 구단)`;
+      clubSelect.innerHTML = `<option value="ALL">${label}</option>` +
         clubs.map(c => `<option value="${c}">${c}</option>`).join('');
     }
 
@@ -2056,10 +2185,25 @@
       const pos = document.getElementById('pos-filter-select').value;
       const q = document.getElementById('player-search-input').value.trim().toLowerCase();
 
+      const isVirtualMode = VIRTUAL_LEAGUES.includes(lg);
+
       filteredPlayersList = allPlayers.filter(p => {
+        const isVirt = isVirtualPlayer(p);
+
+        if (isVirtualMode) {
+          if (!isVirt) return false;
+          if (club !== 'ALL' && p.current_club !== club) return false;
+        } else if (lg === 'ALL') {
+          if (isVirt) return false;
+          if (!BIG_5_LEAGUES.includes(p.league)) return false;
+          if (club !== 'ALL' && p.current_club !== club) return false;
+        } else {
+          if (isVirt) return false;
+          if (p.league !== lg) return false;
+          if (club !== 'ALL' && p.current_club !== club) return false;
+        }
+
         if (onlyKoreanMode && p.nationality !== 'South Korea') return false;
-        if (lg !== 'ALL' && p.league !== lg) return false;
-        if (club !== 'ALL' && p.current_club !== club) return false;
         if (pos !== 'ALL' && p.position !== pos) return false;
         if (q) {
           const matchName = p.name && p.name.toLowerCase().includes(q);
@@ -2083,8 +2227,11 @@
 
     function filterManagersOnly() {
       onlyKoreanMode = false;
-      document.getElementById('league-filter-select').value = 'ALL';
-      populateClubDropdown('ALL');
+      const currentLg = document.getElementById('league-filter-select').value;
+      if (!VIRTUAL_LEAGUES.includes(currentLg) && currentLg !== 'ALL' && !BIG_5_LEAGUES.includes(currentLg)) {
+        document.getElementById('league-filter-select').value = 'ALL';
+        populateClubDropdown('ALL');
+      }
       document.getElementById('pos-filter-select').value = 'MGR';
       document.getElementById('player-search-input').value = '';
       currentDisplayLimit = 100;
@@ -2125,7 +2272,14 @@
         card.className = isSelected
           ? 'player-card text-left p-2.5 rounded-lg border border-emerald-500 bg-emerald-950/20 transition flex flex-col justify-between'
           : 'player-card text-left p-2.5 rounded-lg border border-white/[0.06] bg-[#0e1117] hover:border-zinc-600 transition flex flex-col justify-between';
-        const displayName = p.name_ko !== p.name ? `${p.name_ko} (${p.name})` : p.name;
+        const displayName = formatPlayerName(p);
+        const isInjured = p.is_injured === 1;
+        const injuryBadge = isInjured
+          ? `<div class="mt-1 flex items-center gap-1 text-[9px] font-semibold text-rose-400 bg-rose-500/15 border border-rose-500/30 px-1.5 py-0.5 rounded truncate" title="${p.injury_detail || '부상 결장'}">
+               <span class="w-1.5 h-1.5 rounded-full bg-rose-500 shrink-0 animate-pulse"></span>
+               <span class="truncate">부상: ${p.injury_detail || '결장 / 정밀 진단'}</span>
+             </div>`
+          : '';
         card.innerHTML = `
           <div class="flex items-center justify-between w-full">
             <span class="text-[10px] font-semibold px-1.5 py-0.2 rounded bg-zinc-800 text-zinc-300">${p.position}</span>
@@ -2134,6 +2288,7 @@
           <div class="mt-1">
             <div class="text-xs font-semibold text-white truncate">${displayName}</div>
             <div class="text-[10px] text-zinc-400 truncate">${p.current_club}</div>
+            ${injuryBadge}
           </div>
           <div class="mt-1.5 pt-1 border-t border-white/[0.04] flex items-center justify-between text-[10px]">
             <span class="text-emerald-400 font-semibold">€${(p.market_value_eur / 1000000).toFixed(1)}M</span>
@@ -2169,24 +2324,37 @@
       }
 
       const navName = document.getElementById('nav-player-name');
-      if (navName) navName.textContent = p.name_ko || p.name;
+      if (navName) navName.textContent = formatPlayerName(p);
       const homePlayerStat = document.getElementById('home-active-player-stat');
-      if (homePlayerStat) homePlayerStat.textContent = `${p.name_ko} (${p.age}세, ${p.position})`;
+      if (homePlayerStat) homePlayerStat.textContent = `${formatPlayerName(p)} (${p.age}세, ${p.position})`;
 
       const stratName = document.getElementById('strat-target-name');
       const stratBadge = document.getElementById('strat-target-badge');
-      if (stratName) stratName.textContent = `${p.name_ko} (${p.name})`;
+      if (stratName) stratName.textContent = formatPlayerName(p);
       if (stratBadge) stratBadge.textContent = `${p.current_club} · ${p.position} · €${(p.market_value_eur/1000000).toFixed(1)}M`;
 
       const spCard = document.getElementById('selected-player-card');
       if (spCard) spCard.classList.remove('hidden');
       document.getElementById('sp-pos').textContent = `${p.position} (${p.secondary_positions})`;
-      document.getElementById('sp-name').textContent = `${p.name_ko} (${p.name})`;
+      document.getElementById('sp-name').textContent = formatPlayerName(p);
       document.getElementById('sp-club').textContent = `${p.current_club} · ${p.league} · 계약만료 ${p.contract_expires}`;
       document.getElementById('sp-val').textContent = `€${p.market_value_eur.toLocaleString()}`;
       document.getElementById('sp-wage').textContent = `주급 €${p.weekly_wage_eur.toLocaleString()}`;
       document.getElementById('sp-strengths').textContent = `전술 특성: ${p.strengths_summary}`;
       document.getElementById('sp-percentile-badge').textContent = `상위 ${100 - p.pos_percentile + 1}%`;
+
+      const injBox = document.getElementById('sp-injury-box');
+      const injDetail = document.getElementById('sp-injury-detail');
+      const injReturn = document.getElementById('sp-injury-return');
+      if (injBox && injDetail && injReturn) {
+        if (p.is_injured === 1) {
+          injBox.classList.remove('hidden');
+          injDetail.textContent = p.injury_detail || '부상 결장 (정밀 진단 중)';
+          injReturn.textContent = p.injury_return_date ? `예상 복귀: ${p.injury_return_date}` : '복귀 추적 중';
+        } else {
+          injBox.classList.add('hidden');
+        }
+      }
 
       const gbeAuto = p.intl_match_pct >= 70
         ? `<span class="text-emerald-400 font-semibold">GBE Auto-Pass (A매치 ${p.intl_match_pct}%)</span>`
@@ -2609,7 +2777,7 @@
           <div onclick="selectProspectByName('${p.name}')"
             class="p-2.5 rounded-lg bg-[#0e1117] border border-white/[0.04] hover:border-zinc-600 transition cursor-pointer space-y-1 text-xs">
             <div class="flex items-center justify-between font-semibold text-white">
-              <span>${p.name_ko} (${p.name})</span>
+              <span>${formatPlayerName(p)}</span>
               <span class="text-[10px] text-zinc-400 font-mono">${p.position} · ${p.age}세</span>
             </div>
             <div class="text-[11px] text-zinc-400">${p.current_club} (${p.league})</div>
@@ -6141,6 +6309,12 @@
       const projValStr = target.projected_5yr_valuation_eur ? `€${(target.projected_5yr_valuation_eur/1000000).toFixed(0)}M` : '-';
       const roiStr = target.projected_agency_roi_eur ? `€${(target.projected_agency_roi_eur/1000000).toFixed(1)}M` : '-';
 
+      const isKoreanTarget = target.nationality === 'South Korea' || (target.name_ko && ['박태양', '김진혁', '한승민', '강도현', '서진우', '최민우', '윤도겸'].includes(target.name_ko));
+      const targetDisplayName = (isKoreanTarget && target.name_ko && target.name_ko !== target.name)
+        ? `${target.name} (${target.name_ko})`
+        : target.name;
+      const targetNameSafe = (target.name || '').replace(/'/g, "\\'");
+
       return `
         <div class="ui-card p-5 border-white/[0.08] hover:border-amber-500/40 transition flex flex-col justify-between space-y-4 bg-[#11141a]">
           <div>
@@ -6154,7 +6328,7 @@
                   ${isPlayer ? '⚽ 선수' : '👔 감독'}
                 </span>
               </div>
-              <button onclick="removeTargetFromWatchlist(${target.target_id}, '${target.target_type}', '${target.name_ko}')"
+              <button onclick="removeTargetFromWatchlist(${target.target_id}, '${target.target_type}', '${targetNameSafe}')"
                 class="text-zinc-500 hover:text-rose-400 text-xs px-1.5 py-0.5 rounded hover:bg-zinc-800 transition" title="관심 제외">
                 ✕ 관심 제외
               </button>
@@ -6163,9 +6337,8 @@
             <!-- Header Info -->
             <div class="flex items-start justify-between gap-3 mt-3">
               <div>
-                <h4 class="text-base font-bold text-white tracking-tight flex items-center gap-1.5">
-                  <span>${target.name_ko}</span>
-                  <span class="text-xs font-normal text-zinc-400 font-mono">${target.name}</span>
+                <h4 class="text-base font-bold text-white tracking-tight">
+                  ${targetDisplayName}
                 </h4>
                 <p class="text-xs text-zinc-400 mt-0.5">
                   <span class="text-zinc-200 font-medium">${currentClub}</span>
@@ -6217,11 +6390,11 @@
 
           <!-- Action Buttons -->
           <div class="grid grid-cols-2 gap-2 pt-1">
-            <button onclick="generateRecruitmentPitch(${target.target_id}, '${target.target_type}', '${target.name_ko}')"
+            <button onclick="generateRecruitmentPitch(${target.target_id}, '${target.target_type}', '${targetNameSafe}')"
               class="px-3 py-2 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-semibold text-xs transition flex items-center justify-center gap-1.5 shadow-md shadow-sky-950/30">
               <span>📊 1-Page 제안서</span>
             </button>
-            <button onclick="enrollRecruitmentTarget(${target.target_id}, '${target.target_type}', '${target.name_ko}')"
+            <button onclick="enrollRecruitmentTarget(${target.target_id}, '${target.target_type}', '${targetNameSafe}')"
               class="px-3 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition flex items-center justify-center gap-1.5 shadow-md shadow-emerald-950/30">
               <span>✍️ 전속 계약 체결</span>
             </button>
@@ -6476,6 +6649,8 @@
         const clientId = client.client_id || (isPlayer ? client.player_id : client.manager_id);
         const nameKo = client.client_name_ko || client.client_name;
         const nameEn = client.client_name;
+        const isKoreanClient = client.nationality === 'South Korea' || ['Leo Park', 'David Han', 'Do-hyun Kang', 'Jin-woo Seo', 'Min-woo Choi', 'Kevin Yoon', 'Jin-hyuk Kim'].includes(nameEn);
+        const clientDisplayName = (isKoreanClient && nameKo && nameKo !== nameEn) ? `${nameEn} (${nameKo})` : nameEn;
         const currentClub = client.current_club || '무소속 (FA)';
         const isFA = !currentClub || currentClub.includes('무직') || currentClub.includes('무소속') || currentClub.includes('자유계약') || currentClub === 'FA';
         const isVirtual = Boolean((clientId >= 90000) || (client.player_id >= 90000) || (client.manager_id >= 90000));
@@ -6493,9 +6668,9 @@
                   <span class="px-2 py-0.5 rounded text-[10px] font-bold ${isPlayer ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-purple-500/10 text-purple-400 border border-purple-500/20'}">
                     ${isPlayer ? `선수 (${client.position || 'FW'})` : '감독 (Manager)'}
                   </span>
-                  ${isVirtual ? '<span class="px-1.5 py-0.2 rounded text-[9px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">🧪 가상 인물</span>' : '<span class="px-1.5 py-0.2 rounded text-[9px] font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30">⭐ 실제 고객</span>'}
+                  ${isVirtual ? '<span class="px-1.5 py-0.2 rounded text-[9px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">🧪 테스트 인물</span>' : '<span class="px-1.5 py-0.2 rounded text-[9px] font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30">⭐ 실제 고객</span>'}
                 </div>
-                <button onclick="terminateClientContract(${clientId}, '${client.type}', '${nameKo}')"
+                <button onclick="terminateClientContract(${clientId}, '${client.type}', '${clientDisplayName.replace(/'/g, "\\'")}')"
                   class="text-[10px] text-zinc-500 hover:text-rose-400 px-1.5 py-0.5 rounded hover:bg-zinc-800 transition" title="전속 대리 계약 해지">
                   ✕ 전속해지
                 </button>
@@ -6504,9 +6679,8 @@
               <!-- Client Header -->
               <div class="flex items-start justify-between gap-3 mt-3">
                 <div>
-                  <h4 class="text-base font-bold text-white tracking-tight flex items-center gap-1.5">
-                    <span>${nameKo}</span>
-                    <span class="text-xs font-normal text-zinc-400 font-mono">${nameEn}</span>
+                  <h4 class="text-base font-bold text-white tracking-tight">
+                    ${clientDisplayName}
                   </h4>
                   <p class="text-xs text-zinc-400 mt-0.5 flex items-center gap-1">
                     <span class="text-zinc-200 font-medium">${currentClub}</span>
@@ -6787,6 +6961,250 @@
         loadAgencyRecruitmentTargets();
       } catch (err) {
         alert('계약 해지 통신 오류: ' + err.message);
+      }
+    }
+
+
+    // -------------------------------------------------------------------------
+    // Realtime Intelligence Ticker Bar & Briefing Center Controller
+    // -------------------------------------------------------------------------
+    let tickerRumors = [];
+    let currentTickerIdx = 0;
+    let tickerTimer = null;
+    let activeBriefingTab = 'RUMORS';
+
+    async function loadTickerRumors() {
+      try {
+        const res = await fetch('/api/news/transfer-rumors');
+        if (!res.ok) return;
+        const data = await res.json();
+        tickerRumors = data.rumors || [];
+        if (tickerRumors.length > 0) {
+          updateTickerDisplay();
+          startTickerRotation();
+          renderBriefingRumors(tickerRumors);
+        }
+      } catch (err) {
+        console.warn('Ticker load error:', err);
+      }
+    }
+
+    function updateTickerDisplay() {
+      if (!tickerRumors || tickerRumors.length === 0) return;
+      const item = tickerRumors[currentTickerIdx % tickerRumors.length];
+      
+      const badgeEl = document.getElementById('ticker-category-badge');
+      const textEl = document.getElementById('ticker-headline-text');
+      const srcEl = document.getElementById('ticker-source-text');
+
+      if (!badgeEl || !textEl) return;
+
+      let catText = '[이적 루머]';
+      let catClasses = 'shrink-0 px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-500/15 text-amber-400 border border-amber-500/30';
+      if (item.category === 'TRAINING_INJURY') {
+        catText = '[훈련/부상 속보]';
+        catClasses = 'shrink-0 px-1.5 py-0.5 rounded text-[10px] font-bold bg-rose-500/15 text-rose-400 border border-rose-500/30';
+      } else if (item.category === 'OFFICIAL_DEAL') {
+        catText = '[오피셜 이적]';
+        catClasses = 'shrink-0 px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30';
+      }
+
+      badgeEl.className = catClasses;
+      badgeEl.textContent = catText;
+      textEl.textContent = item.headline || item.summary || '최신 속보';
+      if (srcEl) {
+        srcEl.textContent = `출처: ${item.source_name || 'Official Desk'} (${item.published_time || '오늘'})`;
+      }
+    }
+
+    function nextTickerItem() {
+      if (!tickerRumors || tickerRumors.length === 0) return;
+      currentTickerIdx = (currentTickerIdx + 1) % tickerRumors.length;
+      updateTickerDisplay();
+      resetTickerRotation();
+    }
+
+    function prevTickerItem() {
+      if (!tickerRumors || tickerRumors.length === 0) return;
+      currentTickerIdx = (currentTickerIdx - 1 + tickerRumors.length) % tickerRumors.length;
+      updateTickerDisplay();
+      resetTickerRotation();
+    }
+
+    function startTickerRotation() {
+      if (tickerTimer) clearInterval(tickerTimer);
+      tickerTimer = setInterval(() => {
+        if (!tickerRumors || tickerRumors.length === 0) return;
+        currentTickerIdx = (currentTickerIdx + 1) % tickerRumors.length;
+        updateTickerDisplay();
+      }, 5500);
+    }
+
+    function resetTickerRotation() {
+      startTickerRotation();
+    }
+
+    async function syncDailyInjuriesAndRumors(force = false) {
+      const syncBtn = document.getElementById('btn-ticker-sync');
+      const syncIcon = document.getElementById('ticker-sync-icon');
+      if (syncIcon) syncIcon.classList.add('animate-spin');
+
+      try {
+        const res = await fetch('/api/sync/daily-injuries', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ force_api_refresh: force })
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          alert('부상/루머 동기화 실패: ' + (data.detail || '오류'));
+          return;
+        }
+
+        const inj = data.injury_sync || {};
+        const count = inj.total_active_injured_players || inj.updated_players_count || 0;
+        alert(`✅ 일일 부상자 및 최신 루머 동기화 완료!
+• 5대 리그 활성 부상자: ${count.toLocaleString()}명 갱신
+• 최신 이적/훈련 속보: ${(data.latest_rumors_count || 0)}건 갱신`);
+
+        await loadTickerRumors();
+        await loadPlayers();
+        if (activeBriefingTab === 'INJURIES') {
+          const lSelect = document.getElementById('briefing-league-select');
+          await loadInjuriesSummary(lSelect ? lSelect.value : 'ALL');
+        }
+      } catch (err) {
+        alert('동기화 통신 오류: ' + err.message);
+      } finally {
+        if (syncIcon) syncIcon.classList.remove('animate-spin');
+      }
+    }
+
+    function openBriefingModal() {
+      const modal = document.getElementById('modal-briefing-center');
+      if (!modal) return;
+      modal.classList.remove('hidden');
+      renderBriefingRumors(tickerRumors);
+      loadInjuriesSummary('ALL');
+    }
+
+    function closeBriefingModal() {
+      const modal = document.getElementById('modal-briefing-center');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function switchBriefingTab(tab) {
+      activeBriefingTab = tab;
+      const tabRumors = document.getElementById('briefing-tab-rumors');
+      const tabInjuries = document.getElementById('briefing-tab-injuries');
+      const panelRumors = document.getElementById('briefing-panel-rumors');
+      const panelInjuries = document.getElementById('briefing-panel-injuries');
+      const filterBox = document.getElementById('briefing-league-filter-container');
+
+      if (tab === 'RUMORS') {
+        tabRumors.className = 'px-3 py-1.5 rounded-lg text-xs font-bold text-amber-400 bg-amber-500/10 border border-amber-500/30 transition flex items-center gap-1.5 shadow-sm';
+        tabInjuries.className = 'px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800/60 transition flex items-center gap-1.5';
+        panelRumors.classList.remove('hidden');
+        panelInjuries.classList.add('hidden');
+        if (filterBox) filterBox.classList.add('hidden');
+      } else {
+        tabInjuries.className = 'px-3 py-1.5 rounded-lg text-xs font-bold text-rose-400 bg-rose-500/10 border border-rose-500/30 transition flex items-center gap-1.5 shadow-sm';
+        tabRumors.className = 'px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800/60 transition flex items-center gap-1.5';
+        panelInjuries.classList.remove('hidden');
+        panelRumors.classList.add('hidden');
+        if (filterBox) filterBox.classList.remove('hidden');
+      }
+    }
+
+    function renderBriefingRumors(items) {
+      const listEl = document.getElementById('briefing-rumors-list');
+      const countEl = document.getElementById('briefing-rumors-count');
+      if (!listEl) return;
+      if (countEl) countEl.textContent = (items || []).length;
+
+      if (!items || items.length === 0) {
+        listEl.innerHTML = '<div class="p-4 text-center text-zinc-500 text-xs">등록된 이적 소식이 없습니다.</div>';
+        return;
+      }
+
+      listEl.innerHTML = items.map(item => {
+        let tagBg = 'bg-amber-500/15 text-amber-400 border-amber-500/30';
+        let tagText = '이적 루머';
+        if (item.category === 'TRAINING_INJURY') {
+          tagBg = 'bg-rose-500/15 text-rose-400 border-rose-500/30';
+          tagText = '훈련/부상 속보';
+        } else if (item.category === 'OFFICIAL_DEAL') {
+          tagBg = 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30';
+          tagText = '오피셜 계약';
+        }
+
+        return `
+          <div class="p-3 rounded-lg border border-white/[0.06] bg-[#0c0e14] hover:border-zinc-600 transition space-y-1.5">
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2">
+                <span class="px-1.5 py-0.5 rounded text-[10px] font-bold border ${tagBg}">${tagText}</span>
+                <span class="text-xs font-bold text-white">${item.player_name_ko || item.player_name}</span>
+                <span class="text-[11px] text-zinc-400">(${item.club_name || '-'})</span>
+              </div>
+              <span class="text-[10px] font-mono text-zinc-500">${item.published_time || '오늘'}</span>
+            </div>
+            <p class="text-xs font-medium text-zinc-200 leading-relaxed">${item.headline}</p>
+            <p class="text-[11px] text-zinc-400 leading-relaxed">${item.summary || ''}</p>
+            <div class="flex items-center justify-between pt-1 border-t border-white/[0.04] text-[10px] text-zinc-500">
+              <span>출처: <span class="text-zinc-300 font-medium">${item.source_name || 'Official Desk'}</span></span>
+              <span class="px-1.5 py-0.2 rounded bg-zinc-800 text-zinc-400 font-mono">${item.credibility_tier || 'TIER_1'}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function loadInjuriesSummary(league = 'ALL') {
+      const listEl = document.getElementById('briefing-injuries-list');
+      const countEl = document.getElementById('briefing-injuries-count');
+      if (!listEl) return;
+      listEl.innerHTML = '<div class="p-4 text-center text-zinc-500 text-xs">부상자 명단을 불러오는 중...</div>';
+
+      try {
+        const res = await fetch(`/api/injuries/summary?league=${encodeURIComponent(league)}&limit=80`);
+        if (!res.ok) return;
+        const data = await res.json();
+        const injuries = data.injuries || [];
+        if (countEl) countEl.textContent = injuries.length;
+
+        if (injuries.length === 0) {
+          listEl.innerHTML = '<div class="p-4 text-center text-zinc-500 text-xs">현재 등록된 활성 부상자가 없습니다.</div>';
+          return;
+        }
+
+        listEl.innerHTML = injuries.map(p => {
+          const valM = (p.market_value_eur / 1000000).toFixed(1);
+          return `
+            <div class="p-2.5 rounded-lg border border-white/[0.06] bg-[#0c0e14] hover:border-zinc-600 transition flex items-center justify-between gap-3">
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="w-8 h-8 rounded-lg bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400 font-bold text-xs shrink-0">
+                  🏥
+                </div>
+                <div class="min-w-0">
+                  <div class="flex items-center gap-2">
+                    <span class="text-xs font-bold text-white truncate">${p.name_ko || p.name}</span>
+                    <span class="text-[10px] px-1 py-0.2 rounded bg-zinc-800 text-zinc-300 font-mono">${p.position}</span>
+                    <span class="text-[11px] text-zinc-400 truncate">${p.current_club} · ${p.league}</span>
+                  </div>
+                  <div class="text-[11px] text-rose-400 font-medium truncate mt-0.5">
+                    ${p.injury_detail || p.injury_type || '부상'}
+                  </div>
+                </div>
+              </div>
+              <div class="text-right shrink-0">
+                <div class="text-xs font-bold text-emerald-400">€${valM}M</div>
+                <div class="text-[10px] text-zinc-500 font-mono">${p.injury_return_date || '복귀 추적 중'}</div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      } catch (err) {
+        listEl.innerHTML = `<div class="p-4 text-center text-rose-400 text-xs">부상자 조회 실패: ${err.message}</div>`;
       }
     }
 
@@ -7078,6 +7496,7 @@
               <option value="Bundesliga">Bundesliga</option>
               <option value="Serie A">Serie A</option>
               <option value="Ligue 1">Ligue 1</option>
+              <option value="테스트 리그 (Test League)">테스트 리그 (Test League)</option>
               <option value="기타 글로벌 리그">기타 글로벌 리그</option>
             </select>
           </div>
@@ -7155,6 +7574,7 @@
               <option value="Bundesliga">Bundesliga</option>
               <option value="Serie A">Serie A</option>
               <option value="Ligue 1">Ligue 1</option>
+              <option value="테스트 리그 (Test League)">테스트 리그 (Test League)</option>
               <option value="기타 글로벌 리그">기타 글로벌 리그</option>
             </select>
           </div>
@@ -7188,6 +7608,101 @@
           </button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: LIVE TRANSFER & INJURY BRIEFING CENTER (실시간 이적 & 부상 브리핑 센터) -->
+  <!-- ========================================================================= -->
+  <div id="modal-briefing-center" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md hidden p-4">
+    <div class="ui-card w-full max-w-4xl max-h-[88vh] flex flex-col border-white/[0.12] bg-[#11141a] shadow-2xl relative overflow-hidden">
+      <!-- Modal Header -->
+      <div class="p-4 border-b border-white/[0.08] flex items-center justify-between bg-[#141820]">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 font-bold text-sm">
+            📡
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-white tracking-tight flex items-center gap-2">
+              실시간 이적 루머 & 유럽 5대 리그 부상 브리핑 센터
+              <span class="px-1.5 py-0.2 rounded text-[10px] bg-rose-500/20 text-rose-400 border border-rose-500/30">LIVE INTELLIGENCE</span>
+            </h3>
+            <p class="text-xs text-zinc-400">공신력 1티어 이적 소식과 공식 부상자(훈련/경기) 실시간 통합 모니터링</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="syncDailyInjuriesAndRumors(true)" class="px-2.5 py-1 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-400 hover:bg-amber-500/25 text-xs font-medium transition flex items-center gap-1">
+            <span>🔄 API 전수 동기화</span>
+          </button>
+          <button onclick="closeBriefingModal()" class="w-8 h-8 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-white flex items-center justify-center text-lg transition">
+            ✕
+          </button>
+        </div>
+      </div>
+
+      <!-- Tab Switcher (Rumors vs Injuries) -->
+      <div class="px-4 pt-3 pb-2 border-b border-white/[0.06] flex items-center justify-between gap-2 bg-[#0e1117]">
+        <div class="flex items-center gap-2">
+          <button id="briefing-tab-rumors" onclick="switchBriefingTab('RUMORS')"
+            class="px-3 py-1.5 rounded-lg text-xs font-bold text-amber-400 bg-amber-500/10 border border-amber-500/30 transition flex items-center gap-1.5 shadow-sm">
+            <span>🔥 실시간 이적 루머 & 속보</span>
+            <span id="briefing-rumors-count" class="px-1.5 py-0.2 rounded-full text-[10px] bg-amber-500/20 text-amber-300 font-mono">0</span>
+          </button>
+          <button id="briefing-tab-injuries" onclick="switchBriefingTab('INJURIES')"
+            class="px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800/60 transition flex items-center gap-1.5">
+            <span>🏥 5대 리그 부상자 명단</span>
+            <span id="briefing-injuries-count" class="px-1.5 py-0.2 rounded-full text-[10px] bg-rose-500/20 text-rose-400 font-mono">0</span>
+          </button>
+        </div>
+
+        <!-- League Filter for Injuries (Only visible when INJURIES tab active) -->
+        <div id="briefing-league-filter-container" class="hidden flex items-center gap-1.5">
+          <span class="text-[11px] text-zinc-500">리그:</span>
+          <select id="briefing-league-select" onchange="loadInjuriesSummary(this.value)" class="bg-[#12151c] text-xs px-2 py-1 rounded border border-white/[0.08] text-zinc-300 focus:outline-none focus:border-amber-500">
+            <option value="ALL">전체 5대 리그</option>
+            <option value="Premier League">Premier League</option>
+            <option value="La Liga">La Liga</option>
+            <option value="Serie A">Serie A</option>
+            <option value="Bundesliga">Bundesliga</option>
+            <option value="Ligue 1">Ligue 1</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Tab Content Area -->
+      <div class="flex-1 overflow-y-auto p-4 space-y-3">
+        <!-- Panel 1: Rumors List -->
+        <div id="briefing-panel-rumors" class="space-y-2.5">
+          <div class="text-xs text-zinc-500 flex items-center justify-between">
+            <span>최신 유럽 1티어 소식통(Romano, Ornstein, Sky Sports 등) 기반 실시간 루머</span>
+            <span id="briefing-rumors-updated" class="font-mono text-[10px]">방금 갱신됨</span>
+          </div>
+          <div id="briefing-rumors-list" class="space-y-2">
+            <!-- Dynamic rumor cards -->
+          </div>
+        </div>
+
+        <!-- Panel 2: Injuries List -->
+        <div id="briefing-panel-injuries" class="hidden space-y-2.5">
+          <div class="text-xs text-zinc-500 flex items-center justify-between">
+            <span>공식 구단 피트니스 리포트 및 경기/훈련 부상 결장자 명단 (시세 순 정렬)</span>
+            <span id="briefing-injuries-updated" class="font-mono text-[10px]">동기화 완료</span>
+          </div>
+          <div id="briefing-injuries-list" class="space-y-2">
+            <!-- Dynamic injury cards -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="p-3 border-t border-white/[0.08] bg-[#12151c] flex items-center justify-between text-[11px] text-zinc-500">
+        <div>
+          💡 1일 1회 무료 쿼터 자동 최적화 동기화 & 실시간 훈련 부상/이적 인텔리전스
+        </div>
+        <button onclick="closeBriefingModal()" class="px-3 py-1 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 transition">
+          닫기
+        </button>
+      </div>
     </div>
   </div>
 

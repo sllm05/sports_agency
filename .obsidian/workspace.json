@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "SPORTS_AGENCY_V3_MASTER_PLAN.md",
+                "file": "qa.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "SPORTS_AGENCY_V3_MASTER_PLAN"
+              "title": "qa"
             }
           }
         ]
@@ -190,17 +190,17 @@
   },
   "active": "bf761550caf7c1d6",
   "lastOpenFiles": [
-    "scratch/inspect_calc_22_return.py",
-    "scratch/inspect_calc_22.py",
-    "scratch/inspect_hud_update.py",
-    "scratch/find_missing_ids.py",
-    "scratch/inspect_on_select_player.py",
-    "scratch/inspect_yt_btn.py",
-    "scratch/inspect_card_html.py",
-    "scratch/find_all_html_ids.py",
-    "scratch/check_element_ids.py",
-    "scratch/diagnose_render_pitch_3.py",
-    "scratch/diagnose_render_pitch_2.py",
+    "data/agency_desk.db-shm",
+    "data/agency_desk.db-wal",
+    "SPORTS_AGENCY_V3_MASTER_PLAN.md",
+    "src/sports_agency/__pycache__/injury_news_sync.cpython-311.pyc",
+    "src/sports_agency/injury_news_sync.py",
+    "scratch/check_tot_son.py",
+    "scratch/verify_all_requirements.py",
+    "scratch/search_portfolio_render.py",
+    "scratch/search_names_html.py",
+    "scratch/check_playstyle_cols.py",
+    "scratch/migrate_updates.py",
     "outputs/recruitment_pitch_Arda_Güler.md",
     "outputs/recruitment_pitch_Pep_Guardiola.md",
     "outputs/recruitment_pitch_Adrien_Thomasson.md",
@@ -216,7 +216,6 @@
     "outputs/Erling_Haaland/2_dual_track_deal_prep.md",
     "outputs/Erling_Haaland/1_career_valuation_report.md",
     "qa.md",
-    "SPORTS_AGENCY_V3_MASTER_PLAN.md",
     "SPORTS_AGENCY_PLAN.md",
     "outputs/Min-Jae_Kim_pitch_deck.md",
     "outputs/Min-Jae_Kim_deal_prep.md",

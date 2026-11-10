@@ -3312,3 +3312,98 @@
 [2026-11-10 16:32:12] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
 [2026-11-10 16:32:13] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
 [2026-11-10 16:32:14] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 16:39:29] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 17:08:38] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 17:11:13] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€38,000,000, wage=€105,000/wk, 4yr) -> annual_psr=€16,877,130
+[2026-11-10 17:11:13] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
+[2026-11-10 17:11:14] [INFO] [MCP_TOOL_11] Discovered 6 undervalued prospects (pos=ALL, max_age=23)
+[2026-11-10 17:11:14] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 17:11:14] [INFO] [MCP_TOOL_8] scan_bosman_and_replacement_targets(pos=ALL, league=ALL) -> 25 club targets found
+[2026-11-10 17:11:18] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 17:11:26] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
+[2026-11-10 17:12:07] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
+[2026-11-10 17:12:09] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
+[2026-11-10 17:12:14] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 17:12:21] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 17:12:25] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€220,000,000, wage=€807,300/wk, 4yr) -> annual_psr=€108,011,357
+[2026-11-10 17:12:25] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€220,000,000
+[2026-11-10 17:12:27] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=La Liga, fee=€200,000,000, wage=€585,000/wk, 4yr) -> annual_psr=€86,651,700
+[2026-11-10 17:12:27] [INFO] [MCP_TOOL_1] get_player_complete_data(Lamine Yamal) -> club=FC Barcelona, val=€200,000,000
+[2026-11-10 17:12:28] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=La Liga, fee=€180,000,000, wage=€585,000/wk, 4yr) -> annual_psr=€81,476,700
+[2026-11-10 17:12:28] [INFO] [MCP_TOOL_1] get_player_complete_data(Kylian Mbappé) -> club=Real Madrid CF, val=€180,000,000
+[2026-11-10 17:12:29] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€220,000,000, wage=€807,300/wk, 4yr) -> annual_psr=€108,011,357
+[2026-11-10 17:12:29] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€220,000,000
+[2026-11-10 17:12:31] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=La Liga, fee=€200,000,000, wage=€585,000/wk, 4yr) -> annual_psr=€86,651,700
+[2026-11-10 17:12:31] [INFO] [MCP_TOOL_1] get_player_complete_data(Lamine Yamal) -> club=FC Barcelona, val=€200,000,000
+[2026-11-10 17:12:35] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€220,000,000, wage=€807,300/wk, 4yr) -> annual_psr=€108,011,357
+[2026-11-10 17:12:35] [INFO] [MCP_TOOL_1] get_player_complete_data(Erling Haaland) -> club=Manchester City FC, val=€220,000,000
+[2026-11-10 17:12:39] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=La Liga, fee=€180,000,000, wage=€585,000/wk, 4yr) -> annual_psr=€81,476,700
+[2026-11-10 17:12:39] [INFO] [MCP_TOOL_1] get_player_complete_data(Kylian Mbappé) -> club=Real Madrid CF, val=€180,000,000
+[2026-11-10 17:12:40] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=La Liga, fee=€150,000,000, wage=€440,700/wk, 4yr) -> annual_psr=€65,197,614
+[2026-11-10 17:12:40] [INFO] [MCP_TOOL_1] get_player_complete_data(Pedri) -> club=FC Barcelona, val=€150,000,000
+[2026-11-10 17:12:51] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€38,000,000, wage=€312,000/wk, 4yr) -> annual_psr=€29,806,092
+[2026-11-10 17:12:51] [INFO] [MCP_TOOL_1] get_player_complete_data(Heung-min Son) -> club=Tottenham Hotspur FC, val=€38,000,000
+[2026-11-10 17:14:39] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=테스트/가상 리그 (Virtual League), fee=€8,500,000, wage=€18,200/wk, 4yr) -> annual_psr=€3,717,626
+[2026-11-10 17:14:39] [INFO] [MCP_TOOL_1] get_player_complete_data(Mateo Silva) -> club=솔라리스 시티 FC, val=€8,500,000
+[2026-11-10 17:29:01] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€38,000,000, wage=€105,000/wk, 4yr) -> annual_psr=€16,877,130
+[2026-11-10 17:29:02] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
+[2026-11-10 17:29:02] [INFO] [MCP_TOOL_11] Discovered 6 undervalued prospects (pos=ALL, max_age=23)
+[2026-11-10 17:29:02] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 17:29:02] [INFO] [MCP_TOOL_8] scan_bosman_and_replacement_targets(pos=ALL, league=ALL) -> 25 club targets found
+[2026-11-10 17:29:09] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 17:30:10] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
+[2026-11-10 17:30:12] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 17:30:29] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 17:31:06] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 17:32:06] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 17:32:42] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 17:32:43] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
+[2026-11-10 17:32:44] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 17:32:50] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 17:33:05] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 17:33:31] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 17:33:33] [INFO] [MCP_TOOL_7] calculate_psr_and_tax_breakdown(league=Premier League, fee=€38,000,000, wage=€105,000/wk, 4yr) -> annual_psr=€16,877,130
+[2026-11-10 17:33:33] [INFO] [MCP_TOOL_11] Discovered 6 undervalued prospects (pos=ALL, max_age=23)
+[2026-11-10 17:33:33] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
+[2026-11-10 17:33:34] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 17:33:34] [INFO] [MCP_TOOL_8] scan_bosman_and_replacement_targets(pos=ALL, league=ALL) -> 25 club targets found
+[2026-11-10 17:33:39] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
+[2026-11-10 17:33:41] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 17:33:41] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 17:33:44] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
+[2026-11-10 17:33:56] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
+[2026-11-10 17:33:56] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
+[2026-11-10 17:33:57] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
+[2026-11-10 17:33:57] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
+[2026-11-10 17:33:57] [INFO] [VERTEX_LLM_CALL] Model=gemini-3.8-flash | Temp=0.3 | OutputChars=3060
+[2026-11-10 17:33:58] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
+[2026-11-10 17:33:59] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 17:35:10] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 17:35:35] [INFO] [VERTEX_LLM_CALL] Model=gemini-3.8-flash | Temp=0.3 | OutputChars=3290
+[2026-11-10 17:36:04] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 17:36:05] [INFO] [API_FOOTBALL_QUOTA] API-Football call recorded. Used today: 1/100
+[2026-11-10 17:36:06] [INFO] [API_FOOTBALL_QUOTA] API-Football call recorded. Used today: 2/100
+[2026-11-10 17:36:07] [INFO] [API_FOOTBALL_QUOTA] API-Football call recorded. Used today: 3/100
+[2026-11-10 17:36:07] [INFO] [API_FOOTBALL_QUOTA] API-Football call recorded. Used today: 4/100
+[2026-11-10 17:36:08] [INFO] [API_FOOTBALL_QUOTA] API-Football call recorded. Used today: 5/100
+[2026-11-10 17:36:19] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 17:36:20] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 17:36:22] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 17:36:22] [INFO] [MCP_AGENCY_RECRUITMENT] Listed recruitment targets: 15 targets (category=ALL, type=ALL)
+[2026-11-10 17:36:25] [INFO] [MCP_AGENCY_PORTFOLIO] Fetched portfolio: 0 players, 0 managers, Total MV €0
+[2026-11-10 17:36:33] [INFO] [VERTEX_GROUNDING_SEARCH] Model=gemini-3.5-flash | Club=Manchester City FC | Pos=Player | Headline=Maresca's Midfield Overhaul at Manchester City Struggles for
+[2026-11-10 17:38:18] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 17:39:50] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 17:39:51] [INFO] [API_FOOTBALL_QUOTA] API-Football call recorded. Used today: 6/100
+[2026-11-10 17:40:26] [INFO] [DAILY_INJURY_SYNC_WARN] Error syncing La Liga: database is locked
+[2026-11-10 17:42:43] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 17:43:14] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 17:43:16] [INFO] [API_FOOTBALL_QUOTA] API-Football call recorded. Used today: 7/100
+[2026-11-10 17:43:18] [INFO] [API_FOOTBALL_QUOTA] API-Football call recorded. Used today: 8/100
+[2026-11-10 17:43:20] [INFO] [API_FOOTBALL_QUOTA] API-Football call recorded. Used today: 9/100
+[2026-11-10 17:43:22] [INFO] [API_FOOTBALL_QUOTA] API-Football call recorded. Used today: 10/100
+[2026-11-10 17:43:25] [INFO] [API_FOOTBALL_QUOTA] API-Football call recorded. Used today: 11/100
+[2026-11-10 17:43:26] [INFO] [DAILY_INJURY_SYNC_DONE] Daily injury sync completed. Updated: 585, Total active in DB: 578
+[2026-11-10 17:44:52] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 17:48:55] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)
+[2026-11-10 17:51:29] [INFO] [GCP_ADC_INIT] Connected to Vertex AI via ADC (project=iceu-songpa09, location=global)

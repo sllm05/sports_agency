@@ -65,6 +65,13 @@ from sports_agency.api_football_client import (
     onboard_external_prospect,
 )
 from sports_agency.tactics_engine import build_player_tactics_payload
+from sports_agency.injury_news_sync import (
+    get_active_injuries_list,
+    get_latest_rumors,
+    init_injury_news_tables,
+    sync_daily_injuries,
+    sync_live_transfer_rumors,
+)
 
 STATIC_DIR = Path(__file__).resolve().parent / "static"
 
@@ -88,6 +95,16 @@ if STATIC_DIR.exists():
 REA_DIR = PROJECT_ROOT / "rea"
 if REA_DIR.exists():
     app.mount("/rea", StaticFiles(directory=str(REA_DIR)), name="rea")
+
+
+@app.on_event("startup")
+def on_app_startup() -> None:
+    """Initialize DB tables and ensure latest injury/rumor feed is available."""
+    try:
+        init_injury_news_tables()
+        get_latest_rumors(limit=10)
+    except Exception as e:
+        print(f"[STARTUP] Injury/rumor init warning: {e}")
 
 
 # ============================================================================
@@ -186,6 +203,10 @@ class LivePlayerSyncRequest(BaseModel):
 
 class FootballDataSyncRequest(BaseModel):
     force_api_refresh: bool = Field(False, description="True일 경우 Football-Data.org v4 API를 새로 호출하여 96개 구단 스쿼드 전체 갱신")
+
+
+class DailyInjurySyncRequest(BaseModel):
+    force_api_refresh: bool = Field(False, description="True일 경우 API-Football 5대 리그 부상자 전수 강제 재동기화")
 
 
 class RecruitmentPitchRequest(BaseModel):
@@ -572,6 +593,63 @@ def api_sync_live_player(req: LivePlayerSyncRequest) -> dict[str, Any]:
     try:
         result = sync_single_player_via_vertex_grounding(req.player_name)
         return result
+    except Exception as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
+@app.post("/api/sync/daily-injuries")
+def api_sync_daily_injuries(req: DailyInjurySyncRequest | None = None) -> dict[str, Any]:
+    """
+    Executes Daily Injury & Transfer Rumor Synchronization across Big 5 European leagues.
+    - Synchronizes API-Football league-wide injuries into SQLite `players` and `player_injuries`.
+    - Refreshes breaking transfer rumors & training injury intelligence into `live_transfer_rumors`.
+    """
+    force = req.force_api_refresh if req else False
+    try:
+        injury_res = sync_daily_injuries(force=force)
+        rumors = sync_live_transfer_rumors(force=force)
+        return {
+            "status": "ok",
+            "injury_sync": injury_res,
+            "latest_rumors_count": len(rumors),
+            "rumors": rumors,
+        }
+    except Exception as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
+@app.get("/api/injuries/summary")
+def api_get_injuries_summary(league: str = "ALL", limit: int = 50) -> dict[str, Any]:
+    """
+    Retrieves active injured players list and total counts, optionally filtered by league.
+    """
+    try:
+        injuries = get_active_injuries_list(league=league, limit=limit)
+        return {
+            "status": "ok",
+            "league_filter": league,
+            "active_injuries_count": len(injuries),
+            "injuries": injuries,
+        }
+    except Exception as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
+@app.get("/api/news/transfer-rumors")
+def api_get_transfer_rumors(limit: int = 10, force_refresh: bool = False) -> dict[str, Any]:
+    """
+    Retrieves real-time European transfer rumors and training injury alerts.
+    """
+    try:
+        if force_refresh:
+            rumors = sync_live_transfer_rumors(force=True)
+        else:
+            rumors = get_latest_rumors(limit=limit)
+        return {
+            "status": "ok",
+            "count": len(rumors),
+            "rumors": rumors,
+        }
     except Exception as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
 
