@@ -96,7 +96,7 @@ def _build_valuation_hexagon_svg(p: dict[str, Any], vp: dict[str, Any] | None = 
 
 
 def _build_datamb_percentile_bars_html(p: dict[str, Any]) -> str:
-    """Generates visual percentile progress bars comparing position metrics against Big 5 peers."""
+    """Generates an embedded DataMB 7-Axis & Opta percentile comparison bar widget."""
     prog = float(p.get("progressive_actions_per90") or 5.5)
     kp = float(p.get("key_passes_per90") or 1.2)
     g = float(p.get("goals_per90") or 0.4)
@@ -116,27 +116,30 @@ def _build_datamb_percentile_bars_html(p: dict[str, Any]) -> str:
 
     rows_html = []
     for it in items:
-        rows_html.append(f'''
-    <div style="margin-bottom: 10px;">
-      <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 4px; color: #d4d4d8;">
-        <span><b>{it["label"]}</b></span>
-        <span style="color: {it["color"]}; font-weight: bold;">{it["val"]} (상위 {100 - it["pct"] + 1}%)</span>
-      </div>
-      <div style="width: 100%; height: 7px; background: #27272a; border-radius: 4px; overflow: hidden;">
-        <div style="width: {it["pct"]}%; height: 100%; background: {it["color"]}; border-radius: 4px;"></div>
-      </div>
-    </div>
-''')
+        rank_pct = max(1, 100 - it["pct"] + 1)
+        row = (
+            f'<div style="margin-bottom: 10px;">'
+            f'<div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 4px; color: #d4d4d8;">'
+            f'<span><b>{it["label"]}</b></span>'
+            f'<span style="color: {it["color"]}; font-weight: bold;">{it["val"]} (상위 {rank_pct}%)</span>'
+            f'</div>'
+            f'<div style="width: 100%; height: 7px; background: #27272a; border-radius: 4px; overflow: hidden;">'
+            f'<div style="width: {it["pct"]}%; height: 100%; background: {it["color"]}; border-radius: 4px;"></div>'
+            f'</div>'
+            f'</div>'
+        )
+        rows_html.append(row)
 
-    return f'''
-<div style="background: #0a0c10; border: 1px solid rgba(56, 189, 248, 0.2); border-radius: 12px; padding: 16px; margin: 18px 0;">
-  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 8px;">
-    <span style="font-size: 12px; font-weight: bold; color: #e4e4e7;">📊 DataMB 5대 리그 동 포지션 백분위 벤치마크</span>
-    <span style="font-size: 10px; color: #38bdf8; background: rgba(56, 189, 248, 0.12); padding: 2px 8px; border-radius: 4px; border: 1px solid rgba(56, 189, 248, 0.25);">Opta / FBref 2025-26 실측</span>
-  </div>
-  {''.join(rows_html)}
-</div>
-'''.strip()
+    inner = "".join(rows_html)
+    return (
+        f'<div style="background: #0a0c10; border: 1px solid rgba(56, 189, 248, 0.2); border-radius: 12px; padding: 16px; margin: 18px 0;">'
+        f'<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 8px;">'
+        f'<span style="font-size: 12px; font-weight: bold; color: #e4e4e7;">📊 DataMB 5대 리그 동 포지션 백분위 벤치마크</span>'
+        f'<span style="font-size: 10px; color: #38bdf8; background: rgba(56, 189, 248, 0.12); padding: 2px 8px; border-radius: 4px; border: 1px solid rgba(56, 189, 248, 0.25);">Opta / FBref 2025-26 실측</span>'
+        f'</div>'
+        f'{inner}'
+        f'</div>'
+    )
 
 
 def _build_psr_financial_gauge_svg(psr: dict[str, Any], target_club_name: str = "타겟 구단", agreed_base: int = 120000) -> str:

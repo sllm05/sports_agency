@@ -7,56 +7,56 @@
 ## 1.
 
 <div style="background: #0a0c10; border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 12px; padding: 16px; margin: 18px 0; box-shadow: 0 4px 20px rgba(0,0,0,0.4);">
-  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 8px;">
-    <span style="font-size: 12px; font-weight: bold; color: #34d399;">📑 Chelsea FC 최종 합의 Term Sheet 요약</span>
-    <span style="font-size: 10px; color: #a1a1aa; background: #18181b; padding: 2px 8px; border-radius: 4px;">구단 제출 최종안</span>
-  </div>
-  <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; font-size: 11px; text-align: center;">
-    <div style="background: #18181b; padding: 8px; border-radius: 6px;">
-      <div style="color: #71717a;">합의 기본급 (세전)</div>
-      <div style="color: #f4f4f5; font-weight: bold; font-size: 13px; margin-top: 2px;">€259,468/주</div>
-      <div style="color: #34d399; font-size: 10px;">(실수령 약 €142,707/주)</div>
-    </div>
-    <div style="background: #18181b; padding: 8px; border-radius: 6px;">
-      <div style="color: #71717a;">성과급 옵션</div>
-      <div style="color: #38bdf8; font-weight: bold; font-size: 13px; margin-top: 2px;">€40,968/주 상당</div>
-      <div style="color: #71717a; font-size: 10px;">출전+UCL 진출 연동</div>
-    </div>
-    <div style="background: #18181b; padding: 8px; border-radius: 6px;">
-      <div style="color: #71717a;">바이아웃 조항</div>
-      <div style="color: #fbbf24; font-weight: bold; font-size: 13px; margin-top: 2px;">€21,750,000</div>
-      <div style="color: #71717a; font-size: 10px;">2년차 발동 가능</div>
-    </div>
-    <div style="background: #18181b; padding: 8px; border-radius: 6px;">
-      <div style="color: #71717a;">에이전트 수수료</div>
-      <div style="color: #c084fc; font-weight: bold; font-size: 13px; margin-top: 2px;">6.5%</div>
-      <div style="color: #71717a; font-size: 10px;">FFAR 유예 준수</div>
-    </div>
-  </div>
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 8px;">
+<span style="font-size: 12px; font-weight: bold; color: #34d399;">📑 Chelsea FC 최종 합의 Term Sheet 요약</span>
+<span style="font-size: 10px; color: #a1a1aa; background: #18181b; padding: 2px 8px; border-radius: 4px;">구단 제출 최종안</span>
+</div>
+<div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; font-size: 11px; text-align: center;">
+<div style="background: #18181b; padding: 8px; border-radius: 6px;">
+<div style="color: #71717a;">합의 기본급 (세전)</div>
+<div style="color: #f4f4f5; font-weight: bold; font-size: 13px; margin-top: 2px;">€259,468/주</div>
+<div style="color: #34d399; font-size: 10px;">(실수령 약 €142,707/주)</div>
+</div>
+<div style="background: #18181b; padding: 8px; border-radius: 6px;">
+<div style="color: #71717a;">성과급 옵션</div>
+<div style="color: #38bdf8; font-weight: bold; font-size: 13px; margin-top: 2px;">€40,968/주 상당</div>
+<div style="color: #71717a; font-size: 10px;">출전+UCL 진출 연동</div>
+</div>
+<div style="background: #18181b; padding: 8px; border-radius: 6px;">
+<div style="color: #71717a;">바이아웃 조항</div>
+<div style="color: #fbbf24; font-weight: bold; font-size: 13px; margin-top: 2px;">€21,750,000</div>
+<div style="color: #71717a; font-size: 10px;">2년차 발동 가능</div>
+</div>
+<div style="background: #18181b; padding: 8px; border-radius: 6px;">
+<div style="color: #71717a;">에이전트 수수료</div>
+<div style="color: #c084fc; font-weight: bold; font-size: 13px; margin-top: 2px;">6.5%</div>
+<div style="color: #71717a; font-size: 10px;">FFAR 유예 준수</div>
+</div>
+</div>
 </div>
 
 <div style="background: linear-gradient(180deg, #0e1117 0%, #0a0c10 100%); border: 1px solid rgba(168, 85, 247, 0.25); border-radius: 12px; padding: 16px; margin: 20px 0;">
-  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 8px;">
-    <span style="font-size: 13px; font-weight: 700; color: #f4f4f5;">💼 Chelsea FC CFO & 스포츠 디렉터 맞춤형 PSR 장부 비용 비교</span>
-    <span style="font-size: 11px; padding: 2px 8px; border-radius: 6px; background: rgba(168, 85, 247, 0.15); color: #c084fc; font-weight: 600; border: 1px solid rgba(168, 85, 247, 0.3);">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 8px;">
+<span style="font-size: 13px; font-weight: 700; color: #f4f4f5;">💼 Chelsea FC CFO & 스포츠 디렉터 맞춤형 PSR 장부 비용 비교</span>
+<span style="font-size: 11px; padding: 2px 8px; border-radius: 6px; background: rgba(168, 85, 247, 0.15); color: #c084fc; font-weight: 600; border: 1px solid rgba(168, 85, 247, 0.3);">
       UEFA FSR 70% 가이드라인 충족
-    </span>
-  </div>
-  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
-    <div style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.25); border-radius: 8px; padding: 10px; text-align: center;">
-      <div style="font-size: 11px; color: #fca5a5;">타겟 리그 동급 대체선수 연간 장부비용</div>
-      <div style="font-size: 16px; font-weight: 800; color: #ef4444; margin-top: 4px;">€27,139,259/년</div>
-      <div style="font-size: 10px; color: #71717a;">이적료 €60M 상각 + 고액 세전연봉</div>
-    </div>
-    <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 8px; padding: 10px; text-align: center;">
-      <div style="font-size: 11px; color: #6ee7b7;">본 영입 제안 연간 PSR 장부비용</div>
-      <div style="font-size: 16px; font-weight: 800; color: #10b981; margin-top: 4px;">€20,103,155/년</div>
-      <div style="font-size: 10px; color: #34d399;">연간 약 €7,036,104 (약 35%) 재정 세이브</div>
-    </div>
-  </div>
-  <div style="font-size: 11px; color: #a1a1aa; line-height: 1.5; padding: 8px 12px; background: rgba(255,255,255,0.02); border-radius: 6px;">
+</span>
+</div>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+<div style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.25); border-radius: 8px; padding: 10px; text-align: center;">
+<div style="font-size: 11px; color: #fca5a5;">타겟 리그 동급 대체선수 연간 장부비용</div>
+<div style="font-size: 16px; font-weight: 800; color: #ef4444; margin-top: 4px;">€27,139,259/년</div>
+<div style="font-size: 10px; color: #71717a;">이적료 €60M 상각 + 고액 세전연봉</div>
+</div>
+<div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 8px; padding: 10px; text-align: center;">
+<div style="font-size: 11px; color: #6ee7b7;">본 영입 제안 연간 PSR 장부비용</div>
+<div style="font-size: 16px; font-weight: 800; color: #10b981; margin-top: 4px;">€20,103,155/년</div>
+<div style="font-size: 10px; color: #34d399;">연간 약 €7,036,104 (약 35%) 재정 세이브</div>
+</div>
+</div>
+<div style="font-size: 11px; color: #a1a1aa; line-height: 1.5; padding: 8px 12px; background: rgba(255,255,255,0.02); border-radius: 6px;">
     💡 <b>재무 임팩트 코멘트</b>: 이적료 상각 상한 5년 적용 및 합리적 기본급 타결로 Chelsea FC의 차기 시즌 스쿼드 비용 비율(Squad Cost Ratio)을 안전 마진 내로 강력히 방어합니다.
-  </div>
+</div>
 </div>
 
  재무 타겟 밴드 및 Net-Gross 실수령액 비교 (UK Tax System)

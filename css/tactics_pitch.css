@@ -1,0 +1,63 @@
+/**
+ * AgencyOS Pro - 2D Football Match Pitch & Tactical Canvas Stylesheet
+ */
+
+.football-pitch {
+  background: radial-gradient(circle at center, #1e3a24 0%, #0d1e12 100%);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.75rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 5-Zone Half Space Grid Lines */
+.pitch-zone-halfspace {
+  background-color: rgba(59, 130, 246, 0.08);
+  border-left: 1px dashed rgba(255, 255, 255, 0.15);
+  border-right: 1px dashed rgba(255, 255, 255, 0.15);
+}
+
+.pitch-zone-box {
+  background-color: rgba(239, 68, 68, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+/* Player Nodes (FM 2D Circles) */
+.player-node {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+  transition: transform 0.15s ease-out;
+}
+.player-node-home {
+  background-color: #3b82f6;
+  border: 2px solid #ffffff;
+  color: #ffffff;
+}
+.player-node-away {
+  background-color: #ef4444;
+  border: 2px solid #ffffff;
+  color: #ffffff;
+}
+.player-node-target {
+  background-color: #10b981;
+  border: 2px solid #fef08a;
+  color: #ffffff;
+  box-shadow: 0 0 10px #10b981;
+}
+
+/* Ball Node */
+.ball-node {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  border: 2px solid #000000;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+}

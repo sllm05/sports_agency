@@ -1,0 +1,42 @@
+/**
+ * AgencyOS Pro - DataMB Radar & Charts Stylesheet
+ */
+
+.radar-container {
+  position: relative;
+  width: 100%;
+  height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* DataMB Signature Palette Classes */
+.datamb-red {
+  color: #ef4444;
+  border-color: #ef4444;
+  background-color: rgba(239, 68, 68, 0.18);
+}
+.datamb-blue {
+  color: #3b82f6;
+  border-color: #3b82f6;
+  background-color: rgba(59, 130, 246, 0.18);
+}
+.datamb-green {
+  color: #10b981;
+  border-color: #10b981;
+  background-color: rgba(16, 185, 129, 0.18);
+}
+.datamb-purple {
+  color: #a855f7;
+  border-color: #a855f7;
+  background-color: rgba(168, 85, 247, 0.18);
+}
+
+/* Matrix Table Hover & Top Percentile Highlights */
+.matrix-crown-best {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.25), rgba(245, 158, 11, 0.05));
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  color: #fef08a;
+  font-weight: 700;
+}

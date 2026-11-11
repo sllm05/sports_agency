@@ -15,15 +15,15 @@ Jin-hyuk Kim 선수 및 가족 여러분, Antigravity Sports Management(AGSM)는
 AGSM은 런던, 마드리드, 뮌헨, 서울 지사의 글로벌 네트워크를 바탕으로 **향후 5년간 선수의 시장 가치를 €30,000,000에서 €8,000,000까지 폭발적으로 성장시키는 맞춤형 전속 대리 솔루션**을 제안합니다.
 
 <div style="background: linear-gradient(180deg, #0e1117 0%, #0a0c10 100%); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 12px; padding: 18px; margin: 18px 0; box-shadow: 0 10px 30px -5px rgba(0,0,0,0.6);">
-  <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 10px; margin-bottom: 12px;">
-    <span style="font-size: 13px; font-weight: 700; color: #f1f5f9; display: flex; align-items: center; gap: 8px;">
-      <span style="display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: #10b981;"></span>
+<div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 10px; margin-bottom: 12px;">
+<span style="font-size: 13px; font-weight: 700; color: #f1f5f9; display: flex; align-items: center; gap: 8px;">
+<span style="display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: #10b981;"></span>
       🎯 Antigravity Sports — 4D 에이전시 전속 영입 잠재력 & 스타성 평가 매트릭스
-    </span>
-    <span style="font-size: 11px; padding: 3px 10px; border-radius: 6px; background: rgba(16, 185, 129, 0.15); color: #34d399; font-weight: bold; border: 1px solid rgba(16, 185, 129, 0.3);">
+</span>
+<span style="font-size: 11px; padding: 3px 10px; border-radius: 6px; background: rgba(16, 185, 129, 0.15); color: #34d399; font-weight: bold; border: 1px solid rgba(16, 185, 129, 0.3);">
       Recruitment Fit: 89.0/100
-    </span>
-  </div>
+</span>
+</div>
   <svg viewBox="0 0 420 220" style="width: 100%; max-width: 440px; height: auto; display: block; margin: 0 auto;">
     <polygon points="210,30 330,110 330,180 210,210 90,180 90,110" fill="none" stroke="#27272a" stroke-width="1" />
     <polygon points="210,65 280,110 280,150 210,170 140,150 140,110" fill="none" stroke="#27272a" stroke-width="1" />
@@ -38,12 +38,12 @@ AGSM은 런던, 마드리드, 뮌헨, 서울 지사의 글로벌 네트워크를
     <text x="210" y="215" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="bold">에이전시 시너지 94.0점</text>
     <text x="75" y="114" text-anchor="end" fill="#e2e8f0" font-size="11" font-weight="bold">피크 상한 88.0점</text>
   </svg>
-  <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 12px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.06); text-align: center; font-size: 11px;">
-    <div><span style="color: #71717a;">현재 시장가</span><br><b style="color: #f1f5f9; font-size: 12px;">€30,000,000</b></div>
-    <div><span style="color: #71717a;">5년 목표 가치</span><br><b style="color: #34d399; font-size: 12px;">€8,000,000</b></div>
-    <div><span style="color: #71717a;">가치 상승 배수</span><br><b style="color: #38bdf8; font-size: 12px;">+-73%</b></div>
-    <div><span style="color: #71717a;">에이전시 예상 수수료</span><br><b style="color: #fbbf24; font-size: 12px;">€400,000</b></div>
-  </div>
+<div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 12px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.06); text-align: center; font-size: 11px;">
+<div><span style="color: #71717a;">현재 시장가</span><br><b style="color: #f1f5f9; font-size: 12px;">€30,000,000</b></div>
+<div><span style="color: #71717a;">5년 목표 가치</span><br><b style="color: #34d399; font-size: 12px;">€8,000,000</b></div>
+<div><span style="color: #71717a;">가치 상승 배수</span><br><b style="color: #38bdf8; font-size: 12px;">+-73%</b></div>
+<div><span style="color: #71717a;">에이전시 예상 수수료</span><br><b style="color: #fbbf24; font-size: 12px;">€400,000</b></div>
+</div>
 </div>
 
 ---
@@ -65,10 +65,10 @@ AGSM은 런던, 마드리드, 뮌헨, 서울 지사의 글로벌 네트워크를
 ## 3. 5개년 커리어 스텝업 & 가치 폭발 로드맵
 
 <div style="background: #0e1117; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 18px; margin: 18px 0;">
-  <div style="font-size: 13px; font-weight: bold; color: #f1f5f9; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;">
-    <span>📈 5개년 커리어 스텝업 밸류에이션 성장 로드맵 (AGSM 매니지먼트 적용 시)</span>
-    <span style="font-size: 11px; color: #94a3b8;">단위: 백만 유로 (€M)</span>
-  </div>
+<div style="font-size: 13px; font-weight: bold; color: #f1f5f9; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;">
+<span>📈 5개년 커리어 스텝업 밸류에이션 성장 로드맵 (AGSM 매니지먼트 적용 시)</span>
+<span style="font-size: 11px; color: #94a3b8;">단위: 백만 유로 (€M)</span>
+</div>
   <svg viewBox="0 0 500 130" style="width: 100%; max-width: 520px; height: auto; display: block; margin: 0 auto;">
     <line x1="40" y1="105" x2="480" y2="105" stroke="#27272a" stroke-width="1.5" />
     <rect x="55" y="97" width="42" height="8" fill="#475569" rx="4" />

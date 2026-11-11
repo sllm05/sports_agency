@@ -10,94 +10,94 @@
 ## 1.
 
 <div style="background: linear-gradient(180deg, #0e1117 0%, #0a0c10 100%); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 12px; padding: 16px; margin: 20px 0; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5);">
-  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 8px;">
-    <span style="font-size: 13px; font-weight: 700; color: #e4e4e7; display: flex; align-items: center; gap: 6px;">
-      <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #10b981;"></span>
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 8px;">
+<span style="font-size: 13px; font-weight: 700; color: #e4e4e7; display: flex; align-items: center; gap: 6px;">
+<span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #10b981;"></span>
       💰 에이전시 공식 선수 가치 & 계약 밸류에이션 육각형 레이더
-    </span>
-    <span style="font-size: 11px; padding: 2px 8px; border-radius: 6px; background: rgba(16, 185, 129, 0.15); color: #34d399; font-weight: 600; border: 1px solid rgba(16, 185, 129, 0.3);">
+</span>
+<span style="font-size: 11px; padding: 2px 8px; border-radius: 6px; background: rgba(16, 185, 129, 0.15); color: #34d399; font-weight: 600; border: 1px solid rgba(16, 185, 129, 0.3);">
       Valuation Index: 85.5/100
-    </span>
-  </div>
+</span>
+</div>
   <svg viewBox="0 0 420 300" style="width: 100%; max-width: 440px; height: auto; display: block; margin: 0 auto;">
     <polygon points="210.0,125.0 231.7,137.5 231.7,162.5 210.0,175.0 188.3,162.5 188.3,137.5" fill="none" stroke="#27272a" stroke-width="1" /><polygon points="210.0,100.0 253.3,125.0 253.3,175.0 210.0,200.0 166.7,175.0 166.7,125.0" fill="none" stroke="#27272a" stroke-width="1" /><polygon points="210.0,75.0 275.0,112.5 275.0,187.5 210.0,225.0 145.0,187.5 145.0,112.5" fill="none" stroke="#27272a" stroke-width="1" /><polygon points="210.0,50.0 296.6,100.0 296.6,200.0 210.0,250.0 123.4,200.0 123.4,100.0" fill="none" stroke="#27272a" stroke-width="1" />
     <line x1="210" y1="150" x2="210.0" y2="50.0" stroke="#27272a" stroke-width="1" /><text x="210.0" y="28.0" text-anchor="middle" fill="#a1a1aa" font-size="11" font-weight="600" font-family="system-ui, sans-serif">시장 가치 <tspan fill="#34d399" font-weight="bold">64</tspan></text><line x1="210" y1="150" x2="296.6" y2="100.0" stroke="#27272a" stroke-width="1" /><text x="319.1" y="91.0" text-anchor="start" fill="#a1a1aa" font-size="11" font-weight="600" font-family="system-ui, sans-serif">주급 파워 <tspan fill="#34d399" font-weight="bold">86</tspan></text><line x1="210" y1="150" x2="296.6" y2="200.0" stroke="#27272a" stroke-width="1" /><text x="319.1" y="217.0" text-anchor="start" fill="#a1a1aa" font-size="11" font-weight="600" font-family="system-ui, sans-serif">계약 레버리지 <tspan fill="#34d399" font-weight="bold">92</tspan></text><line x1="210" y1="150" x2="210.0" y2="250.0" stroke="#27272a" stroke-width="1" /><text x="210.0" y="280.0" text-anchor="middle" fill="#a1a1aa" font-size="11" font-weight="600" font-family="system-ui, sans-serif">피크 성장성 <tspan fill="#34d399" font-weight="bold">80</tspan></text><line x1="210" y1="150" x2="123.4" y2="200.0" stroke="#27272a" stroke-width="1" /><text x="100.9" y="217.0" text-anchor="end" fill="#a1a1aa" font-size="11" font-weight="600" font-family="system-ui, sans-serif">국제 위상 <tspan fill="#34d399" font-weight="bold">98</tspan></text><line x1="210" y1="150" x2="123.4" y2="100.0" stroke="#27272a" stroke-width="1" /><text x="100.9" y="91.0" text-anchor="end" fill="#a1a1aa" font-size="11" font-weight="600" font-family="system-ui, sans-serif">리그 핵심도 <tspan fill="#34d399" font-weight="bold">93</tspan></text>
     <polygon points="210.0,86.0 284.5,107.0 289.7,196.0 210.0,230.0 125.1,199.0 129.5,103.5" fill="rgba(16, 185, 129, 0.25)" stroke="#10b981" stroke-width="2.5" />
     <circle cx="210.0" cy="86.0" r="4" fill="#10b981" stroke="#ffffff" stroke-width="1.5" /><circle cx="284.5" cy="107.0" r="4" fill="#10b981" stroke="#ffffff" stroke-width="1.5" /><circle cx="289.7" cy="196.0" r="4" fill="#10b981" stroke="#ffffff" stroke-width="1.5" /><circle cx="210.0" cy="230.0" r="4" fill="#10b981" stroke="#ffffff" stroke-width="1.5" /><circle cx="125.1" cy="199.0" r="4" fill="#10b981" stroke="#ffffff" stroke-width="1.5" /><circle cx="129.5" cy="103.5" r="4" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />
   </svg>
-  <div style="display: flex; justify-content: space-around; margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.04); font-size: 11px; color: #71717a; text-align: center;">
-    <div>시세 <b style="color: #f4f4f5;">€15,000,000</b></div>
-    <div>주급 <b style="color: #f4f4f5;">€218,500/주</b></div>
-    <div>만료 <b style="color: #f4f4f5;">2026-06-30</b></div>
-    <div>소화시간 <b style="color: #34d399;">2,450분</b></div>
-  </div>
+<div style="display: flex; justify-content: space-around; margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.04); font-size: 11px; color: #71717a; text-align: center;">
+<div>시세 <b style="color: #f4f4f5;">€15,000,000</b></div>
+<div>주급 <b style="color: #f4f4f5;">€218,500/주</b></div>
+<div>만료 <b style="color: #f4f4f5;">2026-06-30</b></div>
+<div>소화시간 <b style="color: #34d399;">2,450분</b></div>
+</div>
 </div>
 
 <div style="background: #0a0c10; border: 1px solid rgba(56, 189, 248, 0.2); border-radius: 12px; padding: 16px; margin: 18px 0;">
-  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 8px;">
-    <span style="font-size: 12px; font-weight: bold; color: #e4e4e7;">📊 DataMB 5대 리그 동 포지션 백분위 벤치마크</span>
-    <span style="font-size: 10px; color: #38bdf8; background: rgba(56, 189, 248, 0.12); padding: 2px 8px; border-radius: 4px; border: 1px solid rgba(56, 189, 248, 0.25);">Opta / FBref 2025-26 실측</span>
-  </div>
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 8px;">
+<span style="font-size: 12px; font-weight: bold; color: #e4e4e7;">📊 DataMB 5대 리그 동 포지션 백분위 벤치마크</span>
+<span style="font-size: 10px; color: #38bdf8; background: rgba(56, 189, 248, 0.12); padding: 2px 8px; border-radius: 4px; border: 1px solid rgba(56, 189, 248, 0.25);">Opta / FBref 2025-26 실측</span>
+</div>
   
-    <div style="margin-bottom: 10px;">
-      <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 4px; color: #d4d4d8;">
-        <span><b>90분당 실측 전진 액션 (Progressive Actions)</b></span>
-        <span style="color: #10b981; font-weight: bold;">5.8회/90 (상위 44%)</span>
-      </div>
-      <div style="width: 100%; height: 7px; background: #27272a; border-radius: 4px; overflow: hidden;">
-        <div style="width: 57%; height: 100%; background: #10b981; border-radius: 4px;"></div>
-      </div>
-    </div>
+<div style="margin-bottom: 10px;">
+<div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 4px; color: #d4d4d8;">
+<span><b>90분당 실측 전진 액션 (Progressive Actions)</b></span>
+<span style="color: #10b981; font-weight: bold;">5.8회/90 (상위 44%)</span>
+</div>
+<div style="width: 100%; height: 7px; background: #27272a; border-radius: 4px; overflow: hidden;">
+<div style="width: 57%; height: 100%; background: #10b981; border-radius: 4px;"></div>
+</div>
+</div>
 
-    <div style="margin-bottom: 10px;">
-      <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 4px; color: #d4d4d8;">
-        <span><b>키패스 찬스 메이킹 (Key Passes)</b></span>
-        <span style="color: #38bdf8; font-weight: bold;">2.1회/90 (상위 17%)</span>
-      </div>
-      <div style="width: 100%; height: 7px; background: #27272a; border-radius: 4px; overflow: hidden;">
-        <div style="width: 84%; height: 100%; background: #38bdf8; border-radius: 4px;"></div>
-      </div>
-    </div>
+<div style="margin-bottom: 10px;">
+<div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 4px; color: #d4d4d8;">
+<span><b>키패스 찬스 메이킹 (Key Passes)</b></span>
+<span style="color: #38bdf8; font-weight: bold;">2.1회/90 (상위 17%)</span>
+</div>
+<div style="width: 100%; height: 7px; background: #27272a; border-radius: 4px; overflow: hidden;">
+<div style="width: 84%; height: 100%; background: #38bdf8; border-radius: 4px;"></div>
+</div>
+</div>
 
-    <div style="margin-bottom: 10px;">
-      <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 4px; color: #d4d4d8;">
-        <span><b>xG + xAG 직접 공격 기여력</b></span>
-        <span style="color: #f59e0b; font-weight: bold;">0.79/90 (상위 30%)</span>
-      </div>
-      <div style="width: 100%; height: 7px; background: #27272a; border-radius: 4px; overflow: hidden;">
-        <div style="width: 71%; height: 100%; background: #f59e0b; border-radius: 4px;"></div>
-      </div>
-    </div>
+<div style="margin-bottom: 10px;">
+<div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 4px; color: #d4d4d8;">
+<span><b>xG + xAG 직접 공격 기여력</b></span>
+<span style="color: #f59e0b; font-weight: bold;">0.79/90 (상위 30%)</span>
+</div>
+<div style="width: 100%; height: 7px; background: #27272a; border-radius: 4px; overflow: hidden;">
+<div style="width: 71%; height: 100%; background: #f59e0b; border-radius: 4px;"></div>
+</div>
+</div>
 
-    <div style="margin-bottom: 10px;">
-      <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 4px; color: #d4d4d8;">
-        <span><b>90분당 실제 득점력 (Goals/90)</b></span>
-        <span style="color: #ec4899; font-weight: bold;">0.55골/90 (상위 37%)</span>
-      </div>
-      <div style="width: 100%; height: 7px; background: #27272a; border-radius: 4px; overflow: hidden;">
-        <div style="width: 64%; height: 100%; background: #ec4899; border-radius: 4px;"></div>
-      </div>
-    </div>
+<div style="margin-bottom: 10px;">
+<div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 4px; color: #d4d4d8;">
+<span><b>90분당 실제 득점력 (Goals/90)</b></span>
+<span style="color: #ec4899; font-weight: bold;">0.55골/90 (상위 37%)</span>
+</div>
+<div style="width: 100%; height: 7px; background: #27272a; border-radius: 4px; overflow: hidden;">
+<div style="width: 64%; height: 100%; background: #ec4899; border-radius: 4px;"></div>
+</div>
+</div>
 
-    <div style="margin-bottom: 10px;">
-      <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 4px; color: #d4d4d8;">
-        <span><b>수비/공중 경합 승률 (Duels Won %)</b></span>
-        <span style="color: #a855f7; font-weight: bold;">48.0% (상위 53%)</span>
-      </div>
-      <div style="width: 100%; height: 7px; background: #27272a; border-radius: 4px; overflow: hidden;">
-        <div style="width: 48%; height: 100%; background: #a855f7; border-radius: 4px;"></div>
-      </div>
-    </div>
+<div style="margin-bottom: 10px;">
+<div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 4px; color: #d4d4d8;">
+<span><b>수비/공중 경합 승률 (Duels Won %)</b></span>
+<span style="color: #a855f7; font-weight: bold;">48.0% (상위 53%)</span>
+</div>
+<div style="width: 100%; height: 7px; background: #27272a; border-radius: 4px; overflow: hidden;">
+<div style="width: 48%; height: 100%; background: #a855f7; border-radius: 4px;"></div>
+</div>
+</div>
 
-    <div style="margin-bottom: 10px;">
-      <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 4px; color: #d4d4d8;">
-        <span><b>공식 경기 출전 신뢰도 (Minutes Sample)</b></span>
-        <span style="color: #34d399; font-weight: bold;">2,450분 (상위 30%)</span>
-      </div>
-      <div style="width: 100%; height: 7px; background: #27272a; border-radius: 4px; overflow: hidden;">
-        <div style="width: 71%; height: 100%; background: #34d399; border-radius: 4px;"></div>
-      </div>
-    </div>
+<div style="margin-bottom: 10px;">
+<div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 4px; color: #d4d4d8;">
+<span><b>공식 경기 출전 신뢰도 (Minutes Sample)</b></span>
+<span style="color: #34d399; font-weight: bold;">2,450분 (상위 30%)</span>
+</div>
+<div style="width: 100%; height: 7px; background: #27272a; border-radius: 4px; overflow: hidden;">
+<div style="width: 71%; height: 100%; background: #34d399; border-radius: 4px;"></div>
+</div>
+</div>
 
 </div>
 

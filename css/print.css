@@ -1,0 +1,51 @@
+/**
+ * AgencyOS Pro - Print & PDF Export Stylesheet
+ * Optimized for Deal Memorandums and PFA Standard Representation Contracts
+ */
+
+@media print {
+  body {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    font-size: 11pt;
+  }
+
+  nav, header, aside, .no-print, button, #ticker-container, .modal-backdrop {
+    display: none !important;
+  }
+
+  .ui-card {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+  }
+
+  #document-print-area {
+    display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 1.5cm !important;
+    color: #111827 !important;
+  }
+
+  h1, h2, h3, h4 {
+    color: #111827 !important;
+    page-break-after: avoid;
+  }
+
+  table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+  }
+
+  th, td {
+    border: 1px solid #d1d5db !important;
+    padding: 6px 10px !important;
+    color: #1f2937 !important;
+  }
+
+  .page-break {
+    page-break-before: always;
+  }
+}

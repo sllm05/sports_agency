@@ -303,3 +303,115 @@
 
 ### 4. 분쟁 해결 및 전속 관할
 - 본 계약과 관련된 일체의 분쟁은 **FIFA 에이전트 분쟁조정실(Agents Chamber of the Football Tribunal)** 또는 스위스 로잔에 소재한 스포츠중재재판소(CAS)의 전속 관할에 속함을 명시해야 합니다.
+
+---
+
+## [문서 15] 잉글랜드 축구협회(FA) 고유 에이전트 규정(FA Football Agent Regs) 및 영국 경쟁법(Competition Act) 중재 판결
+- **출처**: The FA Football Agent Regulations (Post-Arbitration), Rule K Arbitral Award (CAA Base & Others v The FA), UK Competition Act 1998
+- **기준일**: 2024-2026 시즌
+
+### 1. 영국 중재재판소(Rule K Arbitral Tribunal) 판결 요지
+- FIFA Circular 1873 발표 이전 영국 중재재판소는 대형 에이전시 연합(CAA Base, Wasserman, Stellar 등)이 제기한 소송에서 **FIFA 식 3%~5% 수수료 상한(Fee Cap) 및 선지급 제한 규정이 영국 경쟁법 제1장(Chapter I, Competition Act 1998)을 위반하여 가격 담합에 해당한다**고 최종 판시했습니다.
+- 이에 따라 **잉글랜드 국내 거래(Domestic Transactions: 잉글랜드 클럽 간 또는 잉글랜드 클럽과 선수/감독 간 거래)에 대해서는 수수료 상한제(Fee Cap)의 적용이 전면 중단(Inoperative)**되었습니다.
+
+### 2. 국내 거래 vs 국제 거래의 이원화 적용
+- **잉글랜드 국내 거래**: 수수료 상한이 배제되므로 에이전트는 시장 자율 협상에 따라 수수료율(통상 5%~10%)을 자유롭게 책정할 수 있습니다.
+- **국제 이적(Cross-Border Transactions)**: 잉글랜드 클럽과 해외 클럽 간 거래의 경우 FIFA Circular 1873의 전 세계 잠정 유예 효력 범위 및 상대국 로컬 협회 규정을 병행 검토해야 합니다.
+
+### 3. 이중 대리(Dual Representation) 허용 요건 및 과세 리스크
+- The FA 규정상 선수와 영입 구단을 동시에 대리하는 **제한적 이중 대리(Dual Representation)**는 양 당사자의 사전 서면 동의(Prior Written Agreement)가 있는 경우에만 예외적으로 허용됩니다.
+- **영국 국세청(HMRC) 세무 원칙**: 구단이 선수를 대신하여 에이전트 수수료를 대납할 경우, 전체 수수료 중 '선수 대리분(최소 50%)'에 대해 선수의 근로소득(Benefit in Kind - P11D)으로 간주하여 최고 45%의 소득세 및 13.8% 고용주 국민보험료(Class 1A NIC)를 원천징수해야 합니다.
+
+### 4. FA Clearing House 및 공인 등록 의무
+- 잉글랜드 내에서 활동하는 모든 축구 에이전트는 FIFA 라이선스 취득 외에도 **The FA Agent Registration System**에 등록을 완료하고 연례 적격성 심사를 통과해야만 공식 업무를 수행할 수 있습니다.
+
+---
+
+## [문서 16] 프리미어리그 차세대 스쿼드 비용 규정 (SCR: Squad Cost Rule 85%/70%) 및 앵커링(TBA)
+- **출처**: Premier League Rulebook Amendments, UEFA Club Licensing and Financial Sustainability Regulations (FSR)
+- **기준일**: 2024-2026 시즌 과도기 및 공식 적용 기준
+
+### 1. 기존 PSR(Profit and Sustainability Rules)에서 SCR로의 체제 전환
+- 기존의 '3개년 누적 손실 1억 500만 파운드 제한(PSR)' 방식의 한계를 극복하고 유럽축구연맹(UEFA)의 재정 지속가능성 규정(FSR)과 보조를 맞추기 위해 **스쿼드 비용 규정(Squad Cost Rule - SCR)**이 도입되었습니다.
+- **스쿼드 비용(Squad Cost) 산출 공식**:
+  `스쿼드 비용 = 1군 선수단 및 감독·코칭스태프 총급여 + 이적료 연간 감가상각비(Amortisation) + 에이전트 수수료(Intermediary Fees)`
+
+### 2. 리그별·참가대회별 SCR 비율 한도
+- **UEFA 유럽 대항전(UCL, UEL, UECL) 진출 구단**: 클럽 총 매출액(Turnover) + 선수 매각 순이익(Net Profit on Player Sales)의 **70% 이하**로 스쿼드 비용을 제한합니다 (UEFA FSR 동기화).
+- **비유럽 대항전 구단 (EPL 국내 전념 구단)**: 총 매출액 + 선수 매각 순이익의 **85% 이하** 한도를 적용받아 상대적으로 재정적 유연성을 부여받습니다.
+
+### 3. Top-to-Bottom Anchoring (TBA, 바텀 앵커링 상한제)
+- 리그 내 재정 격차 심화를 방지하기 위해 **최하위(20위) 구단이 수령하는 리그 중앙 분배 중계권료의 일정 배수(예: 4.5배~5.0배)**를 전체 구단의 절대 지출 상한선(Hard Cap)으로 설정하는 앵커링 제도가 병행 운용됩니다.
+- 아무리 글로벌 상업 매출이 높은 메가 클럽이라 하더라도 이 앵커링 한도를 초과하여 스쿼드 비용을 지출할 수 없습니다.
+
+### 4. 위반 시 제재 프레임워크
+- 경미한 초과(한도의 1~5% 미만): 초과 지출액에 비례하는 럭셔리 택스(Financial Surcharge) 부과 및 유소년 축구 발전 기금 강제 납부.
+- 중대한 초과(5% 이상 또는 반복 위반): 프리미어리그 즉각적 승점 삭감(Points Deduction: 기본 -4점 + 초과액 500만 파운드당 -1점 가산) 및 유럽대항전 선수 등록 명단 축소 제재.
+
+---
+
+## [문서 17] 스페인 라리가(La Liga) 경제통제 규정 (LCPD 샐러리캡 한도 및 1:1 / 1:2 지출 제한 규칙)
+- **출처**: LaLiga Normas de Elaboración de Presupuestos de Clubes y SADs (Articles 93, 100), RFEF General Regulations
+- **기준일**: 2024-2026 시즌
+
+### 1. LCPD (Límite de Coste de Plantilla Deportiva) 개념
+- 라리가 연맹(LFP)이 매 시즌 및 이적시장 직전 각 구단의 회계 감사 보고서, 스폰서십 계약, 중계권료, 경기장 수익을 기반으로 사전 책정하는 **선수단 비용 공식 한도(소위 라리가 샐러리캡)**입니다.
+- 포함 대상: 1군 등록 선수, 감독, 수석코치 및 피트니스 코치의 기본급, 성과급, 초상권료, 이적료 연간 상각액 전체.
+
+### 2. 한도 초과 구단(Exceeded Clubs)에 대한 1:1 vs 1:2 규칙
+- **정상 구단 (한도 미초과, 1:1 Rule 적용)**:
+  LCPD 여유 한도가 남아 있는 구단은 이적료 수익이나 선수 매각으로 절감한 인건비 전액(100%)을 신규 선수 영입 및 등록에 그대로 재투자할 수 있습니다.
+- **초과 구단 (Exceeded Clubs, 1:2 / 50% Rule 적용)**:
+  LCPD를 초과한 구단은 원칙적으로 신규 선수를 라리가에 등록(Inscripción)할 수 없으며, 기존 선수를 매각하거나 방출하여 절감한 인건비 및 이적료 이익의 최대 **50% (1:2 비율)**까지만 신규 선수 등록 비용으로 지출할 수 있습니다.
+- **프랜차이즈 스타 예외 (60% Rule)**:
+  방출된 선수의 총 인건비가 클럽 전체 LCPD의 5% 이상을 차지했던 고액 연봉자일 경우, 예외적으로 절감액의 **60%**까지 신규 영입 자금으로 재투자할 수 있습니다.
+
+### 3. 장기 부상 선수 대체 등록 규정 (Article 77)
+- 1군 등록 선수가 4개월 이상의 장기 부상을 입어 의료위원회의 인증을 받은 경우, 해당 선수의 연봉 최대 **80% 한도** 내에서 LCPD 초과 구단이라 하더라도 즉시 대체 선수를 긴급 등록할 수 있습니다.
+
+---
+
+## [문서 18] 프랑스 스포츠법(Code du Sport) 에이전트 면허주의 및 DNCG 재정 통제·선수등록 차단 규정
+- **출처**: Code du Sport Français (Articles L.222-7 à L.222-22), FFF Règlements Généraux, Charte du Football Professionnel
+- **기준일**: 2024-2026 시즌
+
+### 1. 프랑스 스포츠법의 독점적 고유 면허주의 (Licence FFF)
+- 프랑스는 자국 스포츠법(Code du Sport Art. L.222-7)에 따라 전 세계에서 가장 엄격한 국가 자격 면허제를 운영합니다.
+- **FIFA 라이선스만으로는 프랑스 국내에서 단독 대리 계약을 체결하거나 수수료를 청구할 수 없으며**, 프랑스 체육부 및 프랑스 축구협회(FFF)가 주관하는 국가 에이전트 시험(Examen d'agent de joueur)을 합격하여 FFF 면허를 발급받은 자만이 법적 대리권을 갖습니다.
+
+### 2. 외국인 에이전트의 필수 절차: Convention de Présentation
+- FFF 면허가 없는 해외 공인 에이전트가 프랑스 구단이나 소속 선수와 거래할 경우, 반드시 **공인 FFF 라이선스 에이전트와 공식 협력 협약(Convention de Présentation)**을 서면으로 체결하고 FFF에 사전 신고해야 합니다.
+- 위반 시 해당 중개 계약은 프랑스 민법 및 스포츠법상 절대 무효가 되며, 2년 이하의 징역 또는 30,000유로 이하의 형사 처벌 대상이 됩니다.
+
+### 3. 이중 대리(Dual Representation) 절대 금지
+- 프랑스 스포츠법 Article L.222-17에 따라 동일한 거래에서 **구단과 선수를 동시에 대리하는 모든 형태의 쌍방 대리 행위는 전면 금지**되며, 위반 시 형사 범죄로 처벌받습니다.
+
+### 4. DNCG (Direction Nationale du Contrôle de Gestion)의 선수등록 차단 권한
+- 프랑스 프로축구 재정감시국(DNCG)은 프랑스 구단의 재정 건전성을 상시 감사하며, 재정 기준 미달 구단에 대해 다음과 같은 강력한 행정 명령을 즉각 발동합니다:
+  - **급여 총액 통제 (Encadrement de la masse salariale)**: 구단의 연간 급여 지출을 특정 금액 이하로 동결.
+  - **신규 선수 등록 금지 (Interdiction de recrutement)**: 이적 계약을 체결하더라도 LFP에 선수 등록을 거부하여 경기 출전 원천 차단.
+  - **조건부 강제 강등 (Rétrogradation administrative)**.
+
+---
+
+## [문서 19] FIFA 풋볼 트리뷰널(Football Tribunal) 분쟁 해결 절차 및 PFA 표준 계약서 해지 보상(RSTP 제17조)
+- **출처**: Procedural Rules Governing the Football Tribunal (Edition 2023/2024), FIFA RSTP Article 17, FA/PFA Standard Form of Contract
+- **기준일**: 2024-2026 시즌
+
+### 1. FIFA 풋볼 트리뷰널(Football Tribunal) 3대 전문 심판부
+- **분쟁조정실 (Dispute Resolution Chamber - DRC)**:
+  선수 vs 구단 간 계약 위반, 정당한 사유 없는 계약 해지, 급여 체불(RSTP Art. 14bis), 훈련보상금(Training Compensation) 및 연대기여금(Solidarity Mechanism) 분쟁을 전담합니다 (동등한 수의 선수 대표와 구단 대표로 구성).
+- **선수지위소위원회 (Players' Status Chamber - PSC)**:
+  구단 vs 구단 간 국제 이적료 미지급 분쟁, **감독(Coach) vs 구단 간의 고용 계약 분쟁**을 전담합니다. (※ 중요: 감독 관련 분쟁은 DRC가 아닌 PSC가 전속 관할권을 가집니다).
+- **에이전트 분쟁조정실 (Agents Chamber - AC)**:
+  FFAR 시행 이후 에이전트 vs 선수, 또는 에이전트 vs 구단 간의 중개 수수료 분쟁 및 에이전트 계약 위반을 전담 심판합니다.
+
+### 2. 정당한 사유 없는 계약 해지 시 손해배상 산정 원칙 (RSTP Article 17)
+- 일방이 정당한 사유(Just Cause) 없이 계약을 파기한 경우 다음 기준에 따라 배상금(Compensation)을 산정합니다:
+  1. **계약 잔여 가치 (Residual Value)**: 잔여 계약 기간 동안 선수가 수령하기로 되어 있던 기본급 및 보장 보너스 총액.
+  2. **손해 경감 의무 (Mitigation of Damages)**: 선수가 새 구단과 계약하여 수령하게 되는 급여액은 원 손해배상액에서 공제됩니다. 단, 새 계약 급여가 이전보다 낮을 경우 차액은 추가 배상됩니다.
+  3. **바이아웃 조항(Buyout Clause) 및 손해배상 예정액(Liquidated Damages)**: 계약서에 사전 합의된 고정 위약금이 유효하게 기재되어 있을 경우 해당 금액이 최우선 적용됩니다.
+  4. **스포츠 제재 (Sporting Sanctions)**: 보호 기간(Protected Period: 만 28세 이전 체결 시 3년, 만 28세 이후 2년) 내 정당한 사유 없이 계약을 해지한 선수는 4~6개월간 공식 경기 출전 정지, 관여한 구단은 2개 연속 이적시장 등록 금지 처분을 받습니다.
+
+### 3. PFA 표준 계약서(FA/PFA Standard Contract) 상의 급여 체불 해지권
+- 잉글랜드 PFA 표준 계약서에 따르면, 구단이 선수에게 급여를 14일 이상 연체할 경우 선수는 공식 최고장(Default Notice)을 송부할 수 있으며, 최고 후 7일 이내에 미지급 급여 전액이 변제되지 않으면 선수는 **즉시 계약을 해지할 정당한 사유(Just Cause)**를 취득하고 잔여 계약 전액을 배상 청구할 수 있습니다.

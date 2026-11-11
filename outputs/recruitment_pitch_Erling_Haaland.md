@@ -39,9 +39,9 @@ AGSM은 런던, 마드리드, 뮌헨, 서울 지사의 글로벌 디렉터 네�
     <text x="75" y="114" text-anchor="end" fill="#e2e8f0" font-size="11" font-weight="bold">피크 상한 98.0점</text>
   </svg>
   <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 12px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.06); text-align: center; font-size: 11px;">
-    <div><span style="color: #71717a;">현재 시장가</span><br><b style="color: #f1f5f9; font-size: 12px;">€220,000,000</b></div>
+    <div><span style="color: #71717a;">현재 시장가</span><br><b style="color: #f1f5f9; font-size: 12px;">€264,000,000</b></div>
     <div><span style="color: #71717a;">5년 목표 가치</span><br><b style="color: #34d399; font-size: 12px;">€250,000,000</b></div>
-    <div><span style="color: #71717a;">가치 상승 배수</span><br><b style="color: #38bdf8; font-size: 12px;">+14%</b></div>
+    <div><span style="color: #71717a;">가치 상승 배수</span><br><b style="color: #38bdf8; font-size: 12px;">+-5%</b></div>
     <div><span style="color: #71717a;">에이전시 예상 수수료</span><br><b style="color: #fbbf24; font-size: 12px;">€16,000,000</b></div>
   </div>
 </div>
@@ -58,7 +58,7 @@ AGSM은 런던, 마드리드, 뮌헨, 서울 지사의 글로벌 디렉터 네�
 | **온피치 잠재력 및 최고점 (Ceiling)** | **98.0/100** | 상위 1% | 빅5 리그 90분당 실측 공격/전술 기여도 바탕, 바이아웃 최적화 |
 | **스타성 및 글로벌 마케팅 파워** | **97.0/100** | 상위 2% | 글로벌 스포츠 브랜드 메가 스폰서십 및 초상권 수익 배분 극대화 |
 | **에이전시 네트워크 적합도** | **93.0/100** | 상위 1% | AGSM 소속 빅클럽 디렉터 직통 라인 가동, 협상 레버리지 100% 행사 |
-| **5개년 예상 시장 가치 (5-Yr MV)** | **€250,000,000** | 역대 최고 수준 | 현 시세 대비 **+14%** 가치 도약 보장 |
+| **5개년 예상 시장 가치 (5-Yr MV)** | **€250,000,000** | 역대 최고 수준 | 현 시세 대비 **+-5%** 가치 도약 보장 |
 
 ---
 
@@ -71,17 +71,17 @@ AGSM은 런던, 마드리드, 뮌헨, 서울 지사의 글로벌 디렉터 네�
   </div>
   <svg viewBox="0 0 500 130" style="width: 100%; max-width: 520px; height: auto; display: block; margin: 0 auto;">
     <line x1="40" y1="105" x2="480" y2="105" stroke="#27272a" stroke-width="1.5" />
-    <rect x="55" y="43" width="42" height="62" fill="#475569" rx="4" />
-    <text x="76" y="38" text-anchor="middle" fill="#94a3b8" font-size="10" font-weight="bold">€220M</text>
+    <rect x="55" y="31" width="42" height="74" fill="#475569" rx="4" />
+    <text x="76" y="26" text-anchor="middle" fill="#94a3b8" font-size="10" font-weight="bold">€264M</text>
     <text x="76" y="120" text-anchor="middle" fill="#64748b" font-size="10">현재(Y0)</text>
-    <rect x="145" y="28" width="42" height="77" fill="#0284c7" rx="4" />
-    <text x="166" y="23" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="bold">€275M</text>
+    <rect x="145" y="20" width="42" height="92" fill="#0284c7" rx="4" />
+    <text x="166" y="16" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="bold">€330M</text>
     <text x="166" y="120" text-anchor="middle" fill="#64748b" font-size="10">Y1 (재계약)</text>
-    <rect x="235" y="20" width="42" height="95" fill="#0284c7" rx="4" />
-    <text x="256" y="16" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="bold">€341M</text>
+    <rect x="235" y="20" width="42" height="115" fill="#0284c7" rx="4" />
+    <text x="256" y="16" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="bold">€409M</text>
     <text x="256" y="120" text-anchor="middle" fill="#64748b" font-size="10">Y2 (스폰서)</text>
-    <rect x="325" y="20" width="42" height="114" fill="#059669" rx="4" />
-    <text x="346" y="16" text-anchor="middle" fill="#34d399" font-size="10" font-weight="bold">€407M</text>
+    <rect x="325" y="20" width="42" height="137" fill="#059669" rx="4" />
+    <text x="346" y="16" text-anchor="middle" fill="#34d399" font-size="10" font-weight="bold">€488M</text>
     <text x="346" y="120" text-anchor="middle" fill="#64748b" font-size="10">Y3 (메가딜)</text>
     <rect x="415" y="35" width="42" height="70" fill="#10b981" rx="4" />
     <text x="436" y="30" text-anchor="middle" fill="#10b981" font-size="10" font-weight="bold">€250M</text>
@@ -90,7 +90,7 @@ AGSM은 런던, 마드리드, 뮌헨, 서울 지사의 글로벌 디렉터 네�
 </div>
 
 1. **Step 1 (Year 1: 현 소속팀 대우 개선 및 바이아웃 개정)**
-   - 현 주급 (€621,000/주) 대비 최소 80%~120% 인상된 메가 재계약 체결
+   - 현 주급 (€450,000/주) 대비 최소 80%~120% 인상된 메가 재계약 체결
    - 해외 빅클럽 이적 시 발동되는 합리적 바이아웃(Release Clause) 또는 바이백 조항 명문화
 2. **Step 2 (Year 2~3: 글로벌 상업 스폰서십 & 초상권 자산화)**
    - 나이키/아디다스 글로벌 메인 모델 재계약 추진 (연간 €5M~€10M 이상 규모)

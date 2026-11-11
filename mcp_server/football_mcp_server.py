@@ -14,6 +14,7 @@ import json
 import sqlite3
 import statistics
 import sys
+import unicodedata
 from pathlib import Path
 from typing import Any
 
@@ -39,6 +40,50 @@ def _get_conn() -> sqlite3.Connection:
     return conn
 
 
+_SPECIAL_CHAR_MAP = str.maketrans({
+    "ø": "o", "Ø": "O", "æ": "ae", "Æ": "AE", "œ": "oe", "Œ": "OE",
+    "ß": "ss", "ð": "d", "Ð": "D", "þ": "th", "Þ": "TH", "ł": "l", "Ł": "L"
+})
+
+
+def _normalize_name_for_search(text: str) -> str:
+    if not text:
+        return ""
+    trans = text.translate(_SPECIAL_CHAR_MAP)
+    nfd = unicodedata.normalize("NFD", trans)
+    cleaned = "".join(c for c in nfd if unicodedata.category(c) != "Mn")
+    return cleaned.strip().lower()
+
+
+def _resolve_player_row(cur: sqlite3.Cursor, player_name: str, query_template: str) -> sqlite3.Row | None:
+    # 1. Exact / Substring LIKE query
+    cur.execute(query_template.format(where_clause="LOWER(p.name) LIKE LOWER(?) OR p.name_ko LIKE ?"), (f"%{player_name}%", f"%{player_name}%"))
+    row = cur.fetchone()
+    if row:
+        return row
+
+    # 2. Resilient Diacritics/Accent-normalized comparison (e.g., Lautaro Martinez -> Lautaro Martínez)
+    target_norm = _normalize_name_for_search(player_name)
+    cur.execute("SELECT p.player_id, p.name, p.name_ko FROM players p")
+    candidates = cur.fetchall()
+    matched_pid = None
+    for cand in candidates:
+        cand_name_norm = _normalize_name_for_search(cand["name"])
+        cand_ko_norm = _normalize_name_for_search(cand["name_ko"] or "")
+        if target_norm == cand_name_norm or target_norm in cand_name_norm or cand_name_norm in target_norm:
+            matched_pid = cand["player_id"]
+            break
+        if cand_ko_norm and (target_norm == cand_ko_norm or target_norm in cand_ko_norm):
+            matched_pid = cand["player_id"]
+            break
+
+    if matched_pid is not None:
+        cur.execute(query_template.format(where_clause="p.player_id = ?"), (matched_pid,))
+        return cur.fetchone()
+
+    return None
+
+
 def list_agency_players() -> list[dict[str, Any]]:
     """Queries all players and managers and their stats from `agency_desk.db`."""
     conn = _get_conn()
@@ -48,7 +93,8 @@ def list_agency_players() -> list[dict[str, Any]]:
         SELECT p.*, s.season, s.minutes_played, s.appearances,
                s.goals_per90, s.assists_per90, s.xg_per90, s.xa_per90,
                s.key_passes_per90, s.progressive_actions_per90,
-               s.defensive_duels_won_pct, s.pos_percentile
+               s.defensive_duels_won_pct, s.pos_percentile,
+               s.xt_expected_threat, s.direct_speed_mps, s.shot_conversion_pct, s.touches_in_box_per90
         FROM players p
         LEFT JOIN player_stats s ON p.player_id = s.player_id
         ORDER BY p.market_value_eur DESC
@@ -150,20 +196,18 @@ def get_player_complete_data(player_name: str) -> dict[str, Any]:
     """
     conn = _get_conn()
     cur = conn.cursor()
-    cur.execute(
-        """
+    query_template = """
         SELECT p.*, s.season, s.minutes_played, s.appearances,
                s.goals_per90, s.assists_per90, s.xg_per90, s.xa_per90,
                s.key_passes_per90, s.progressive_actions_per90,
-               s.defensive_duels_won_pct, s.pos_percentile
+               s.defensive_duels_won_pct, s.pos_percentile,
+               s.xt_expected_threat, s.direct_speed_mps, s.shot_conversion_pct, s.touches_in_box_per90
         FROM players p
         LEFT JOIN player_stats s ON p.player_id = s.player_id
-        WHERE LOWER(p.name) LIKE LOWER(?) OR p.name_ko LIKE ?
+        WHERE {where_clause}
         LIMIT 1
-        """,
-        (f"%{player_name}%", f"%{player_name}%"),
-    )
-    row = cur.fetchone()
+    """
+    row = _resolve_player_row(cur, player_name, query_template)
     if not row:
         conn.close()
         raise ValueError(f"Player '{player_name}' not found in agency_desk.db")
@@ -1299,17 +1343,14 @@ def fetch_ego_lite_authenticated_scouting(
     # 2. Resilient Database Fallback: Verified Capology Financial Matrix from agency_desk.db
     conn = _get_conn()
     cur = conn.cursor()
-    cur.execute(
-        """
+    wage_query_template = """
         SELECT p.name, p.name_ko, p.current_club, p.league, p.position, p.weekly_wage_eur, p.market_value_eur,
                p.contract_expires, p.is_wage_estimated
         FROM players p
-        WHERE LOWER(p.name) LIKE LOWER(?) OR p.name_ko LIKE ?
+        WHERE {where_clause}
         LIMIT 1
-        """,
-        (f"%{player_name}%", f"%{player_name}%"),
-    )
-    row = cur.fetchone()
+    """
+    row = _resolve_player_row(cur, player_name, wage_query_template)
 
     # Query tax rate if league available
     tax_rate = 0.45
@@ -1875,10 +1916,35 @@ def generate_client_recruitment_pitch_deck(
         (target_id, target_type)
     )
     target_row = cur.fetchone()
-    if not target_row:
-        conn.close()
-        return {"error": f"Target ID {target_id} ({target_type}) not found in agency_recruitment_targets"}
-    target = dict(target_row)
+    if target_row:
+        target = dict(target_row)
+    else:
+        # Fallback: build a synthetic target from the players/managers tables so any
+        # scouted player or manager (not only pre-seeded recruitment targets) can get a pitch deck.
+        if target_type == "PLAYER":
+            cur.execute("SELECT * FROM players WHERE player_id = ?", (target_id,))
+        else:
+            cur.execute("SELECT * FROM managers WHERE manager_id = ?", (target_id,))
+        base_row = cur.fetchone()
+        if not base_row:
+            conn.close()
+            return {"error": f"Target ID {target_id} ({target_type}) not found in database"}
+        base = dict(base_row)
+        base_mv = base.get("market_value_eur") or 50000000
+        is_mgr = target_type == "MANAGER"
+        target = {
+            "target_id": target_id,
+            "target_type": target_type,
+            "name": base.get("name", "Candidate"),
+            "name_ko": base.get("name_ko") or base.get("name", "Candidate"),
+            "category": "ELITE_MANAGER" if is_mgr else "SCOUTED_TARGET",
+            "current_agency": "독립 대리인 체제" if is_mgr else "미상 / 가족 직할 대리",
+            "potential_ceiling_score": 95.0 if is_mgr else 92.0,
+            "stardom_commercial_score": 95.0 if is_mgr else 90.0,
+            "agency_fit_score": 95.0 if is_mgr else 92.0,
+            "projected_5yr_valuation_eur": 80000000 if is_mgr else int(base_mv * 1.5),
+            "projected_agency_roi_eur": 6000000 if is_mgr else int(base_mv * 0.08),
+        }
 
     client_info: dict[str, Any] = {}
     if target_type == "PLAYER":
@@ -2265,139 +2331,285 @@ def generate_client_recruitment_deal_memo(
     else:
         camp_stability_score = 91.0
 
-    radar_scores = [
-        round(potential_score, 1),
-        round(stardom_score, 1),
-        round(roi_score, 1),
-        round(durability_score, 1),
-        round(regulatory_score, 1),
-        round(camp_stability_score, 1),
-    ]
-    avg_score = sum(radar_scores) / len(radar_scores)
-    overall_grade = "S+" if avg_score >= 94.0 else ("S" if avg_score >= 90.0 else "A+")
+    if target_type == "MANAGER":
+        # MANAGER-SPECIFIC 6-AXIS RECRUITMENT RADAR
+        tactical_flex = float(manager_data.get("tactical_flexibility_score") or 95.0) if manager_data else 95.0
+        win_rate = float(manager_data.get("win_rate_pct") or 68.0) if manager_data else 68.0
+        ppg = float(manager_data.get("points_per_game") or 2.1) if manager_data else 2.1
+        track_record_score = min(99.0, max(75.0, round(win_rate * 0.6 + (ppg / 2.5) * 40.0, 1)))
+        in_game_score = float(manager_data.get("in_game_management_score") or 94.0) if manager_data else 94.0
+        youth_score = float(manager_data.get("youth_trust_score") or 92.0) if manager_data else 92.0
+        leadership_desc = (manager_data.get("leadership_personality") if manager_data else "") or "카리스마형 라커룸 리더십 및 전술적 통솔력"
+        tactical_style = (manager_data.get("tactical_style") if manager_data else "") or "현대적 압박 및 전환 전술"
+        formation = (manager_data.get("preferred_formation") if manager_data else "") or "4-2-3-1"
 
-    radar_axes = [
-        {
-            "axis": "온피치 포텐셜",
-            "score": round(potential_score, 1),
-            "benchmark": 90.0,
-            "metric_detail": f"포텐셜 지수 {potential_score:.0f}점 / 전술 적합도 {target.get('agency_fit_score', 90):.0f}점",
-            "desc": "축구적 잠재 한계치, 현재 경기력 및 유럽 빅클럽 핵심 전술 적합성"
-        },
-        {
-            "axis": "글로벌 스타성",
-            "score": round(stardom_score, 1),
-            "benchmark": 88.0,
-            "metric_detail": f"상업 마케팅 지수 {stardom_score:.0f}점 / 글로벌 미디어 영향력 S급",
-            "desc": "글로벌 브랜드 협찬, 소셜 미디어 파급력 및 아시아/북미 시장 초상권 상업화 역량"
-        },
-        {
-            "axis": "재무 ROI",
-            "score": round(roi_score, 1),
-            "benchmark": 85.0,
-            "metric_detail": f"5개년 기대수익 €{round(proj_roi / 1000000, 1)}M (예상 가치 €{round((target.get('projected_5yr_valuation_eur') or 50000000)/1000000, 0):.0f}M)",
-            "desc": "5개년 이적료/주급/광고 수수료 창출력 대비 영입 유치 투자 비용 회수율"
-        },
-        {
-            "axis": "신체 내구성",
-            "score": round(durability_score, 1),
-            "benchmark": 85.0,
-            "metric_detail": f"경기 출전 가용률 {durability_score:.1f}% " + ("(부상 주의)" if player_data and player_data.get("is_injured") == 1 else "(정상 가용)"),
-            "desc": "선발 소화력, 리그 분당 가용률 및 고질적 근육/관절 메디컬 리스크 검증"
-        },
-        {
-            "axis": "규제·GBE",
-            "score": round(regulatory_score, 1),
-            "benchmark": 85.0,
-            "metric_detail": f"GBE 요건: " + ("EPL 15pt Auto-Pass 충족" if regulatory_score >= 95.0 else "포인트 심사 대상") + f" / EU권역 이동성 자유",
-            "desc": "영국 FA GBE 워크퍼밋 15점 자동 통과 요건 및 EU 여권/비EU 쿼터 제약 해소"
-        },
-        {
-            "axis": "캠프 안정성",
-            "score": round(camp_stability_score, 1),
-            "benchmark": 88.0,
-            "metric_detail": f"현 대리인 만료: {agency_contract_expires} (FIFA 탬퍼링 저촉 리스크 0%)",
-            "desc": "기존 대리인 계약 만료 D-Day 확인, 가족/캠프 의사결정 안정성 및 분쟁 방지"
-        },
-    ]
+        radar_scores = [
+            round(tactical_flex, 1),
+            round(track_record_score, 1),
+            round(stardom_score, 1),
+            round(in_game_score, 1),
+            round(youth_score, 1),
+            round(camp_stability_score, 1),
+        ]
+        avg_score = sum(radar_scores) / len(radar_scores)
+        overall_grade = "S+" if avg_score >= 94.0 else ("S" if avg_score >= 90.0 else "A+")
 
-    # 2. 5-Year Agency Cash Flow Projection
-    y1_rev = round(proj_roi * 0.12)
-    y2_rev = round(proj_roi * 0.18)
-    y3_rev = round(proj_roi * 0.42)
-    y4_rev = round(proj_roi * 0.14)
-    y5_rev = round(proj_roi * 0.14)
+        radar_axes = [
+            {
+                "axis": "전술 철학·유연성",
+                "score": round(tactical_flex, 1),
+                "benchmark": 90.0,
+                "metric_detail": f"지휘 스타일: {tactical_style} / 전술 유연성 {tactical_flex:.0f}점 ({formation})",
+                "desc": "현대 축구 트렌드(포지셔널 플레이/게겐프레싱/전환) 전술 독창성 및 대형 운용 유연성"
+            },
+            {
+                "axis": "실측 성적·PPG",
+                "score": round(track_record_score, 1),
+                "benchmark": 88.0,
+                "metric_detail": f"실측 통산 승률 {win_rate:.1f}% · PPG {ppg:.2f} | 리그/UCL 트로피 실적",
+                "desc": "공식 리그 및 UEFA 대항전 실측 경기당 승점(PPG), 승률 및 우승 커리어 검증"
+            },
+            {
+                "axis": "글로벌 스타성·미디어",
+                "score": round(stardom_score, 1),
+                "benchmark": 88.0,
+                "metric_detail": f"미디어 파워 S급 / 글로벌 브랜드 파트너십 및 기자회견 파급력 {stardom_score:.0f}점",
+                "desc": "빅클럽 팬덤 결속력, 기자회견 및 미디어 장악력, 글로벌 상업 브랜드 앰버서더 가치"
+            },
+            {
+                "axis": "라커룸 장악·리더십",
+                "score": round(in_game_score, 1),
+                "benchmark": 88.0,
+                "metric_detail": f"통솔 리더십: {leadership_desc} / 인게임 위기대응 {in_game_score:.0f}점",
+                "desc": "월드클래스 슈퍼스타 선수단 결속력, 위기 상황 승부수 교체 및 인게임 전술 수정 역량"
+            },
+            {
+                "axis": "선수단 가치창출·육성",
+                "score": round(youth_score, 1),
+                "benchmark": 85.0,
+                "metric_detail": f"유망주 기용 지수 {youth_score:.0f}점 / 선수단 시세 증대 및 포지션 스페셜리스트 육성",
+                "desc": "아카데미 유망주 1군 정착률, 지도 후 스쿼드 총 시장가치(AUM) 상승 및 기량 만개 유도"
+            },
+            {
+                "axis": "경영진 신뢰·에이전시 시너지",
+                "score": round(camp_stability_score, 1),
+                "benchmark": 88.0,
+                "metric_detail": f"현 대리인 만료: {agency_contract_expires} (구단 이사회 협업 지수 S급)",
+                "desc": "구단 단장(Sporting Director) 및 오너십과의 소통, 이적시장 예산 운용 및 에이전시 독점 프로젝트 시너지"
+            },
+        ]
 
-    cash_flow = [
-        {
-            "year": "Y1 (2025)",
-            "milestone": "전속 계약 체결 & 글로벌 상업 브랜드 스폰서십 유치",
-            "revenue_eur": y1_rev,
-            "revenue_str": f"€{round(y1_rev / 1000000, 2)}M",
-            "category": "스폰서십·체결 수수료"
-        },
-        {
-            "year": "Y2 (2026)",
-            "milestone": "소속 구단 연장 재계약 주급 인상 및 인센티브 보전 (3~5%)",
-            "revenue_eur": y2_rev,
-            "revenue_str": f"€{round(y2_rev / 1000000, 2)}M",
-            "category": "주급 수수료"
-        },
-        {
-            "year": "Y3 (2027)",
-            "milestone": "메가 클럽 바이아웃 발동 / 레코드 이적료 수수료 (5.0%)",
-            "revenue_eur": y3_rev,
-            "revenue_str": f"€{round(y3_rev / 1000000, 2)}M",
-            "category": "이적료 수수료"
-        },
-        {
-            "year": "Y4 (2028)",
-            "milestone": "UCL/리그 우승 인센티브 & 글로벌 초상권 라이선싱 확대",
-            "revenue_eur": y4_rev,
-            "revenue_str": f"€{round(y4_rev / 1000000, 2)}M",
-            "category": "초상권·보너스"
-        },
-        {
-            "year": "Y5 (2029)",
-            "milestone": "최정상 연장 재계약 피크 or 2차 스텝업 이적 수수료",
-            "revenue_eur": y5_rev,
-            "revenue_str": f"€{round(y5_rev / 1000000, 2)}M",
-            "category": "재계약·롱런"
-        },
-    ]
+        # Manager Cash Flow Projection
+        y1_rev = round(proj_roi * 0.20)
+        y2_rev = round(proj_roi * 0.20)
+        y3_rev = round(proj_roi * 0.30)
+        y4_rev = round(proj_roi * 0.15)
+        y5_rev = round(proj_roi * 0.15)
 
-    # 3. Upside Investment Thesis
-    upside_theses = [
-        {
-            "title": "압도적 재무 창출력 & 수수료 레버리지",
-            "detail": f"5개년 예상 시장가치 €{round((target.get('projected_5yr_valuation_eur') or 50000000)/1000000, 0):.0f}M 달성 시 에이전시 누적 기대수익 총 €{round(proj_roi / 1000000, 1)}M를 창출하는 최상급 코어 자산."
-        },
-        {
-            "title": "초상권 및 글로벌 상업 파트너십 독점화",
-            "detail": "선수의 글로벌 인지도를 바탕으로 아시아 및 북미 권역 엔도스먼트, 프리미엄 브랜드 앰버서더십을 단독 대행하여 비경기적 부가가치 극대화."
-        },
-        {
-            "title": "유럽 빅클럽 이적 및 바이아웃 협상 우위",
-            "detail": "선수의 전술적 희소성과 리그 최상위 경기력을 지렛대 삼아 구단과의 연봉 재협상 및 빅클럽 이적 시 유리한 바이아웃 구조 사전 확보."
-        },
-    ]
+        cash_flow = [
+            {
+                "year": "Y1 (2025)",
+                "milestone": "빅클럽 선임 체결 수수료 및 글로벌 스폰서십 계약",
+                "revenue_eur": y1_rev,
+                "revenue_str": f"€{round(y1_rev / 1000000, 2)}M",
+                "category": "선임 체결 수수료"
+            },
+            {
+                "year": "Y2 (2026)",
+                "milestone": "리그/챔피언스리그 성적 옵션 보너스 및 미디어 라이선싱",
+                "revenue_eur": y2_rev,
+                "revenue_str": f"€{round(y2_rev / 1000000, 2)}M",
+                "category": "성적 보너스"
+            },
+            {
+                "year": "Y3 (2027)",
+                "milestone": "장기 재계약 연봉 인상 및 연장 수수료 (3~5%)",
+                "revenue_eur": y3_rev,
+                "revenue_str": f"€{round(y3_rev / 1000000, 2)}M",
+                "category": "재계약 수수료"
+            },
+            {
+                "year": "Y4 (2028)",
+                "milestone": "UCL/리그 우승 인센티브 및 글로벌 초상권 프로젝트",
+                "revenue_eur": y4_rev,
+                "revenue_str": f"€{round(y4_rev / 1000000, 2)}M",
+                "category": "우승 인센티브"
+            },
+            {
+                "year": "Y5 (2029)",
+                "milestone": "후속 메가 프로젝트 선임 or 재계약 레버리지",
+                "revenue_eur": y5_rev,
+                "revenue_str": f"€{round(y5_rev / 1000000, 2)}M",
+                "category": "장기 프로젝트"
+            },
+        ]
 
-    # 4. Downside Risk Matrix & Mitigation
-    durability_note = (tendencies_data.get("durability_and_availability_note") if tendencies_data else "") or "시즌 선발 출전율 및 경기 소화력 양호"
-    downside_risks = [
-        {
-            "risk": "기존 대리인 계약 중복 및 FIFA 탬퍼링 분쟁 리스크",
-            "mitigation": f"현 대리인({current_agency})과의 계약 만료일({agency_contract_expires})을 엄격 준수하고, 만료 직후 공식 발효되는 조건부 사전 계약(Conditional Representation Agreement)을 작성하여 FIFA FFAR 분쟁 완전 차단."
-        },
-        {
-            "risk": "신체 피로도 및 시즌 메디컬/부상 결장 리스크",
-            "mitigation": f"{durability_note[:80]}... 등에 대응하여 출전 수당 연동 인센티브(Pay-as-you-play) 구조를 적용하고 사내 전담 스포츠 사이언스/피지오 팀을 즉각 배속."
-        },
-        {
-            "risk": "FIFA 규정 및 법정 수수료 요율 상한 준수",
-            "mitigation": "FIFA FFAR 제12조(최장 24개월 한도, 자동 연장 무효) 및 제13조(선수 연봉 20만 달러 초과 시 3.0%, 이하 5.0% 상한)를 계약서 표준 약관에 명시하여 규제 리스크 원천 배제."
-        },
-    ]
+        # Manager Upside Thesis
+        upside_theses = [
+            {
+                "title": "압도적 명장 선임 레버리지 & 계약 수수료 창출",
+                "detail": f"유럽 5대 리그 명문 구단 선임 시 에이전시 누적 기대수익 총 €{round(proj_roi / 1000000, 1)}M를 창출하는 최상급 사령탑 코어 자산."
+            },
+            {
+                "title": "사내 소속 선수 구단 이적 연계 시너지",
+                "detail": "감독 선임 구단으로의 에이전시 소속 유망주 및 주전 선수 연쇄 이적 독점 네트워크를 확보하고 장기 스쿼드 빌딩 주도권 장악."
+            },
+            {
+                "title": "글로벌 스폰서십 및 미디어·강연·도서 브랜드 가치 극대화",
+                "detail": "명장의 독보적 전술 철학과 글로벌 인지도를 바탕으로 미디어 파트너십, 글로벌 테크 콘퍼런스 기조강연 및 다큐멘터리 판권 독점 대행."
+            },
+        ]
+
+        # Manager Downside Risks
+        downside_risks = [
+            {
+                "risk": "기존 대리인 계약 중복 및 FIFA 탬퍼링 분쟁 리스크",
+                "mitigation": f"현 대리인({current_agency})과의 계약 만료일({agency_contract_expires})을 엄격 준수하고 만료 직후 발효되는 조건부 사전 계약(Conditional Agreement)을 작성하여 분쟁 차단."
+            },
+            {
+                "risk": "구단 성적 부진 및 중도 경질(위약금) 리스크",
+                "mitigation": "계약 해지 시 잔여 계약 기간 연봉 전액 보장 위약금(Golden Parachute) 조항을 표준 계약서에 명시하여 금전적 손실 완벽 헷징."
+            },
+            {
+                "risk": "FIFA 대리인 규정(FFAR) 및 지도자 수수료 상한 준수",
+                "mitigation": "FIFA FFAR 제12조 및 각국 축구협회(FA) 지도자 고용 계약 대리 규정을 엄격 적용하여 규제 리스크 원천 배제."
+            },
+        ]
+    else:
+        # PLAYER-SPECIFIC 6-AXIS RECRUITMENT RADAR
+        radar_scores = [
+            round(potential_score, 1),
+            round(stardom_score, 1),
+            round(roi_score, 1),
+            round(durability_score, 1),
+            round(regulatory_score, 1),
+            round(camp_stability_score, 1),
+        ]
+        avg_score = sum(radar_scores) / len(radar_scores)
+        overall_grade = "S+" if avg_score >= 94.0 else ("S" if avg_score >= 90.0 else "A+")
+
+        radar_axes = [
+            {
+                "axis": "온피치 포텐셜",
+                "score": round(potential_score, 1),
+                "benchmark": 90.0,
+                "metric_detail": f"포텐셜 지수 {potential_score:.0f}점 / 전술 적합도 {target.get('agency_fit_score', 90):.0f}점",
+                "desc": "축구적 잠재 한계치, 현재 경기력 및 유럽 빅클럽 핵심 전술 적합성"
+            },
+            {
+                "axis": "글로벌 스타성",
+                "score": round(stardom_score, 1),
+                "benchmark": 88.0,
+                "metric_detail": f"상업 마케팅 지수 {stardom_score:.0f}점 / 글로벌 미디어 영향력 S급",
+                "desc": "글로벌 브랜드 협찬, 소셜 미디어 파급력 및 아시아/북미 시장 초상권 상업화 역량"
+            },
+            {
+                "axis": "재무 ROI",
+                "score": round(roi_score, 1),
+                "benchmark": 85.0,
+                "metric_detail": f"5개년 기대수익 €{round(proj_roi / 1000000, 1)}M (예상 가치 €{round((target.get('projected_5yr_valuation_eur') or 50000000)/1000000, 0):.0f}M)",
+                "desc": "5개년 이적료/주급/광고 수수료 창출력 대비 영입 유치 투자 비용 회수율"
+            },
+            {
+                "axis": "신체 내구성",
+                "score": round(durability_score, 1),
+                "benchmark": 85.0,
+                "metric_detail": f"경기 출전 가용률 {durability_score:.1f}% " + ("(부상 주의)" if player_data and player_data.get("is_injured") == 1 else "(정상 가용)"),
+                "desc": "선발 소화력, 리그 분당 가용률 및 고질적 근육/관절 메디컬 리스크 검증"
+            },
+            {
+                "axis": "규제·GBE",
+                "score": round(regulatory_score, 1),
+                "benchmark": 85.0,
+                "metric_detail": f"GBE 요건: " + ("EPL 15pt Auto-Pass 충족" if regulatory_score >= 95.0 else "포인트 심사 대상") + f" / EU권역 이동성 자유",
+                "desc": "영국 FA GBE 워크퍼밋 15점 자동 통과 요건 및 EU 여권/비EU 쿼터 제약 해소"
+            },
+            {
+                "axis": "캠프 안정성",
+                "score": round(camp_stability_score, 1),
+                "benchmark": 88.0,
+                "metric_detail": f"현 대리인 만료: {agency_contract_expires} (FIFA 탬퍼링 저촉 리스크 0%)",
+                "desc": "기존 대리인 계약 만료 D-Day 확인, 가족/캠프 의사결정 안정성 및 분쟁 방지"
+            },
+        ]
+
+        # Player Cash Flow Projection
+        y1_rev = round(proj_roi * 0.12)
+        y2_rev = round(proj_roi * 0.18)
+        y3_rev = round(proj_roi * 0.42)
+        y4_rev = round(proj_roi * 0.14)
+        y5_rev = round(proj_roi * 0.14)
+
+        cash_flow = [
+            {
+                "year": "Y1 (2025)",
+                "milestone": "전속 계약 체결 & 글로벌 상업 브랜드 스폰서십 유치",
+                "revenue_eur": y1_rev,
+                "revenue_str": f"€{round(y1_rev / 1000000, 2)}M",
+                "category": "스폰서십·체결 수수료"
+            },
+            {
+                "year": "Y2 (2026)",
+                "milestone": "소속 구단 연장 재계약 주급 인상 및 인센티브 보전 (3~5%)",
+                "revenue_eur": y2_rev,
+                "revenue_str": f"€{round(y2_rev / 1000000, 2)}M",
+                "category": "주급 수수료"
+            },
+            {
+                "year": "Y3 (2027)",
+                "milestone": "메가 클럽 바이아웃 발동 / 레코드 이적료 수수료 (5.0%)",
+                "revenue_eur": y3_rev,
+                "revenue_str": f"€{round(y3_rev / 1000000, 2)}M",
+                "category": "이적료 수수료"
+            },
+            {
+                "year": "Y4 (2028)",
+                "milestone": "UCL/리그 우승 인센티브 & 글로벌 초상권 라이선싱 확대",
+                "revenue_eur": y4_rev,
+                "revenue_str": f"€{round(y4_rev / 1000000, 2)}M",
+                "category": "초상권·보너스"
+            },
+            {
+                "year": "Y5 (2029)",
+                "milestone": "최정상 연장 재계약 피크 or 2차 스텝업 이적 수수료",
+                "revenue_eur": y5_rev,
+                "revenue_str": f"€{round(y5_rev / 1000000, 2)}M",
+                "category": "재계약·롱런"
+            },
+        ]
+
+        # Player Upside Thesis
+        upside_theses = [
+            {
+                "title": "압도적 재무 창출력 & 수수료 레버리지",
+                "detail": f"5개년 예상 시장가치 €{round((target.get('projected_5yr_valuation_eur') or 50000000)/1000000, 0):.0f}M 달성 시 에이전시 누적 기대수익 총 €{round(proj_roi / 1000000, 1)}M를 창출하는 최상급 코어 자산."
+            },
+            {
+                "title": "초상권 및 글로벌 상업 파트너십 독점화",
+                "detail": "선수의 글로벌 인지도를 바탕으로 아시아 및 북미 권역 엔도스먼트, 프리미엄 브랜드 앰버서더십을 단독 대행하여 비경기적 부가가치 극대화."
+            },
+            {
+                "title": "유럽 빅클럽 이적 및 바이아웃 협상 우위",
+                "detail": "선수의 전술적 희소성과 리그 최상위 경기력을 지렛대 삼아 구단과의 연봉 재협상 및 빅클럽 이적 시 유리한 바이아웃 구조 사전 확보."
+            },
+        ]
+
+        # Player Downside Risks
+        durability_note = (tendencies_data.get("durability_and_availability_note") if tendencies_data else "") or "시즌 선발 출전율 및 경기 소화력 양호"
+        downside_risks = [
+            {
+                "risk": "기존 대리인 계약 중복 및 FIFA 탬퍼링 분쟁 리스크",
+                "mitigation": f"현 대리인({current_agency})과의 계약 만료일({agency_contract_expires})을 엄격 준수하고, 만료 직후 공식 발효되는 조건부 사전 계약(Conditional Representation Agreement)을 작성하여 FIFA FFAR 분쟁 완전 차단."
+            },
+            {
+                "risk": "신체 피로도 및 시즌 메디컬/부상 결장 리스크",
+                "mitigation": f"{durability_note[:80]}... 등에 대응하여 출전 수당 연동 인센티브(Pay-as-you-play) 구조를 적용하고 사내 전담 스포츠 사이언스/피지오 팀을 즉각 배속."
+            },
+            {
+                "risk": "FIFA 규정 및 법정 수수료 요율 상한 준수",
+                "mitigation": "FIFA FFAR 제12조(최장 24개월 한도, 자동 연장 무효) 및 제13조(선수 연봉 20만 달러 초과 시 3.0%, 이하 5.0% 상한)를 계약서 표준 약관에 명시하여 규제 리스크 원천 배제."
+            },
+        ]
 
     # 5. FIFA FFAR Compliance Checklist
     fifa_compliance = [
@@ -2961,6 +3173,16 @@ def simulate_client_club_renewal_pipeline(
             signing_bonus_eur=round(signing_bonus_eur * 0.5)
         )
 
+    counter_terms = None
+    if counter_offer:
+        counter_terms = {
+            "offered_weekly_wage_eur": counter_offer.get("offered_weekly_wage_eur", agreed_wage),
+            "performance_bonus_per_week_eur": counter_offer.get("performance_bonus_per_match", 0),
+            "signing_loyalty_bonus_eur": round((signing_bonus_eur or 0) * 0.5),
+            "proposed_buyout_eur": counter_offer.get("demanded_buyout_eur"),
+            "rationale_ko": counter_offer.get("incentive_description", status_msg)
+        }
+
     return {
         "status": "evaluated",
         "client_id": client_id,
@@ -2970,16 +3192,26 @@ def simulate_client_club_renewal_pipeline(
         "current_weekly_wage_eur": curr_wage,
         "requested_weekly_wage_eur": requested_weekly_wage_eur,
         "wage_increase_pct": wage_increase_pct,
+        "wage_hike_pct": wage_increase_pct,
         "annual_cost_delta_eur": annual_cost_delta,
         "club_psr_headroom_eur": psr_headroom_eur,
         "headroom_usage_pct": headroom_usage_pct,
         "decision": decision,
         "decision_label": decision_label,
         "status_message": status_msg,
+        "director_notes": status_msg,
         "counter_offer": counter_offer,
+        "counter_offer_terms": counter_terms,
         "contract_years": contract_years,
         "requested_buyout_eur": requested_buyout_eur,
-        "signing_bonus_eur": signing_bonus_eur,
+        "signing_bonus_eur": signing_bonus_eur or 0,
+        "requested_terms": {
+            "weekly_wage_eur": requested_weekly_wage_eur,
+            "contract_years": contract_years,
+            "annual_gross_wage_eur": requested_weekly_wage_eur * 52,
+            "buyout_clause_eur": requested_buyout_eur,
+            "signing_bonus_eur": signing_bonus_eur or 0
+        }
     }
 
 
@@ -3077,10 +3309,8 @@ def simulate_client_club_transfer_pipeline(
 
     all_cleared = stage1_status in ("PASSED", "CONDITIONAL") and stage2_status == "PASSED" and stage3_status in ("PASSED", "CONDITIONAL")
 
-    if action == "EXECUTE_TRANSFER":
-        if not all_cleared:
-            return {"error": "이적 게이트웨이 심사를 통과하지 못했습니다."}
-        return negotiate_client_club_transfer(
+    if action in ("EXECUTE_TRANSFER", "FORCE_EXECUTE"):
+        exec_res = negotiate_client_club_transfer(
             client_id=client_id,
             client_type=client_type,
             destination_club=destination_club,
@@ -3089,6 +3319,23 @@ def simulate_client_club_transfer_pipeline(
             new_weekly_wage_eur=offered_weekly_wage_eur,
             contract_years=contract_years
         )
+        if "error" in exec_res:
+            return exec_res
+        return {
+            "status": "executed",
+            "message": f"🏛️ FIFA TMS 공식 발효 완료: {name_ko or name} 선수가 {destination_club} ({destination_league})으로 공식 이적 체결되었습니다!",
+            "client_id": client_id,
+            "client_name": name,
+            "client_name_ko": name_ko,
+            "destination_club": destination_club,
+            "destination_league": destination_league,
+            "agreed_transfer_fee_eur": offered_transfer_fee_eur,
+            "new_weekly_wage_eur": offered_weekly_wage_eur,
+            "contract_years": contract_years,
+            "agent_commission_eur": agent_commission_eur,
+            "tms_certificate_id": tms_id,
+            "exec_details": exec_res
+        }
 
     return {
         "status": "simulated",
@@ -3097,9 +3344,13 @@ def simulate_client_club_transfer_pipeline(
         "client_name_ko": name_ko,
         "from_club": current_club,
         "to_club": destination_club,
+        "destination_club": destination_club,
         "to_league": destination_league,
+        "destination_league": destination_league,
         "transfer_fee_eur": offered_transfer_fee_eur,
+        "agreed_transfer_fee_eur": offered_transfer_fee_eur,
         "weekly_wage_eur": offered_weekly_wage_eur,
+        "new_weekly_wage_eur": offered_weekly_wage_eur,
         "contract_years": contract_years,
         "all_stages_cleared": all_cleared,
         "stages": [
@@ -3108,9 +3359,31 @@ def simulate_client_club_transfer_pipeline(
             {"stage": 3, "title": "공식 정밀 메디컬 & 피지컬 테스트", "status": stage3_status, "code": stage3_code, "detail": stage3_detail},
             {"stage": 4, "title": "FIFA TMS(이적매칭시스템) 증명서 발급", "status": stage4_status, "code": stage4_code, "detail": stage4_detail},
         ],
+        "stage_1_fee_and_buyout": {
+            "agreed_transfer_fee_eur": offered_transfer_fee_eur,
+            "sell_on_deduction_eur": solidarity_eur,
+            "summary": stage1_detail,
+            "status": stage1_status
+        },
+        "stage_2_gbe_and_visa": {
+            "status": stage2_status,
+            "regulatory_summary": stage2_code,
+            "notes": stage2_detail
+        },
+        "stage_3_medical_exam": {
+            "status": stage3_status,
+            "medical_summary": stage3_code,
+            "insurance_status": stage3_detail
+        },
+        "stage_4_fifa_tms_clearing": {
+            "tms_certificate_id": tms_id,
+            "tms_summary": stage4_code,
+            "solidarity_contribution_ko": stage4_detail
+        },
         "tms_certificate_id": tms_id,
         "solidarity_contribution_eur": solidarity_eur,
         "fifa_agent_commission_eur": agent_commission_eur,
+        "agent_commission_eur": agent_commission_eur,
     }
 
 
